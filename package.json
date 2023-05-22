@@ -1,9 +1,9 @@
 {
-  "name": "@openimis/fe-template",
-  "version": "1.2.0-rc1",
+  "name": "@openimis/fe-social_protection",
+  "version": "0.1.0",
   "license": "AGPL-3.0-only",
-  "description": "openIMIS Frontend Template module",
-  "repository": "openimis/openimis-fe-template_js",
+  "description": "openIMIS Frontend Social Protection module",
+  "repository": "openimis/openimis-fe-social_protection_js",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "engines": {
