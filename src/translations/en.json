@@ -1,2 +1,16 @@
 {
+  "socialProtection.benefitPlan.delete.mutation": "TO BE FILLED",
+  "socialProtection.benefitPlan.delete.confirm.title": "TO BE FILLED",
+  "socialProtection.benefitPlan.delete.confirm.message": "TO BE FILLED",
+  "socialProtection.benefitPlan.editButtonTooltip": "Edit",
+  "socialProtection.benefitPlan.deleteButtonTooltip": "Delete",
+  "socialProtection.benefitPlan.searcherResultsTitle": "{benefitPlansTotalCount} Benefit Plans",
+  "socialProtection.benefitPlan.dateValidTo": "Date to",
+  "socialProtection.benefitPlan.dateValidFrom": "Date from",
+  "socialProtection.benefitPlan.name": "Name",
+  "socialProtection.benefitPlan.code": "Code",
+  "socialProtection.benefitPlan.maxBeneficiaries": "Max Beneficiaries",
+  "socialProtection.benefitPlan.pageTitle": "BenefitPlans",
+  "socialProtection.menu.socialProtection": "Benefit Plans",
+  "socialProtection.mainMenuSocialProtection": "Social Protection"
 }
