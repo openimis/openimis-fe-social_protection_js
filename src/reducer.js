@@ -58,7 +58,7 @@ function reducer(
                 ...state,
                 fetchingBenefitPlans: false,
                 fetchedBenefitPlans: true,
-                benefitPlans: parseData(action.payload.benefitPlans)?.map((benefitPlan) => ({
+                benefitPlans: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => ({
                     ...benefitPlan,
                     id: decodeId(benefitPlan.id)
                 })),

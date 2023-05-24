@@ -36,7 +36,7 @@ const BenefitPlanSearcher = ({
                                  journalize,
                                  submittingMutation,
                                  mutation,
-                                 fetchbenefitPlans,
+                                 fetchBenefitPlans,
                                  deleteBenefitPlan,
                                  fetchingBenefitPlans,
                                  fetchedBenefitPlans,
@@ -100,6 +100,9 @@ const BenefitPlanSearcher = ({
         const formatters = [
             (benefitPlan) => benefitPlan.code,
             (benefitPlan) => benefitPlan.name,
+            (benefitPlan) => benefitPlan.dateValidFrom,
+            (benefitPlan) => benefitPlan.dateValidTo,
+            (benefitPlan) => benefitPlan.maxBeneficiaries,
         ];
         if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE)) {
             formatters.push((benefitPlan) => (

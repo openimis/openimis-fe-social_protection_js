@@ -8,6 +8,8 @@ import {
 import {ACTION_TYPE} from "./reducer";
 import {ERROR, REQUEST, SUCCESS} from "./util/action-type";
 
+const HOLDER_PROJECTION = "holder{id, code, tradeName}"
+
 const BENEFIT_PLAN_FULL_PROJECTION = [
     "id",
     "isDeleted",
@@ -21,7 +23,7 @@ const BENEFIT_PLAN_FULL_PROJECTION = [
     "name",
     "maxBeneficiaries",
     "ceilingPerBeneficiary",
-    "holder",
+    HOLDER_PROJECTION,
     "jsonExt",
 ];
 
