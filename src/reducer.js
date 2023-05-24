@@ -8,14 +8,18 @@ import {
     pageInfo,
     decodeId,
 } from "@openimis/fe-core";
-import {REQUEST, SUCCESS, ERROR} from "./util/action-type";
+import {REQUEST, SUCCESS, ERROR, CLEAR} from "./util/action-type";
 
 export const ACTION_TYPE = {
     MUTATION: "BENEFIT_PLAN_MUTATION",
     SEARCH_BENEFIT_PLANS: "BENEFIT_PLAN_BENEFIT_PLANS",
     GET_BENEFIT_PLAN: "BENEFIT_PLAN_BENEFIT_PLAN",
     DELETE_BENEFIT_PLAN: "BENEFIT_PLAN_DELETE_BENEFIT_PLAN",
-    UPDATE_BENEFIT_PLAN: "BENEFIT_PLAN_UPDATE_BENEFIT_PLAN"
+    UPDATE_BENEFIT_PLAN: "BENEFIT_PLAN_UPDATE_BENEFIT_PLAN",
+    BENEFIT_PLAN_CODE_FIELDS_VALIDATION: "BENEFIT_PLAN_CODE_FIELDS_VALIDATION",
+    BENEFIT_PLAN_NAME_FIELDS_VALIDATION: "BENEFIT_PLAN_NAME_FIELDS_VALIDATION",
+    BENEFIT_PLAN_CODE_SET_VALID: "BENEFIT_PLAN_CODE_SET_VALID",
+    BENEFIT_PLAN_NAME_SET_VALID: "BENEFIT_PLAN_NAME_SET_VALID"
 };
 
 function reducer(
@@ -88,6 +92,126 @@ function reducer(
                 ...state,
                 fetchingBenefitPlan: false,
                 errorBenefitPlan: formatServerError(action.payload),
+            };
+        case REQUEST(ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanCode: {
+                        isValidating: true,
+                        isValid: false,
+                        validationError: null,
+                    },
+                },
+            };
+        case SUCCESS(ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanCode: {
+                        isValidating: false,
+                        isValid: action.payload?.data.isValid,
+                        validationError: formatGraphQLError(action.payload)
+                    }
+                }
+            }
+        case ERROR(ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanCode: {
+                        isValidating: false,
+                        isValid: false,
+                        validationError: formatServerError(action.payload),
+                    },
+                },
+            };
+        case CLEAR(ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanCode: {
+                        isValidating: false,
+                        isValid: false,
+                        validationError: null,
+                    },
+                },
+            };
+        case ACTION_TYPE.BENEFIT_PLAN_CODE_SET_VALID:
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanCode: {
+                        isValidating: false,
+                        isValid: true,
+                        validationError: null,
+                    },
+                },
+            };
+        case REQUEST(ACTION_TYPE.BENEFIT_PLAN_NAME_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanName: {
+                        isValidating: true,
+                        isValid: false,
+                        validationError: null,
+                    },
+                },
+            };
+        case SUCCESS(ACTION_TYPE.BENEFIT_PLAN_NAME_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanName: {
+                        isValidating: false,
+                        isValid: action.payload?.data.isValid,
+                        validationError: formatGraphQLError(action.payload)
+                    }
+                }
+            }
+        case ERROR(ACTION_TYPE.BENEFIT_PLAN_NAME_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanName: {
+                        isValidating: false,
+                        isValid: false,
+                        validationError: formatServerError(action.payload),
+                    },
+                },
+            };
+        case CLEAR(ACTION_TYPE.BENEFIT_PLAN_NAME_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanName: {
+                        isValidating: false,
+                        isValid: false,
+                        validationError: null,
+                    },
+                },
+            };
+        case ACTION_TYPE.BENEFIT_PLAN_NAME_SET_VALID:
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanName: {
+                        isValidating: false,
+                        isValid: true,
+                        validationError: null,
+                    },
+                },
             };
         case REQUEST(ACTION_TYPE.MUTATION):
             return dispatchMutationReq(state, action);

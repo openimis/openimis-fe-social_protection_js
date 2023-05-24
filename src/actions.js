@@ -3,10 +3,11 @@ import {
     formatPageQuery,
     formatPageQueryWithCount,
     formatMutation,
-    formatGQLString
+    formatGQLString,
+    graphqlWithVariables,
 } from "@openimis/fe-core";
 import {ACTION_TYPE} from "./reducer";
-import {ERROR, REQUEST, SUCCESS} from "./util/action-type";
+import {CLEAR, ERROR, REQUEST, SUCCESS} from "./util/action-type";
 
 const HOLDER_PROJECTION = "holder{id, code, tradeName}"
 
@@ -58,13 +59,14 @@ function dateTimeToDate(date) {
 }
 
 function formatBenefitPlanGQL(benefitPlan) {
+    console.log(benefitPlan)
     return `
     ${!!benefitPlan.id ? `id: "${benefitPlan.id}"` : ""}
     ${!!benefitPlan.name ? `name: "${formatGQLString(benefitPlan.name)}"` : ""}
     ${!!benefitPlan.code ? `code: "${formatGQLString(benefitPlan.code)}"` : ""}
     ${!!benefitPlan.maxBeneficiaries ? `maxBeneficiaries: ${benefitPlan.maxBeneficiaries}` : ""}
     ${!!benefitPlan.ceilingPerBeneficiary ? `ceilingPerBeneficiary: "${benefitPlan.ceilingPerBeneficiary}"` : ""}
-    ${!!benefitPlan.holderId ? `holderId: "${benefitPlan.holderId}"` : ""}
+    ${!!benefitPlan.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ""}
     ${!!benefitPlan.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ""}
     ${!!benefitPlan.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ""}
     ${!!benefitPlan.beneficiaryDataSchema ? `beneficiaryDataSchema: "${JSON.stringify(benefitPlan.beneficiaryDataSchema)}"` : ""}
@@ -85,3 +87,61 @@ export function updateBenefitPlan(benefitPlan, clientMutationLabel) {
         },
     );
 }
+
+export function benefitPlanCodeValidationCheck(mm, variables) {
+    return graphqlWithVariables(
+        `
+      query ($bfCode: String!) {
+        isValid: 
+            bfCodeValidity(bfCode: $bfCode) {
+                isValid
+            }
+      }
+      `,
+        variables,
+        ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION,
+    );
+}
+
+export function benefitPlanNameValidationCheck(mm, variables) {
+    return graphqlWithVariables(
+        `
+      query ($bfName: String!) {
+        isValid: 
+            bfNameValidity(bfName: $bfName) {
+                isValid
+        }
+      }
+      `,
+        variables,
+        ACTION_TYPE.BENEFIT_PLAN_NAME_FIELDS_VALIDATION,
+    );
+}
+
+export const benefitPlanCodeSetValid = () => {
+    return (dispatch) => {
+        dispatch({type: ACTION_TYPE.BENEFIT_PLAN_CODE_SET_VALID});
+    };
+};
+
+export const benefitPlanNameSetValid = () => {
+    return (dispatch) => {
+        dispatch({type: ACTION_TYPE.BENEFIT_PLAN_NAME_SET_VALID});
+    };
+};
+
+export const benefitPlanCodeValidationClear = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR(ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION),
+        });
+    };
+};
+
+export const benefitPlanNameValidationClear = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR(ACTION_TYPE.BENEFIT_PLAN_NAME_FIELDS_VALIDATION),
+        });
+    };
+};

@@ -1,17 +1,24 @@
 import React, {Fragment} from "react";
-import {Grid, Divider, Typography} from "@material-ui/core";
+import {Grid} from "@material-ui/core";
+import {connect} from "react-redux";
 import {
     withModulesManager,
     FormPanel,
     TextAreaInput,
-    TextInput,
     NumberInput,
-    formatMessage,
+    ValidatedTextInput,
     PublishedComponent,
 } from "@openimis/fe-core";
 import {injectIntl} from "react-intl";
 import {withTheme, withStyles} from "@material-ui/core/styles";
 import {isJsonString} from "../util/json-validate";
+import {MAX_CODE_LENGTH} from "../constants"
+import {
+    benefitPlanCodeSetValid,
+    benefitPlanCodeValidationCheck,
+    benefitPlanCodeValidationClear, benefitPlanNameSetValid,
+    benefitPlanNameValidationCheck, benefitPlanNameValidationClear
+} from "../actions";
 
 const styles = theme => ({
     tableTitle: theme.table.title,
@@ -22,29 +29,78 @@ const styles = theme => ({
 });
 
 class BenefitPlanHeadPanel extends FormPanel {
+
+    shouldValidateCode(inputValue) {
+        const {savedBenefitPlanCode, benefitPlan} = this.props;
+        if ((!!benefitPlan?.id && inputValue === savedBenefitPlanCode) ||
+            (!savedBenefitPlanCode && !!benefitPlan?.id))
+            return false;
+        return true;
+    }
+
+    shouldValidateName(inputValue) {
+        const {savedBenefitPlanName, benefitPlan} = this.props;
+        if ((!!benefitPlan?.id && inputValue === savedBenefitPlanName) ||
+            (!savedBenefitPlanName && !!benefitPlan?.id))
+            return false;
+        return true;
+    }
+
     render() {
-        const {edited, classes, intl} = this.props;
+        const {
+            edited,
+            classes,
+            isBenefitPlanCodeValid,
+            isBenefitPlanCodeValidating,
+            benefitPlanCodeValidationError,
+            isBenefitPlanNameValid,
+            isBenefitPlanNameValidating,
+            benefitPlanNameValidationError
+        } = this.props;
         const benefitPlan = {...edited};
-        console.log(intl)
+
         return (
             <Fragment>
                 <Grid container className={classes.item}>
                     <Grid item xs={3} className={classes.item}>
-                        <TextInput
+                        <ValidatedTextInput
                             module="socialProtection"
                             label="benefitPlan.code"
                             required
                             onChange={v => this.updateAttribute('code', v)}
-                            value={benefitPlan?.code}
+                            value={benefitPlan?.code ?? ""}
+                            itemQueryIdentifier="bfCode"
+                            action={benefitPlanCodeValidationCheck}
+                            //autoFocus={autoFocus}
+                            clearAction={benefitPlanCodeValidationClear}
+                            setValidAction={benefitPlanCodeSetValid}
+                            shouldValidate={v => this.shouldValidateCode(v)}
+                            codeTakenLabel="benefitPlan.code.alreadyTaken"
+                            isValid={isBenefitPlanCodeValid}
+                            isValidating={isBenefitPlanCodeValidating}
+                            validationError={benefitPlanCodeValidationError}
+                            inputProps={{
+                                "maxLength": MAX_CODE_LENGTH,
+                            }}
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>
-                        <TextInput
+                        <ValidatedTextInput
                             module="socialProtection"
                             label="benefitPlan.name"
                             required
                             onChange={v => this.updateAttribute('name', v)}
-                            value={benefitPlan?.name}
+                            value={benefitPlan?.name ?? ""}
+                            itemQueryIdentifier="bfName"
+                            action={benefitPlanNameValidationCheck}
+                            //autoFocus={autoFocus}
+                            clearAction={benefitPlanNameValidationClear}
+                            setValidAction={benefitPlanNameSetValid}
+                            shouldValidate={v => this.shouldValidateName(v)}
+                            codeTakenLabel="benefitPlan.name.alreadyTaken"
+                            isValid={isBenefitPlanNameValid}
+                            isValidating={isBenefitPlanNameValidating}
+                            validationError={benefitPlanNameValidationError}
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>
@@ -101,4 +157,15 @@ class BenefitPlanHeadPanel extends FormPanel {
     }
 }
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(BenefitPlanHeadPanel))))
+const mapStateToProps = (store) => ({
+    isBenefitPlanCodeValid: store.socialProtection.validationFields?.benefitPlanCode?.isValid,
+    isBenefitPlanCodeValidating: store.socialProtection.validationFields?.benefitPlanCode?.isValidating,
+    benefitPlanCodeValidationError: store.socialProtection.validationFields?.benefitPlanCode?.validationError,
+    savedBenefitPlanCode: store.socialProtection?.benefitPlan?.code,
+    isBenefitPlanNameValid: store.socialProtection.validationFields?.benefitPlanName?.isValid,
+    isBenefitPlanNameValidating: store.socialProtection.validationFields?.benefitPlanName?.isValidating,
+    benefitPlanNameValidationError: store.socialProtection.validationFields?.benefitPlanName?.validationError,
+    savedBenefitPlanName: store.socialProtection?.benefitPlan?.name,
+});
+
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(BenefitPlanHeadPanel)))))
