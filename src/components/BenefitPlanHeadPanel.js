@@ -5,7 +5,8 @@ import {
     FormPanel,
     TextAreaInput,
     TextInput,
-    FormattedMessage,
+    NumberInput,
+    formatMessage,
     PublishedComponent,
 } from "@openimis/fe-core";
 import {injectIntl} from "react-intl";
@@ -22,8 +23,9 @@ const styles = theme => ({
 
 class BenefitPlanHeadPanel extends FormPanel {
     render() {
-        const {edited, classes} = this.props;
+        const {edited, classes, intl} = this.props;
         const benefitPlan = {...edited};
+        console.log(intl)
         return (
             <Fragment>
                 <Grid container className={classes.item}>
@@ -66,11 +68,30 @@ class BenefitPlanHeadPanel extends FormPanel {
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>
+                        <NumberInput
+                            min={0}
+                            displayZero
+                            module="socialProtection"
+                            label="benefitPlan.maxBeneficiaries"
+                            onChange={v => this.updateAttribute('maxBeneficiaries', v)}
+                            value={benefitPlan?.maxBeneficiaries ?? ""}
+                        />
+                    </Grid>
+                    <Grid item xs={3} className={classes.item}>
+                        <PublishedComponent
+                            pubRef="policyHolder.PolicyHolderPicker"
+                            module="socialProtection"
+                            withNull
+                            onChange={v => this.updateAttribute('holder', v)}
+                            value={benefitPlan?.holder}
+                        />
+                    </Grid>
+                    <Grid item xs={3} className={classes.item}>
                         <TextAreaInput
                             module="socialProtection"
                             label="benefitPlan.json_ext"
-                            value={benefitPlan?.jsonExt}
                             onChange={v => this.updateAttribute('jsonExt', v)}
+                            value={benefitPlan?.jsonExt}
                             error={!!benefitPlan?.jsonExt && !isJsonString(benefitPlan?.jsonExt)}
                         />
                     </Grid>

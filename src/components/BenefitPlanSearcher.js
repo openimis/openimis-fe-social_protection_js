@@ -141,7 +141,7 @@ const BenefitPlanSearcher = ({
         ["name", true],
         ["dateValidityFrom", true],
         ["dateValidityTo", true],
-        ["max_beneficiaries", true],
+        ["maxBeneficiaries", true],
     ];
 
     const benefitPlanUpdatePageUrl = (benefitPlan) => modulesManager.getRef("socialProtection.route.benefitPlan") + "/" + benefitPlan?.id;

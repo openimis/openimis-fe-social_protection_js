@@ -13,10 +13,8 @@
   "socialProtection.benefitPlan.maxBeneficiaries": "Max Beneficiaries",
   "socialProtection.benefitPlan.json_ext": "JSON_EXT",
   "socialProtection.benefitPlan.pageTitle": "Benefit Plan {code} {name}",
-  "socialProtection.benefitPlan.saveButton.tooltip.enabled": "TO BE FILLED",
-  "socialProtection.benefitPlan.saveButton.tooltip.disabled": "TO BE FILLED",
-  "socialProtection.benefitPlan.headPanelTitle": "TO BE FILLED",
-  "socialProtection.benefitPlan.mandatoryFieldsEmptyError": "TO BE FILLED",
+  "socialProtection.benefitPlan.saveButton.tooltip.enabled": "Enabled",
+  "socialProtection.benefitPlan.saveButton.tooltip.disabled": "Disabled",
   "socialProtection.mainMenuSocialProtection": "Social Protection",
   "socialProtection.menu.socialProtection.benefitPlans": "Benefit Plans"
 }
