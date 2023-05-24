@@ -1,6 +1,6 @@
 {
-  "socialProtection.benefitPlan.delete.confirm.title": "DELETE BENEFIT PLAN",
-  "socialProtection.benefitPlan.delete.confirm.message": "Are you sure you want to delete the benefit plan {name}",
+  "socialProtection.benefitPlan.delete.confirm.title": "DELETE BENEFIT PLAN {code} {name}",
+  "socialProtection.benefitPlan.delete.confirm.message": "Are you sure you want to delete the benefit plan?",
   "socialProtection.benefitPlan.delete.mutationLabel": "Delete benefit plan {name}",
   "socialProtection.benefitPlan.update.mutationLabel": "Update product {name}",
   "socialProtection.benefitPlan.editButtonTooltip": "Edit",

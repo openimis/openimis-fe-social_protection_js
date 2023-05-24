@@ -38,7 +38,7 @@ export function fetchBenefitPlan(params) {
 }
 
 export function deleteBenefitPlan(benefitPlan, clientMutationLabel) {
-    const benefitPlanUuids = `uuids: ["${benefitPlan?.id}"]`;
+    const benefitPlanUuids = `ids: ["${benefitPlan?.id}"]`;
     const mutation = formatMutation("deleteBenefitPlan", benefitPlanUuids, clientMutationLabel);
     const requestedDateTime = new Date();
     return graphql(

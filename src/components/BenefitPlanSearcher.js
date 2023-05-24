@@ -49,6 +49,8 @@ const BenefitPlanSearcher = ({
     const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
     const prevSubmittingMutationRef = useRef();
 
+    useEffect(() => benefitPlanToDelete && openDeleteBenefitPlanConfirmDialog(), [benefitPlanToDelete]);
+
     useEffect(() => {
         if (benefitPlanToDelete && confirmed) {
             deleteBenefitPlan(
