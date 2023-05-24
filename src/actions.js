@@ -63,10 +63,10 @@ function formatBenefitPlanGQL(benefitPlan) {
     ${!!benefitPlan.name ? `name: "${formatGQLString(benefitPlan.name)}"` : ""}
     ${!!benefitPlan.code ? `code: "${formatGQLString(benefitPlan.code)}"` : ""}
     ${!!benefitPlan.maxBeneficiaries ? `maxBeneficiaries: ${benefitPlan.maxBeneficiaries}` : ""}
-    ${!!benefitPlan.ceilingPerBeneficiary ? `ceilingPerBeneficiary: ${benefitPlan.ceilingPerBeneficiary}` : ""}
+    ${!!benefitPlan.ceilingPerBeneficiary ? `ceilingPerBeneficiary: "${benefitPlan.ceilingPerBeneficiary}"` : ""}
     ${!!benefitPlan.holderId ? `holderId: "${benefitPlan.holderId}"` : ""}
-    ${!!benefitPlan.dateValidFrom ? `holderId: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ""}
-    ${!!benefitPlan.dateValidTo ? `holderId: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ""}
+    ${!!benefitPlan.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ""}
+    ${!!benefitPlan.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ""}
     ${!!benefitPlan.beneficiaryDataSchema ? `beneficiaryDataSchema: "${JSON.stringify(benefitPlan.beneficiaryDataSchema)}"` : ""}
     ${!!benefitPlan.jsonExt ? `jsonExt: "${JSON.stringify(benefitPlan.jsonExt)}"` : ""}`;
 }

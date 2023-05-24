@@ -8,7 +8,7 @@ import { SOCIAL_PROTECTION_MAIN_MENU_CONTRIBUTION_KEY } from "../constants";
 const BenefitPlanMainMenu = (props) => {
     const entries = [
         {
-            text: formatMessage(props.intl, "socialProtection", "menu.socialProtection"),
+            text: formatMessage(props.intl, "socialProtection", "menu.socialProtection.benefitPlans"),
             icon: <Tune />,
             route: "/benefitPlans",
         }

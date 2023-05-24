@@ -1,7 +1,8 @@
 {
-  "socialProtection.benefitPlan.delete.mutation": "TO BE FILLED",
-  "socialProtection.benefitPlan.delete.confirm.title": "TO BE FILLED",
-  "socialProtection.benefitPlan.delete.confirm.message": "TO BE FILLED",
+  "socialProtection.benefitPlan.delete.confirm.title": "DELETE BENEFIT PLAN",
+  "socialProtection.benefitPlan.delete.confirm.message": "Are you sure you want to delete the benefit plan {name}",
+  "socialProtection.benefitPlan.delete.mutationLabel": "Delete benefit plan {name}",
+  "socialProtection.benefitPlan.update.mutationLabel": "Update product {name}",
   "socialProtection.benefitPlan.editButtonTooltip": "Edit",
   "socialProtection.benefitPlan.deleteButtonTooltip": "Delete",
   "socialProtection.benefitPlan.searcherResultsTitle": "{benefitPlansTotalCount} Benefit Plans",
@@ -10,7 +11,12 @@
   "socialProtection.benefitPlan.name": "Name",
   "socialProtection.benefitPlan.code": "Code",
   "socialProtection.benefitPlan.maxBeneficiaries": "Max Beneficiaries",
-  "socialProtection.benefitPlan.pageTitle": "BenefitPlans",
-  "socialProtection.menu.socialProtection": "Benefit Plans",
-  "socialProtection.mainMenuSocialProtection": "Social Protection"
+  "socialProtection.benefitPlan.json_ext": "JSON_EXT",
+  "socialProtection.benefitPlan.pageTitle": "Benefit Plan {code} {name}",
+  "socialProtection.benefitPlan.saveButton.tooltip.enabled": "TO BE FILLED",
+  "socialProtection.benefitPlan.saveButton.tooltip.disabled": "TO BE FILLED",
+  "socialProtection.benefitPlan.headPanelTitle": "TO BE FILLED",
+  "socialProtection.benefitPlan.mandatoryFieldsEmptyError": "TO BE FILLED",
+  "socialProtection.mainMenuSocialProtection": "Social Protection",
+  "socialProtection.menu.socialProtection.benefitPlans": "Benefit Plans"
 }
