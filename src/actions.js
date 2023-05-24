@@ -59,7 +59,6 @@ function dateTimeToDate(date) {
 }
 
 function formatBenefitPlanGQL(benefitPlan) {
-    console.log(benefitPlan)
     return `
     ${!!benefitPlan.id ? `id: "${benefitPlan.id}"` : ""}
     ${!!benefitPlan.name ? `name: "${formatGQLString(benefitPlan.name)}"` : ""}
