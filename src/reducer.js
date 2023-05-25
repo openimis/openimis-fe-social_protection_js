@@ -63,17 +63,17 @@ function reducer(
                 fetchingBenefitPlans: false,
                 fetchedBenefitPlans: true,
                 benefitPlans: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
-                    let res = ({
+                    let response = ({
                         ...benefitPlan,
                         id: decodeId(benefitPlan.id),
                     })
-                    if (res?.holder?.id) {
-                        res.holder = ({
-                            ...res.holder,
-                            id: decodeId(res.holder.id)
+                    if (response?.holder?.id) {
+                        response.holder = ({
+                            ...response.holder,
+                            id: decodeId(response.holder.id)
                         })
                     }
-                    return res
+                    return response
                 }),
                 benefitPlansPageInfo: pageInfo(action.payload.data.benefitPlan),
                 benefitPlansTotalCount: !!action.payload.data.benefitPlan ? action.payload.data.benefitPlan.totalCount : null,
@@ -85,17 +85,17 @@ function reducer(
                 fetchingBenefitPlan: false,
                 fetchedBenefitPlan: true,
                 benefitPlan: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
-                    let res = ({
+                    let response = ({
                         ...benefitPlan,
                         id: decodeId(benefitPlan.id),
                     })
-                    if (res?.holder?.id) {
-                        res.holder = ({
-                            ...res.holder,
-                            id: decodeId(res.holder.id)
+                    if (response?.holder?.id) {
+                        response.holder = ({
+                            ...response.holder,
+                            id: decodeId(response.holder.id)
                         })
                     }
-                    return res
+                    return response
                 })?.[0],
                 errorBenefitPlan: null,
             };
@@ -130,7 +130,7 @@ function reducer(
                     ...state.validationFields,
                     benefitPlanCode: {
                         isValidating: false,
-                        isValid: action.payload?.data.isValid,
+                        isValid: action.payload?.data.isValid.isValid,
                         validationError: formatGraphQLError(action.payload)
                     }
                 }
@@ -190,7 +190,7 @@ function reducer(
                     ...state.validationFields,
                     benefitPlanName: {
                         isValidating: false,
-                        isValid: action.payload?.data.isValid,
+                        isValid: action.payload?.data.isValid.isValid,
                         validationError: formatGraphQLError(action.payload)
                     }
                 }

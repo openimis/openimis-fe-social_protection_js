@@ -30,18 +30,10 @@ const styles = theme => ({
 
 class BenefitPlanHeadPanel extends FormPanel {
 
-    shouldValidateCode(inputValue) {
-        const {savedBenefitPlanCode, benefitPlan} = this.props;
-        if ((!!benefitPlan?.id && inputValue === savedBenefitPlanCode) ||
-            (!savedBenefitPlanCode && !!benefitPlan?.id))
-            return false;
-        return true;
-    }
-
-    shouldValidateName(inputValue) {
-        const {savedBenefitPlanName, benefitPlan} = this.props;
-        if ((!!benefitPlan?.id && inputValue === savedBenefitPlanName) ||
-            (!savedBenefitPlanName && !!benefitPlan?.id))
+    shouldValidate(inputValue, fieldToValidate) {
+        const {benefitPlan} = this.props;
+        if ((!!benefitPlan?.id && inputValue === fieldToValidate) ||
+            (!fieldToValidate && !!benefitPlan?.id))
             return false;
         return true;
     }
@@ -55,7 +47,9 @@ class BenefitPlanHeadPanel extends FormPanel {
             benefitPlanCodeValidationError,
             isBenefitPlanNameValid,
             isBenefitPlanNameValidating,
-            benefitPlanNameValidationError
+            benefitPlanNameValidationError,
+            savedBenefitPlanCode,
+            savedBenefitPlanName
         } = this.props;
         const benefitPlan = {...edited};
 
@@ -73,7 +67,7 @@ class BenefitPlanHeadPanel extends FormPanel {
                             action={benefitPlanCodeValidationCheck}
                             clearAction={benefitPlanCodeValidationClear}
                             setValidAction={benefitPlanCodeSetValid}
-                            shouldValidate={v => this.shouldValidateCode(v)}
+                            shouldValidate={v => this.shouldValidate(v, savedBenefitPlanCode)}
                             codeTakenLabel="benefitPlan.code.alreadyTaken"
                             isValid={isBenefitPlanCodeValid}
                             isValidating={isBenefitPlanCodeValidating}
@@ -94,7 +88,7 @@ class BenefitPlanHeadPanel extends FormPanel {
                             action={benefitPlanNameValidationCheck}
                             clearAction={benefitPlanNameValidationClear}
                             setValidAction={benefitPlanNameSetValid}
-                            shouldValidate={v => this.shouldValidateName(v)}
+                            shouldValidate={v => this.shouldValidate(v, savedBenefitPlanName)}
                             codeTakenLabel="benefitPlan.name.alreadyTaken"
                             isValid={isBenefitPlanNameValid}
                             isValidating={isBenefitPlanNameValidating}
