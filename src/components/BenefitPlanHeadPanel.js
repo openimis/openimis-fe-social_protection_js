@@ -137,7 +137,7 @@ class BenefitPlanHeadPanel extends FormPanel {
                             module="socialProtection"
                             withNull
                             onChange={v => this.updateAttribute('holder', v)}
-                            value={benefitPlan?.holder}
+                            value={!!benefitPlan.holder && benefitPlan.holder}
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>

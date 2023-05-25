@@ -82,7 +82,7 @@ const BenefitPlanSearcher = ({
             formatMessage(intl, "socialProtection", "benefitPlan.delete.confirm.message"),
         );
 
-    const fetch = (params) => fetchBenefitPlans(params);
+    const fetch = (params) => fetchBenefitPlans(modulesManager, params);
 
     const headers = () => {
         const headers = [

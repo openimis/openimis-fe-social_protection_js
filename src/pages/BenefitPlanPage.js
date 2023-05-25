@@ -6,6 +6,8 @@ import {
     formatMessageWithValues,
     coreConfirm,
     journalize,
+    withModulesManager,
+    decodeId,
 } from "@openimis/fe-core";
 import {injectIntl} from "react-intl";
 import {bindActionCreators} from "redux";
@@ -23,28 +25,29 @@ const styles = (theme) => ({
 });
 
 const BenefitPlanPage = ({
-                             intl,
-                             classes,
-                             rights,
-                             history,
-                             benefitPlanUuid,
-                             benefitPlan,
-                             fetchBenefitPlan,
-                             deleteBenefitPlan,
-                             updateBenefitPlan,
-                             coreConfirm,
-                             confirmed,
-                             submittingMutation,
-                             mutation,
-                             journalize,
-                         }) => {
+    intl,
+    classes,
+    rights,
+    history,
+    benefitPlanUuid,
+    benefitPlan,
+    fetchBenefitPlan,
+    deleteBenefitPlan,
+    updateBenefitPlan,
+    coreConfirm,
+    confirmed,
+    submittingMutation,
+    mutation,
+    journalize,
+    modulesManager,
+}) => {
     const [editedBenefitPlan, setEditedBenefitPlan] = useState({});
     const [confirmedAction, setConfirmedAction] = useState(() => null);
     const prevSubmittingMutationRef = useRef();
 
     useEffect(() => {
         if (!!benefitPlanUuid) {
-            fetchBenefitPlan([`id: "${benefitPlanUuid}"`]);
+            fetchBenefitPlan(modulesManager, [`id: "${benefitPlanUuid}"`]);
         }
     }, [benefitPlanUuid]);
 
@@ -172,5 +175,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withHistory(
-    injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanPage)))),
+    withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanPage))))),
 );

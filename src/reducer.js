@@ -62,10 +62,19 @@ function reducer(
                 ...state,
                 fetchingBenefitPlans: false,
                 fetchedBenefitPlans: true,
-                benefitPlans: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => ({
-                    ...benefitPlan,
-                    id: decodeId(benefitPlan.id)
-                })),
+                benefitPlans: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
+                    let res = ({
+                        ...benefitPlan,
+                        id: decodeId(benefitPlan.id),
+                    })
+                    if (res?.holder?.id) {
+                        res.holder = ({
+                            ...res.holder,
+                            id: decodeId(res.holder.id)
+                        })
+                    }
+                    return res
+                }),
                 benefitPlansPageInfo: pageInfo(action.payload.data.benefitPlan),
                 benefitPlansTotalCount: !!action.payload.data.benefitPlan ? action.payload.data.benefitPlan.totalCount : null,
                 errorBenefitPlans: formatGraphQLError(action.payload),
@@ -75,10 +84,19 @@ function reducer(
                 ...state,
                 fetchingBenefitPlan: false,
                 fetchedBenefitPlan: true,
-                benefitPlan: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => ({
-                    ...benefitPlan,
-                    id: decodeId(benefitPlan.id),
-                }))?.[0],
+                benefitPlan: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
+                    let res = ({
+                        ...benefitPlan,
+                        id: decodeId(benefitPlan.id),
+                    })
+                    if (res?.holder?.id) {
+                        res.holder = ({
+                            ...res.holder,
+                            id: decodeId(res.holder.id)
+                        })
+                    }
+                    return res
+                })?.[0],
                 errorBenefitPlan: null,
             };
         case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
