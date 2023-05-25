@@ -27,24 +27,24 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import BenefitPlanFilter from "./BenefitPlanFilter";
 
 const BenefitPlanSearcher = ({
-                                 intl,
-                                 modulesManager,
-                                 history,
-                                 rights,
-                                 coreConfirm,
-                                 confirmed,
-                                 journalize,
-                                 submittingMutation,
-                                 mutation,
-                                 fetchBenefitPlans,
-                                 deleteBenefitPlan,
-                                 fetchingBenefitPlans,
-                                 fetchedBenefitPlans,
-                                 errorBenefitPlans,
-                                 benefitPlans,
-                                 benefitPlansPageInfo,
-                                 benefitPlansTotalCount,
-                             }) => {
+    intl,
+    modulesManager,
+    history,
+    rights,
+    coreConfirm,
+    confirmed,
+    journalize,
+    submittingMutation,
+    mutation,
+    fetchBenefitPlans,
+    deleteBenefitPlan,
+    fetchingBenefitPlans,
+    fetchedBenefitPlans,
+    errorBenefitPlans,
+    benefitPlans,
+    benefitPlansPageInfo,
+    benefitPlansTotalCount,
+}) => {
     const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
     const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
     const prevSubmittingMutationRef = useRef();

@@ -71,7 +71,6 @@ class BenefitPlanHeadPanel extends FormPanel {
                             value={benefitPlan?.code ?? ""}
                             itemQueryIdentifier="bfCode"
                             action={benefitPlanCodeValidationCheck}
-                            //autoFocus={autoFocus}
                             clearAction={benefitPlanCodeValidationClear}
                             setValidAction={benefitPlanCodeSetValid}
                             shouldValidate={v => this.shouldValidateCode(v)}
@@ -93,7 +92,6 @@ class BenefitPlanHeadPanel extends FormPanel {
                             value={benefitPlan?.name ?? ""}
                             itemQueryIdentifier="bfName"
                             action={benefitPlanNameValidationCheck}
-                            //autoFocus={autoFocus}
                             clearAction={benefitPlanNameValidationClear}
                             setValidAction={benefitPlanNameSetValid}
                             shouldValidate={v => this.shouldValidateName(v)}
@@ -145,7 +143,7 @@ class BenefitPlanHeadPanel extends FormPanel {
                     <Grid item xs={3} className={classes.item}>
                         <TextAreaInput
                             module="socialProtection"
-                            label="benefitPlan.json_ext"
+                            label="benefitPlan.jsonExt"
                             onChange={v => this.updateAttribute('jsonExt', v)}
                             value={benefitPlan?.jsonExt}
                             error={!!benefitPlan?.jsonExt && !isJsonString(benefitPlan?.jsonExt)}
