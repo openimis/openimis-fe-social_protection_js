@@ -19,7 +19,8 @@ export const ACTION_TYPE = {
     BENEFIT_PLAN_CODE_FIELDS_VALIDATION: "BENEFIT_PLAN_CODE_FIELDS_VALIDATION",
     BENEFIT_PLAN_NAME_FIELDS_VALIDATION: "BENEFIT_PLAN_NAME_FIELDS_VALIDATION",
     BENEFIT_PLAN_CODE_SET_VALID: "BENEFIT_PLAN_CODE_SET_VALID",
-    BENEFIT_PLAN_NAME_SET_VALID: "BENEFIT_PLAN_NAME_SET_VALID"
+    BENEFIT_PLAN_NAME_SET_VALID: "BENEFIT_PLAN_NAME_SET_VALID",
+    SEARCH_BENEFICIARIES: "BENEFICIARY_BENEFICIARIES"
 };
 
 function reducer(
@@ -35,7 +36,14 @@ function reducer(
         fetchingBenefitPlan: false,
         errorBenefitPlan: null,
         fetchedBenefitPlan: false,
-        benefitPlan: null
+        benefitPlan: null,
+        fetchingBeneficiaries: false,
+        fetchedBeneficiaries: false,
+        beneficiaries: [],
+        beneficiariesPageInfo: {},
+        beneficiariesTotalCount: 0,
+        errorBeneficiaries: null,
+        beneficiary: null,
     },
     action,
 ) {
@@ -56,6 +64,16 @@ function reducer(
                 fetchingBenefitPlan: true,
                 fetchedBenefitPlan: false,
                 benefitPlan: null,
+            };
+        case REQUEST(ACTION_TYPE.SEARCH_BENEFICIARIES):
+            return {
+                ...state,
+                fetchingBeneficiaries: true,
+                fetchedBeneficiaries: false,
+                beneficiaries: [],
+                beneficiariesPageInfo: {},
+                beneficiariesTotalCount: 0,
+                errorBeneficiaries: null,
             };
         case SUCCESS(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
             return {
@@ -99,6 +117,22 @@ function reducer(
                 })?.[0],
                 errorBenefitPlan: null,
             };
+        case SUCCESS(ACTION_TYPE.SEARCH_BENEFICIARIES):
+            return {
+                ...state,
+                fetchingBeneficiaries: false,
+                fetchedBeneficiaries: true,
+                beneficiaries: parseData(action.payload.data.beneficiary)?.map((beneficiary) => {
+                    console.log('aaaaaa')
+                    return ({
+                        ...beneficiary,
+                        id: decodeId(beneficiary.id),
+                    })
+                }),
+                beneficiariesPageInfo: pageInfo(action.payload.data.beneficiary),
+                beneficiariesTotalCount: !!action.payload.data.beneficiary ? action.payload.data.beneficiary.totalCount : null,
+                errorBeneficiaries: formatGraphQLError(action.payload),
+            };
         case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
             return {
                 ...state,
@@ -110,6 +144,12 @@ function reducer(
                 ...state,
                 fetchingBenefitPlan: false,
                 errorBenefitPlan: formatServerError(action.payload),
+            };
+        case ERROR(ACTION_TYPE.SEARCH_BENEFICIARIES):
+            return {
+                ...state,
+                fetchingBeneficiaries: false,
+                errorBeneficiaries: formatServerError(action.payload),
             };
         case REQUEST(ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION):
             return {

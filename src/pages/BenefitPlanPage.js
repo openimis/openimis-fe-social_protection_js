@@ -13,9 +13,10 @@ import {injectIntl} from "react-intl";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {withTheme, withStyles} from "@material-ui/core/styles";
-import {RIGHT_BENEFIT_PLAN_UPDATE} from "../constants";
+import {RIGHT_BENEFICIARY_SEARCH, RIGHT_BENEFIT_PLAN_UPDATE} from "../constants";
 import {fetchBenefitPlan, deleteBenefitPlan, updateBenefitPlan} from "../actions";
 import BenefitPlanHeadPanel from "../components/BenefitPlanHeadPanel";
+import BenefitPlanTabPanel from "../components/BenefitPlanTabPanel";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {ACTION_TYPE} from "../reducer";
 import {isJsonString} from "../util/json-validate";
@@ -141,7 +142,10 @@ const BenefitPlanPage = ({
                     canSave={canSave}
                     save={handleSave}
                     HeadPanel={BenefitPlanHeadPanel}
-                    Panels={[]}
+
+                    Panels={
+                        rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPlanTabPanel] : []
+                    }
                     rights={rights}
                     actions={actions}
                     setConfirmedAction={setConfirmedAction}

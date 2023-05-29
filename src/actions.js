@@ -11,7 +11,7 @@ import {CLEAR, ERROR, REQUEST, SUCCESS} from "./util/action-type";
 
 const HOLDER_PROJECTION = "holder{id, code, tradeName}"
 
-const BENEFIT_PLAN_FULL_PROJECTION= (modulesManager) => [
+const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
     "id",
     "isDeleted",
     "dateCreated",
@@ -29,9 +29,20 @@ const BENEFIT_PLAN_FULL_PROJECTION= (modulesManager) => [
     modulesManager.getProjection("policyHolder.PolicyHolderPicker.projection"),
 ];
 
+const BENEFICIARY_FULL_PROJECTION = () => [
+    "id",
+    "individual {firstName, lastName, dob}",
+    "status"
+]
+
 export function fetchBenefitPlans(modulesManager, params) {
     const payload = formatPageQueryWithCount("benefitPlan", params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));
     return graphql(payload, ACTION_TYPE.SEARCH_BENEFIT_PLANS)
+}
+
+export function fetchBeneficiaries(params) {
+    const payload = formatPageQueryWithCount("beneficiary", params, BENEFICIARY_FULL_PROJECTION())
+    return graphql(payload, ACTION_TYPE.SEARCH_BENEFICIARIES)
 }
 
 export function fetchBenefitPlan(modulesManager, params) {
