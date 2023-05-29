@@ -123,7 +123,6 @@ function reducer(
                 fetchingBeneficiaries: false,
                 fetchedBeneficiaries: true,
                 beneficiaries: parseData(action.payload.data.beneficiary)?.map((beneficiary) => {
-                    console.log('aaaaaa')
                     return ({
                         ...beneficiary,
                         id: decodeId(beneficiary.id),
