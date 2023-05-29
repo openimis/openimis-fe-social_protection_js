@@ -14,6 +14,7 @@ export const ACTION_TYPE = {
     MUTATION: "BENEFIT_PLAN_MUTATION",
     SEARCH_BENEFIT_PLANS: "BENEFIT_PLAN_BENEFIT_PLANS",
     GET_BENEFIT_PLAN: "BENEFIT_PLAN_BENEFIT_PLAN",
+    CREATE_BENEFIT_PLAN: "BENEFIT_PLAN_CREATE_BENEFIT_PLAN",
     DELETE_BENEFIT_PLAN: "BENEFIT_PLAN_DELETE_BENEFIT_PLAN",
     UPDATE_BENEFIT_PLAN: "BENEFIT_PLAN_UPDATE_BENEFIT_PLAN",
     BENEFIT_PLAN_CODE_FIELDS_VALIDATION: "BENEFIT_PLAN_CODE_FIELDS_VALIDATION",
@@ -282,6 +283,8 @@ function reducer(
             return dispatchMutationReq(state, action);
         case ERROR(ACTION_TYPE.MUTATION):
             return dispatchMutationErr(state, action);
+        case SUCCESS(ACTION_TYPE.CREATE_BENEFIT_PLAN):
+            return dispatchMutationResp(state, "createBenefitPlan", action);
         case SUCCESS(ACTION_TYPE.DELETE_BENEFIT_PLAN):
             return dispatchMutationResp(state, "deleteBenefitPlan", action);
         case SUCCESS(ACTION_TYPE.UPDATE_BENEFIT_PLAN):

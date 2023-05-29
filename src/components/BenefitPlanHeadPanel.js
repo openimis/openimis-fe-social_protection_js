@@ -102,7 +102,7 @@ class BenefitPlanHeadPanel extends FormPanel {
                             label="benefitPlan.dateValidFrom"
                             required
                             onChange={v => this.updateAttribute('dateValidFrom', v)}
-                            value={benefitPlan?.dateValidFrom}
+                            value={benefitPlan?.dateValidFrom ?? ""}
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>
@@ -112,7 +112,7 @@ class BenefitPlanHeadPanel extends FormPanel {
                             label="benefitPlan.dateValidTo"
                             required
                             onChange={v => this.updateAttribute('dateValidTo', v)}
-                            value={benefitPlan?.dateValidTo}
+                            value={benefitPlan?.dateValidTo ?? ""}
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>
@@ -131,7 +131,7 @@ class BenefitPlanHeadPanel extends FormPanel {
                             module="socialProtection"
                             withNull
                             onChange={v => this.updateAttribute('holder', v)}
-                            value={!!benefitPlan.holder && benefitPlan.holder}
+                            value={!!benefitPlan?.holder && benefitPlan.holder}
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>

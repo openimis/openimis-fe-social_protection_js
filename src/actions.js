@@ -72,16 +72,31 @@ function dateTimeToDate(date) {
 
 function formatBenefitPlanGQL(benefitPlan) {
     return `
-    ${!!benefitPlan.id ? `id: "${benefitPlan.id}"` : ""}
-    ${!!benefitPlan.name ? `name: "${formatGQLString(benefitPlan.name)}"` : ""}
-    ${!!benefitPlan.code ? `code: "${formatGQLString(benefitPlan.code)}"` : ""}
-    ${!!benefitPlan.maxBeneficiaries ? `maxBeneficiaries: ${benefitPlan.maxBeneficiaries}` : ""}
-    ${!!benefitPlan.ceilingPerBeneficiary ? `ceilingPerBeneficiary: "${benefitPlan.ceilingPerBeneficiary}"` : ""}
-    ${!!benefitPlan.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ""}
-    ${!!benefitPlan.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ""}
-    ${!!benefitPlan.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ""}
-    ${!!benefitPlan.beneficiaryDataSchema ? `beneficiaryDataSchema: "${JSON.stringify(benefitPlan.beneficiaryDataSchema)}"` : ""}
-    ${!!benefitPlan.jsonExt ? `jsonExt: "${JSON.stringify(benefitPlan.jsonExt)}"` : ""}`;
+    ${!!benefitPlan?.id ? `id: "${benefitPlan.id}"` : ""}
+    ${!!benefitPlan?.name ? `name: "${formatGQLString(benefitPlan.name)}"` : ""}
+    ${!!benefitPlan?.code ? `code: "${formatGQLString(benefitPlan.code)}"` : ""}
+    ${!!benefitPlan?.maxBeneficiaries ? `maxBeneficiaries: ${benefitPlan.maxBeneficiaries}` : ""}
+    ${!!benefitPlan?.ceilingPerBeneficiary ? `ceilingPerBeneficiary: "${benefitPlan.ceilingPerBeneficiary}"` : ""}
+    ${!!benefitPlan?.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ""}
+    ${!!benefitPlan?.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ""}
+    ${!!benefitPlan?.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ""}
+    ${!!benefitPlan?.beneficiaryDataSchema ? `beneficiaryDataSchema: "${JSON.stringify(benefitPlan.beneficiaryDataSchema)}"` : ""}
+    ${!!benefitPlan?.jsonExt ? `jsonExt: "${JSON.stringify(benefitPlan.jsonExt)}"` : ""}`;
+}
+
+export function createBenefitPlan(benefitPlan, clientMutationLabel) {
+    const mutation = formatMutation("createBenefitPlan", formatBenefitPlanGQL(benefitPlan), clientMutationLabel);
+    const requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.CREATE_BENEFIT_PLAN), ERROR(ACTION_TYPE.MUTATION)],
+        {
+            actionType: ACTION_TYPE.CREATE_BENEFIT_PLAN,
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime,
+        },
+    );
 }
 
 export function updateBenefitPlan(benefitPlan, clientMutationLabel) {
