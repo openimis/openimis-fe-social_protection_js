@@ -270,6 +270,14 @@ function reducer(
                     },
                 },
             };
+        case CLEAR(ACTION_TYPE.GET_BENEFIT_PLAN):
+            return {
+                ...state,
+                fetchingBenefitPlan: false,
+                errorBenefitPlan: null,
+                fetchedBenefitPlan: false,
+                benefitPlan: null,
+            }
         case REQUEST(ACTION_TYPE.MUTATION):
             return dispatchMutationReq(state, action);
         case ERROR(ACTION_TYPE.MUTATION):

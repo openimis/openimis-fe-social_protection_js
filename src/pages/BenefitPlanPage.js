@@ -14,7 +14,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {withTheme, withStyles} from "@material-ui/core/styles";
 import {RIGHT_BENEFICIARY_SEARCH, RIGHT_BENEFIT_PLAN_UPDATE} from "../constants";
-import {fetchBenefitPlan, deleteBenefitPlan, updateBenefitPlan} from "../actions";
+import {fetchBenefitPlan, deleteBenefitPlan, updateBenefitPlan, clearBenefitPlan} from "../actions";
 import BenefitPlanHeadPanel from "../components/BenefitPlanHeadPanel";
 import BenefitPlanTabPanel from "../components/BenefitPlanTabPanel";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -26,22 +26,23 @@ const styles = (theme) => ({
 });
 
 const BenefitPlanPage = ({
-    intl,
-    classes,
-    rights,
-    history,
-    benefitPlanUuid,
-    benefitPlan,
-    fetchBenefitPlan,
-    deleteBenefitPlan,
-    updateBenefitPlan,
-    coreConfirm,
-    confirmed,
-    submittingMutation,
-    mutation,
-    journalize,
-    modulesManager,
-}) => {
+                             intl,
+                             classes,
+                             rights,
+                             history,
+                             benefitPlanUuid,
+                             benefitPlan,
+                             fetchBenefitPlan,
+                             deleteBenefitPlan,
+                             updateBenefitPlan,
+                             coreConfirm,
+                             confirmed,
+                             submittingMutation,
+                             mutation,
+                             journalize,
+                             modulesManager,
+                             clearBenefitPlan,
+                         }) => {
     const [editedBenefitPlan, setEditedBenefitPlan] = useState({});
     const [confirmedAction, setConfirmedAction] = useState(() => null);
     const prevSubmittingMutationRef = useRef();
@@ -66,6 +67,10 @@ const BenefitPlanPage = ({
     });
 
     useEffect(() => setEditedBenefitPlan(benefitPlan), [benefitPlan]);
+
+    useEffect(() => {
+        return () => clearBenefitPlan();
+    }, []);
 
     const back = () => history.goBack();
 
@@ -142,7 +147,6 @@ const BenefitPlanPage = ({
                     canSave={canSave}
                     save={handleSave}
                     HeadPanel={BenefitPlanHeadPanel}
-
                     Panels={
                         rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPlanTabPanel] : []
                     }
@@ -171,6 +175,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         fetchBenefitPlan,
+        clearBenefitPlan,
         deleteBenefitPlan,
         updateBenefitPlan,
         coreConfirm,

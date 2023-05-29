@@ -1,10 +1,12 @@
 import React from "react";
-import {Helmet, withModulesManager, formatMessage} from "@openimis/fe-core";
+import {Helmet, withModulesManager, formatMessage, withTooltip, historyPush} from "@openimis/fe-core";
 import {injectIntl} from "react-intl";
 import {withTheme, withStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
-import {RIGHT_BENEFIT_PLAN_SEARCH} from "../constants";
+import {RIGHT_BENEFIT_PLAN_CREATE, RIGHT_BENEFIT_PLAN_SEARCH, SOCIAL_PROTECTION_ROUTE_BENEFIT_PLAN} from "../constants";
 import BenefitPlanSearcher from "../components/BenefitPlanSearcher";
+import {Fab} from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 
 
 const styles = (theme) => ({
@@ -15,11 +17,27 @@ const styles = (theme) => ({
 const BenefitPlansPage = (props) => {
     const {intl, classes, rights} = props;
 
+    const onAdd = () =>
+        historyPush(
+            props.modulesManager,
+            props.history,
+            SOCIAL_PROTECTION_ROUTE_BENEFIT_PLAN
+        );
+
     return (
         rights.includes(RIGHT_BENEFIT_PLAN_SEARCH) && (
             <div className={classes.page}>
                 <Helmet title={formatMessage(intl, "socialProtection", "benefitPlan.pageTitle")}/>
                 <BenefitPlanSearcher rights={rights}/>
+                {rights.includes(RIGHT_BENEFIT_PLAN_CREATE) &&
+                    withTooltip(
+                        <div className={classes.fab}>
+                            <Fab color="primary" onClick={onAdd}>
+                                <AddIcon/>
+                            </Fab>
+                        </div>,
+                        formatMessage(intl, "socialProtection", "createButton.tooltip")
+                    )}
             </div>
         )
     );

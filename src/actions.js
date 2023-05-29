@@ -156,3 +156,11 @@ export const benefitPlanNameValidationClear = () => {
         });
     };
 };
+
+export const clearBenefitPlan = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR(ACTION_TYPE.GET_BENEFIT_PLAN)
+        });
+    }
+}
