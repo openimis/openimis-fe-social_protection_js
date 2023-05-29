@@ -24,6 +24,7 @@ const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
     "name",
     "maxBeneficiaries",
     "ceilingPerBeneficiary",
+    "beneficiaryDataSchema",
     "jsonExt",
     "holder" +
     modulesManager.getProjection("policyHolder.PolicyHolderPicker.projection"),
@@ -80,8 +81,8 @@ function formatBenefitPlanGQL(benefitPlan) {
     ${!!benefitPlan?.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ""}
     ${!!benefitPlan?.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ""}
     ${!!benefitPlan?.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ""}
-    ${!!benefitPlan?.beneficiaryDataSchema ? `beneficiaryDataSchema: "${JSON.stringify(benefitPlan.beneficiaryDataSchema)}"` : ""}
-    ${!!benefitPlan?.jsonExt ? `jsonExt: "${JSON.stringify(benefitPlan.jsonExt)}"` : ""}`;
+    ${!!benefitPlan?.beneficiaryDataSchema ? `beneficiaryDataSchema: ${JSON.stringify(benefitPlan.beneficiaryDataSchema)}` : ""}
+    ${!!benefitPlan?.jsonExt ? `jsonExt: ${JSON.stringify(benefitPlan.jsonExt)}` : ""}`;
 }
 
 export function createBenefitPlan(benefitPlan, clientMutationLabel) {
@@ -144,6 +145,22 @@ export function benefitPlanNameValidationCheck(mm, variables) {
     );
 }
 
+export function benefitPlanSchemaValidationCheck(mm, variables) {
+    return graphqlWithVariables(
+        `
+      query ($bfSchema: String!) {
+        isValid: 
+            bfSchemaValidity(bfSchema: $bfSchema) {
+                isValid
+                errorMessage
+        }
+      }
+      `,
+        variables,
+        ACTION_TYPE.BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION,
+    );
+}
+
 export const benefitPlanCodeSetValid = () => {
     return (dispatch) => {
         dispatch({type: ACTION_TYPE.BENEFIT_PLAN_CODE_SET_VALID});
@@ -153,6 +170,12 @@ export const benefitPlanCodeSetValid = () => {
 export const benefitPlanNameSetValid = () => {
     return (dispatch) => {
         dispatch({type: ACTION_TYPE.BENEFIT_PLAN_NAME_SET_VALID});
+    };
+};
+
+export const benefitPlanSchemaSetValid = () => {
+    return (dispatch) => {
+        dispatch({type: ACTION_TYPE.BENEFIT_PLAN_SCHEMA_SET_VALID});
     };
 };
 
@@ -168,6 +191,14 @@ export const benefitPlanNameValidationClear = () => {
     return (dispatch) => {
         dispatch({
             type: CLEAR(ACTION_TYPE.BENEFIT_PLAN_NAME_FIELDS_VALIDATION),
+        });
+    };
+};
+
+export const benefitPlanSchemaValidationClear = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR(ACTION_TYPE.BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION),
         });
     };
 };

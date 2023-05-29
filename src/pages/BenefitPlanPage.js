@@ -43,6 +43,9 @@ const BenefitPlanPage = ({
                              modulesManager,
                              createBenefitPlan,
                              clearBenefitPlan,
+                             isBenefitPlanNameValid,
+                             isBenefitPlanCodeValid,
+                             isBenefitPlanSchemaValid,
                          }) => {
     const [editedBenefitPlan, setEditedBenefitPlan] = useState({});
     const [confirmedAction, setConfirmedAction] = useState(() => null);
@@ -91,8 +94,14 @@ const BenefitPlanPage = ({
         }
         return true;
     }
+    const isValid = () => {
+        return (
+            (!!editedBenefitPlan?.code ? isBenefitPlanCodeValid : true) &&
+            (!!editedBenefitPlan?.name ? isBenefitPlanNameValid : true) &&
+            (!!editedBenefitPlan?.beneficiaryDataSchema ? isBenefitPlanSchemaValid : true))
+    }
 
-    const canSave = () => !isMandatoryFieldsEmpty() && (!!editedBenefitPlan?.jsonExt? isJsonString(editedBenefitPlan.jsonExt) : true);
+    const canSave = () => !isMandatoryFieldsEmpty() && isValid() && (!!editedBenefitPlan?.jsonExt ? isJsonString(editedBenefitPlan.jsonExt) : true);
 
     const handleSave = () => {
         if (!!benefitPlan?.id) {
@@ -174,6 +183,9 @@ const mapStateToProps = (state, props) => ({
     errorBenefitPlan: state.socialProtection.errorBenefitPlan,
     submittingMutation: state.socialProtection.submittingMutation,
     mutation: state.socialProtection.mutation,
+    isBenefitPlanCodeValid: state.socialProtection.validationFields?.benefitPlanCode?.isValid,
+    isBenefitPlanNameValid: state.socialProtection.validationFields?.benefitPlanName?.isValid,
+    isBenefitPlanSchemaValid: state.socialProtection.validationFields?.benefitPlanSchema?.isValid,
 });
 
 const mapDispatchToProps = (dispatch) => {
