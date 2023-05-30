@@ -28,6 +28,7 @@
   "socialProtection.beneficiary.status.SUSPENDED": "SUSPENDED",
   "socialProtection.benefitPlan.saveButton.tooltip.enabled": "Enabled",
   "socialProtection.benefitPlan.saveButton.tooltip.disabled": "Disabled",
+  "socialProtection.benefitPlan.benefitPlanHelmet": "Benefit Plan",
   "socialProtection.benefitPlan.code.alreadyTaken": "The code is already taken",
   "socialProtection.benefitPlan.name.alreadyTaken": "The name is already taken",
   "socialProtection.benefitPlan.benefitPlanBeneficiariesList.label": "List",

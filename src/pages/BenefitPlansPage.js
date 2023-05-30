@@ -27,7 +27,7 @@ const BenefitPlansPage = (props) => {
     return (
         rights.includes(RIGHT_BENEFIT_PLAN_SEARCH) && (
             <div className={classes.page}>
-                <Helmet title={formatMessage(intl, "socialProtection", "benefitPlan.pageTitle")}/>
+                <Helmet title={formatMessage(intl, "socialProtection", "benefitPlan.benefitPlanHelmet")}/>
                 <BenefitPlanSearcher rights={rights}/>
                 {rights.includes(RIGHT_BENEFIT_PLAN_CREATE) &&
                     withTooltip(
