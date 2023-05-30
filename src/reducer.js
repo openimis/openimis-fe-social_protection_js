@@ -14,12 +14,16 @@ export const ACTION_TYPE = {
     MUTATION: "BENEFIT_PLAN_MUTATION",
     SEARCH_BENEFIT_PLANS: "BENEFIT_PLAN_BENEFIT_PLANS",
     GET_BENEFIT_PLAN: "BENEFIT_PLAN_BENEFIT_PLAN",
+    CREATE_BENEFIT_PLAN: "BENEFIT_PLAN_CREATE_BENEFIT_PLAN",
     DELETE_BENEFIT_PLAN: "BENEFIT_PLAN_DELETE_BENEFIT_PLAN",
     UPDATE_BENEFIT_PLAN: "BENEFIT_PLAN_UPDATE_BENEFIT_PLAN",
     BENEFIT_PLAN_CODE_FIELDS_VALIDATION: "BENEFIT_PLAN_CODE_FIELDS_VALIDATION",
     BENEFIT_PLAN_NAME_FIELDS_VALIDATION: "BENEFIT_PLAN_NAME_FIELDS_VALIDATION",
+    BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION: "BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION",
     BENEFIT_PLAN_CODE_SET_VALID: "BENEFIT_PLAN_CODE_SET_VALID",
-    BENEFIT_PLAN_NAME_SET_VALID: "BENEFIT_PLAN_NAME_SET_VALID"
+    BENEFIT_PLAN_NAME_SET_VALID: "BENEFIT_PLAN_NAME_SET_VALID",
+    BENEFIT_PLAN_SCHEMA_SET_VALID: "BENEFIT_PLAN_NAME_SET_VALID",
+    SEARCH_BENEFICIARIES: "BENEFICIARY_BENEFICIARIES"
 };
 
 function reducer(
@@ -35,7 +39,14 @@ function reducer(
         fetchingBenefitPlan: false,
         errorBenefitPlan: null,
         fetchedBenefitPlan: false,
-        benefitPlan: null
+        benefitPlan: null,
+        fetchingBeneficiaries: false,
+        fetchedBeneficiaries: false,
+        beneficiaries: [],
+        beneficiariesPageInfo: {},
+        beneficiariesTotalCount: 0,
+        errorBeneficiaries: null,
+        beneficiary: null,
     },
     action,
 ) {
@@ -56,6 +67,16 @@ function reducer(
                 fetchingBenefitPlan: true,
                 fetchedBenefitPlan: false,
                 benefitPlan: null,
+            };
+        case REQUEST(ACTION_TYPE.SEARCH_BENEFICIARIES):
+            return {
+                ...state,
+                fetchingBeneficiaries: true,
+                fetchedBeneficiaries: false,
+                beneficiaries: [],
+                beneficiariesPageInfo: {},
+                beneficiariesTotalCount: 0,
+                errorBeneficiaries: null,
             };
         case SUCCESS(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
             return {
@@ -99,6 +120,21 @@ function reducer(
                 })?.[0],
                 errorBenefitPlan: null,
             };
+        case SUCCESS(ACTION_TYPE.SEARCH_BENEFICIARIES):
+            return {
+                ...state,
+                fetchingBeneficiaries: false,
+                fetchedBeneficiaries: true,
+                beneficiaries: parseData(action.payload.data.beneficiary)?.map((beneficiary) => {
+                    return ({
+                        ...beneficiary,
+                        id: decodeId(beneficiary.id),
+                    })
+                }),
+                beneficiariesPageInfo: pageInfo(action.payload.data.beneficiary),
+                beneficiariesTotalCount: !!action.payload.data.beneficiary ? action.payload.data.beneficiary.totalCount : null,
+                errorBeneficiaries: formatGraphQLError(action.payload),
+            };
         case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
             return {
                 ...state,
@@ -110,6 +146,12 @@ function reducer(
                 ...state,
                 fetchingBenefitPlan: false,
                 errorBenefitPlan: formatServerError(action.payload),
+            };
+        case ERROR(ACTION_TYPE.SEARCH_BENEFICIARIES):
+            return {
+                ...state,
+                fetchingBeneficiaries: false,
+                errorBeneficiaries: formatServerError(action.payload),
             };
         case REQUEST(ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION):
             return {
@@ -231,10 +273,83 @@ function reducer(
                     },
                 },
             };
+        case REQUEST(ACTION_TYPE.BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanSchema: {
+                        isValidating: true,
+                        isValid: false,
+                        validationError: null,
+                        validationErrorMessage: null,
+                    },
+                },
+            };
+        case SUCCESS(ACTION_TYPE.BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanSchema: {
+                        isValidating: false,
+                        isValid: action.payload?.data.isValid.isValid,
+                        validationError: formatGraphQLError(action.payload),
+                        validationErrorMessage: action.payload?.data.isValid.errorMessage,
+                    }
+                }
+            }
+        case ERROR(ACTION_TYPE.BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanSchema: {
+                        isValidating: false,
+                        isValid: false,
+                        validationError: formatServerError(action.payload),
+                    },
+                },
+            };
+        case CLEAR(ACTION_TYPE.BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION):
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanSchema: {
+                        isValidating: false,
+                        isValid: false,
+                        validationError: null,
+                        validationErrorMessage: null,
+                    },
+                },
+            };
+        case ACTION_TYPE.BENEFIT_PLAN_SCHEMA_SET_VALID:
+            return {
+                ...state,
+                validationFields: {
+                    ...state.validationFields,
+                    benefitPlanSchema: {
+                        isValidating: false,
+                        isValid: true,
+                        validationError: null,
+                    },
+                },
+            };
+        case CLEAR(ACTION_TYPE.GET_BENEFIT_PLAN):
+            return {
+                ...state,
+                fetchingBenefitPlan: false,
+                errorBenefitPlan: null,
+                fetchedBenefitPlan: false,
+                benefitPlan: null,
+            }
         case REQUEST(ACTION_TYPE.MUTATION):
             return dispatchMutationReq(state, action);
         case ERROR(ACTION_TYPE.MUTATION):
             return dispatchMutationErr(state, action);
+        case SUCCESS(ACTION_TYPE.CREATE_BENEFIT_PLAN):
+            return dispatchMutationResp(state, "createBenefitPlan", action);
         case SUCCESS(ACTION_TYPE.DELETE_BENEFIT_PLAN):
             return dispatchMutationResp(state, "deleteBenefitPlan", action);
         case SUCCESS(ACTION_TYPE.UPDATE_BENEFIT_PLAN):

@@ -11,7 +11,7 @@ import {CLEAR, ERROR, REQUEST, SUCCESS} from "./util/action-type";
 
 const HOLDER_PROJECTION = "holder{id, code, tradeName}"
 
-const BENEFIT_PLAN_FULL_PROJECTION= (modulesManager) => [
+const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
     "id",
     "isDeleted",
     "dateCreated",
@@ -24,14 +24,26 @@ const BENEFIT_PLAN_FULL_PROJECTION= (modulesManager) => [
     "name",
     "maxBeneficiaries",
     "ceilingPerBeneficiary",
+    "beneficiaryDataSchema",
     "jsonExt",
     "holder" +
     modulesManager.getProjection("policyHolder.PolicyHolderPicker.projection"),
 ];
 
+const BENEFICIARY_FULL_PROJECTION = () => [
+    "id",
+    "individual {firstName, lastName, dob}",
+    "status"
+]
+
 export function fetchBenefitPlans(modulesManager, params) {
     const payload = formatPageQueryWithCount("benefitPlan", params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));
     return graphql(payload, ACTION_TYPE.SEARCH_BENEFIT_PLANS)
+}
+
+export function fetchBeneficiaries(params) {
+    const payload = formatPageQueryWithCount("beneficiary", params, BENEFICIARY_FULL_PROJECTION())
+    return graphql(payload, ACTION_TYPE.SEARCH_BENEFICIARIES)
 }
 
 export function fetchBenefitPlan(modulesManager, params) {
@@ -61,16 +73,31 @@ function dateTimeToDate(date) {
 
 function formatBenefitPlanGQL(benefitPlan) {
     return `
-    ${!!benefitPlan.id ? `id: "${benefitPlan.id}"` : ""}
-    ${!!benefitPlan.name ? `name: "${formatGQLString(benefitPlan.name)}"` : ""}
-    ${!!benefitPlan.code ? `code: "${formatGQLString(benefitPlan.code)}"` : ""}
-    ${!!benefitPlan.maxBeneficiaries ? `maxBeneficiaries: ${benefitPlan.maxBeneficiaries}` : ""}
-    ${!!benefitPlan.ceilingPerBeneficiary ? `ceilingPerBeneficiary: "${benefitPlan.ceilingPerBeneficiary}"` : ""}
-    ${!!benefitPlan.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ""}
-    ${!!benefitPlan.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ""}
-    ${!!benefitPlan.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ""}
-    ${!!benefitPlan.beneficiaryDataSchema ? `beneficiaryDataSchema: "${JSON.stringify(benefitPlan.beneficiaryDataSchema)}"` : ""}
-    ${!!benefitPlan.jsonExt ? `jsonExt: "${JSON.stringify(benefitPlan.jsonExt)}"` : ""}`;
+    ${!!benefitPlan?.id ? `id: "${benefitPlan.id}"` : ""}
+    ${!!benefitPlan?.name ? `name: "${formatGQLString(benefitPlan.name)}"` : ""}
+    ${!!benefitPlan?.code ? `code: "${formatGQLString(benefitPlan.code)}"` : ""}
+    ${!!benefitPlan?.maxBeneficiaries ? `maxBeneficiaries: ${benefitPlan.maxBeneficiaries}` : ""}
+    ${!!benefitPlan?.ceilingPerBeneficiary ? `ceilingPerBeneficiary: "${benefitPlan.ceilingPerBeneficiary}"` : ""}
+    ${!!benefitPlan?.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ""}
+    ${!!benefitPlan?.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ""}
+    ${!!benefitPlan?.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ""}
+    ${!!benefitPlan?.beneficiaryDataSchema ? `beneficiaryDataSchema: ${JSON.stringify(benefitPlan.beneficiaryDataSchema)}` : ""}
+    ${!!benefitPlan?.jsonExt ? `jsonExt: ${JSON.stringify(benefitPlan.jsonExt)}` : ""}`;
+}
+
+export function createBenefitPlan(benefitPlan, clientMutationLabel) {
+    const mutation = formatMutation("createBenefitPlan", formatBenefitPlanGQL(benefitPlan), clientMutationLabel);
+    const requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.CREATE_BENEFIT_PLAN), ERROR(ACTION_TYPE.MUTATION)],
+        {
+            actionType: ACTION_TYPE.CREATE_BENEFIT_PLAN,
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime,
+        },
+    );
 }
 
 export function updateBenefitPlan(benefitPlan, clientMutationLabel) {
@@ -118,6 +145,22 @@ export function benefitPlanNameValidationCheck(mm, variables) {
     );
 }
 
+export function benefitPlanSchemaValidationCheck(mm, variables) {
+    return graphqlWithVariables(
+        `
+      query ($bfSchema: String!) {
+        isValid: 
+            bfSchemaValidity(bfSchema: $bfSchema) {
+                isValid
+                errorMessage
+        }
+      }
+      `,
+        variables,
+        ACTION_TYPE.BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION,
+    );
+}
+
 export const benefitPlanCodeSetValid = () => {
     return (dispatch) => {
         dispatch({type: ACTION_TYPE.BENEFIT_PLAN_CODE_SET_VALID});
@@ -127,6 +170,12 @@ export const benefitPlanCodeSetValid = () => {
 export const benefitPlanNameSetValid = () => {
     return (dispatch) => {
         dispatch({type: ACTION_TYPE.BENEFIT_PLAN_NAME_SET_VALID});
+    };
+};
+
+export const benefitPlanSchemaSetValid = () => {
+    return (dispatch) => {
+        dispatch({type: ACTION_TYPE.BENEFIT_PLAN_SCHEMA_SET_VALID});
     };
 };
 
@@ -145,3 +194,19 @@ export const benefitPlanNameValidationClear = () => {
         });
     };
 };
+
+export const benefitPlanSchemaValidationClear = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR(ACTION_TYPE.BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION),
+        });
+    };
+};
+
+export const clearBenefitPlan = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR(ACTION_TYPE.GET_BENEFIT_PLAN)
+        });
+    }
+}

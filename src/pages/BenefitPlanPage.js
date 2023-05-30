@@ -13,9 +13,10 @@ import {injectIntl} from "react-intl";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {withTheme, withStyles} from "@material-ui/core/styles";
-import {RIGHT_BENEFIT_PLAN_UPDATE} from "../constants";
-import {fetchBenefitPlan, deleteBenefitPlan, updateBenefitPlan} from "../actions";
+import {RIGHT_BENEFICIARY_SEARCH, RIGHT_BENEFIT_PLAN_UPDATE} from "../constants";
+import {fetchBenefitPlan, deleteBenefitPlan, updateBenefitPlan, clearBenefitPlan, createBenefitPlan} from "../actions";
 import BenefitPlanHeadPanel from "../components/BenefitPlanHeadPanel";
+import BenefitPlanTabPanel from "../components/BenefitPlanTabPanel";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {ACTION_TYPE} from "../reducer";
 import {isJsonString} from "../util/json-validate";
@@ -40,6 +41,11 @@ const BenefitPlanPage = ({
     mutation,
     journalize,
     modulesManager,
+    createBenefitPlan,
+    clearBenefitPlan,
+    isBenefitPlanNameValid,
+    isBenefitPlanCodeValid,
+    isBenefitPlanSchemaValid,
 }) => {
     const [editedBenefitPlan, setEditedBenefitPlan] = useState({});
     const [confirmedAction, setConfirmedAction] = useState(() => null);
@@ -66,6 +72,10 @@ const BenefitPlanPage = ({
 
     useEffect(() => setEditedBenefitPlan(benefitPlan), [benefitPlan]);
 
+    useEffect(() => {
+        return () => clearBenefitPlan();
+    }, []);
+
     const back = () => history.goBack();
 
     const titleParams = (benefitPlan) => ({
@@ -74,28 +84,37 @@ const BenefitPlanPage = ({
     });
 
     const isMandatoryFieldsEmpty = () => {
-        if (editedBenefitPlan === undefined || editedBenefitPlan === null) {
-            return false;
-        }
         if (
-            !!editedBenefitPlan.code &&
-            !!editedBenefitPlan.name
+            !!editedBenefitPlan?.code &&
+            !!editedBenefitPlan?.name &&
+            !!editedBenefitPlan?.dateValidFrom &&
+            !!editedBenefitPlan?.dateValidTo
         ) {
             return false;
         }
         return true;
     }
+    const isValid = () => {
+        return (
+            (!!editedBenefitPlan?.code ? isBenefitPlanCodeValid : true) &&
+            (!!editedBenefitPlan?.name ? isBenefitPlanNameValid : true) &&
+            (!!editedBenefitPlan?.beneficiaryDataSchema ? isBenefitPlanSchemaValid : true))
+    }
 
-    const canSave = () => !isMandatoryFieldsEmpty() && isJsonString(editedBenefitPlan?.jsonExt);
+    const canSave = () => !isMandatoryFieldsEmpty() && isValid() && (!!editedBenefitPlan?.jsonExt ? isJsonString(editedBenefitPlan.jsonExt) : true);
 
     const handleSave = () => {
-        updateBenefitPlan(
-            editedBenefitPlan,
-            formatMessageWithValues(intl, "socialProtection", "benefitPlan.update.mutationLabel", {
-                code: benefitPlan?.code,
-                name: benefitPlan?.name
-            }),
-        );
+        if (!!benefitPlan?.id) {
+            updateBenefitPlan(
+                editedBenefitPlan,
+                formatMessageWithValues(intl, "socialProtection", "benefitPlan.update.mutationLabel", titleParams(benefitPlan)),
+            );
+        } else {
+            createBenefitPlan(
+                editedBenefitPlan,
+                formatMessageWithValues(intl, "socialProtection", "benefitPlan.create.mutationLabel", titleParams(benefitPlan))
+            )
+        }
     };
 
     const deleteBenefitPlanCallback = () => deleteBenefitPlan(
@@ -141,11 +160,13 @@ const BenefitPlanPage = ({
                     canSave={canSave}
                     save={handleSave}
                     HeadPanel={BenefitPlanHeadPanel}
-                    Panels={[]}
+                    Panels={
+                        rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPlanTabPanel] : []
+                    }
                     rights={rights}
                     actions={actions}
                     setConfirmedAction={setConfirmedAction}
-                    saveTooltip={formatMessage(intl, "socialProtection", `benefitPlan.saveButton.tooltip.${canSave ? 'enabled' : 'disabled'}`)}
+                    saveTooltip={formatMessage(intl, "socialProtection", `benefitPlan.saveButton.tooltip.${canSave() ? 'enabled' : 'disabled'}`)}
                 />
             </div>
         )
@@ -162,11 +183,16 @@ const mapStateToProps = (state, props) => ({
     errorBenefitPlan: state.socialProtection.errorBenefitPlan,
     submittingMutation: state.socialProtection.submittingMutation,
     mutation: state.socialProtection.mutation,
+    isBenefitPlanCodeValid: state.socialProtection.validationFields?.benefitPlanCode?.isValid,
+    isBenefitPlanNameValid: state.socialProtection.validationFields?.benefitPlanName?.isValid,
+    isBenefitPlanSchemaValid: state.socialProtection.validationFields?.benefitPlanSchema?.isValid,
 });
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
+        createBenefitPlan,
         fetchBenefitPlan,
+        clearBenefitPlan,
         deleteBenefitPlan,
         updateBenefitPlan,
         coreConfirm,

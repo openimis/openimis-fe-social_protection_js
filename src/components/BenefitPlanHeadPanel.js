@@ -7,6 +7,7 @@ import {
     TextAreaInput,
     NumberInput,
     ValidatedTextInput,
+    ValidatedTextAreaInput,
     PublishedComponent,
 } from "@openimis/fe-core";
 import {injectIntl} from "react-intl";
@@ -16,8 +17,12 @@ import {MAX_CODE_LENGTH} from "../constants"
 import {
     benefitPlanCodeSetValid,
     benefitPlanCodeValidationCheck,
-    benefitPlanCodeValidationClear, benefitPlanNameSetValid,
-    benefitPlanNameValidationCheck, benefitPlanNameValidationClear
+    benefitPlanCodeValidationClear,
+    benefitPlanNameSetValid,
+    benefitPlanNameValidationCheck,
+    benefitPlanNameValidationClear, benefitPlanSchemaSetValid,
+    benefitPlanSchemaValidationCheck,
+    benefitPlanSchemaValidationClear
 } from "../actions";
 
 const styles = theme => ({
@@ -49,7 +54,11 @@ class BenefitPlanHeadPanel extends FormPanel {
             isBenefitPlanNameValidating,
             benefitPlanNameValidationError,
             savedBenefitPlanCode,
-            savedBenefitPlanName
+            savedBenefitPlanName,
+            isBenefitPlanSchemaValid,
+            isBenefitPlanSchemaValidating,
+            benefitPlanSchemaValidationError,
+            benefitPlanSchemaValidationErrorMessage,
         } = this.props;
         const benefitPlan = {...edited};
 
@@ -102,7 +111,7 @@ class BenefitPlanHeadPanel extends FormPanel {
                             label="benefitPlan.dateValidFrom"
                             required
                             onChange={v => this.updateAttribute('dateValidFrom', v)}
-                            value={benefitPlan?.dateValidFrom}
+                            value={benefitPlan?.dateValidFrom ?? ""}
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>
@@ -112,7 +121,7 @@ class BenefitPlanHeadPanel extends FormPanel {
                             label="benefitPlan.dateValidTo"
                             required
                             onChange={v => this.updateAttribute('dateValidTo', v)}
-                            value={benefitPlan?.dateValidTo}
+                            value={benefitPlan?.dateValidTo ?? ""}
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>
@@ -131,7 +140,24 @@ class BenefitPlanHeadPanel extends FormPanel {
                             module="socialProtection"
                             withNull
                             onChange={v => this.updateAttribute('holder', v)}
-                            value={!!benefitPlan.holder && benefitPlan.holder}
+                            value={!!benefitPlan?.holder && benefitPlan.holder}
+                        />
+                    </Grid>
+                    <Grid item xs={3} className={classes.item}>
+                        <ValidatedTextAreaInput
+                            module="socialProtection"
+                            label="benefitPlan.schema"
+                            onChange={v => this.updateAttribute('beneficiaryDataSchema', v)}
+                            value={benefitPlan?.beneficiaryDataSchema}
+                            codeTakenLabel={benefitPlanSchemaValidationErrorMessage}
+                            itemQueryIdentifier="bfSchema"
+                            action={benefitPlanSchemaValidationCheck}
+                            clearAction={benefitPlanSchemaValidationClear}
+                            setValidAction={benefitPlanSchemaSetValid}
+                            shouldValidate={v => true}
+                            isValid={isBenefitPlanSchemaValid}
+                            isValidating={isBenefitPlanSchemaValidating}
+                            validationError={benefitPlanSchemaValidationError}
                         />
                     </Grid>
                     <Grid item xs={3} className={classes.item}>
@@ -158,6 +184,10 @@ const mapStateToProps = (store) => ({
     isBenefitPlanNameValidating: store.socialProtection.validationFields?.benefitPlanName?.isValidating,
     benefitPlanNameValidationError: store.socialProtection.validationFields?.benefitPlanName?.validationError,
     savedBenefitPlanName: store.socialProtection?.benefitPlan?.name,
+    isBenefitPlanSchemaValid: store.socialProtection.validationFields?.benefitPlanSchema?.isValid,
+    isBenefitPlanSchemaValidating: store.socialProtection.validationFields?.benefitPlanSchema?.isValidating,
+    benefitPlanSchemaValidationError: store.socialProtection.validationFields?.benefitPlanSchema?.validationError,
+    benefitPlanSchemaValidationErrorMessage: store.socialProtection.validationFields?.benefitPlanSchema?.validationErrorMessage,
 });
 
 export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(BenefitPlanHeadPanel)))))

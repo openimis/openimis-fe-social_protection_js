@@ -3,6 +3,27 @@ import reducer from "./reducer";
 import BenefitPlanMainMenu from "./menus/BenefitPlanMainMenu";
 import BenefitPlansPage from "./pages/BenefitPlansPage";
 import BenefitPlanPage from "./pages/BenefitPlanPage";
+import BeneficiaryStatusPicker from "./pickers/BeneficiaryStatusPicker";
+import {
+    BenefitPlanBeneficiariesListTabPanel,
+    BenefitPlanBeneficiariesListTabLabel,
+} from "./components/BenefitPlanBeneficiariesListTab";
+import {
+    BenefitPlanBeneficiariesActiveTabLabel,
+    BenefitPlanBeneficiariesActiveTabPanel,
+} from "./components/BenefitPlanBeneficiariesActiveTab";
+import {
+    BenefitPlanBeneficiariesPotentialTabLabel,
+    BenefitPlanBeneficiariesPotentialTabPanel,
+} from "./components/BenefitPlanBeneficiariesPotentialTab";
+import {
+    BenefitPlanBeneficiariesSuspendedTabLabel,
+    BenefitPlanBeneficiariesSuspendedTabPanel
+} from "./components/BenefitPlanBeneficiariesSuspendedTab";
+import {
+    BenefitPlanBeneficiariesGraduatedTabLabel,
+    BenefitPlanBeneficiariesGraduatedTabPanel
+} from "./components/BenefitPlanBeneficiariesGraduatedTab";
 
 const ROUTE_BENEFIT_PLANS = "benefitPlans";
 const ROUTE_BENEFIT_PLAN = "benefitPlans/benefitPlan";
@@ -17,7 +38,20 @@ const DEFAULT_CONFIG = {
     ],
     "refs": [
         {key: "socialProtection.route.benefitPlan", ref: ROUTE_BENEFIT_PLAN},
-    ]
+        {key: "socialProtection.BeneficiaryStatusPicker", ref: BeneficiaryStatusPicker},
+    ],
+    "benefitPlan.TabPanel.label": [
+        BenefitPlanBeneficiariesListTabLabel,
+        BenefitPlanBeneficiariesPotentialTabLabel,
+        BenefitPlanBeneficiariesActiveTabLabel,
+        BenefitPlanBeneficiariesGraduatedTabLabel,
+        BenefitPlanBeneficiariesSuspendedTabLabel],
+    "benefitPlan.TabPanel.panel": [
+        BenefitPlanBeneficiariesListTabPanel,
+        BenefitPlanBeneficiariesPotentialTabPanel,
+        BenefitPlanBeneficiariesActiveTabPanel,
+        BenefitPlanBeneficiariesGraduatedTabPanel,
+        BenefitPlanBeneficiariesSuspendedTabPanel]
 }
 
 export const SocialProtectionModule = (cfg) => {
