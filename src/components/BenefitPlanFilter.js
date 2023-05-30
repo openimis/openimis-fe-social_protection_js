@@ -61,7 +61,7 @@ const BenefitPlanFilter = ({intl, classes, filters, onChangeFilters}) => {
                             {
                                 id: "dateValidFrom",
                                 value: v,
-                                filter: `dateValidFrom: "${v}"`,
+                                filter: `dateValidFrom: "${v}T00:00:00.000Z"`,
                             },
                         ])
                     }
@@ -78,7 +78,7 @@ const BenefitPlanFilter = ({intl, classes, filters, onChangeFilters}) => {
                             {
                                 id: "dateValidTo",
                                 value: v,
-                                filter: `dateValidTo: "${v}"`,
+                                filter: `dateValidTo: "${v}T00:00:00.000Z"`,
                             },
                         ])
                     }
