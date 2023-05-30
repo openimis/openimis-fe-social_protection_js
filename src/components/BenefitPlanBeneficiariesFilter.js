@@ -39,7 +39,7 @@ const BenefitPlanBeneficiariesFilter = ({intl, classes, filters, onChangeFilters
                 <TextInput
                     module="socialProtection"
                     label="beneficiary.firstName"
-                    value={filterValue("firstName")}
+                    value={filterValue("individual_FirstName")}
                     onChange={onChangeStringFilter("individual_FirstName", CONTAINS_LOOKUP)}
                 />
             </Grid>
@@ -47,7 +47,7 @@ const BenefitPlanBeneficiariesFilter = ({intl, classes, filters, onChangeFilters
                 <TextInput
                     module="socialProtection"
                     label="beneficiary.lastName"
-                    value={filterValue("lastName")}
+                    value={filterValue("individual_LastName")}
                     onChange={onChangeStringFilter("individual_LastName", CONTAINS_LOOKUP)}
                 />
             </Grid>
@@ -56,11 +56,11 @@ const BenefitPlanBeneficiariesFilter = ({intl, classes, filters, onChangeFilters
                     pubRef="core.DatePicker"
                     module="socialProtection"
                     label="beneficiary.dob"
-                    value={filterValue("dob")}
+                    value={filterValue("individual_Dob")}
                     onChange={(v) =>
                         onChangeFilters([
                             {
-                                id: "dob",
+                                id: "individual_Dob",
                                 value: v,
                                 filter: `individual_Dob: "${v}"`,
                             },

@@ -37,9 +37,9 @@ const BenefitPlanBeneficiariesSearcher = ({
     ];
 
     const sorts = () => [
-        ["firstName", true],
-        ["lastName", true],
-        ["dob", true],
+        ["individual_FirstName", true],
+        ["individual_LastName", true],
+        ["individual_Dob", true],
         ["status", false],
     ];
 
