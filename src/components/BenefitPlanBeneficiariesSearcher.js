@@ -8,18 +8,18 @@ import {DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS} from "../constants";
 import BenefitPlanBeneficiariesFilter from "./BenefitPlanBeneficiariesFilter";
 
 const BenefitPlanBeneficiariesSearcher = ({
-                                              intl,
-                                              benefitPlan,
-                                              fetchBeneficiaries,
-                                              fetchingBeneficiaries,
-                                              fetchedBeneficaries,
-                                              errorBeneficiaries,
-                                              beneficiaries,
-                                              beneficiariesPageInfo,
-                                              beneficiariesTotalCount,
-                                              status,
-                                              readOnly
-                                          }) => {
+    intl,
+    benefitPlan,
+    fetchBeneficiaries,
+    fetchingBeneficiaries,
+    fetchedBeneficaries,
+    errorBeneficiaries,
+    beneficiaries,
+    beneficiariesPageInfo,
+    beneficiariesTotalCount,
+    status,
+    readOnly
+}) => {
     const fetch = (params) => fetchBeneficiaries(params);
 
     const headers = () => [
