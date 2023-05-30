@@ -26,27 +26,27 @@ const styles = (theme) => ({
 });
 
 const BenefitPlanPage = ({
-                             intl,
-                             classes,
-                             rights,
-                             history,
-                             benefitPlanUuid,
-                             benefitPlan,
-                             fetchBenefitPlan,
-                             deleteBenefitPlan,
-                             updateBenefitPlan,
-                             coreConfirm,
-                             confirmed,
-                             submittingMutation,
-                             mutation,
-                             journalize,
-                             modulesManager,
-                             createBenefitPlan,
-                             clearBenefitPlan,
-                             isBenefitPlanNameValid,
-                             isBenefitPlanCodeValid,
-                             isBenefitPlanSchemaValid,
-                         }) => {
+    intl,
+    classes,
+    rights,
+    history,
+    benefitPlanUuid,
+    benefitPlan,
+    fetchBenefitPlan,
+    deleteBenefitPlan,
+    updateBenefitPlan,
+    coreConfirm,
+    confirmed,
+    submittingMutation,
+    mutation,
+    journalize,
+    modulesManager,
+    createBenefitPlan,
+    clearBenefitPlan,
+    isBenefitPlanNameValid,
+    isBenefitPlanCodeValid,
+    isBenefitPlanSchemaValid,
+}) => {
     const [editedBenefitPlan, setEditedBenefitPlan] = useState({});
     const [confirmedAction, setConfirmedAction] = useState(() => null);
     const prevSubmittingMutationRef = useRef();
