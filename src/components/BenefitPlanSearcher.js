@@ -139,8 +139,8 @@ const BenefitPlanSearcher = ({
     const sorts = () => [
         ["code", true],
         ["name", true],
-        ["dateValidityFrom", true],
-        ["dateValidityTo", true],
+        ["dateValidFrom", true],
+        ["dateValidTo", true],
         ["maxBeneficiaries", true],
     ];
 
