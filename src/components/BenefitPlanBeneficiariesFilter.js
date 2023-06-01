@@ -17,7 +17,7 @@ function BenefitPlanBeneficiariesFilter({
 
   const onChangeStringFilter = (filterName, lookup = null) => (value) => {
     if (lookup) {
-      debouncedOnChangeFilters([
+      debouncedOnChangeFilters([  
         {
           id: filterName,
           value,
