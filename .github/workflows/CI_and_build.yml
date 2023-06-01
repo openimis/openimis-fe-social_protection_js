@@ -36,7 +36,7 @@ jobs:
         run : yarn build 
       - name: Check build status
         run: |
-          if [ -d "build" ]; then
+          if [ -d "dist" ]; then
             echo "Build successful!"
           else
             echo "Build failed!"
