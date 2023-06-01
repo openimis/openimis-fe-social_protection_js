@@ -1,3 +1,4 @@
+// Disable due to core architecture
 /* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
 import messages_en from './translations/en.json';

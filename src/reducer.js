@@ -1,3 +1,4 @@
+// Disabled due to consistency with other modules
 /* eslint-disable default-param-last */
 
 import {
