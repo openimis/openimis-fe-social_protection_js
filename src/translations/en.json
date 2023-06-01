@@ -4,6 +4,7 @@
   "socialProtection.benefitPlan.delete.mutationLabel": "Delete benefit plan {name}",
   "socialProtection.benefitPlan.update.mutationLabel": "Update product {name}",
   "socialProtection.benefitPlan.create.mutationLabel": "Create product {name}",
+  "socialProtection.downloadBeneficiaries.mutationLabel": "Download beneficiaries",
   "socialProtection.benefitPlan.editButtonTooltip": "Edit",
   "socialProtection.benefitPlan.deleteButtonTooltip": "Delete",
   "socialProtection.benefitPlan.searcherResultsTitle": "{benefitPlansTotalCount} Benefit Plans",
@@ -38,5 +39,12 @@
   "socialProtection.benefitPlan.benefitPlanBeneficiariesPotential.label": "Potential",
   "socialProtection.mainMenuSocialProtection": "Social Protection",
   "socialProtection.menu.socialProtection.benefitPlans": "Benefit Plans",
-  "socialProtection.advancedFilters": "Advanced Filters"
+  "socialProtection.advancedFilters": "Advanced Filters",
+  "socialProtection.download": "Download",
+  "socialProtection.export.firstName": "first_name",
+  "socialProtection.export.lastName": "last_name",
+  "socialProtection.export.dob": "dob",
+  "socialProtection.export.dateCreated": "date_created",
+  "socialProtection.export.label": "Download",
+  "socialProtection.export.filename": "beneficiaries_export"
 }
