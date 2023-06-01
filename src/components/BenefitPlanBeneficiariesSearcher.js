@@ -6,10 +6,12 @@ import {connect} from "react-redux";
 import {fetchBeneficiaries, downloadBeneficiaries} from "../actions";
 import {DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, RIGHT_BENEFICIARY_SEARCH} from "../constants";
 import BenefitPlanBeneficiariesFilter from "./BenefitPlanBeneficiariesFilter";
-import {Button,
+import {
+    Button,
     Dialog,
     DialogActions,
-    DialogTitle,} from "@material-ui/core";
+    DialogTitle,
+} from "@material-ui/core";
 
 const BenefitPlanBeneficiariesSearcher = ({
     intl,
@@ -25,7 +27,6 @@ const BenefitPlanBeneficiariesSearcher = ({
     beneficiariesTotalCount,
     status,
     readOnly,
-
     beneficiaryExport,
     errorBeneficiaryExport,
 }) => {
@@ -73,15 +74,15 @@ const BenefitPlanBeneficiariesSearcher = ({
         return filters;
     };
 
-    const [failedExport, setFailedExport] = useState(false)
+    const [failedExport, setFailedExport] = useState(false);
 
     useEffect(() => {
-        setFailedExport(true)
-      }, [errorBeneficiaryExport])
+        setFailedExport(true);
+    }, [errorBeneficiaryExport])
 
     useEffect(() => {
     if (beneficiaryExport) {
-        downloadExport(beneficiaryExport, 'beneficiary_export.csv')();
+        downloadExport(beneficiaryExport, `${formatMessage(intl, "socialProtection", "export.filename")}.csv`)();
     }
     }, [beneficiaryExport])
 
@@ -116,7 +117,7 @@ const BenefitPlanBeneficiariesSearcher = ({
                     'individual__last_name': formatMessage(intl, "socialProtection", "export.lastName"),
                     'individual__dob': formatMessage(intl, "socialProtection", "export.dob"),
                     'individual__date_created': formatMessage(intl, "socialProtection", "export.dateCreated"),
-                  }}
+                }}
                 exportFieldLabel={formatMessage(intl, "socialProtection", "export.label")}
                 headers={headers}
                 itemFormatters={itemFormatters}
@@ -130,9 +131,9 @@ const BenefitPlanBeneficiariesSearcher = ({
                 <Dialog fullWidth maxWidth="sm">
                   <DialogTitle>{errorBeneficiaryExport}</DialogTitle>
                   <DialogActions>
-                  <Button onClick={setFailedExport(false)} variant="contained">
-                    {formatMessage(intl, "socialProtection", "ok")}
-                  </Button>
+                    <Button onClick={setFailedExport(false)} variant="contained">
+                      {formatMessage(intl, "socialProtection", "ok")}
+                    </Button>
                   </DialogActions>
                 </Dialog>
               )}

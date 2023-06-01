@@ -45,5 +45,6 @@
   "socialProtection.export.lastName": "last_name",
   "socialProtection.export.dob": "dob",
   "socialProtection.export.dateCreated": "date_created",
-  "socialProtection.export.label": "Download"
+  "socialProtection.export.label": "Download",
+  "socialProtection.export.filename": "beneficiaries_export"
 }
