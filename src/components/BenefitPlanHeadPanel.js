@@ -183,7 +183,8 @@ const mapStateToProps = (store) => ({
   isBenefitPlanSchemaValid: store.socialProtection.validationFields?.benefitPlanSchema?.isValid,
   isBenefitPlanSchemaValidating: store.socialProtection.validationFields?.benefitPlanSchema?.isValidating,
   benefitPlanSchemaValidationError: store.socialProtection.validationFields?.benefitPlanSchema?.validationError,
-  benefitPlanSchemaValidationErrorMessage: store.socialProtection.validationFields?.benefitPlanSchema?.validationErrorMessage,
+  benefitPlanSchemaValidationErrorMessage:
+    store.socialProtection.validationFields?.benefitPlanSchema?.validationErrorMessage,
 });
 
 export default withModulesManager(injectIntl(withTheme(withStyles(styles)(

@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable import/prefer-default-export */
 import messages_en from './translations/en.json';
 import reducer from './reducer';
 import BenefitPlanMainMenu from './menus/BenefitPlanMainMenu';
