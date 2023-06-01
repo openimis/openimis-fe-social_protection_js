@@ -23,7 +23,8 @@ export const ACTION_TYPE = {
     BENEFIT_PLAN_CODE_SET_VALID: "BENEFIT_PLAN_CODE_SET_VALID",
     BENEFIT_PLAN_NAME_SET_VALID: "BENEFIT_PLAN_NAME_SET_VALID",
     BENEFIT_PLAN_SCHEMA_SET_VALID: "BENEFIT_PLAN_NAME_SET_VALID",
-    SEARCH_BENEFICIARIES: "BENEFICIARY_BENEFICIARIES"
+    SEARCH_BENEFICIARIES: "BENEFICIARY_BENEFICIARIES",
+    BENEFICIARY_EXPORT: "BENEFICIARY_EXPORT"
 };
 
 function reducer(
@@ -47,6 +48,11 @@ function reducer(
         beneficiariesTotalCount: 0,
         errorBeneficiaries: null,
         beneficiary: null,
+        fetchingBeneficiaryExport: true,
+        fetchedBeneficiaryExport: false,
+        beneficiaryExport: null,
+        beneficiaryExportPageInfo: {},
+        errorBeneficiaryExport: null,
     },
     action,
 ) {
@@ -344,6 +350,30 @@ function reducer(
                 fetchedBenefitPlan: false,
                 benefitPlan: null,
             }
+        case REQUEST(ACTION_TYPE.BENEFICIARY_EXPORT):
+            return {
+            ...state,
+            fetchingBeneficiaryExport: true,
+            fetchedBeneficiaryExport: false,
+            beneficiaryExport: null,
+            beneficiaryExportPageInfo: {},
+            errorBeneficiaryExport: null,
+            };
+        case SUCCESS(ACTION_TYPE.BENEFICIARY_EXPORT):
+            return {
+                ...state,
+                fetchingBeneficiaryExport: false,
+                fetchedBeneficiaryExport: true,
+                beneficiaryExport: action.payload.data.beneficiaryExport,
+                beneficiaryExportPageInfo: pageInfo(action.payload.data.beneficiaryExport),
+                errorBeneficiaryExport: formatGraphQLError(action.payload),
+            };
+        case ERROR(ACTION_TYPE.BENEFICIARY_EXPORT):
+            return {
+                ...state,
+                fetchingBeneficiaryExport: false,
+                errorBeneficiaryExport: formatServerError(action.payload),
+            };
         case REQUEST(ACTION_TYPE.MUTATION):
             return dispatchMutationReq(state, action);
         case ERROR(ACTION_TYPE.MUTATION):

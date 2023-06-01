@@ -161,6 +161,14 @@ export function benefitPlanSchemaValidationCheck(mm, variables) {
     );
 }
 
+export function downloadBeneficiaries(params) {
+    const payload = `
+    {
+      beneficiaryExport${!!params && params.length ? `(${params.join(",")})` : ""}
+    }`
+    return graphql(payload, ACTION_TYPE.BENEFICIARY_EXPORT);
+  }
+
 export const benefitPlanCodeSetValid = () => {
     return (dispatch) => {
         dispatch({type: ACTION_TYPE.BENEFIT_PLAN_CODE_SET_VALID});
