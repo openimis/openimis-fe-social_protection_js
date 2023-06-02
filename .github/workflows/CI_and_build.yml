@@ -30,15 +30,15 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      # Runs a single command using the runners shell
-      - name: get dependences
-        run: |
-          node openimis-config.js openimis.json
       - name: Install dependencies
         run : yarn install 
       - name: build
         run : yarn build 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: frontend-node${{ matrix.node-version }}-${{github.run_number}}-${{github.sha}}
-          path: ./build/*
+      - name: Check build status
+        run: |
+          if [ -d "dist" ]; then
+            echo "Build successful!"
+          else
+            echo "Build failed!"
+            exit 1
+          fi
