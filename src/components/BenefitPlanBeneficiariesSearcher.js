@@ -138,6 +138,10 @@ function BenefitPlanBeneficiariesSearcher({
         defaultPageSize={DEFAULT_PAGE_SIZE}
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
+        isCustomFiltering={true}
+        objectForCustomFiltering={benefitPlan}
+        moduleName={"social_protection"}
+        objectType={"BenefitPlan"}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">
