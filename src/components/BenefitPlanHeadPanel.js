@@ -109,6 +109,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             required
             onChange={(v) => this.updateAttribute('dateValidFrom', v)}
             value={benefitPlan?.dateValidFrom ?? ''}
+            maxDate={benefitPlan?.dateValidTo || ''}
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>
@@ -119,6 +120,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             required
             onChange={(v) => this.updateAttribute('dateValidTo', v)}
             value={benefitPlan?.dateValidTo ?? ''}
+            minDate={benefitPlan?.dateValidFrom || new Date().getDate()}
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>
