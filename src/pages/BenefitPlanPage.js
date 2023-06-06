@@ -5,6 +5,7 @@ import {
   formatMessage,
   formatMessageWithValues,
   coreConfirm,
+  clearConfirm,
   journalize,
   withModulesManager,
 } from '@openimis/fe-core';
@@ -37,6 +38,7 @@ function BenefitPlanPage({
   deleteBenefitPlan,
   updateBenefitPlan,
   coreConfirm,
+  clearConfirm,
   confirmed,
   submittingMutation,
   mutation,
@@ -58,7 +60,10 @@ function BenefitPlanPage({
     }
   }, [benefitPlanUuid]);
 
-  useEffect(() => confirmed && confirmedAction(), [confirmed]);
+  useEffect(() => {
+    if (confirmed) confirmedAction();
+    return () => confirmed && clearConfirm(null);
+  }, [confirmed]);
 
   const back = () => history.goBack();
 
@@ -203,6 +208,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   deleteBenefitPlan,
   updateBenefitPlan,
   coreConfirm,
+  clearConfirm,
   journalize,
 }, dispatch);
 

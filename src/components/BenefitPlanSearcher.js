@@ -6,6 +6,7 @@ import {
   formatMessageWithValues,
   Searcher,
   coreConfirm,
+  clearConfirm,
   journalize,
   withHistory,
   historyPush,
@@ -30,6 +31,7 @@ function BenefitPlanSearcher({
   history,
   rights,
   coreConfirm,
+  clearConfirm,
   confirmed,
   journalize,
   submittingMutation,
@@ -70,6 +72,7 @@ function BenefitPlanSearcher({
     if (benefitPlanToDelete && confirmed !== null) {
       setBenefitPlanToDelete(null);
     }
+    return () => confirmed && clearConfirm(false);
   }, [confirmed]);
 
   useEffect(() => {
@@ -207,6 +210,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
     fetchBenefitPlans,
     deleteBenefitPlan,
     coreConfirm,
+    clearConfirm,
     journalize,
   },
   dispatch,
