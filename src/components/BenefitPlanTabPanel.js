@@ -53,9 +53,6 @@ function BenefitPlanTabPanel({
           isSelected={isSelected}
           tabStyle={tabStyle}
         />
-        <Button variant="contained" color="primary" className={classes.button}>
-          {formatMessage(intl, 'socialProtection', 'advancedFilters')}
-        </Button>
       </Grid>
       <Contributions
         contributionKey={BENEFIT_PLAN_TABS_PANEL_CONTRIBUTION_KEY}
