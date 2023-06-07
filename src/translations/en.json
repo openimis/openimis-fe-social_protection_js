@@ -27,8 +27,8 @@
   "socialProtection.beneficiary.status.ACTIVE": "ACTIVE",
   "socialProtection.beneficiary.status.GRADUATED": "GRADUATED",
   "socialProtection.beneficiary.status.SUSPENDED": "SUSPENDED",
-  "socialProtection.benefitPlan.saveButton.tooltip.enabled": "Enabled",
-  "socialProtection.benefitPlan.saveButton.tooltip.disabled": "Disabled",
+  "socialProtection.benefitPlan.saveButton.tooltip.enabled": "Save changes",
+  "socialProtection.benefitPlan.saveButton.tooltip.disabled": "Save changes",
   "socialProtection.benefitPlan.benefitPlanHelmet": "Benefit Plan",
   "socialProtection.benefitPlan.code.alreadyTaken": "The code is already taken",
   "socialProtection.benefitPlan.name.alreadyTaken": "The name is already taken",
@@ -40,11 +40,13 @@
   "socialProtection.mainMenuSocialProtection": "Social Protection",
   "socialProtection.menu.socialProtection.benefitPlans": "Benefit Plans",
   "socialProtection.advancedFilters": "Advanced Filters",
+  "socialProtection.createButton.tooltip": "Create",
   "socialProtection.download": "Download",
   "socialProtection.export.firstName": "first_name",
   "socialProtection.export.lastName": "last_name",
   "socialProtection.export.dob": "dob",
   "socialProtection.export.dateCreated": "date_created",
   "socialProtection.export.label": "Download",
-  "socialProtection.export.filename": "beneficiaries_export"
+  "socialProtection.export.filename": "beneficiaries_export",
+  "socialProtection.validation.benefitPlan.invalidSchema": "Invalid schema"
 }
