@@ -31,6 +31,7 @@
   "socialProtection.beneficiary.beneficiaryStatusPicker.GRADUATED": "GRADUATED",
   "socialProtection.beneficiary.beneficiaryStatusPicker.SUSPENDED": "SUSPENDED",
   "socialProtection.any": "Any",
+  "socialProtection.beneficiary.status": "Status",
   "socialProtection.emptyString": "",
   "socialProtection.groupBeneficiary.status": "Status",
   "socialProtection.groupBeneficiary.id": "ID",
