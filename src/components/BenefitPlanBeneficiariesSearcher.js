@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { injectIntl } from 'react-intl';
 import {
-  formatMessage, formatMessageWithValues, Searcher, downloadExport,
+  formatMessage, formatMessageWithValues, Searcher, downloadExport, CLEARED_STATE_FILTER
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -78,6 +78,7 @@ function BenefitPlanBeneficiariesSearcher({
   };
 
   const [failedExport, setFailedExport] = useState(false);
+  const [appliedCustomFilters, setAppliedCustomFilters] = useState([CLEARED_STATE_FILTER]);
 
   useEffect(() => {
     setFailedExport(true);
@@ -89,15 +90,19 @@ function BenefitPlanBeneficiariesSearcher({
     }
   }, [beneficiaryExport]);
 
-  const beneficiaryFilter = (props) => (
+  const beneficiaryFilter = (props) => {
+    return(
     <BenefitPlanBeneficiariesFilter
       intl={props.intl}
       classes={props.classes}
-      filters={props.filterrs}
+      filters={props.filters}
       onChangeFilters={props.onChangeFilters}
       readOnly={readOnly}
     />
-  );
+  )};
+
+  useEffect(() => {}, [appliedCustomFilters]);
+
   return (
     !!benefitPlan?.id && (
     <div>
@@ -142,6 +147,8 @@ function BenefitPlanBeneficiariesSearcher({
         objectForCustomFiltering={benefitPlan}
         moduleName={"social_protection"}
         objectType={"BenefitPlan"}
+        appliedCustomFilters={appliedCustomFilters}
+        setAppliedCustomFilters={setAppliedCustomFilters}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">
