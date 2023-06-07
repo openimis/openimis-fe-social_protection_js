@@ -47,5 +47,6 @@
   "socialProtection.export.dob": "dob",
   "socialProtection.export.dateCreated": "date_created",
   "socialProtection.export.label": "Download",
-  "socialProtection.export.filename": "beneficiaries_export"
+  "socialProtection.export.filename": "beneficiaries_export",
+  "socialProtection.validation.benefitPlan.invalidSchema": "Invalid schema"
 }

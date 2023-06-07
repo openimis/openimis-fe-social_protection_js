@@ -291,7 +291,6 @@ function reducer(
             isValidating: true,
             isValid: false,
             validationError: null,
-            validationErrorMessage: null,
           },
         },
       };
@@ -304,7 +303,6 @@ function reducer(
             isValidating: false,
             isValid: action.payload?.data.isValid.isValid,
             validationError: formatGraphQLError(action.payload),
-            validationErrorMessage: action.payload?.data.isValid.errorMessage,
           },
         },
       };
@@ -329,7 +327,6 @@ function reducer(
             isValidating: false,
             isValid: false,
             validationError: null,
-            validationErrorMessage: null,
           },
         },
       };
