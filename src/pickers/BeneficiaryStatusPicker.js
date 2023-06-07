@@ -1,42 +1,12 @@
-import React from 'react';
-import { SelectInput, formatMessage } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
-import { BENEFICIARY_STATUS } from '../constants';
+import React, { Component } from "react";
+import { ConstantBasedPicker } from "@openimis/fe-core";
 
-function BeneficiaryStatusPicker({
-  intl,
-  value,
-  label,
-  onChange,
-  readOnly = false,
-  withNull = false,
-  nullLabel = null,
-  withLabel = true,
-  required = false,
-}) {
-  const options = Object.keys(BENEFICIARY_STATUS).map((key) => ({
-    value: BENEFICIARY_STATUS[key],
-    label: formatMessage(intl, 'socialProtection', `beneficiary.status.${key}`),
-  }));
+import { BENEFICIARY_STATUS_LIST } from "../constants";
 
-  if (withNull) {
-    options.unshift({
-      value: null,
-      label: nullLabel || formatMessage(intl, 'socialProtection', 'beneficiaries.emptyLabel'),
-    });
+class BeneficiaryStatusPicker extends Component {
+  render() {
+    return <ConstantBasedPicker module="socialProtection" label="benefitPlanTypePicker" constants={BENEFICIARY_STATUS_LIST} {...this.props} />;
   }
-
-  return (
-    <SelectInput
-      module="socialProtection"
-      label={withLabel && label}
-      options={options}
-      value={value}
-      onChange={onChange}
-      readOnly={readOnly}
-      required={required}
-    />
-  );
 }
 
-export default injectIntl(BeneficiaryStatusPicker);
+export default BeneficiaryStatusPicker;

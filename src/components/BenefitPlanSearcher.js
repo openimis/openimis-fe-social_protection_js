@@ -91,6 +91,7 @@ function BenefitPlanSearcher({
     const headers = [
       'benefitPlan.code',
       'benefitPlan.name',
+      'benefitPlan.type',
       'benefitPlan.dateValidFrom',
       'benefitPlan.dateValidTo',
       'benefitPlan.maxBeneficiaries',
@@ -116,6 +117,7 @@ function BenefitPlanSearcher({
     const formatters = [
       (benefitPlan) => benefitPlan.code,
       (benefitPlan) => benefitPlan.name,
+      (benefitPlan) => benefitPlan.type,
       (benefitPlan) => benefitPlan.dateValidFrom,
       (benefitPlan) => benefitPlan.dateValidTo,
       (benefitPlan) => benefitPlan.maxBeneficiaries,

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Tab } from '@material-ui/core';
 import { formatMessage, PublishedComponent } from '@openimis/fe-core';
-import { BENEFICIARY_STATUS, BENEFIT_PLAN_BENEFICIARIES_POTENTIAL_TAB_VALUE } from '../constants';
+import {BENEFICIARY_STATUS, BENEFIT_PLAN_BENEFICIARIES_POTENTIAL_TAB_VALUE, BENEFIT_PLAN_TYPE} from '../constants';
 import BenefitPlanBeneficiariesSearcher from './BenefitPlanBeneficiariesSearcher';
+import BenefitPlanGroupBeneficiariesSearcher from "./BenefitPlanGroupBeneficiariesSearcher";
 
 function BenefitPlanBeneficiariesPotentialTabLabel({
   intl, onChange, tabStyle, isSelected,
@@ -26,11 +27,19 @@ function BenefitPlanBeneficiariesPotentialTabPanel({ value, benefitPlan }) {
       index={BENEFIT_PLAN_BENEFICIARIES_POTENTIAL_TAB_VALUE}
       value={value}
     >
-      <BenefitPlanBeneficiariesSearcher
-        benefitPlan={benefitPlan}
-        status={BENEFICIARY_STATUS.POTENTIAL}
-        readOnly
-      />
+      {benefitPlan?.type === BENEFIT_PLAN_TYPE.INDIVIDUAL ? (
+          <BenefitPlanBeneficiariesSearcher
+              benefitPlan={benefitPlan}
+              status={BENEFICIARY_STATUS.POTENTIAL}
+              readOnly
+          />
+      ) : (
+          <BenefitPlanGroupBeneficiariesSearcher
+              benefitPlan={benefitPlan}
+              status={BENEFICIARY_STATUS.POTENTIAL}
+              readOnly
+          />
+      )}
     </PublishedComponent>
   );
 }
