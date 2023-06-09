@@ -93,7 +93,7 @@ function BenefitPlanBeneficiariesSearcher({
     <BenefitPlanBeneficiariesFilter
       intl={props.intl}
       classes={props.classes}
-      filters={props.filterrs}
+      filters={props.filters}
       onChangeFilters={props.onChangeFilters}
       readOnly={readOnly}
     />

@@ -186,7 +186,7 @@ export function downloadBeneficiaries(params) {
 export function downloadGroupBeneficiaries(params) {
   const payload = `
     {
-      beneficiaryExport${!!params && params.length ? `(${params.join(',')})` : ''}
+      groupBeneficiaryExport${!!params && params.length ? `(${params.join(',')})` : ''}
     }`;
   return graphql(payload, ACTION_TYPE.GROUP_BENEFICIARY_EXPORT);
 }
