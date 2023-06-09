@@ -17,6 +17,7 @@
   "socialProtection.benefitPlan.jsonExt": "json_ext",
   "socialProtection.benefitPlan.schema": "Schema",
   "socialProtection.benefitPlan.pageTitle": "Benefit Plan {code} {name}",
+  "socialProtection.benefitPackage.pageTitle": "{name} Group",
   "socialProtection.beneficiary.code": "Code",
   "socialProtection.beneficiary.firstName": "First name",
   "socialProtection.beneficiary.lastName": "Last name",
@@ -48,5 +49,7 @@
   "socialProtection.export.dateCreated": "date_created",
   "socialProtection.export.label": "Download",
   "socialProtection.export.filename": "beneficiaries_export",
-  "socialProtection.validation.benefitPlan.invalidSchema": "Invalid schema"
+  "socialProtection.validation.benefitPlan.invalidSchema": "Invalid schema",
+  "socialProtection.benefitPackage.overviewButtonTooltip": "Show Benefit Package",
+  "socialProtection.GroupDetailPanel.title": "Group Details"
 }

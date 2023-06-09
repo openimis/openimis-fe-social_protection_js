@@ -6,6 +6,7 @@ import reducer from './reducer';
 import BenefitPlanMainMenu from './menus/BenefitPlanMainMenu';
 import BenefitPlansPage from './pages/BenefitPlansPage';
 import BenefitPlanPage from './pages/BenefitPlanPage';
+import BenefitPackagePage from './pages/BenefitPackagePage';
 import BeneficiaryStatusPicker from './pickers/BeneficiaryStatusPicker';
 import {
   BenefitPlanBeneficiariesListTabPanel,
@@ -30,6 +31,7 @@ import {
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
+const ROUTE_BENEFIT_PACKAGE = 'benefitPackage';
 
 const DEFAULT_CONFIG = {
   translations: [{ key: 'en', messages: messages_en }],
@@ -38,9 +40,11 @@ const DEFAULT_CONFIG = {
   'core.Router': [
     { path: ROUTE_BENEFIT_PLANS, component: BenefitPlansPage },
     { path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`, component: BenefitPlanPage },
+    { path: `${ROUTE_BENEFIT_PLAN}/${ROUTE_BENEFIT_PACKAGE}/:individual_uuid?`, component: BenefitPackagePage },
   ],
   refs: [
     { key: 'socialProtection.route.benefitPlan', ref: ROUTE_BENEFIT_PLAN },
+    { key: 'socialProtection.route.benefitPackage', ref: ROUTE_BENEFIT_PACKAGE },
     { key: 'socialProtection.BeneficiaryStatusPicker', ref: BeneficiaryStatusPicker },
   ],
   'benefitPlan.TabPanel.label': [
