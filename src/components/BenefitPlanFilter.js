@@ -4,7 +4,7 @@ import { TextInput, PublishedComponent } from '@openimis/fe-core';
 import { Grid } from '@material-ui/core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import _debounce from 'lodash/debounce';
-import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME } from '../constants';
+import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
 
 function BenefitPlanFilter({
@@ -13,6 +13,8 @@ function BenefitPlanFilter({
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
   const filterValue = (filterName) => filters?.[filterName]?.value;
+
+  const filterTextFieldValue = (filterName) => filters?.[filterName]?.value ?? EMPTY_STRING;
 
   const onChangeStringFilter = (filterName, lookup = null) => (value) => {
     if (lookup) {
@@ -40,7 +42,7 @@ function BenefitPlanFilter({
         <TextInput
           module="socialProtection"
           label="benefitPlan.code"
-          value={filterValue('code')}
+          value={filterTextFieldValue('code')}
           onChange={onChangeStringFilter('code', CONTAINS_LOOKUP)}
         />
       </Grid>
@@ -48,7 +50,7 @@ function BenefitPlanFilter({
         <TextInput
           module="socialProtection"
           label="benefitPlan.name"
-          value={filterValue('name')}
+          value={filterTextFieldValue('name')}
           onChange={onChangeStringFilter('name', CONTAINS_LOOKUP)}
         />
       </Grid>
