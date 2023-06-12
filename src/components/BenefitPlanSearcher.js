@@ -44,7 +44,7 @@ function BenefitPlanSearcher({
   benefitPlansPageInfo,
   benefitPlansTotalCount,
   individualId,
-  beneficiaryStatus
+  beneficiaryStatus,
 }) {
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
@@ -87,7 +87,6 @@ function BenefitPlanSearcher({
   useEffect(() => {
     prevSubmittingMutationRef.current = submittingMutation;
   });
-
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -192,9 +191,9 @@ function BenefitPlanSearcher({
     }),
   });
 
-
   return (
-    propsLoaded && <Searcher
+    propsLoaded && (
+    <Searcher
       key={JSON.stringify(defaultFilters())}
       module="socialProtection"
       FilterPane={BenefitPlanFilter}
@@ -218,6 +217,7 @@ function BenefitPlanSearcher({
       rowDisabled={isRowDisabled}
       rowLocked={isRowDisabled}
     />
+    )
   );
 }
 
