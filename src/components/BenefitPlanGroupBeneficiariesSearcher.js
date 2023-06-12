@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core';
 import { fetchGroupBeneficiaries, downloadGroupBeneficiaries } from '../actions';
 import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from '../constants';
-import BenefitPlanGroupBeneficiariesFilter from "./BenefitPlanGroupBeneficiariesFilter";
+import BenefitPlanGroupBeneficiariesFilter from './BenefitPlanGroupBeneficiariesFilter';
 
 function BenefitPlanGroupBeneficiariesSearcher({
   intl,
