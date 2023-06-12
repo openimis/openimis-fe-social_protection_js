@@ -1,9 +1,9 @@
 import React from 'react';
 import { Tab } from '@material-ui/core';
 import { formatMessage, PublishedComponent } from '@openimis/fe-core';
-import {BENEFICIARY_STATUS, BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE, BENEFIT_PLAN_TYPE} from '../constants';
+import { BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE, BENEFIT_PLAN_TYPE } from '../constants';
 import BenefitPlanBeneficiariesSearcher from './BenefitPlanBeneficiariesSearcher';
-import BenefitPlanGroupBeneficiariesSearcher from "./BenefitPlanGroupBeneficiariesSearcher";
+import BenefitPlanGroupBeneficiariesSearcher from './BenefitPlanGroupBeneficiariesSearcher';
 
 function BenefitPlanBeneficiariesListTabLabel({
   intl, onChange, tabStyle, isSelected,
@@ -28,9 +28,9 @@ function BenefitPlanBeneficiariesListTabPanel({ value, benefitPlan }) {
       value={value}
     >
       {benefitPlan?.type === BENEFIT_PLAN_TYPE.INDIVIDUAL ? (
-          <BenefitPlanBeneficiariesSearcher benefitPlan={benefitPlan}/>
+        <BenefitPlanBeneficiariesSearcher benefitPlan={benefitPlan} />
       ) : (
-          <BenefitPlanGroupBeneficiariesSearcher benefitPlan={benefitPlan}/>
+        <BenefitPlanGroupBeneficiariesSearcher benefitPlan={benefitPlan} />
       )}
     </PublishedComponent>
   );

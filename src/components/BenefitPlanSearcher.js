@@ -43,10 +43,13 @@ function BenefitPlanSearcher({
   benefitPlans,
   benefitPlansPageInfo,
   benefitPlansTotalCount,
+  individualId,
+  beneficiaryStatus
 }) {
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
   const prevSubmittingMutationRef = useRef();
+  const [propsLoaded, setPropsLoaded] = useState(false);
 
   const openDeleteBenefitPlanConfirmDialog = () => coreConfirm(
     formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.confirm.title', {
@@ -84,6 +87,14 @@ function BenefitPlanSearcher({
   useEffect(() => {
     prevSubmittingMutationRef.current = submittingMutation;
   });
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPropsLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const fetch = (params) => fetchBenefitPlans(modulesManager, params);
 
@@ -167,10 +178,24 @@ function BenefitPlanSearcher({
       value: false,
       filter: 'isDeleted: false',
     },
+    ...(individualId && {
+      individualId: {
+        value: individualId,
+        filter: `individualId: "${individualId}"`,
+      },
+    }),
+    ...(beneficiaryStatus && {
+      beneficiaryStatus: {
+        value: beneficiaryStatus,
+        filter: `beneficiaryStatus: "${beneficiaryStatus}"`,
+      },
+    }),
   });
 
+
   return (
-    <Searcher
+    propsLoaded && <Searcher
+      key={JSON.stringify(defaultFilters())}
       module="socialProtection"
       FilterPane={BenefitPlanFilter}
       fetch={fetch}
