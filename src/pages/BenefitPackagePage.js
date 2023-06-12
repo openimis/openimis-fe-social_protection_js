@@ -9,7 +9,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import BenefitPackageHeadPanel from '../components/BenefitPackageHeadPanel';
+import BenefitPackageGroupPanel from '../components/BenefitPackageGroupPanel';
 import BenefitPackageTabPanel from '../components/BenefitPackageTabPanel';
 import { RIGHT_BENEFICIARY_SEARCH } from '../constants';
 import BenefitPackageIndividualPanel from '../components/BenefitPackageIndividualPanel';
@@ -44,7 +44,7 @@ function BenefitPackagePage({
         title={formatMessageWithValues(intl, 'socialProtection', 'benefitPackage.pageTitle', { name: testGroupName })}
         openDirty
         back={back}
-        HeadPanel={BenefitPackageHeadPanel}
+        HeadPanel={BenefitPackageGroupPanel}
         Panels={
           rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPackageIndividualPanel, BenefitPackageTabPanel] : []
         }

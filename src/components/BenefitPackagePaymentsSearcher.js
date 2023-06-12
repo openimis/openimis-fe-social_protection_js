@@ -29,8 +29,6 @@ function BenefitPackagePaymentsSearcher({
   // errorBeneficiaries,
   // beneficiaries,
   beneficiariesPageInfo,
-  // beneficiariesTotalCount,
-  // status,
   readOnly,
 }) {
   const fetch = () => {};
@@ -83,34 +81,32 @@ function BenefitPackagePaymentsSearcher({
   const filters = defaultFilters();
 
   return (
-    true && (
-      <div>
-        <Searcher
-          module="benefitPlan"
-          FilterPane={beneficiaryFilter}
-          fetch={fetch}
-          itemsPageInfo={beneficiariesPageInfo}
-          // items={beneficiaries}
+    <div>
+      <Searcher
+        module="benefitPlan"
+        FilterPane={beneficiaryFilter}
+        fetch={fetch}
+        itemsPageInfo={beneficiariesPageInfo}
+          // items={DUMMY_PAYMENTS}
           // fetchingItems={fetchingBeneficiaries}
           // fetchedItems={fetchedBeneficiaries}
           // errorItems={errorBeneficiaries}
-          tableTitle={formatMessageWithValues(
-            intl,
-            'socialProtection',
-            'beneficiaries.payments.searcherResultsTitle',
-            {
-              beneficiariesTotalCount: 0,
-            },
-          )}
-          headers={headers}
-          itemFormatters={itemFormatters}
-          sorts={sorts}
-          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
-          defaultPageSize={DEFAULT_PAGE_SIZE}
-          defaultFilters={filters}
-        />
-      </div>
-    )
+        tableTitle={formatMessageWithValues(
+          intl,
+          'socialProtection',
+          'beneficiaries.payments.searcherResultsTitle',
+          {
+            beneficiariesTotalCount: 0,
+          },
+        )}
+        headers={headers}
+        itemFormatters={itemFormatters}
+        sorts={sorts}
+        rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+        defaultPageSize={DEFAULT_PAGE_SIZE}
+        defaultFilters={filters}
+      />
+    </div>
   );
 }
 
@@ -120,15 +116,20 @@ const mapStateToProps = (state) => ({
   // fetchingBeneficiaries: state.socialProtection.fetchingBeneficiaries,
   // fetchedBeneficiaries: state.socialProtection.fetchedBeneficiaries,
   // errorBeneficiaries: state.socialProtection.errorBeneficiaries,
-  // beneficiaries: state.socialProtection.beneficiaries,
+  beneficiaries: state.socialProtection.beneficiaries,
   beneficiariesPageInfo: state.socialProtection.beneficiariesPageInfo,
   // beneficiariesTotalCount: state.socialProtection.beneficiariesTotalCount,
+  fetchingPayments: null,
+  fetchedPayments: null,
+  payments: null,
+  errorPayments: null,
+  paymentsPageInfo: null,
   selectedFilters: state.core.filtersCache.benefitPlanBeneficiaryFilterCache,
   fetchingPaymentsExport: null,
   fetchedPaymentsExport: null,
   paymentsExport: null,
-  paymentsExportPageInfo: null,
   paymentsExportError: null,
+  paymentsExportPageInfo: null,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ }, dispatch);

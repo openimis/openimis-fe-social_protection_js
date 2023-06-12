@@ -33,7 +33,7 @@ function renderHeadPanelSubtitle(classes) {
   );
 }
 
-class BenefitPackageHeadPanel extends FormPanel {
+class BenefitPackageGroupPanel extends FormPanel {
   render() {
     const { classes } = this.props;
 
@@ -50,4 +50,4 @@ class BenefitPackageHeadPanel extends FormPanel {
   }
 }
 
-export default withModulesManager(withTheme(withStyles(styles)(BenefitPackageHeadPanel)));
+export default withModulesManager(withTheme(withStyles(styles)(BenefitPackageGroupPanel)));

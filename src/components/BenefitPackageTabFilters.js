@@ -9,7 +9,7 @@ import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
 function BenefitPackageTabFilters({
-  intl, classes, filters, onChangeFilters, readOnly,
+  intl, classes, filters, onChangeFilters,
 }) {
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
@@ -74,7 +74,6 @@ function BenefitPackageTabFilters({
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryPicker.label"
           withNull
-          readOnly={readOnly}
           nullLabel={formatMessage(intl, 'socialProtection', 'any')}
           value={filterValue('status')}
           onChange={(value) => onChangeFilters([
