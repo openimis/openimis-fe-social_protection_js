@@ -1,9 +1,9 @@
 import React from 'react';
 import { Tab } from '@material-ui/core';
 import { formatMessage, PublishedComponent } from '@openimis/fe-core';
-import {BENEFICIARY_STATUS, BENEFIT_PLAN_BENEFICIARIES_SUSPENDED_TAB_VALUE, BENEFIT_PLAN_TYPE} from '../constants';
+import { BENEFICIARY_STATUS, BENEFIT_PLAN_BENEFICIARIES_SUSPENDED_TAB_VALUE, BENEFIT_PLAN_TYPE } from '../constants';
 import BenefitPlanBeneficiariesSearcher from './BenefitPlanBeneficiariesSearcher';
-import BenefitPlanGroupBeneficiariesSearcher from "./BenefitPlanGroupBeneficiariesSearcher";
+import BenefitPlanGroupBeneficiariesSearcher from './BenefitPlanGroupBeneficiariesSearcher';
 
 function BenefitPlanBeneficiariesSuspendedTabLabel({
   intl, onChange, tabStyle, isSelected,
@@ -28,17 +28,17 @@ function BenefitPlanBeneficiariesSuspendedTabPanel({ value, benefitPlan }) {
       value={value}
     >
       {benefitPlan?.type === BENEFIT_PLAN_TYPE.INDIVIDUAL ? (
-          <BenefitPlanBeneficiariesSearcher
-              benefitPlan={benefitPlan}
-              status={BENEFICIARY_STATUS.SUSPENDED}
-              readOnly
-          />
+        <BenefitPlanBeneficiariesSearcher
+          benefitPlan={benefitPlan}
+          status={BENEFICIARY_STATUS.SUSPENDED}
+          readOnly
+        />
       ) : (
-          <BenefitPlanGroupBeneficiariesSearcher
-              benefitPlan={benefitPlan}
-              status={BENEFICIARY_STATUS.SUSPENDED}
-              readOnly
-          />
+        <BenefitPlanGroupBeneficiariesSearcher
+          benefitPlan={benefitPlan}
+          status={BENEFICIARY_STATUS.SUSPENDED}
+          readOnly
+        />
       )}
     </PublishedComponent>
   );

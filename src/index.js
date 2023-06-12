@@ -27,7 +27,7 @@ import {
   BenefitPlanBeneficiariesGraduatedTabLabel,
   BenefitPlanBeneficiariesGraduatedTabPanel,
 } from './components/BenefitPlanBeneficiariesGraduatedTab';
-import BenefitPlanSearcher from "./components/BenefitPlanSearcher";
+import BenefitPlanSearcher from './components/BenefitPlanSearcher';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';

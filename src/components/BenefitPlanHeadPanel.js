@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import {
   withModulesManager,
   FormPanel,
-  formatMessage,
   NumberInput,
   ValidatedTextInput,
   ValidatedTextAreaInput,
@@ -23,7 +22,7 @@ import {
   benefitPlanSchemaValidationCheck,
   benefitPlanSchemaValidationClear,
 } from '../actions';
-import BenefitPlanTypePicker from "../pickers/BenefitPlanTypePicker";
+import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -56,9 +55,7 @@ class BenefitPlanHeadPanel extends FormPanel {
       isBenefitPlanSchemaValid,
       isBenefitPlanSchemaValidating,
       benefitPlanSchemaValidationError,
-      benefitPlanSchemaValidationErrorMessage,
       readOnly,
-      intl,
     } = this.props;
     const benefitPlan = { ...edited };
 
@@ -146,10 +143,10 @@ class BenefitPlanHeadPanel extends FormPanel {
         </Grid>
         <Grid item xs={3} className={classes.item}>
           <BenefitPlanTypePicker
-              label="beneficiary.benefitPlanTypePicker"
-              required
-              withNull={false}
-              readOnly={readOnly}
+            label="beneficiary.benefitPlanTypePicker"
+            required
+            withNull={false}
+            readOnly={readOnly}
             onChange={(v) => this.updateAttribute('type', v)}
             value={!!benefitPlan?.type && benefitPlan.type}
           />
