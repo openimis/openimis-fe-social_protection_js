@@ -17,6 +17,7 @@
   "socialProtection.benefitPlan.jsonExt": "json_ext",
   "socialProtection.benefitPlan.schema": "Schema",
   "socialProtection.benefitPlan.pageTitle": "Benefit Plan {code} {name}",
+  "socialProtection.benefitPlan.isDeleted": "Show historical",
   "socialProtection.beneficiary.code": "Code",
   "socialProtection.beneficiary.firstName": "First name",
   "socialProtection.beneficiary.lastName": "Last name",
