@@ -54,8 +54,8 @@ function BenefitPlanBeneficiariesSearcher({
     '',
   ];
 
-  const openBenefitPackage = (individual) => history.push(`${mm.getRef('socialProtection.route.benefitPackage')}`
-    + `/${individual?.id}`);
+  const openBenefitPackage = (beneficiary) => history.push(`${mm.getRef('socialProtection.route.benefitPackage')}`
+    + `/${beneficiary?.id}`);
 
   const itemFormatters = () => {
     const result = [

@@ -3,7 +3,7 @@ import {
   withModulesManager,
   FormPanel,
   FormattedMessage,
-  PublishedComponent,
+  // PublishedComponent,
 } from '@openimis/fe-core';
 import { Grid, Typography } from '@material-ui/core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
@@ -16,32 +16,33 @@ const styles = (theme) => ({
   },
 });
 
+function renderHeadPanelSubtitle(classes) {
+  return (
+    <Grid item>
+      <Grid container align="center" justify="center" direction="column" className={classes.fullHeight}>
+        <Grid item>
+          <Typography>
+            <FormattedMessage
+              module="socialProtection"
+              id="socialProtection.benefitPackage.GroupDetailPanel.title"
+            />
+          </Typography>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+}
+
 class BenefitPackageHeadPanel extends FormPanel {
   render() {
     const { classes } = this.props;
 
     return (
       <Grid container className={classes.item}>
-        <Grid item>
-          <Grid container align="center" justify="center" direction="column" className={classes.fullHeight}>
-            <Grid item>
-              <Typography>
-                <FormattedMessage module="socialProtection" id="socialProtection.GroupDetailPanel.title" />
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
+        {renderHeadPanelSubtitle(classes)}
         <Grid container className={classes.item}>
           <Grid item xs={12}>
-            <PublishedComponent
-              pubRef="location.DetailedLocation"
-            //   withNull={true}
-            //   readOnly={readOnly}
-              required
-            //   value={!edited ? null : edited.location}
-            //   onChange={(v) => this.updateAttribute("location", v)}
-            //   filterLabels={false}
-            />
+            {/* FIELDS */}
           </Grid>
         </Grid>
       </Grid>

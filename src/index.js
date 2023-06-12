@@ -28,6 +28,14 @@ import {
   BenefitPlanBeneficiariesGraduatedTabLabel,
   BenefitPlanBeneficiariesGraduatedTabPanel,
 } from './components/BenefitPlanBeneficiariesGraduatedTab';
+import {
+  BenefitPackagePaymentsTabLabel,
+  BenefitPackagePaymentsTabPanel,
+} from './components/BenefitPackagePaymentsTab';
+import {
+  BenefitPackageGrievancesTabLabel,
+  BenefitPackageGrievancesTabPanel,
+} from './components/BenefitPackageGrievancesTab';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -40,7 +48,7 @@ const DEFAULT_CONFIG = {
   'core.Router': [
     { path: ROUTE_BENEFIT_PLANS, component: BenefitPlansPage },
     { path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`, component: BenefitPlanPage },
-    { path: `${ROUTE_BENEFIT_PLAN}/${ROUTE_BENEFIT_PACKAGE}/:individual_uuid?`, component: BenefitPackagePage },
+    { path: `${ROUTE_BENEFIT_PLAN}/${ROUTE_BENEFIT_PACKAGE}/:beneficiary_uuid?`, component: BenefitPackagePage },
   ],
   refs: [
     { key: 'socialProtection.route.benefitPlan', ref: ROUTE_BENEFIT_PLAN },
@@ -59,6 +67,14 @@ const DEFAULT_CONFIG = {
     BenefitPlanBeneficiariesActiveTabPanel,
     BenefitPlanBeneficiariesGraduatedTabPanel,
     BenefitPlanBeneficiariesSuspendedTabPanel],
+  'benefitPackage.TabPanel.label': [
+    BenefitPackagePaymentsTabLabel,
+    BenefitPackageGrievancesTabLabel,
+  ],
+  'benefitPackage.TabPanel.panel': [
+    BenefitPackagePaymentsTabPanel,
+    BenefitPackageGrievancesTabPanel,
+  ],
 };
 
 export const SocialProtectionModule = (cfg) => ({ ...DEFAULT_CONFIG, ...cfg });

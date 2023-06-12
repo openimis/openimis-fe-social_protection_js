@@ -1,65 +1,80 @@
-import React from 'react';
-import {
-  // useDispatch,
-  useSelector,
-} from 'react-redux';
+import React, { useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import {
   Form,
-  formatMessage,
   formatMessageWithValues,
-  // useModulesManager,
   useHistory,
+  useModulesManager,
 } from '@openimis/fe-core';
+import { bindActionCreators } from 'redux';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import BenefitPackageHeadPanel from '../components/BenefitPackageHeadPanel';
 import BenefitPackageTabPanel from '../components/BenefitPackageTabPanel';
 import { RIGHT_BENEFICIARY_SEARCH } from '../constants';
+import BenefitPackageIndividualPanel from '../components/BenefitPackageIndividualPanel';
+import { fetchBeneficiary } from '../actions';
 
 const styles = (theme) => ({
   page: theme.page,
 });
 
-function BenefitPackagePage({ intl, classes }) {
-  // const modulesManager = useModulesManager();
-  // const dispatch = useDispatch();
-  const rights = useSelector((store) => store.core?.user?.i_user?.rights ?? []);
-
+function BenefitPackagePage({
+  rights, intl, classes, beneficiaryUuid, beneficiaryFirstName, beneficiaryLastName,
+}) {
   const history = useHistory();
-  const testGroupName = 'testGroupName';
+  const modulesManager = useModulesManager();
+  const dispatch = useDispatch();
+  const testGroupName = 'someTestGroupName';
+
+  useEffect(() => {
+    if (beneficiaryUuid) {
+      dispatch(fetchBeneficiary(modulesManager, {
+        beneficiaryUuid,
+      }));
+    }
+  }, [beneficiaryUuid]);
 
   const back = () => history.goBack();
-
-  console.log(classes);
 
   return (
     <div className={classes.page}>
       <Form
         module="socialProtection"
         title={formatMessageWithValues(intl, 'socialProtection', 'benefitPackage.pageTitle', { name: testGroupName })}
-        // titleParams={testGroupName}
         openDirty
-        // benefitPlan={editedBenefitPlan}
-        // edited={editedBenefitPlan}
-        // onEditedChanged={setEditedBenefitPlan}
         back={back}
-        // mandatoryFieldsEmpty={isMandatoryFieldsEmpty}
-        // canSave={canSave}
-        // save={handleSave}
         HeadPanel={BenefitPackageHeadPanel}
-        Panels={rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPackageTabPanel] : []}
+        Panels={
+          rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPackageIndividualPanel, BenefitPackageTabPanel] : []
+        }
+        individualTitle={
+          formatMessageWithValues(
+            intl,
+            'socialProtection',
+            'benefitPackage.Individual.pageTitle',
+            {
+              firstName: beneficiaryFirstName,
+              lastName: beneficiaryLastName,
+            },
+          )
+        }
         rights={rights}
-        // actions={actions}
-        // setConfirmedAction={setConfirmedAction}
-        saveTooltip={formatMessage(
-          intl,
-          'socialProtection',
-          // `benefitPlan.saveButton.tooltip.${canSave() ? 'enabled' : 'disabled'}`,
-          'benefitPlan.saveButton.tooltip.enabled',
-        )}
       />
     </div>
   );
 }
 
-export default injectIntl(withTheme(withStyles(styles)(BenefitPackagePage)));
+const mapStateToProps = (state, props) => ({
+  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  beneficiaryUuid: props.match.params.beneficiary_uuid,
+  beneficiaryFirstName: state.socialProtection.beneficiary?.individual?.firstName,
+  beneficiaryLastName: state.socialProtection.beneficiary?.individual?.lastName,
+});
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+}, dispatch);
+
+export default injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(
+  BenefitPackagePage,
+))));

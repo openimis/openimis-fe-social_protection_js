@@ -9,6 +9,8 @@
   "socialProtection.benefitPlan.deleteButtonTooltip": "Delete",
   "socialProtection.benefitPlan.searcherResultsTitle": "{benefitPlansTotalCount} Benefit Plans",
   "socialProtection.beneficiaries.searcherResultsTitle": "{beneficiariesTotalCount} Beneficiaries",
+  "socialProtection.beneficiaries.payments.searcherResultsTitle": "{beneficiariesTotalCount} Payments Found",
+  "socialProtection.beneficiaries.grievances.searcherResultsTitle": "{beneficiariesTotalCount} Grievances Found",
   "socialProtection.benefitPlan.dateValidTo": "Date to",
   "socialProtection.benefitPlan.dateValidFrom": "Date from",
   "socialProtection.benefitPlan.name": "Name",
@@ -18,6 +20,7 @@
   "socialProtection.benefitPlan.schema": "Schema",
   "socialProtection.benefitPlan.pageTitle": "Benefit Plan {code} {name}",
   "socialProtection.benefitPackage.pageTitle": "{name} Group",
+  "socialProtection.benefitPackage.Individual.pageTitle": "{firstName} {lastName}",
   "socialProtection.beneficiary.code": "Code",
   "socialProtection.beneficiary.firstName": "First name",
   "socialProtection.beneficiary.lastName": "Last name",
@@ -51,5 +54,8 @@
   "socialProtection.export.filename": "beneficiaries_export",
   "socialProtection.validation.benefitPlan.invalidSchema": "Invalid schema",
   "socialProtection.benefitPackage.overviewButtonTooltip": "Show Benefit Package",
-  "socialProtection.GroupDetailPanel.title": "Group Details"
+  "socialProtection.benefitPackage.GroupDetailPanel.title": "Group Details",
+  "socialProtection.benefitPackage.IndividualDetailPanel.title": "Individual Details",
+  "socialProtection.benefitPackage.benefitPackagePaymentsTab.label": "Payments",
+  "socialProtection.benefitPackage.benefitPackageGrievancesTab.label": "Grievances"
 }

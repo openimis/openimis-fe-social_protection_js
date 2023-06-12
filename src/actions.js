@@ -46,6 +46,37 @@ export function fetchBeneficiaries(params) {
   return graphql(payload, ACTION_TYPE.SEARCH_BENEFICIARIES);
 }
 
+export function fetchBeneficiary(modulesManager, variables) {
+  return graphqlWithVariables(
+    `
+      query ($beneficiaryUuid: UUID) {
+        beneficiary(id: $beneficiaryUuid) {
+          totalCount
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+          edges {
+            node {
+              id
+              individual {
+                firstName
+                lastName
+                dob
+              }
+              status
+            }
+          }
+        }
+      } 
+    `,
+    variables,
+    ACTION_TYPE.GET_BENEFICIARY,
+  );
+}
+
 export function fetchBenefitPlan(modulesManager, params) {
   const payload = formatPageQuery('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));
   return graphql(payload, ACTION_TYPE.GET_BENEFIT_PLAN);
@@ -163,6 +194,14 @@ export function benefitPlanSchemaValidationCheck(mm, variables) {
 }
 
 export function downloadBeneficiaries(params) {
+  const payload = `
+    {
+      beneficiaryExport${!!params && params.length ? `(${params.join(',')})` : ''}
+    }`;
+  return graphql(payload, ACTION_TYPE.BENEFICIARY_EXPORT);
+}
+
+export function downloadPayments(params) {
   const payload = `
     {
       beneficiaryExport${!!params && params.length ? `(${params.join(',')})` : ''}

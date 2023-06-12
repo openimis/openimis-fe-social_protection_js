@@ -29,6 +29,7 @@ export const ACTION_TYPE = {
   BENEFIT_PLAN_NAME_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
   BENEFIT_PLAN_SCHEMA_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
   SEARCH_BENEFICIARIES: 'BENEFICIARY_BENEFICIARIES',
+  GET_BENEFICIARY: 'BENEFICIARY_BENEFICIARY',
   BENEFICIARY_EXPORT: 'BENEFICIARY_EXPORT',
 };
 
@@ -52,7 +53,10 @@ function reducer(
     beneficiariesPageInfo: {},
     beneficiariesTotalCount: 0,
     errorBeneficiaries: null,
+    fetchingBeneficiary: false,
+    fetchedBeneficiary: false,
     beneficiary: null,
+    errorBeneficiary: null,
     fetchingBeneficiaryExport: true,
     fetchedBeneficiaryExport: false,
     beneficiaryExport: null,
@@ -373,6 +377,39 @@ function reducer(
         ...state,
         fetchingBeneficiaryExport: false,
         errorBeneficiaryExport: formatServerError(action.payload),
+      };
+    case REQUEST(ACTION_TYPE.GET_BENEFICIARY):
+      return {
+        ...state,
+        fetchingBeneficiary: true,
+        fetchedBeneficiary: false,
+        beneficiary: null,
+        errorBeneficiary: null,
+      };
+    case SUCCESS(ACTION_TYPE.GET_BENEFICIARY):
+      return {
+        ...state,
+        fetchingBeneficiary: false,
+        fetchedBeneficiary: true,
+        beneficiary: parseData(action.payload.data.beneficiary).map((beneficiary) => ({
+          ...beneficiary,
+          id: decodeId(beneficiary.id),
+        }))?.[0],
+        error: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.GET_BENEFICIARY):
+      return {
+        ...state,
+        fetchingBeneficiary: false,
+        errorBeneficiary: formatServerError(action.payload),
+      };
+    case CLEAR(ACTION_TYPE.GET_BENEFICIARY):
+      return {
+        ...state,
+        fetchingBeneficiary: false,
+        fetchedBeneficiary: false,
+        beneficiary: null,
+        errorBeneficiary: null,
       };
     case REQUEST(ACTION_TYPE.MUTATION):
       return dispatchMutationReq(state, action);
