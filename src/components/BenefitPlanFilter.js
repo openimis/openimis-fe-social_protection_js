@@ -1,7 +1,7 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { TextInput, PublishedComponent, formatMessage } from '@openimis/fe-core';
-import { Grid } from '@material-ui/core';
+import { FormControlLabel, Grid, Checkbox } from '@material-ui/core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import _debounce from 'lodash/debounce';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
@@ -35,6 +35,17 @@ function BenefitPlanFilter({
         },
       ]);
     }
+  };
+
+  const onChangeCheckbox = (key, value) => {
+    const filters = [
+      {
+        id: key,
+        value,
+        filter: `${key}: ${value}`,
+      },
+    ];
+    onChangeFilters(filters);
   };
 
   return (
@@ -83,6 +94,21 @@ function BenefitPlanFilter({
               filter: `dateValidTo: "${v}T00:00:00.000Z"`,
             },
           ])}
+        />
+      </Grid>
+      <Grid item xs={2} className={classes.item}>
+        <FormControlLabel
+          control={(
+            <Checkbox
+              color="primary"
+              checked={filterValue('isDeleted')}
+              onChange={(event) => onChangeCheckbox(
+                'isDeleted',
+                event.target.checked,
+              )}
+            />
+          )}
+          label={formatMessage(intl, 'socialProtection', 'benefitPlan.isDeleted')}
         />
       </Grid>
       {showInIndividual && (
