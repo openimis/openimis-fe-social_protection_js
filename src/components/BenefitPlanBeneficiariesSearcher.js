@@ -60,7 +60,9 @@ function BenefitPlanBeneficiariesSearcher({
         height: '45px',
         marginTop: '7px',
       }}
-      >{number}</div>
+      >
+        {number}
+      </div>
     );
   };
   
