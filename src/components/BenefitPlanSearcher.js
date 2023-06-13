@@ -49,7 +49,6 @@ function BenefitPlanSearcher({
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
   const prevSubmittingMutationRef = useRef();
-  const [propsLoaded, setPropsLoaded] = useState(false);
 
   const openDeleteBenefitPlanConfirmDialog = () => coreConfirm(
     formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.confirm.title', {
@@ -87,13 +86,6 @@ function BenefitPlanSearcher({
   useEffect(() => {
     prevSubmittingMutationRef.current = submittingMutation;
   });
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPropsLoaded(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
 
   const fetch = (params) => fetchBenefitPlans(modulesManager, params);
 
@@ -172,27 +164,29 @@ function BenefitPlanSearcher({
 
   const isRowDisabled = (_, benefitPlan) => deletedBenefitPlanUuids.includes(benefitPlan.id);
 
-  const defaultFilters = () => ({
-    isDeleted: {
-      value: false,
-      filter: 'isDeleted: false',
-    },
-    ...(individualId && {
-      individualId: {
+  const defaultFilters = () => {
+    const filters = {
+      isDeleted: {
+        value: false,
+        filter: 'isDeleted: false',
+      },
+    };
+    if (individualId !== null && individualId !== undefined) {
+      filters.individualId = {
         value: individualId,
         filter: `individualId: "${individualId}"`,
-      },
-    }),
-    ...(beneficiaryStatus && {
-      beneficiaryStatus: {
+      };
+    }
+    if (beneficiaryStatus !== null && beneficiaryStatus !== undefined) {
+      filters.beneficiaryStatus = {
         value: beneficiaryStatus,
         filter: `beneficiaryStatus: "${beneficiaryStatus}"`,
-      },
-    }),
-  });
+      };
+    }
+    return filters;
+  };
 
   return (
-    propsLoaded && (
     <Searcher
       key={JSON.stringify(defaultFilters())}
       module="socialProtection"
@@ -217,7 +211,6 @@ function BenefitPlanSearcher({
       rowDisabled={isRowDisabled}
       rowLocked={isRowDisabled}
     />
-    )
   );
 }
 
