@@ -29,7 +29,9 @@ export const ACTION_TYPE = {
   BENEFIT_PLAN_NAME_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
   BENEFIT_PLAN_SCHEMA_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
   SEARCH_BENEFICIARIES: 'BENEFICIARY_BENEFICIARIES',
+  SEARCH_GROUP_BENEFICIARIES: 'GROUP_BENEFICIARY_GROUP_BENEFICIARIES',
   BENEFICIARY_EXPORT: 'BENEFICIARY_EXPORT',
+  GROUP_BENEFICIARY_EXPORT: 'GROUP_BENEFICIARY_EXPORT',
 };
 
 function reducer(
@@ -58,6 +60,17 @@ function reducer(
     beneficiaryExport: null,
     beneficiaryExportPageInfo: {},
     errorBeneficiaryExport: null,
+    fetchingGroupBeneficiaryExport: true,
+    fetchedGroupBeneficiaryExport: false,
+    groupBeneficiaryExport: null,
+    groupBeneficiaryExportPageInfo: {},
+    errorGroupBeneficiaryExport: null,
+    fetchingGroupBeneficiaries: true,
+    fetchedGroupBeneficiaries: false,
+    groupBeneficiaries: [],
+    groupBeneficiariesPageInfo: {},
+    groupBeneficiariesTotalCount: 0,
+    errorGroupBeneficiaries: null,
   },
   action,
 ) {
@@ -88,6 +101,16 @@ function reducer(
         beneficiariesPageInfo: {},
         beneficiariesTotalCount: 0,
         errorBeneficiaries: null,
+      };
+    case REQUEST(ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES):
+      return {
+        ...state,
+        fetchingGroupBeneficiaries: true,
+        fetchedGroupBeneficiaries: false,
+        groupBeneficiaries: [],
+        groupBeneficiariesPageInfo: {},
+        groupBeneficiariesTotalCount: 0,
+        errorGroupBeneficiaries: null,
       };
     case SUCCESS(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
@@ -144,6 +167,19 @@ function reducer(
         beneficiariesTotalCount: action.payload.data.beneficiary ? action.payload.data.beneficiary.totalCount : null,
         errorBeneficiaries: formatGraphQLError(action.payload),
       };
+    case SUCCESS(ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES):
+      return {
+        ...state,
+        fetchingGroupBeneficiaries: false,
+        fetchedGroupBeneficiaries: true,
+        groupBeneficiaries: parseData(action.payload.data.groupBeneficiary)?.map((groupBeneficiary) => ({
+          ...groupBeneficiary,
+          id: decodeId(groupBeneficiary.id),
+        })),
+        beneficiariesPageInfo: pageInfo(action.payload.data.beneficiary),
+        beneficiariesTotalCount: action.payload.data.beneficiary ? action.payload.data.beneficiary.totalCount : null,
+        errorBeneficiaries: formatGraphQLError(action.payload),
+      };
     case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
         ...state,
@@ -161,6 +197,12 @@ function reducer(
         ...state,
         fetchingBeneficiaries: false,
         errorBeneficiaries: formatServerError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES):
+      return {
+        ...state,
+        fetchingGroupBeneficiaries: false,
+        errorGroupBeneficiaries: formatServerError(action.payload),
       };
     case REQUEST(ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION):
       return {
@@ -291,7 +333,6 @@ function reducer(
             isValidating: true,
             isValid: false,
             validationError: null,
-            validationErrorMessage: null,
           },
         },
       };
@@ -304,7 +345,6 @@ function reducer(
             isValidating: false,
             isValid: action.payload?.data.isValid.isValid,
             validationError: formatGraphQLError(action.payload),
-            validationErrorMessage: action.payload?.data.isValid.errorMessage,
           },
         },
       };
@@ -329,7 +369,6 @@ function reducer(
             isValidating: false,
             isValid: false,
             validationError: null,
-            validationErrorMessage: null,
           },
         },
       };
@@ -376,6 +415,30 @@ function reducer(
         ...state,
         fetchingBeneficiaryExport: false,
         errorBeneficiaryExport: formatServerError(action.payload),
+      };
+    case REQUEST(ACTION_TYPE.GROUP_BENEFICIARY_EXPORT):
+      return {
+        ...state,
+        fetchingGroupBeneficiaryExport: true,
+        fetchedGroupBeneficiaryExport: false,
+        groupBeneficiaryExport: null,
+        groupBeneficiaryExportPageInfo: {},
+        errorGroupBeneficiaryExport: null,
+      };
+    case SUCCESS(ACTION_TYPE.GROUP_BENEFICIARY_EXPORT):
+      return {
+        ...state,
+        fetchingGroupBeneficiaryExport: false,
+        fetchedGroupBeneficiaryExport: true,
+        groupBeneficiaryExport: action.payload.data.groupBeneficiaryExport,
+        groupBeneficiaryExportPageInfo: pageInfo(action.payload.data.groupBeneficiaryExport),
+        errorGroupBeneficiaryExport: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.GROUP_BENEFICIARY_EXPORT):
+      return {
+        ...state,
+        fetchingGroupBeneficiaryExport: false,
+        errorGroupBeneficiaryExport: formatServerError(action.payload),
       };
     case REQUEST(ACTION_TYPE.MUTATION):
       return dispatchMutationReq(state, action);

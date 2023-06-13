@@ -4,16 +4,15 @@ import { connect } from 'react-redux';
 import {
   withModulesManager,
   FormPanel,
-  TextAreaInput,
   NumberInput,
   ValidatedTextInput,
   ValidatedTextAreaInput,
+  TextAreaInput,
   PublishedComponent,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import isJsonString from '../util/json-validate';
-import { MAX_CODE_LENGTH } from '../constants';
+import { DESCRIPTION_MAX_LENGTH, MAX_CODE_LENGTH } from '../constants';
 import {
   benefitPlanCodeSetValid,
   benefitPlanCodeValidationCheck,
@@ -24,6 +23,7 @@ import {
   benefitPlanSchemaValidationCheck,
   benefitPlanSchemaValidationClear,
 } from '../actions';
+import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -56,7 +56,7 @@ class BenefitPlanHeadPanel extends FormPanel {
       isBenefitPlanSchemaValid,
       isBenefitPlanSchemaValidating,
       benefitPlanSchemaValidationError,
-      benefitPlanSchemaValidationErrorMessage,
+      readOnly,
     } = this.props;
     const benefitPlan = { ...edited };
 
@@ -109,6 +109,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             required
             onChange={(v) => this.updateAttribute('dateValidFrom', v)}
             value={benefitPlan?.dateValidFrom ?? ''}
+            maxDate={benefitPlan?.dateValidTo ?? ''}
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>
@@ -119,6 +120,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             required
             onChange={(v) => this.updateAttribute('dateValidTo', v)}
             value={benefitPlan?.dateValidTo ?? ''}
+            minDate={benefitPlan?.dateValidFrom ?? new Date().getDate()}
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>
@@ -141,12 +143,22 @@ class BenefitPlanHeadPanel extends FormPanel {
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>
+          <BenefitPlanTypePicker
+            label="beneficiary.benefitPlanTypePicker"
+            required
+            withNull={false}
+            readOnly={readOnly}
+            onChange={(v) => this.updateAttribute('type', v)}
+            value={!!benefitPlan?.type && benefitPlan.type}
+          />
+        </Grid>
+        <Grid item xs={3} className={classes.item}>
           <ValidatedTextAreaInput
             module="socialProtection"
             label="benefitPlan.schema"
             onChange={(v) => this.updateAttribute('beneficiaryDataSchema', v)}
             value={benefitPlan?.beneficiaryDataSchema}
-            codeTakenLabel={benefitPlanSchemaValidationErrorMessage}
+            codeTakenLabel="socialProtection.validation.benefitPlan.invalidSchema"
             itemQueryIdentifier="bfSchema"
             action={benefitPlanSchemaValidationCheck}
             clearAction={benefitPlanSchemaValidationClear}
@@ -160,10 +172,10 @@ class BenefitPlanHeadPanel extends FormPanel {
         <Grid item xs={3} className={classes.item}>
           <TextAreaInput
             module="socialProtection"
-            label="benefitPlan.jsonExt"
-            onChange={(v) => this.updateAttribute('jsonExt', v)}
-            value={benefitPlan?.jsonExt}
-            error={!!benefitPlan?.jsonExt && !isJsonString(benefitPlan?.jsonExt)}
+            label="benefitPlan.description"
+            inputProps={{ maxLength: DESCRIPTION_MAX_LENGTH }}
+            value={benefitPlan?.description}
+            onChange={(v) => this.updateAttribute('description', v)}
           />
         </Grid>
       </Grid>

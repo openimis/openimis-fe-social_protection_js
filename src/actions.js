@@ -19,9 +19,11 @@ const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
   'version',
   'dateValidFrom',
   'dateValidTo',
+  'description',
   'replacementUuid',
   'code',
   'name',
+  'type',
   'maxBeneficiaries',
   'ceilingPerBeneficiary',
   'beneficiaryDataSchema',
@@ -36,6 +38,12 @@ const BENEFICIARY_FULL_PROJECTION = () => [
   'status',
 ];
 
+const GROUP_BENEFICIARY_FULL_PROJECTION = () => [
+  'id',
+  'group {id}',
+  'status',
+];
+
 export function fetchBenefitPlans(modulesManager, params) {
   const payload = formatPageQueryWithCount('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));
   return graphql(payload, ACTION_TYPE.SEARCH_BENEFIT_PLANS);
@@ -44,6 +52,11 @@ export function fetchBenefitPlans(modulesManager, params) {
 export function fetchBeneficiaries(params) {
   const payload = formatPageQueryWithCount('beneficiary', params, BENEFICIARY_FULL_PROJECTION());
   return graphql(payload, ACTION_TYPE.SEARCH_BENEFICIARIES);
+}
+
+export function fetchGroupBeneficiaries(params) {
+  const payload = formatPageQueryWithCount('groupBeneficiary', params, GROUP_BENEFICIARY_FULL_PROJECTION());
+  return graphql(payload, ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES);
 }
 
 export function fetchBenefitPlan(modulesManager, params) {
@@ -79,8 +92,10 @@ function formatBenefitPlanGQL(benefitPlan) {
     ${benefitPlan?.maxBeneficiaries ? `maxBeneficiaries: ${benefitPlan.maxBeneficiaries}` : ''}
     ${benefitPlan?.ceilingPerBeneficiary ? `ceilingPerBeneficiary: "${benefitPlan.ceilingPerBeneficiary}"` : ''}
     ${benefitPlan?.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ''}
+    ${benefitPlan?.type ? `type: ${benefitPlan.type}` : ''}
     ${benefitPlan?.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ''}
     ${benefitPlan?.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ''}
+    ${benefitPlan?.description ? `description: "${formatGQLString(benefitPlan.description)}"` : ''}
     ${benefitPlan?.beneficiaryDataSchema
     ? `beneficiaryDataSchema: ${JSON.stringify(benefitPlan.beneficiaryDataSchema)}` : ''}
     ${benefitPlan?.jsonExt ? `jsonExt: ${JSON.stringify(benefitPlan.jsonExt)}` : ''}`;
@@ -168,6 +183,14 @@ export function downloadBeneficiaries(params) {
       beneficiaryExport${!!params && params.length ? `(${params.join(',')})` : ''}
     }`;
   return graphql(payload, ACTION_TYPE.BENEFICIARY_EXPORT);
+}
+
+export function downloadGroupBeneficiaries(params) {
+  const payload = `
+    {
+      groupBeneficiaryExport${!!params && params.length ? `(${params.join(',')})` : ''}
+    }`;
+  return graphql(payload, ACTION_TYPE.GROUP_BENEFICIARY_EXPORT);
 }
 
 export const benefitPlanCodeSetValid = () => (dispatch) => {

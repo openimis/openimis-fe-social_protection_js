@@ -3,7 +3,7 @@ import _debounce from 'lodash/debounce';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@material-ui/core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import { TextInput, PublishedComponent, formatMessage } from '@openimis/fe-core';
+import { TextInput, formatMessage } from '@openimis/fe-core';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
@@ -42,32 +42,9 @@ function BenefitPlanBeneficiariesFilter({
       <Grid item xs={2} className={classes.item}>
         <TextInput
           module="socialProtection"
-          label="beneficiary.firstName"
-          value={filterTextFieldValue('individual_FirstName')}
-          onChange={onChangeStringFilter('individual_FirstName', CONTAINS_LOOKUP)}
-        />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
-        <TextInput
-          module="socialProtection"
-          label="beneficiary.lastName"
-          value={filterTextFieldValue('individual_LastName')}
-          onChange={onChangeStringFilter('individual_LastName', CONTAINS_LOOKUP)}
-        />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
-        <PublishedComponent
-          pubRef="core.DatePicker"
-          module="socialProtection"
-          label="beneficiary.dob"
-          value={filterValue('individual_Dob')}
-          onChange={(v) => onChangeFilters([
-            {
-              id: 'individual_Dob',
-              value: v,
-              filter: `individual_Dob: "${v}"`,
-            },
-          ])}
+          label="groupBeneficiary.id"
+          value={filterTextFieldValue('group_Id')}
+          onChange={onChangeStringFilter('group_Id', CONTAINS_LOOKUP)}
         />
       </Grid>
       <Grid item xs={2} className={classes.item}>

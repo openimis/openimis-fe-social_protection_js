@@ -5,12 +5,14 @@ import {
   formatMessage,
   formatMessageWithValues,
   coreConfirm,
+  clearConfirm,
   journalize,
   withModulesManager,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { RIGHT_BENEFICIARY_SEARCH, RIGHT_BENEFIT_PLAN_UPDATE } from '../constants';
@@ -20,7 +22,6 @@ import {
 import BenefitPlanHeadPanel from '../components/BenefitPlanHeadPanel';
 import BenefitPlanTabPanel from '../components/BenefitPlanTabPanel';
 import { ACTION_TYPE } from '../reducer';
-import isJsonString from '../util/json-validate';
 
 const styles = (theme) => ({
   page: theme.page,
@@ -37,6 +38,7 @@ function BenefitPlanPage({
   deleteBenefitPlan,
   updateBenefitPlan,
   coreConfirm,
+  clearConfirm,
   confirmed,
   submittingMutation,
   mutation,
@@ -58,7 +60,10 @@ function BenefitPlanPage({
     }
   }, [benefitPlanUuid]);
 
-  useEffect(() => confirmed && confirmedAction(), [confirmed]);
+  useEffect(() => {
+    if (confirmed) confirmedAction();
+    return () => confirmed && clearConfirm(null);
+  }, [confirmed]);
 
   const back = () => history.goBack();
 
@@ -87,9 +92,9 @@ function BenefitPlanPage({
   const isMandatoryFieldsEmpty = () => {
     if (
       !!editedBenefitPlan?.code
-            && !!editedBenefitPlan?.name
-            && !!editedBenefitPlan?.dateValidFrom
-            && !!editedBenefitPlan?.dateValidTo
+      && !!editedBenefitPlan?.name
+      && !!editedBenefitPlan?.dateValidFrom
+      && !!editedBenefitPlan?.dateValidTo
     ) {
       return false;
     }
@@ -97,15 +102,15 @@ function BenefitPlanPage({
   };
   const isValid = () => (
     (editedBenefitPlan?.code ? isBenefitPlanCodeValid : true)
-            && (editedBenefitPlan?.name ? isBenefitPlanNameValid : true)
-            && (editedBenefitPlan?.beneficiaryDataSchema ? isBenefitPlanSchemaValid : true));
+    && (editedBenefitPlan?.name ? isBenefitPlanNameValid : true)
+    && (editedBenefitPlan?.beneficiaryDataSchema ? isBenefitPlanSchemaValid : true));
 
-  const canSave = () => {
-    if (!isMandatoryFieldsEmpty() && isValid() && editedBenefitPlan?.jsonExt) {
-      return isJsonString(editedBenefitPlan.jsonExt);
-    }
+  const doesBenefitPlanChange = () => {
+    if (_.isEqual(benefitPlan, editedBenefitPlan)) return false;
     return true;
   };
+
+  const canSave = () => !isMandatoryFieldsEmpty() && isValid() && doesBenefitPlanChange();
 
   const handleSave = () => {
     if (benefitPlan?.id) {
@@ -164,12 +169,11 @@ function BenefitPlanPage({
         canSave={canSave}
         save={handleSave}
         HeadPanel={BenefitPlanHeadPanel}
-        Panels={
-                        rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPlanTabPanel] : []
-                    }
+        Panels={rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPlanTabPanel] : []}
         rights={rights}
         actions={actions}
         setConfirmedAction={setConfirmedAction}
+        readOnly={!!benefitPlanUuid}
         saveTooltip={formatMessage(
           intl,
           'socialProtection',
@@ -203,6 +207,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   deleteBenefitPlan,
   updateBenefitPlan,
   coreConfirm,
+  clearConfirm,
   journalize,
 }, dispatch);
 
