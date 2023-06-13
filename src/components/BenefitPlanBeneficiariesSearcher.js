@@ -3,7 +3,11 @@ import React, {
 } from 'react';
 import { injectIntl } from 'react-intl';
 import {
-  formatMessage, formatMessageWithValues, Searcher, downloadExport, CLEARED_STATE_FILTER
+  formatMessage, 
+  formatMessageWithValues, 
+  Searcher, 
+  downloadExport, 
+  CLEARED_STATE_FILTER,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -91,17 +95,19 @@ function BenefitPlanBeneficiariesSearcher({
   }, [beneficiaryExport]);
 
   const beneficiaryFilter = (props) => {
-    return(
-    <BenefitPlanBeneficiariesFilter
-      intl={props.intl}
-      classes={props.classes}
-      filters={props.filters}
-      onChangeFilters={props.onChangeFilters}
-      readOnly={readOnly}
-    />
-  )};
+    return (
+      <BenefitPlanBeneficiariesFilter
+        intl={props.intl}
+        classes={props.classes}
+        filters={props.filters}
+        onChangeFilters={props.onChangeFilters}
+        readOnly={readOnly}
+      />
+    )};
 
-  useEffect(() => {}, [appliedCustomFilters]);
+    useEffect(() => {
+      
+    }, [appliedCustomFilters]);
 
   return (
     !!benefitPlan?.id && (
@@ -143,7 +149,7 @@ function BenefitPlanBeneficiariesSearcher({
         defaultPageSize={DEFAULT_PAGE_SIZE}
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
-        isCustomFiltering={true}
+        isCustomFiltering
         objectForCustomFiltering={benefitPlan}
         moduleName={"social_protection"}
         objectType={"BenefitPlan"}
