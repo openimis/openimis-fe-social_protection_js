@@ -42,6 +42,28 @@ function BenefitPlanBeneficiariesSearcher({
   beneficiaryExport,
   errorBeneficiaryExport,
 }) {
+
+  const applyNumberCircle = (number) => {
+    return (
+      <div style={{
+          color: '#ffffff',
+          backgroundColor: '#006273',
+          borderRadius: '50%',
+          padding: '5px',
+          minWidth: '40px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontWeight: 'bold',
+          fontSize: '12px',
+          width: '20px',
+          height: '45px',
+          marginTop: '7px',
+        }}
+      >{number}</div>
+    );
+  };
+  
   const fetch = (params) => fetchBeneficiaries(params);
 
   const headers = () => [
@@ -88,6 +110,7 @@ function BenefitPlanBeneficiariesSearcher({
 
   const [failedExport, setFailedExport] = useState(false);
   const [appliedCustomFilters, setAppliedCustomFilters] = useState([CLEARED_STATE_FILTER]);
+  const [appliedFiltersRowStructure, setAppliedFiltersRowStructure] = useState([CLEARED_STATE_FILTER]);
 
   useEffect(() => {
     setFailedExport(true);
@@ -159,6 +182,9 @@ function BenefitPlanBeneficiariesSearcher({
         objectType={BENEFIT_PLAN_LABEL}
         appliedCustomFilters={appliedCustomFilters}
         setAppliedCustomFilters={setAppliedCustomFilters}
+        appliedFiltersRowStructure={appliedFiltersRowStructure}
+        setAppliedFiltersRowStructure={setAppliedFiltersRowStructure}
+        applyNumberCircle={applyNumberCircle}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">
