@@ -7,7 +7,7 @@ import {
   formatMessageWithValues,
   Searcher,
   downloadExport,
-  CLEARED_STATE_FILTER
+  CLEARED_STATE_FILTER,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -18,7 +18,12 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import { fetchBeneficiaries, downloadBeneficiaries } from '../actions';
-import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from '../constants';
+import { 
+  DEFAULT_PAGE_SIZE,
+  ROWS_PER_PAGE_OPTIONS,
+  MODULE_NAME,
+  BENEFIT_PLAN_LABEL,
+} from '../constants';
 import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';
 
 function BenefitPlanBeneficiariesSearcher({
@@ -150,8 +155,8 @@ function BenefitPlanBeneficiariesSearcher({
         cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
         isCustomFiltering
         objectForCustomFiltering={benefitPlan}
-        moduleName={"social_protection"}
-        objectType={"BenefitPlan"}
+        moduleName={MODULE_NAME}
+        objectType={BENEFIT_PLAN_LABEL}
         appliedCustomFilters={appliedCustomFilters}
         setAppliedCustomFilters={setAppliedCustomFilters}
       />

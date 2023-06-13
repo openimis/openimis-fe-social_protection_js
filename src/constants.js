@@ -28,3 +28,6 @@ export const BENEFICIARY_STATUS = {
   GRADUATED: 'GRADUATED',
   SUSPENDED: 'SUSPENDED',
 };
+
+export const MODULE_NAME = 'social_protection';
+export const BENEFIT_PLAN_LABEL = 'BenefitPlan'
