@@ -19,7 +19,7 @@ import {
   DEFAULT_PAGE_SIZE,
   ROWS_PER_PAGE_OPTIONS,
   RIGHT_BENEFIT_PLAN_UPDATE,
-  RIGHT_BENEFIT_PLAN_DELETE,
+  RIGHT_BENEFIT_PLAN_DELETE
 } from '../constants';
 import { fetchBenefitPlans, deleteBenefitPlan } from '../actions';
 import BenefitPlanFilter from './BenefitPlanFilter';
