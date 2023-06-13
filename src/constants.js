@@ -30,4 +30,4 @@ export const BENEFICIARY_STATUS = {
 };
 
 export const MODULE_NAME = 'social_protection';
-export const BENEFIT_PLAN_LABEL = 'BenefitPlan'
+export const BENEFIT_PLAN_LABEL = 'BenefitPlan';
