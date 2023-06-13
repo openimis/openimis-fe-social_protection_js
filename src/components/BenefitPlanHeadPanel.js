@@ -22,6 +22,7 @@ import {
   benefitPlanSchemaValidationCheck,
   benefitPlanSchemaValidationClear,
 } from '../actions';
+import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -54,6 +55,7 @@ class BenefitPlanHeadPanel extends FormPanel {
       isBenefitPlanSchemaValid,
       isBenefitPlanSchemaValidating,
       benefitPlanSchemaValidationError,
+      readOnly,
     } = this.props;
     const benefitPlan = { ...edited };
 
@@ -137,6 +139,16 @@ class BenefitPlanHeadPanel extends FormPanel {
             withNull
             onChange={(v) => this.updateAttribute('holder', v)}
             value={!!benefitPlan?.holder && benefitPlan.holder}
+          />
+        </Grid>
+        <Grid item xs={3} className={classes.item}>
+          <BenefitPlanTypePicker
+            label="beneficiary.benefitPlanTypePicker"
+            required
+            withNull={false}
+            readOnly={readOnly}
+            onChange={(v) => this.updateAttribute('type', v)}
+            value={!!benefitPlan?.type && benefitPlan.type}
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>

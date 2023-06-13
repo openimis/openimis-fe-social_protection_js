@@ -1,17 +1,17 @@
 import React from 'react';
 import { ConstantBasedPicker } from '@openimis/fe-core';
 
-import { BENEFICIARY_STATUS_LIST } from '../constants';
+import { BENEFIT_PLAN_TYPE_LIST } from '../constants';
 
-function BeneficiaryStatusPicker(props) {
+function BenefitPlanTypePicker(props) {
   const {
     required, withNull, readOnly, onChange, value, nullLabel,
   } = props;
   return (
     <ConstantBasedPicker
       module="socialProtection"
-      label="beneficiary.beneficiaryStatusPicker"
-      constants={BENEFICIARY_STATUS_LIST}
+      label="beneficiary.benefitPlanTypePicker"
+      constants={BENEFIT_PLAN_TYPE_LIST}
       required={required}
       withNull={withNull}
       readOnly={readOnly}
@@ -22,4 +22,4 @@ function BeneficiaryStatusPicker(props) {
   );
 }
 
-export default BeneficiaryStatusPicker;
+export default BenefitPlanTypePicker;

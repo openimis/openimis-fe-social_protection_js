@@ -1,18 +1,20 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import { TextInput, PublishedComponent } from '@openimis/fe-core';
-import { Grid } from '@material-ui/core';
+import { TextInput, PublishedComponent, formatMessage } from '@openimis/fe-core';
+import { FormControlLabel, Grid, Checkbox } from '@material-ui/core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import _debounce from 'lodash/debounce';
-import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME } from '../constants';
+import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
 
 function BenefitPlanFilter({
-  classes, filters, onChangeFilters,
+  intl, classes, filters, onChangeFilters,
 }) {
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
   const filterValue = (filterName) => filters?.[filterName]?.value;
+
+  const filterTextFieldValue = (filterName) => filters?.[filterName]?.value ?? EMPTY_STRING;
 
   const onChangeStringFilter = (filterName, lookup = null) => (value) => {
     if (lookup) {
@@ -34,13 +36,24 @@ function BenefitPlanFilter({
     }
   };
 
+  const onChangeCheckbox = (key, value) => {
+    const filters = [
+      {
+        id: key,
+        value,
+        filter: `${key}: ${value}`,
+      },
+    ];
+    onChangeFilters(filters);
+  };
+
   return (
     <Grid container className={classes.form}>
       <Grid item xs={2} className={classes.item}>
         <TextInput
           module="socialProtection"
           label="benefitPlan.code"
-          value={filterValue('code')}
+          value={filterTextFieldValue('code')}
           onChange={onChangeStringFilter('code', CONTAINS_LOOKUP)}
         />
       </Grid>
@@ -48,7 +61,7 @@ function BenefitPlanFilter({
         <TextInput
           module="socialProtection"
           label="benefitPlan.name"
-          value={filterValue('name')}
+          value={filterTextFieldValue('name')}
           onChange={onChangeStringFilter('name', CONTAINS_LOOKUP)}
         />
       </Grid>
@@ -80,6 +93,21 @@ function BenefitPlanFilter({
               filter: `dateValidTo: "${v}T00:00:00.000Z"`,
             },
           ])}
+        />
+      </Grid>
+      <Grid item xs={2} className={classes.item}>
+        <FormControlLabel
+          control={(
+            <Checkbox
+              color="primary"
+              checked={filterValue('isDeleted')}
+              onChange={(event) => onChangeCheckbox(
+                'isDeleted',
+                event.target.checked,
+              )}
+            />
+          )}
+          label={formatMessage(intl, 'socialProtection', 'benefitPlan.isDeleted')}
         />
       </Grid>
     </Grid>
