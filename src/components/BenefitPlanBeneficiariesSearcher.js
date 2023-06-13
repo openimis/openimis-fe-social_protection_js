@@ -3,11 +3,11 @@ import React, {
 } from 'react';
 import { injectIntl } from 'react-intl';
 import {
-  formatMessage, 
-  formatMessageWithValues, 
-  Searcher, 
-  downloadExport, 
-  CLEARED_STATE_FILTER,
+  formatMessage,
+  formatMessageWithValues,
+  Searcher,
+  downloadExport,
+  CLEARED_STATE_FILTER
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -94,20 +94,19 @@ function BenefitPlanBeneficiariesSearcher({
     }
   }, [beneficiaryExport]);
 
-  const beneficiaryFilter = (props) => {
-    return (
-      <BenefitPlanBeneficiariesFilter
-        intl={props.intl}
-        classes={props.classes}
-        filters={props.filters}
-        onChangeFilters={props.onChangeFilters}
-        readOnly={readOnly}
-      />
-    )};
+  const beneficiaryFilter = (props) => (
+    <BenefitPlanBeneficiariesFilter
+      intl={props.intl}
+      classes={props.classes}
+      filters={props.filters}
+      onChangeFilters={props.onChangeFilters}
+      readOnly={readOnly}
+    />
+  );
 
-    useEffect(() => {
-      
-    }, [appliedCustomFilters]);
+  useEffect(() => {
+    // refresh when appliedCustomFilters is changed
+  }, [appliedCustomFilters]);
 
   return (
     !!benefitPlan?.id && (
