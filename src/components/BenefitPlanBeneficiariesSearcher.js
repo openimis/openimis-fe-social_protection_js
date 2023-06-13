@@ -18,7 +18,7 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import { fetchBeneficiaries, downloadBeneficiaries } from '../actions';
-import { 
+import {
   DEFAULT_PAGE_SIZE,
   ROWS_PER_PAGE_OPTIONS,
   MODULE_NAME,
