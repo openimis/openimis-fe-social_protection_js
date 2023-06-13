@@ -173,6 +173,7 @@ function BenefitPlanPage({
         rights={rights}
         actions={actions}
         setConfirmedAction={setConfirmedAction}
+        readOnly={!!benefitPlanUuid}
         saveTooltip={formatMessage(
           intl,
           'socialProtection',
