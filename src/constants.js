@@ -11,6 +11,7 @@ export const RIGHT_BENEFIT_PLAN_UPDATE = 160003;
 export const RIGHT_BENEFIT_PLAN_DELETE = 160004;
 export const RIGHT_BENEFICIARY_SEARCH = 170001;
 export const MAX_CODE_LENGTH = 8;
+export const DESCRIPTION_MAX_LENGTH = 1024;
 
 export const BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE = 'benefitPlanBeneficiariesListTab';
 export const BENEFIT_PLAN_BENEFICIARIES_ACTIVE_TAB_VALUE = 'benefitPlanBeneficiariesActiveTab';

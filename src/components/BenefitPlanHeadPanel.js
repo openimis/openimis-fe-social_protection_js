@@ -7,11 +7,12 @@ import {
   NumberInput,
   ValidatedTextInput,
   ValidatedTextAreaInput,
+  TextAreaInput,
   PublishedComponent,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import { MAX_CODE_LENGTH } from '../constants';
+import { DESCRIPTION_MAX_LENGTH, MAX_CODE_LENGTH } from '../constants';
 import {
   benefitPlanCodeSetValid,
   benefitPlanCodeValidationCheck,
@@ -154,6 +155,15 @@ class BenefitPlanHeadPanel extends FormPanel {
             isValid={isBenefitPlanSchemaValid}
             isValidating={isBenefitPlanSchemaValidating}
             validationError={benefitPlanSchemaValidationError}
+          />
+        </Grid>
+        <Grid item xs={3} className={classes.item}>
+          <TextAreaInput
+            module="socialProtection"
+            label="benefitPlan.description"
+            inputProps={{ maxLength: DESCRIPTION_MAX_LENGTH }}
+            value={benefitPlan?.description}
+            onChange={(v) => this.updateAttribute('description', v)}
           />
         </Grid>
       </Grid>
