@@ -42,30 +42,27 @@ function BenefitPlanBeneficiariesSearcher({
   beneficiaryExport,
   errorBeneficiaryExport,
 }) {
+  const applyNumberCircle = (number) => (
+    <div style={{
+      color: '#ffffff',
+      backgroundColor: '#006273',
+      borderRadius: '50%',
+      padding: '5px',
+      minWidth: '40px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontWeight: 'bold',
+      fontSize: '12px',
+      width: '20px',
+      height: '45px',
+      marginTop: '7px',
+    }}
+    >
+      {number}
+    </div>
+  );
 
-  const applyNumberCircle = (number) => {
-    return (
-      <div style={{
-        color: '#ffffff',
-        backgroundColor: '#006273',
-        borderRadius: '50%',
-        padding: '5px',
-        minWidth: '40px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontWeight: 'bold',
-        fontSize: '12px',
-        width: '20px',
-        height: '45px',
-        marginTop: '7px',
-      }}
-      >
-        {number}
-      </div>
-    );
-  };
-  
   const fetch = (params) => fetchBeneficiaries(params);
 
   const headers = () => [
