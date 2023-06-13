@@ -44,6 +44,7 @@ function BenefitPlanSearcher({
   benefitPlansPageInfo,
   benefitPlansTotalCount,
   individualId,
+  groupId,
   beneficiaryStatus,
 }) {
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
@@ -181,6 +182,12 @@ function BenefitPlanSearcher({
       filters.beneficiaryStatus = {
         value: beneficiaryStatus,
         filter: `beneficiaryStatus: "${beneficiaryStatus}"`,
+      };
+    }
+    if (groupId !== null && groupId !== undefined) {
+      filters.groupId = {
+        value: groupId,
+        filter: `groupId: "${groupId}"`,
       };
     }
     return filters;
