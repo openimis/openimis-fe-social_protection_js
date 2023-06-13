@@ -19,6 +19,7 @@ const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
   'version',
   'dateValidFrom',
   'dateValidTo',
+  'description',
   'replacementUuid',
   'code',
   'name',
@@ -81,6 +82,7 @@ function formatBenefitPlanGQL(benefitPlan) {
     ${benefitPlan?.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ''}
     ${benefitPlan?.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ''}
     ${benefitPlan?.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ''}
+    ${benefitPlan?.description ? `description: "${formatGQLString(benefitPlan.description)}"` : ''}
     ${benefitPlan?.beneficiaryDataSchema
     ? `beneficiaryDataSchema: ${JSON.stringify(benefitPlan.beneficiaryDataSchema)}` : ''}
     ${benefitPlan?.jsonExt ? `jsonExt: ${JSON.stringify(benefitPlan.jsonExt)}` : ''}`;
