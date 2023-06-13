@@ -5,18 +5,19 @@ import { BENEFIT_PLAN_TYPE_LIST } from '../constants';
 
 function BenefitPlanTypePicker(props) {
   const {
-    required, withNull, readOnly, onChange, value,
+    required, withNull, readOnly, onChange, value, nullLabel,
   } = props;
   return (
     <ConstantBasedPicker
       module="socialProtection"
-      label="benefitPlanTypePicker"
+      label="beneficiary.benefitPlanTypePicker"
       constants={BENEFIT_PLAN_TYPE_LIST}
       required={required}
       withNull={withNull}
       readOnly={readOnly}
       onChange={onChange}
       value={value}
+      nullLabel={nullLabel}
     />
   );
 }
