@@ -9,7 +9,7 @@ import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
 function BenefitPlanFilter({
-  intl, classes, filters, onChangeFilters, showInIndividual,
+  intl, classes, filters, onChangeFilters, showStatuses,
 }) {
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
@@ -111,7 +111,7 @@ function BenefitPlanFilter({
           label={formatMessage(intl, 'socialProtection', 'benefitPlan.isDeleted')}
         />
       </Grid>
-      {showInIndividual && (
+      {showStatuses && (
         <Grid item xs={2} className={classes.item}>
           <BeneficiaryStatusPicker
             label="beneficiary.beneficiaryStatusPicker"

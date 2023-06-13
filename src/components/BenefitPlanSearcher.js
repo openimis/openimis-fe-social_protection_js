@@ -45,7 +45,6 @@ function BenefitPlanSearcher({
   benefitPlansTotalCount,
   individualId,
   groupId,
-  beneficiaryStatus,
 }) {
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
@@ -178,12 +177,6 @@ function BenefitPlanSearcher({
         filter: `individualId: "${individualId}"`,
       };
     }
-    if (beneficiaryStatus !== null && beneficiaryStatus !== undefined) {
-      filters.beneficiaryStatus = {
-        value: beneficiaryStatus,
-        filter: `beneficiaryStatus: "${beneficiaryStatus}"`,
-      };
-    }
     if (groupId !== null && groupId !== undefined) {
       filters.groupId = {
         value: groupId,
@@ -199,7 +192,7 @@ function BenefitPlanSearcher({
       classes={props.classes}
       filters={props.filters}
       onChangeFilters={props.onChangeFilters}
-      showInIndividual={individualId}
+      showStatuses={individualId ?? groupId}
     />
   );
 
