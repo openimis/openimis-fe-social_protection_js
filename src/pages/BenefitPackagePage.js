@@ -20,7 +20,7 @@ const styles = (theme) => ({
 });
 
 function BenefitPackagePage({
-  rights, intl, classes, beneficiaryUuid, beneficiaryFirstName, beneficiaryLastName,
+  rights, intl, classes, beneficiaryUuid, beneficiary, fetchedBeneficiary,
 }) {
   const history = useHistory();
   const modulesManager = useModulesManager();
@@ -39,6 +39,7 @@ function BenefitPackagePage({
 
   return (
     <div className={classes.page}>
+      {fetchedBeneficiary && (
       <Form
         module="socialProtection"
         title={formatMessageWithValues(intl, 'socialProtection', 'benefitPackage.pageTitle', { name: testGroupName })}
@@ -54,13 +55,16 @@ function BenefitPackagePage({
             'socialProtection',
             'benefitPackage.Individual.pageTitle',
             {
-              firstName: beneficiaryFirstName,
-              lastName: beneficiaryLastName,
+              firstName: beneficiary?.individual?.firstName,
+              lastName: beneficiary?.individual?.lastName,
             },
           )
         }
         rights={rights}
+        beneficiary={beneficiary}
+        readOnly
       />
+      )}
     </div>
   );
 }
@@ -68,8 +72,8 @@ function BenefitPackagePage({
 const mapStateToProps = (state, props) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   beneficiaryUuid: props.match.params.beneficiary_uuid,
-  beneficiaryFirstName: state.socialProtection.beneficiary?.individual?.firstName,
-  beneficiaryLastName: state.socialProtection.beneficiary?.individual?.lastName,
+  beneficiary: state.socialProtection.beneficiary,
+  fetchedBeneficiary: state.socialProtection.fetchedBeneficiary,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

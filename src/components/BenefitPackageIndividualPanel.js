@@ -4,7 +4,8 @@ import {
 } from '@material-ui/core';
 import {
   FormattedMessage,
-  // PublishedComponent,
+  PublishedComponent,
+  TextInput,
   FormPanel,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
@@ -58,7 +59,9 @@ function renderHeadPanelSubtitle(classes) {
 
 class BenefitPackageIndividualPanel extends FormPanel {
   render() {
-    const { classes, individualTitle, titleParams } = this.props;
+    const {
+      classes, individualTitle, titleParams, beneficiary: { individual }, readOnly,
+    } = this.props;
 
     return (
       <Grid container>
@@ -71,9 +74,32 @@ class BenefitPackageIndividualPanel extends FormPanel {
             <Grid container className={classes.item}>
               {renderHeadPanelSubtitle(classes)}
               <Grid container className={classes.item}>
-                <Grid item xs={12}>
-                  {/* FIELDS */}
+                <Grid item xs={3} className={classes.item}>
+                  <TextInput
+                    module="socialProtection"
+                    label="beneficiary.firstName"
+                    value={individual.firstName}
+                    readOnly={readOnly}
+                  />
                 </Grid>
+                <Grid item xs={3} className={classes.item}>
+                  <TextInput
+                    module="socialProtection"
+                    label="beneficiary.lastName"
+                    value={individual.lastName}
+                    readOnly={readOnly}
+                  />
+                </Grid>
+                <Grid item xs={3} className={classes.item}>
+                  <PublishedComponent
+                    pubRef="core.DatePicker"
+                    module="socialProtection"
+                    label="beneficiary.dob"
+                    value={individual.dob}
+                    readOnly={readOnly}
+                  />
+                </Grid>
+                {/* FIELDS JSON EXT */}
               </Grid>
             </Grid>
           </Paper>

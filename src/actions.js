@@ -89,6 +89,37 @@ export function fetchBeneficiary(modulesManager, variables) {
   );
 }
 
+// export function fetchBeneficiaryGroup(modulesManager, variables) {
+//   return graphqlWithVariables(
+//     `
+//       query ($beneficiaryUuid: UUID) {
+//         beneficiary(id: $beneficiaryUuid) {
+//           totalCount
+//           pageInfo {
+//             hasNextPage
+//             hasPreviousPage
+//             startCursor
+//             endCursor
+//           }
+//           edges {
+//             node {
+//               id
+//               individual {
+//                 firstName
+//                 lastName
+//                 dob
+//               }
+//               status
+//             }
+//           }
+//         }
+//       }
+//     `,
+//     variables,
+//     ACTION_TYPE.GET_BENEFICIARY_GROUP,
+//   );
+// }
+
 export function fetchBenefitPlan(modulesManager, params) {
   const payload = formatPageQuery('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));
   return graphql(payload, ACTION_TYPE.GET_BENEFIT_PLAN);
