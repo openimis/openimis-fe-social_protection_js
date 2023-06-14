@@ -13,9 +13,10 @@ import {
 import { Person } from '@material-ui/icons';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import { EMPTY_STRING } from '../constants';
+import { EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE } from '../constants';
 
 const styles = (theme) => ({
+  tableTitle: theme.table.title,
   item: theme.paper.item,
   paper: theme.paper.paper,
   fullHeight: {
@@ -23,7 +24,7 @@ const styles = (theme) => ({
   },
 });
 
-function renderHeadPanelSubtitle(intl, history, modulesManager, classes, individualUuid) {
+function renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes, individualUuid) {
   const openIndividual = () => history.push(`/${modulesManager.getRef('individual.route.individual')}`
     + `/${individualUuid}`);
 
@@ -38,7 +39,7 @@ function renderHeadPanelSubtitle(intl, history, modulesManager, classes, individ
             />
             { !!individualUuid && (
             <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.IndividualDetailPanel.tooltip')}>
-              <IconButton onClick={openIndividual}>
+              <IconButton onClick={openIndividual} disabled={!rights.includes(RIGHT_INDIVIDUAL_UPDATE)}>
                 <Person />
               </IconButton>
             </Tooltip>
@@ -94,7 +95,7 @@ class BenefitPackageIndividualPanel extends FormPanel {
 
   render() {
     const {
-      classes, readOnly, intl, history, modulesManager,
+      classes, readOnly, intl, history, modulesManager, rights,
       beneficiary: {
         individual, status, jsonExt,
       },
@@ -104,8 +105,10 @@ class BenefitPackageIndividualPanel extends FormPanel {
     const jsonExtFields = this.createAdditionalField(jsonExt);
 
     return (
-      <Grid container className={classes.item}>
-        {renderHeadPanelSubtitle(intl, history, modulesManager, classes, uuid)}
+      <>
+        <Grid container className={classes.tableTitle}>
+          {renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes, uuid)}
+        </Grid>
         <Grid container className={classes.item}>
           <Grid item xs={3} className={classes.item}>
             <TextInput
@@ -146,7 +149,7 @@ class BenefitPackageIndividualPanel extends FormPanel {
             </Grid>
           ))}
         </Grid>
-      </Grid>
+      </>
     );
   }
 }
