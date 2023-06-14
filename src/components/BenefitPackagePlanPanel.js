@@ -20,7 +20,6 @@ const styles = (theme) => ({
   item: theme.paper.item,
   paper: theme.paper.paper,
   paperHeader: theme.paper.header,
-  paperHeaderAction: theme.paper.action,
   fullHeight: {
     height: '100%',
   },

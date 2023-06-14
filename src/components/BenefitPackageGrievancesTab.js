@@ -26,9 +26,7 @@ function BenefitPackageGrievancesTabPanel({ value }) {
       index={BENEFIT_PACKAGE_GRIEVANCES_TAB_VALUE}
       value={value}
     >
-      <BenefitPackageGrievancesSearcher
-        readOnly
-      />
+      <BenefitPackageGrievancesSearcher readOnly />
     </PublishedComponent>
   );
 }

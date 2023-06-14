@@ -16,11 +16,8 @@ import { withTheme, withStyles } from '@material-ui/core/styles';
 import { EMPTY_STRING } from '../constants';
 
 const styles = (theme) => ({
-  tableTitle: theme.table.title,
   item: theme.paper.item,
   paper: theme.paper.paper,
-  paperHeader: theme.paper.header,
-  paperHeaderAction: theme.paper.action,
   fullHeight: {
     height: '100%',
   },

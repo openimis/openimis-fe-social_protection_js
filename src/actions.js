@@ -218,14 +218,6 @@ export function downloadBeneficiaries(params) {
   return graphql(payload, ACTION_TYPE.BENEFICIARY_EXPORT);
 }
 
-export function downloadPayments(params) {
-  const payload = `
-    {
-      beneficiaryExport${!!params && params.length ? `(${params.join(',')})` : ''}
-    }`;
-  return graphql(payload, ACTION_TYPE.BENEFICIARY_EXPORT);
-}
-
 export function downloadGroupBeneficiaries(params) {
   const payload = `
     {

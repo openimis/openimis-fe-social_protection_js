@@ -26,9 +26,7 @@ function BenefitPackagePaymentsTabPanel({ value }) {
       index={BENEFIT_PACKAGE_PAYMENTS_TAB_VALUE}
       value={value}
     >
-      <BenefitPackagePaymentsSearcher
-        readOnly
-      />
+      <BenefitPackagePaymentsSearcher readOnly />
     </PublishedComponent>
   );
 }
