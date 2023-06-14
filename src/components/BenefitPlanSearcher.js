@@ -43,6 +43,8 @@ function BenefitPlanSearcher({
   benefitPlans,
   benefitPlansPageInfo,
   benefitPlansTotalCount,
+  individualId,
+  beneficiaryStatus,
 }) {
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
@@ -162,15 +164,31 @@ function BenefitPlanSearcher({
 
   const isRowDisabled = (_, benefitPlan) => deletedBenefitPlanUuids.includes(benefitPlan.id);
 
-  const defaultFilters = () => ({
-    isDeleted: {
-      value: false,
-      filter: 'isDeleted: false',
-    },
-  });
+  const defaultFilters = () => {
+    const filters = {
+      isDeleted: {
+        value: false,
+        filter: 'isDeleted: false',
+      },
+    };
+    if (individualId !== null && individualId !== undefined) {
+      filters.individualId = {
+        value: individualId,
+        filter: `individualId: "${individualId}"`,
+      };
+    }
+    if (beneficiaryStatus !== null && beneficiaryStatus !== undefined) {
+      filters.beneficiaryStatus = {
+        value: beneficiaryStatus,
+        filter: `beneficiaryStatus: "${beneficiaryStatus}"`,
+      };
+    }
+    return filters;
+  };
 
   return (
     <Searcher
+      key={JSON.stringify(defaultFilters())}
       module="socialProtection"
       FilterPane={BenefitPlanFilter}
       fetch={fetch}
