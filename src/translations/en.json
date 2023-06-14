@@ -20,6 +20,7 @@
   "socialProtection.benefitPlan.maxBeneficiaries": "Max Beneficiaries",
   "socialProtection.benefitPlan.jsonExt": "json_ext",
   "socialProtection.benefitPlan.schema": "Schema",
+  "socialProtection.benefitPlan.description": "Description",
   "socialProtection.benefitPlan.pageTitle": "Benefit Plan {code} {name}",
   "socialProtection.benefitPackage.Individual.pageTitle": "{firstName} {lastName}",
   "socialProtection.benefitPlan.isDeleted": "Show historical",
