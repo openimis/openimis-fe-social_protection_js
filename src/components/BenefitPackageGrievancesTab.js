@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab } from '@material-ui/core';
 import { formatMessage, PublishedComponent } from '@openimis/fe-core';
-import { BENEFICIARY_STATUS, BENEFIT_PACKAGE_GRIEVANCES_TAB_VALUE } from '../constants';
+import { BENEFIT_PACKAGE_GRIEVANCES_TAB_VALUE } from '../constants';
 import BenefitPackageGrievancesSearcher from './BenefitPackageGrievancesSearcher';
 
 function BenefitPackageGrievancesTabLabel({
@@ -18,7 +18,7 @@ function BenefitPackageGrievancesTabLabel({
   );
 }
 
-function BenefitPackageGrievancesTabPanel({ value, benefitPlan }) {
+function BenefitPackageGrievancesTabPanel({ value }) {
   return (
     <PublishedComponent
       pubRef="policyHolder.TabPanel"
@@ -27,8 +27,6 @@ function BenefitPackageGrievancesTabPanel({ value, benefitPlan }) {
       value={value}
     >
       <BenefitPackageGrievancesSearcher
-        benefitPlan={benefitPlan}
-        status={BENEFICIARY_STATUS.ACTIVE}
         readOnly
       />
     </PublishedComponent>

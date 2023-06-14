@@ -3,7 +3,6 @@ import {
   withModulesManager,
   FormPanel,
   FormattedMessage,
-  // PublishedComponent,
 } from '@openimis/fe-core';
 import { Grid, Typography } from '@material-ui/core';
 import { withTheme, withStyles } from '@material-ui/core/styles';

@@ -18,7 +18,7 @@ function BenefitPackagePaymentsTabLabel({
   );
 }
 
-function BenefitPackagePaymentsTabPanel({ value, benefitPlan }) {
+function BenefitPackagePaymentsTabPanel({ value }) {
   return (
     <PublishedComponent
       pubRef="policyHolder.TabPanel"
@@ -27,7 +27,6 @@ function BenefitPackagePaymentsTabPanel({ value, benefitPlan }) {
       value={value}
     >
       <BenefitPackagePaymentsSearcher
-        benefitPlan={benefitPlan}
         readOnly
       />
     </PublishedComponent>

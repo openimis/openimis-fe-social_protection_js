@@ -9,23 +9,33 @@ import {
 import { bindActionCreators } from 'redux';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import BenefitPackageGroupPanel from '../components/BenefitPackageGroupPanel';
 import BenefitPackageTabPanel from '../components/BenefitPackageTabPanel';
+import BenefitPackagePlanPanel from '../components/BenefitPackagePlanPanel';
 import { RIGHT_BENEFICIARY_SEARCH } from '../constants';
 import BenefitPackageIndividualPanel from '../components/BenefitPackageIndividualPanel';
-import { fetchBeneficiary } from '../actions';
+import { fetchBeneficiary, fetchBenefitPlan } from '../actions';
 
 const styles = (theme) => ({
   page: theme.page,
 });
 
 function BenefitPackagePage({
-  rights, intl, classes, beneficiaryUuid, beneficiary, fetchedBeneficiary,
+  rights,
+  intl,
+  classes,
+  beneficiaryUuid,
+  beneficiary,
+  fetchedBeneficiary,
+  benefitPlanUuid,
+  benefitPlan,
+  fetchedBenefitPlan,
 }) {
   const history = useHistory();
   const modulesManager = useModulesManager();
   const dispatch = useDispatch();
-  const testGroupName = 'someTestGroupName';
+  const dependenciesFetched = fetchedBeneficiary && fetchedBenefitPlan;
+
+  const back = () => history.goBack();
 
   useEffect(() => {
     if (beneficiaryUuid) {
@@ -33,23 +43,17 @@ function BenefitPackagePage({
         beneficiaryUuid,
       }));
     }
-  }, [beneficiaryUuid]);
-
-  const back = () => history.goBack();
+    if (benefitPlanUuid) {
+      dispatch(fetchBenefitPlan(modulesManager, [`id: "${benefitPlanUuid}"`]));
+    }
+  }, [beneficiaryUuid, benefitPlanUuid]);
 
   return (
     <div className={classes.page}>
-      {fetchedBeneficiary && (
+      {dependenciesFetched && (
       <Form
         module="socialProtection"
-        title={formatMessageWithValues(intl, 'socialProtection', 'benefitPackage.pageTitle', { name: testGroupName })}
-        openDirty
-        back={back}
-        HeadPanel={BenefitPackageGroupPanel}
-        Panels={
-          rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPackageIndividualPanel, BenefitPackageTabPanel] : []
-        }
-        individualTitle={
+        title={
           formatMessageWithValues(
             intl,
             'socialProtection',
@@ -60,8 +64,27 @@ function BenefitPackagePage({
             },
           )
         }
+        openDirty
+        back={back}
+        HeadPanel={BenefitPackageIndividualPanel}
+        Panels={
+          rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPackagePlanPanel, BenefitPackageTabPanel] : []
+        }
+        benefitPlanTitle={formatMessageWithValues(
+          intl,
+          'socialProtection',
+          'benefitPlan.pageTitle',
+          {
+            code: benefitPlan?.code,
+            name: benefitPlan?.name,
+          },
+        )}
         rights={rights}
+        intl={intl}
+        history={history}
+        modulesManager={modulesManager}
         beneficiary={beneficiary}
+        benefitPlan={benefitPlan}
         readOnly
       />
       )}
@@ -74,6 +97,9 @@ const mapStateToProps = (state, props) => ({
   beneficiaryUuid: props.match.params.beneficiary_uuid,
   beneficiary: state.socialProtection.beneficiary,
   fetchedBeneficiary: state.socialProtection.fetchedBeneficiary,
+  benefitPlanUuid: props.match.params.benefit_plan_uuid,
+  benefitPlan: state.socialProtection.benefitPlan,
+  fetchedBenefitPlan: state.socialProtection.fetchedBenefitPlan,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

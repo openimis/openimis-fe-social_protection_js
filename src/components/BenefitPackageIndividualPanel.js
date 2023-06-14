@@ -1,15 +1,19 @@
 import React from 'react';
 import {
-  Grid, Typography, Paper, Divider,
+  Grid, Typography, IconButton, Tooltip,
 } from '@material-ui/core';
 import {
   FormattedMessage,
   PublishedComponent,
   TextInput,
+  NumberInput,
   FormPanel,
+  formatMessage,
 } from '@openimis/fe-core';
+import { Person } from '@material-ui/icons';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
+import { EMPTY_STRING } from '../constants';
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -22,25 +26,10 @@ const styles = (theme) => ({
   },
 });
 
-function renderHeadPanelTitle(classes, individualTitle, titleParams) {
-  return (
-    <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
-      <Grid item xs={8}>
-        <Grid container alignItems="center" className={classes.tableTitle}>
-          {!!individualTitle && (
-          <Grid item>
-            <Typography variant="h6">
-              <FormattedMessage module={module} id={individualTitle} values={titleParams} />
-            </Typography>
-          </Grid>
-          )}
-        </Grid>
-      </Grid>
-    </Grid>
-  );
-}
+function renderHeadPanelSubtitle(intl, history, modulesManager, classes, individualUuid) {
+  const openIndividual = () => history.push(`/${modulesManager.getRef('individual.route.individual')}`
+    + `/${individualUuid}`);
 
-function renderHeadPanelSubtitle(classes) {
   return (
     <Grid item>
       <Grid container align="center" justify="center" direction="column" className={classes.fullHeight}>
@@ -50,6 +39,13 @@ function renderHeadPanelSubtitle(classes) {
               module="socialProtection"
               id="socialProtection.benefitPackage.IndividualDetailPanel.title"
             />
+            { !!individualUuid && (
+            <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.IndividualDetailPanel.tooltip')}>
+              <IconButton onClick={openIndividual}>
+                <Person />
+              </IconButton>
+            </Tooltip>
+            )}
           </Typography>
         </Grid>
       </Grid>
@@ -65,68 +61,93 @@ class BenefitPackageIndividualPanel extends FormPanel {
     const additionalFields = JSON.parse(jsonExt);
 
     const arrayWithFields = Object.entries(additionalFields).map(([property, value]) => ({
-      [property]: value,
+      field: { [property]: value },
+      fieldType: typeof value,
     }));
 
     return arrayWithFields;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  renderProperType({ fieldType, field }) {
+    const NUMBER = 'number';
+    switch (fieldType) {
+      case NUMBER:
+        return (
+          <NumberInput
+            module="socialProtection"
+            readOnly
+            min={0}
+            displayZero
+            label={Object.keys(field)[0]}
+            value={Object.values(field)[0]}
+          />
+        );
+      default:
+        return (
+          <TextInput
+            module="socialProtection"
+            readOnly
+            label={Object.keys(field)[0]}
+            value={Object.values(field)[0]}
+          />
+        );
+    }
+  }
+
   render() {
     const {
-      classes, individualTitle, titleParams, beneficiary: { individual, jsonExt }, readOnly,
+      classes, readOnly, intl, history, modulesManager,
+      beneficiary: {
+        individual, status, jsonExt,
+      },
     } = this.props;
+    const { uuid } = individual;
 
     const jsonExtFields = this.createAdditionalField(jsonExt);
 
     return (
-      <Grid container>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            {renderHeadPanelTitle(classes, individualTitle, titleParams)}
-            <Grid item xs={12}>
-              <Divider />
+      <Grid container className={classes.item}>
+        {renderHeadPanelSubtitle(intl, history, modulesManager, classes, uuid)}
+        <Grid container className={classes.item}>
+          <Grid item xs={3} className={classes.item}>
+            <TextInput
+              module="socialProtection"
+              label="beneficiary.firstName"
+              value={individual.firstName}
+              readOnly={readOnly}
+            />
+          </Grid>
+          <Grid item xs={3} className={classes.item}>
+            <TextInput
+              module="socialProtection"
+              label="beneficiary.lastName"
+              value={individual.lastName}
+              readOnly={readOnly}
+            />
+          </Grid>
+          <Grid item xs={3} className={classes.item}>
+            <PublishedComponent
+              pubRef="core.DatePicker"
+              module="socialProtection"
+              label="beneficiary.dob"
+              value={individual.dob}
+              readOnly={readOnly}
+            />
+          </Grid>
+          <Grid item xs={3} className={classes.item}>
+            <TextInput
+              module="socialProtection"
+              label="beneficiary.status"
+              value={status ?? EMPTY_STRING}
+              readOnly={readOnly}
+            />
+          </Grid>
+          {jsonExtFields?.map((jsonExtField) => (
+            <Grid item xs={3} className={classes.item}>
+              {this.renderProperType(jsonExtField)}
             </Grid>
-            <Grid container className={classes.item}>
-              {renderHeadPanelSubtitle(classes)}
-              <Grid container className={classes.item}>
-                <Grid item xs={3} className={classes.item}>
-                  <TextInput
-                    module="socialProtection"
-                    label="beneficiary.firstName"
-                    value={individual.firstName}
-                    readOnly={readOnly}
-                  />
-                </Grid>
-                <Grid item xs={3} className={classes.item}>
-                  <TextInput
-                    module="socialProtection"
-                    label="beneficiary.lastName"
-                    value={individual.lastName}
-                    readOnly={readOnly}
-                  />
-                </Grid>
-                <Grid item xs={3} className={classes.item}>
-                  <PublishedComponent
-                    pubRef="core.DatePicker"
-                    module="socialProtection"
-                    label="beneficiary.dob"
-                    value={individual.dob}
-                    readOnly={readOnly}
-                  />
-                </Grid>
-                {jsonExtFields?.map((field) => (
-                  <Grid item xs={3} className={classes.item}>
-                    <TextInput
-                      module="socialProtection"
-                      label={Object.keys(field)[0]}
-                      value={Object.values(field)[0]}
-                      readOnly={readOnly}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-          </Paper>
+          ))}
         </Grid>
       </Grid>
     );

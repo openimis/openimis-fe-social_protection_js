@@ -49,7 +49,10 @@ const DEFAULT_CONFIG = {
   'core.Router': [
     { path: ROUTE_BENEFIT_PLANS, component: BenefitPlansPage },
     { path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`, component: BenefitPlanPage },
-    { path: `${ROUTE_BENEFIT_PLAN}/${ROUTE_BENEFIT_PACKAGE}/:beneficiary_uuid?`, component: BenefitPackagePage },
+    {
+      path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/:beneficiary_uuid?`,
+      component: BenefitPackagePage,
+    },
   ],
   refs: [
     { key: 'socialProtection.route.benefitPlan', ref: ROUTE_BENEFIT_PLAN },

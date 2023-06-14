@@ -21,7 +21,6 @@
   "socialProtection.benefitPlan.jsonExt": "json_ext",
   "socialProtection.benefitPlan.schema": "Schema",
   "socialProtection.benefitPlan.pageTitle": "Benefit Plan {code} {name}",
-  "socialProtection.benefitPackage.pageTitle": "{name} Group",
   "socialProtection.benefitPackage.Individual.pageTitle": "{firstName} {lastName}",
   "socialProtection.benefitPlan.isDeleted": "Show historical",
   "socialProtection.beneficiary.code": "Code",
@@ -66,6 +65,9 @@
   "socialProtection.benefitPackage.overviewButtonTooltip": "Show Benefit Package",
   "socialProtection.benefitPackage.GroupDetailPanel.title": "Group Details",
   "socialProtection.benefitPackage.IndividualDetailPanel.title": "Individual Details",
+  "socialProtection.benefitPackage.IndividualDetailPanel.tooltip": "Show Individual",
+  "socialProtection.benefitPackage.BenefitPlanDetailPanel.title": "Benefit Plan Details",
+  "socialProtection.benefitPackage.BenefitPlanDetailPanel.tooltip": "Show Benefit Plan",
   "socialProtection.benefitPackage.benefitPackagePaymentsTab.label": "Payments",
   "socialProtection.benefitPackage.benefitPackageGrievancesTab.label": "Grievances"
 }

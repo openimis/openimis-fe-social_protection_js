@@ -75,6 +75,7 @@ export function fetchBeneficiary(modulesManager, variables) {
               id
               jsonExt
               individual {
+                uuid,
                 firstName
                 lastName
                 dob
