@@ -73,6 +73,7 @@ export function fetchBeneficiary(modulesManager, variables) {
           edges {
             node {
               id
+              jsonExt
               individual {
                 firstName
                 lastName
@@ -88,37 +89,6 @@ export function fetchBeneficiary(modulesManager, variables) {
     ACTION_TYPE.GET_BENEFICIARY,
   );
 }
-
-// export function fetchBeneficiaryGroup(modulesManager, variables) {
-//   return graphqlWithVariables(
-//     `
-//       query ($beneficiaryUuid: UUID) {
-//         beneficiary(id: $beneficiaryUuid) {
-//           totalCount
-//           pageInfo {
-//             hasNextPage
-//             hasPreviousPage
-//             startCursor
-//             endCursor
-//           }
-//           edges {
-//             node {
-//               id
-//               individual {
-//                 firstName
-//                 lastName
-//                 dob
-//               }
-//               status
-//             }
-//           }
-//         }
-//       }
-//     `,
-//     variables,
-//     ACTION_TYPE.GET_BENEFICIARY_GROUP,
-//   );
-// }
 
 export function fetchBenefitPlan(modulesManager, params) {
   const payload = formatPageQuery('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));

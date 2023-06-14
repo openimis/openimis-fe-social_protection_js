@@ -58,10 +58,25 @@ function renderHeadPanelSubtitle(classes) {
 }
 
 class BenefitPackageIndividualPanel extends FormPanel {
+  // eslint-disable-next-line class-methods-use-this
+  createAdditionalField(jsonExt) {
+    if (!jsonExt) return [];
+
+    const additionalFields = JSON.parse(jsonExt);
+
+    const arrayWithFields = Object.entries(additionalFields).map(([property, value]) => ({
+      [property]: value,
+    }));
+
+    return arrayWithFields;
+  }
+
   render() {
     const {
-      classes, individualTitle, titleParams, beneficiary: { individual }, readOnly,
+      classes, individualTitle, titleParams, beneficiary: { individual, jsonExt }, readOnly,
     } = this.props;
+
+    const jsonExtFields = this.createAdditionalField(jsonExt);
 
     return (
       <Grid container>
@@ -99,7 +114,16 @@ class BenefitPackageIndividualPanel extends FormPanel {
                     readOnly={readOnly}
                   />
                 </Grid>
-                {/* FIELDS JSON EXT */}
+                {jsonExtFields?.map((field) => (
+                  <Grid item xs={3} className={classes.item}>
+                    <TextInput
+                      module="socialProtection"
+                      label={Object.keys(field)[0]}
+                      value={Object.values(field)[0]}
+                      readOnly={readOnly}
+                    />
+                  </Grid>
+                ))}
               </Grid>
             </Grid>
           </Paper>
