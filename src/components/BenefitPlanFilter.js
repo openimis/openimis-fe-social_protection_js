@@ -6,9 +6,10 @@ import { withTheme, withStyles } from '@material-ui/core/styles';
 import _debounce from 'lodash/debounce';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
+import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
 function BenefitPlanFilter({
-  intl, classes, filters, onChangeFilters,
+  intl, classes, filters, onChangeFilters, showStatuses,
 }) {
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
@@ -110,6 +111,23 @@ function BenefitPlanFilter({
           label={formatMessage(intl, 'socialProtection', 'benefitPlan.isDeleted')}
         />
       </Grid>
+      {showStatuses && (
+        <Grid item xs={2} className={classes.item}>
+          <BeneficiaryStatusPicker
+            label="beneficiary.beneficiaryStatusPicker"
+            withNull
+            nullLabel={formatMessage(intl, 'socialProtection', 'any')}
+            value={filterValue('beneficiaryStatus')}
+            onChange={(value) => onChangeFilters([
+              {
+                id: 'beneficiaryStatus',
+                value,
+                filter: `beneficiaryStatus: "${value}"`,
+              },
+            ])}
+          />
+        </Grid>
+      )}
     </Grid>
   );
 }

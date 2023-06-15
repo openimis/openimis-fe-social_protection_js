@@ -3,7 +3,13 @@ import React, {
 } from 'react';
 import { injectIntl } from 'react-intl';
 import {
-  formatMessage, formatMessageWithValues, Searcher, downloadExport,
+  formatMessage,
+  formatMessageWithValues,
+  Searcher,
+  downloadExport,
+  CLEARED_STATE_FILTER,
+  useModulesManager,
+  useHistory,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -12,12 +18,21 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
+  IconButton,
+  Tooltip,
 } from '@material-ui/core';
+import PreviewIcon from '@material-ui/icons/ListAlt';
 import { fetchBeneficiaries, downloadBeneficiaries } from '../actions';
-import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from '../constants';
+import {
+  DEFAULT_PAGE_SIZE,
+  RIGHT_BENEFICIARY_SEARCH, ROWS_PER_PAGE_OPTIONS,
+  MODULE_NAME,
+  BENEFIT_PLAN_LABEL,
+} from '../constants';
 import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';
 
 function BenefitPlanBeneficiariesSearcher({
+  rights,
   intl,
   benefitPlan,
   fetchBeneficiaries,
@@ -33,6 +48,29 @@ function BenefitPlanBeneficiariesSearcher({
   beneficiaryExport,
   errorBeneficiaryExport,
 }) {
+  const applyNumberCircle = (number) => (
+    <div style={{
+      color: '#ffffff',
+      backgroundColor: '#006273',
+      borderRadius: '50%',
+      padding: '5px',
+      minWidth: '40px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontWeight: 'bold',
+      fontSize: '12px',
+      width: '20px',
+      height: '45px',
+      marginTop: '7px',
+    }}
+    >
+      {number}
+    </div>
+  );
+
+  const modulesManager = useModulesManager();
+  const history = useHistory();
   const fetch = (params) => fetchBeneficiaries(params);
 
   const headers = () => [
@@ -40,14 +78,33 @@ function BenefitPlanBeneficiariesSearcher({
     'socialProtection.beneficiary.lastName',
     'socialProtection.beneficiary.dob',
     'socialProtection.beneficiary.status',
+    '',
   ];
 
-  const itemFormatters = () => [
-    (beneficiary) => beneficiary.individual.firstName,
-    (beneficiary) => beneficiary.individual.lastName,
-    (beneficiary) => beneficiary.individual.dob,
-    (beneficiary) => beneficiary.status,
-  ];
+  const openBenefitPackage = (beneficiary) => history.push(`${benefitPlan?.id}/`
+  + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
+    + `/${beneficiary?.id}`);
+
+  const itemFormatters = () => {
+    const result = [
+      (beneficiary) => beneficiary.individual.firstName,
+      (beneficiary) => beneficiary.individual.lastName,
+      (beneficiary) => beneficiary.individual.dob,
+      (beneficiary) => beneficiary.status,
+    ];
+    if (rights.includes(RIGHT_BENEFICIARY_SEARCH)) {
+      result.push((beneficiary) => (
+        <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.overviewButtonTooltip')}>
+          <IconButton
+            onClick={() => openBenefitPackage(beneficiary)}
+          >
+            <PreviewIcon />
+          </IconButton>
+        </Tooltip>
+      ));
+    }
+    return result;
+  };
 
   const sorts = () => [
     ['individual_FirstName', true],
@@ -78,6 +135,8 @@ function BenefitPlanBeneficiariesSearcher({
   };
 
   const [failedExport, setFailedExport] = useState(false);
+  const [appliedCustomFilters, setAppliedCustomFilters] = useState([CLEARED_STATE_FILTER]);
+  const [appliedFiltersRowStructure, setAppliedFiltersRowStructure] = useState([CLEARED_STATE_FILTER]);
 
   useEffect(() => {
     setFailedExport(true);
@@ -98,6 +157,11 @@ function BenefitPlanBeneficiariesSearcher({
       readOnly={readOnly}
     />
   );
+
+  useEffect(() => {
+    // refresh when appliedCustomFilters is changed
+  }, [appliedCustomFilters]);
+
   return (
     !!benefitPlan?.id && (
     <div>
@@ -138,6 +202,15 @@ function BenefitPlanBeneficiariesSearcher({
         defaultPageSize={DEFAULT_PAGE_SIZE}
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
+        isCustomFiltering
+        objectForCustomFiltering={benefitPlan}
+        moduleName={MODULE_NAME}
+        objectType={BENEFIT_PLAN_LABEL}
+        appliedCustomFilters={appliedCustomFilters}
+        setAppliedCustomFilters={setAppliedCustomFilters}
+        appliedFiltersRowStructure={appliedFiltersRowStructure}
+        setAppliedFiltersRowStructure={setAppliedFiltersRowStructure}
+        applyNumberCircle={applyNumberCircle}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">
@@ -155,6 +228,7 @@ function BenefitPlanBeneficiariesSearcher({
 }
 
 const mapStateToProps = (state) => ({
+  rights: state.core?.user?.i_user?.rights ?? [],
   fetchingBeneficiaries: state.socialProtection.fetchingBeneficiaries,
   fetchedBeneficiaries: state.socialProtection.fetchedBeneficiaries,
   errorBeneficiaries: state.socialProtection.errorBeneficiaries,

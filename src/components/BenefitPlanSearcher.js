@@ -44,6 +44,7 @@ function BenefitPlanSearcher({
   benefitPlansPageInfo,
   benefitPlansTotalCount,
   individualId,
+  groupId,
   beneficiaryStatus,
 }) {
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
@@ -106,12 +107,12 @@ function BenefitPlanSearcher({
 
   function benefitPlanUpdatePageUrl(benefitPlan) {
     return (`${modulesManager.getRef('socialProtection.route.benefitPlan')}`
-     + `/${benefitPlan?.id}`);
+        + `/${benefitPlan?.id}`);
   }
 
   const onDoubleClick = (benefitPlan, newTab = false) => rights.includes(RIGHT_BENEFIT_PLAN_UPDATE)
-        && !deletedBenefitPlanUuids.includes(benefitPlan.id)
-        && historyPush(modulesManager, history, 'socialProtection.route.benefitPlan', [benefitPlan?.id], newTab);
+      && !deletedBenefitPlanUuids.includes(benefitPlan.id)
+      && historyPush(modulesManager, history, 'socialProtection.route.benefitPlan', [benefitPlan?.id], newTab);
 
   const onDelete = (benefitPlan) => setBenefitPlanToDelete(benefitPlan);
 
@@ -175,6 +176,12 @@ function BenefitPlanSearcher({
         filter: `individualId: "${individualId}"`,
       },
     }),
+    ...(groupId && {
+      groupId: {
+        value: groupId,
+        filter: `groupId: "${groupId}"`,
+      },
+    }),
     ...(beneficiaryStatus && {
       beneficiaryStatus: {
         value: beneficiaryStatus,
@@ -183,10 +190,20 @@ function BenefitPlanSearcher({
     }),
   });
 
+  const benefitPlanFilter = (props) => (
+    <BenefitPlanFilter
+      intl={props.intl}
+      classes={props.classes}
+      filters={props.filters}
+      onChangeFilters={props.onChangeFilters}
+      showStatuses={individualId ?? groupId}
+    />
+  );
+
   return (
     <Searcher
       module="socialProtection"
-      FilterPane={BenefitPlanFilter}
+      FilterPane={benefitPlanFilter}
       fetch={fetch}
       items={benefitPlans}
       itemsPageInfo={benefitPlansPageInfo}
