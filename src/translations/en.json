@@ -9,6 +9,7 @@
   "socialProtection.benefitPlan.deleteButtonTooltip": "Delete",
   "socialProtection.benefitPlan.searcherResultsTitle": "{benefitPlansTotalCount} Benefit Plans",
   "socialProtection.beneficiaries.searcherResultsTitle": "{beneficiariesTotalCount} Beneficiaries",
+  "socialProtection.beneficiaries.members.searcherResultsTitle": "{individualsTotalCount} Individuals Found",
   "socialProtection.beneficiaries.payments.searcherResultsTitle": "{beneficiariesTotalCount} Payments Found",
   "socialProtection.beneficiaries.grievances.searcherResultsTitle": "{beneficiariesTotalCount} Grievances Found",
   "socialProtection.groupBeneficiaries.searcherResultsTitle": "{groupBeneficiariesTotalCount} Group Beneficiaries",
@@ -71,6 +72,7 @@
   "socialProtection.benefitPackage.IndividualDetailPanel.tooltip": "Show Individual",
   "socialProtection.benefitPackage.BenefitPlanDetailPanel.title": "Benefit Plan Details",
   "socialProtection.benefitPackage.BenefitPlanDetailPanel.tooltip": "Show Benefit Plan",
+  "socialProtection.benefitPackage.benefitPackageMembersTab.label": "Members",
   "socialProtection.benefitPackage.benefitPackagePaymentsTab.label": "Payments",
   "socialProtection.benefitPackage.benefitPackageGrievancesTab.label": "Grievances"
 }

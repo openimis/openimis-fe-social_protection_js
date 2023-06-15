@@ -7,6 +7,7 @@ import {
   BENEFIT_PACKAGE_TABS_LABEL_CONTRIBUTION_KEY,
   BENEFIT_PACKAGE_TABS_PANEL_CONTRIBUTION_KEY,
   BENEFIT_PACKAGE_PAYMENTS_TAB_VALUE,
+  BENEFIT_PACKAGE_MEMBERS_TAB_VALUE,
 } from '../constants';
 
 const styles = (theme) => ({
@@ -31,9 +32,10 @@ const styles = (theme) => ({
 });
 
 function BenefitPackageTabPanel({
-  intl, rights, classes,
+  intl, rights, classes, groupBeneficiaries,
 }) {
-  const [activeTab, setActiveTab] = useState(BENEFIT_PACKAGE_PAYMENTS_TAB_VALUE);
+  const [activeTab, setActiveTab] = useState(groupBeneficiaries
+    ? BENEFIT_PACKAGE_MEMBERS_TAB_VALUE : BENEFIT_PACKAGE_PAYMENTS_TAB_VALUE);
 
   const isSelected = (tab) => tab === activeTab;
 
@@ -52,12 +54,14 @@ function BenefitPackageTabPanel({
           onChange={handleChange}
           isSelected={isSelected}
           tabStyle={tabStyle}
+          groupBeneficiaries={groupBeneficiaries}
         />
       </Grid>
       <Contributions
         contributionKey={BENEFIT_PACKAGE_TABS_PANEL_CONTRIBUTION_KEY}
         rights={rights}
         value={activeTab}
+        groupBeneficiaries={groupBeneficiaries}
       />
     </Paper>
   );

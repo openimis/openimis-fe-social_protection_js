@@ -37,6 +37,7 @@ import {
   BenefitPackageGrievancesTabPanel,
 } from './components/BenefitPackageGrievancesTab';
 import BenefitPlanSearcher from './components/BenefitPlanSearcher';
+import { BenefitPackageMembersTabLabel, BenefitPackageMembersTabPanel } from './components/BenefitPackageMembersTab';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -77,10 +78,12 @@ const DEFAULT_CONFIG = {
     BenefitPlanBeneficiariesGraduatedTabPanel,
     BenefitPlanBeneficiariesSuspendedTabPanel],
   'benefitPackage.TabPanel.label': [
+    BenefitPackageMembersTabLabel,
     BenefitPackagePaymentsTabLabel,
     BenefitPackageGrievancesTabLabel,
   ],
   'benefitPackage.TabPanel.panel': [
+    BenefitPackageMembersTabPanel,
     BenefitPackagePaymentsTabPanel,
     BenefitPackageGrievancesTabPanel,
   ],
