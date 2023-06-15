@@ -54,7 +54,7 @@ const DEFAULT_CONFIG = {
       component: BenefitPackagePage,
     },
     {
-      path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/group/:beneficiary_group_uuid?`,
+      path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/group/:group_beneficiaries_uuid?`,
       component: BenefitPackagePage,
     },
   ],

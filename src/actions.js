@@ -59,6 +59,36 @@ export function fetchGroupBeneficiaries(params) {
   return graphql(payload, ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES);
 }
 
+export function fetchBeneficiariesGroup(modulesManager, variables) {
+  return graphqlWithVariables(
+    `
+      query ($groupBeneficiariesUuid: UUID) {
+        groupBeneficiary(id: $groupBeneficiariesUuid) {
+          totalCount
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+          edges {
+            node {
+              id
+              jsonExt
+              group {
+                uuid,
+              }
+              status
+            }
+          }
+        }
+      } 
+    `,
+    variables,
+    ACTION_TYPE.GET_BENEFICIARIES_GROUP,
+  );
+}
+
 export function fetchBeneficiary(modulesManager, variables) {
   return graphqlWithVariables(
     `
@@ -91,6 +121,18 @@ export function fetchBeneficiary(modulesManager, variables) {
     ACTION_TYPE.GET_BENEFICIARY,
   );
 }
+
+export const clearBeneficiary = () => (dispatch) => {
+  dispatch({
+    type: CLEAR(ACTION_TYPE.GET_BENEFICIARY),
+  });
+};
+
+export const clearBeneficiariesGroup = () => (dispatch) => {
+  dispatch({
+    type: CLEAR(ACTION_TYPE.GET_BENEFICIARIES_GROUP),
+  });
+};
 
 export function fetchBenefitPlan(modulesManager, params) {
   const payload = formatPageQuery('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));

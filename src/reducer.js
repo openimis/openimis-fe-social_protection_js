@@ -31,6 +31,7 @@ export const ACTION_TYPE = {
   SEARCH_BENEFICIARIES: 'BENEFICIARY_BENEFICIARIES',
   SEARCH_GROUP_BENEFICIARIES: 'GROUP_BENEFICIARY_GROUP_BENEFICIARIES',
   GET_BENEFICIARY: 'BENEFICIARY_BENEFICIARY',
+  GET_BENEFICIARIES_GROUP: 'GROUP_BENEFICIARY_GET_GROUP',
   BENEFICIARY_EXPORT: 'BENEFICIARY_EXPORT',
   GROUP_BENEFICIARY_EXPORT: 'GROUP_BENEFICIARY_EXPORT',
 };
@@ -64,6 +65,10 @@ function reducer(
     beneficiaryExport: null,
     beneficiaryExportPageInfo: {},
     errorBeneficiaryExport: null,
+    group: null,
+    fetchingGroup: false,
+    fetchedGroup: false,
+    errorGroup: null,
     fetchingGroupBeneficiaryExport: true,
     fetchedGroupBeneficiaryExport: false,
     groupBeneficiaryExport: null,
@@ -476,6 +481,39 @@ function reducer(
         fetchedBeneficiary: false,
         beneficiary: null,
         errorBeneficiary: null,
+      };
+    case REQUEST(ACTION_TYPE.GET_BENEFICIARIES_GROUP):
+      return {
+        ...state,
+        fetchingGroup: true,
+        fetchedGroup: false,
+        group: null,
+        errorGroup: null,
+      };
+    case SUCCESS(ACTION_TYPE.GET_BENEFICIARIES_GROUP):
+      return {
+        ...state,
+        fetchingGroup: false,
+        fetchedGroup: true,
+        group: parseData(action.payload.data.groupBeneficiary)?.map((groupBeneficiary) => ({
+          ...groupBeneficiary,
+          id: decodeId(groupBeneficiary.id),
+        }))?.[0],
+        errorGroup: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.GET_BENEFICIARIES_GROUP):
+      return {
+        ...state,
+        fetchingGroup: false,
+        errorGroup: formatServerError(action.payload),
+      };
+    case CLEAR(ACTION_TYPE.GET_BENEFICIARIES_GROUP):
+      return {
+        ...state,
+        fetchingGroup: false,
+        fetchedGroup: false,
+        group: null,
+        errorGroup: null,
       };
     case REQUEST(ACTION_TYPE.MUTATION):
       return dispatchMutationReq(state, action);
