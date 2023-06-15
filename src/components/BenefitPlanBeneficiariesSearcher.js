@@ -83,7 +83,7 @@ function BenefitPlanBeneficiariesSearcher({
 
   const openBenefitPackage = (beneficiary) => history.push(`${benefitPlan?.id}/`
   + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
-    + `/${beneficiary?.id}`);
+    + `/individual/${beneficiary?.id}`);
 
   const itemFormatters = () => {
     const result = [
