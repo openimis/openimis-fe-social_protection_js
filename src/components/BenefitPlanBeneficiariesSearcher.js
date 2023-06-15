@@ -4,11 +4,8 @@ import React, {
 import { injectIntl } from 'react-intl';
 import {
   formatMessage,
- 
   formatMessageWithValues,
- 
   Searcher,
- 
   downloadExport,
   CLEARED_STATE_FILTER,
   useModulesManager,
