@@ -42,7 +42,7 @@ function BenefitPlanBeneficiariesSearcher({
   beneficiaryExport,
   errorBeneficiaryExport,
 }) {
-  const mm = useModulesManager();
+  const modulesManager = useModulesManager();
   const history = useHistory();
   const fetch = (params) => fetchBeneficiaries(params);
 
@@ -55,7 +55,7 @@ function BenefitPlanBeneficiariesSearcher({
   ];
 
   const openBenefitPackage = (beneficiary) => history.push(`${benefitPlan?.id}/`
-  + `${mm.getRef('socialProtection.route.benefitPackage')}`
+  + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
     + `/${beneficiary?.id}`);
 
   const itemFormatters = () => {
