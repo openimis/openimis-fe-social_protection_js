@@ -95,6 +95,7 @@ function BenefitPlanPage({
       && !!editedBenefitPlan?.name
       && !!editedBenefitPlan?.dateValidFrom
       && !!editedBenefitPlan?.dateValidTo
+      && !!editedBenefitPlan?.type
     ) {
       return false;
     }
