@@ -4,9 +4,13 @@ import React, {
 import { injectIntl } from 'react-intl';
 import {
   formatMessage,
+ 
   formatMessageWithValues,
+ 
   Searcher,
+ 
   downloadExport,
+  CLEARED_STATE_FILTER,
   useModulesManager,
   useHistory,
 } from '@openimis/fe-core';
@@ -22,7 +26,12 @@ import {
 } from '@material-ui/core';
 import PreviewIcon from '@material-ui/icons/ListAlt';
 import { fetchBeneficiaries, downloadBeneficiaries } from '../actions';
-import { DEFAULT_PAGE_SIZE, RIGHT_BENEFICIARY_SEARCH, ROWS_PER_PAGE_OPTIONS } from '../constants';
+import {
+  DEFAULT_PAGE_SIZE,
+  RIGHT_BENEFICIARY_SEARCH, ROWS_PER_PAGE_OPTIONS,
+  MODULE_NAME,
+  BENEFIT_PLAN_LABEL,
+} from '../constants';
 import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';
 
 function BenefitPlanBeneficiariesSearcher({
@@ -42,6 +51,27 @@ function BenefitPlanBeneficiariesSearcher({
   beneficiaryExport,
   errorBeneficiaryExport,
 }) {
+  const applyNumberCircle = (number) => (
+    <div style={{
+      color: '#ffffff',
+      backgroundColor: '#006273',
+      borderRadius: '50%',
+      padding: '5px',
+      minWidth: '40px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontWeight: 'bold',
+      fontSize: '12px',
+      width: '20px',
+      height: '45px',
+      marginTop: '7px',
+    }}
+    >
+      {number}
+    </div>
+  );
+
   const modulesManager = useModulesManager();
   const history = useHistory();
   const fetch = (params) => fetchBeneficiaries(params);
@@ -108,6 +138,8 @@ function BenefitPlanBeneficiariesSearcher({
   };
 
   const [failedExport, setFailedExport] = useState(false);
+  const [appliedCustomFilters, setAppliedCustomFilters] = useState([CLEARED_STATE_FILTER]);
+  const [appliedFiltersRowStructure, setAppliedFiltersRowStructure] = useState([CLEARED_STATE_FILTER]);
 
   useEffect(() => {
     setFailedExport(true);
@@ -128,6 +160,11 @@ function BenefitPlanBeneficiariesSearcher({
       readOnly={readOnly}
     />
   );
+
+  useEffect(() => {
+    // refresh when appliedCustomFilters is changed
+  }, [appliedCustomFilters]);
+
   return (
     !!benefitPlan?.id && (
     <div>
@@ -168,6 +205,15 @@ function BenefitPlanBeneficiariesSearcher({
         defaultPageSize={DEFAULT_PAGE_SIZE}
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
+        isCustomFiltering
+        objectForCustomFiltering={benefitPlan}
+        moduleName={MODULE_NAME}
+        objectType={BENEFIT_PLAN_LABEL}
+        appliedCustomFilters={appliedCustomFilters}
+        setAppliedCustomFilters={setAppliedCustomFilters}
+        appliedFiltersRowStructure={appliedFiltersRowStructure}
+        setAppliedFiltersRowStructure={setAppliedFiltersRowStructure}
+        applyNumberCircle={applyNumberCircle}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">
