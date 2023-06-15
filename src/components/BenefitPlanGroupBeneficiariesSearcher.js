@@ -3,7 +3,12 @@ import React, {
 } from 'react';
 import { injectIntl } from 'react-intl';
 import {
-  formatMessage, formatMessageWithValues, Searcher, downloadExport,
+  formatMessage,
+  formatMessageWithValues,
+  Searcher,
+  downloadExport,
+  useModulesManager,
+  useHistory,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -12,12 +17,16 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
+  IconButton,
+  Tooltip,
 } from '@material-ui/core';
+import PreviewIcon from '@material-ui/icons/ListAlt';
 import { fetchGroupBeneficiaries, downloadGroupBeneficiaries } from '../actions';
-import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from '../constants';
+import { DEFAULT_PAGE_SIZE, RIGHT_GROUP_SEARCH, ROWS_PER_PAGE_OPTIONS } from '../constants';
 import BenefitPlanGroupBeneficiariesFilter from './BenefitPlanGroupBeneficiariesFilter';
 
 function BenefitPlanGroupBeneficiariesSearcher({
+  rights,
   intl,
   benefitPlan,
   fetchGroupBeneficiaries,
@@ -33,6 +42,9 @@ function BenefitPlanGroupBeneficiariesSearcher({
   groupBeneficiaryExport,
   errorGroupBeneficiaryExport,
 }) {
+  const modulesManager = useModulesManager();
+  const history = useHistory();
+
   const fetch = (params) => fetchGroupBeneficiaries(params);
 
   const headers = () => [
@@ -40,10 +52,30 @@ function BenefitPlanGroupBeneficiariesSearcher({
     'socialProtection.groupBeneficiary.status',
   ];
 
-  const itemFormatters = () => [
-    (groupBeneficiary) => groupBeneficiary.id,
-    (groupBeneficiary) => groupBeneficiary.status,
-  ];
+  const openBenefitPackage = (groupBeneficiary) => history.push(`${benefitPlan?.id}/`
+  + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
+    + `/${groupBeneficiary?.id}`);
+
+  const itemFormatters = () => {
+    const result = [
+      (groupBeneficiary) => groupBeneficiary.id,
+      (groupBeneficiary) => groupBeneficiary.status,
+    ];
+
+    if (rights.includes(RIGHT_GROUP_SEARCH)) {
+      result.push((groupBeneficiary) => (
+        <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.overviewButtonTooltip')}>
+          <IconButton
+            onClick={() => openBenefitPackage(groupBeneficiary)}
+          >
+            <PreviewIcon />
+          </IconButton>
+        </Tooltip>
+      ));
+    }
+
+    return result;
+  };
 
   const sorts = () => [
     ['group_Id', false],
@@ -145,6 +177,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
 }
 
 const mapStateToProps = (state) => ({
+  rights: state.core?.user?.i_user?.rights ?? [],
   fetchingGroupBeneficiaries: state.socialProtection.fetchingGroupBeneficiaries,
   fetchedGroupBeneficiaries: state.socialProtection.fetchedGroupBeneficiaries,
   errorGroupBeneficiaries: state.socialProtection.errorGroupBeneficiaries,
