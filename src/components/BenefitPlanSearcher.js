@@ -44,7 +44,7 @@ function BenefitPlanSearcher({
   benefitPlansPageInfo,
   benefitPlansTotalCount,
   individualId,
-  beneficiaryStatus,
+  groupId,
 }) {
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
@@ -106,12 +106,12 @@ function BenefitPlanSearcher({
 
   function benefitPlanUpdatePageUrl(benefitPlan) {
     return (`${modulesManager.getRef('socialProtection.route.benefitPlan')}`
-     + `/${benefitPlan?.id}`);
+        + `/${benefitPlan?.id}`);
   }
 
   const onDoubleClick = (benefitPlan, newTab = false) => rights.includes(RIGHT_BENEFIT_PLAN_UPDATE)
-        && !deletedBenefitPlanUuids.includes(benefitPlan.id)
-        && historyPush(modulesManager, history, 'socialProtection.route.benefitPlan', [benefitPlan?.id], newTab);
+      && !deletedBenefitPlanUuids.includes(benefitPlan.id)
+      && historyPush(modulesManager, history, 'socialProtection.route.benefitPlan', [benefitPlan?.id], newTab);
 
   const onDelete = (benefitPlan) => setBenefitPlanToDelete(benefitPlan);
 
@@ -177,20 +177,30 @@ function BenefitPlanSearcher({
         filter: `individualId: "${individualId}"`,
       };
     }
-    if (beneficiaryStatus !== null && beneficiaryStatus !== undefined) {
-      filters.beneficiaryStatus = {
-        value: beneficiaryStatus,
-        filter: `beneficiaryStatus: "${beneficiaryStatus}"`,
+    if (groupId !== null && groupId !== undefined) {
+      filters.groupId = {
+        value: groupId,
+        filter: `groupId: "${groupId}"`,
       };
     }
     return filters;
   };
 
+  const benefitPlanFilter = (props) => (
+    <BenefitPlanFilter
+      intl={props.intl}
+      classes={props.classes}
+      filters={props.filters}
+      onChangeFilters={props.onChangeFilters}
+      showStatuses={individualId ?? groupId}
+    />
+  );
+
   return (
     <Searcher
       key={JSON.stringify(defaultFilters())}
       module="socialProtection"
-      FilterPane={BenefitPlanFilter}
+      FilterPane={benefitPlanFilter}
       fetch={fetch}
       items={benefitPlans}
       itemsPageInfo={benefitPlansPageInfo}
