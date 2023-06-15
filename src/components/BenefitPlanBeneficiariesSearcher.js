@@ -8,6 +8,8 @@ import {
   Searcher,
   downloadExport,
   CLEARED_STATE_FILTER,
+  useModulesManager,
+  useHistory,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -16,17 +18,21 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
+  IconButton,
+  Tooltip,
 } from '@material-ui/core';
+import PreviewIcon from '@material-ui/icons/ListAlt';
 import { fetchBeneficiaries, downloadBeneficiaries } from '../actions';
 import {
   DEFAULT_PAGE_SIZE,
-  ROWS_PER_PAGE_OPTIONS,
+  RIGHT_BENEFICIARY_SEARCH, ROWS_PER_PAGE_OPTIONS,
   MODULE_NAME,
   BENEFIT_PLAN_LABEL,
 } from '../constants';
 import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';
 
 function BenefitPlanBeneficiariesSearcher({
+  rights,
   intl,
   benefitPlan,
   fetchBeneficiaries,
@@ -63,6 +69,8 @@ function BenefitPlanBeneficiariesSearcher({
     </div>
   );
 
+  const modulesManager = useModulesManager();
+  const history = useHistory();
   const fetch = (params) => fetchBeneficiaries(params);
 
   const headers = () => [
@@ -70,14 +78,33 @@ function BenefitPlanBeneficiariesSearcher({
     'socialProtection.beneficiary.lastName',
     'socialProtection.beneficiary.dob',
     'socialProtection.beneficiary.status',
+    '',
   ];
 
-  const itemFormatters = () => [
-    (beneficiary) => beneficiary.individual.firstName,
-    (beneficiary) => beneficiary.individual.lastName,
-    (beneficiary) => beneficiary.individual.dob,
-    (beneficiary) => beneficiary.status,
-  ];
+  const openBenefitPackage = (beneficiary) => history.push(`${benefitPlan?.id}/`
+  + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
+    + `/${beneficiary?.id}`);
+
+  const itemFormatters = () => {
+    const result = [
+      (beneficiary) => beneficiary.individual.firstName,
+      (beneficiary) => beneficiary.individual.lastName,
+      (beneficiary) => beneficiary.individual.dob,
+      (beneficiary) => beneficiary.status,
+    ];
+    if (rights.includes(RIGHT_BENEFICIARY_SEARCH)) {
+      result.push((beneficiary) => (
+        <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.overviewButtonTooltip')}>
+          <IconButton
+            onClick={() => openBenefitPackage(beneficiary)}
+          >
+            <PreviewIcon />
+          </IconButton>
+        </Tooltip>
+      ));
+    }
+    return result;
+  };
 
   const sorts = () => [
     ['individual_FirstName', true],
@@ -201,6 +228,7 @@ function BenefitPlanBeneficiariesSearcher({
 }
 
 const mapStateToProps = (state) => ({
+  rights: state.core?.user?.i_user?.rights ?? [],
   fetchingBeneficiaries: state.socialProtection.fetchingBeneficiaries,
   fetchedBeneficiaries: state.socialProtection.fetchedBeneficiaries,
   errorBeneficiaries: state.socialProtection.errorBeneficiaries,

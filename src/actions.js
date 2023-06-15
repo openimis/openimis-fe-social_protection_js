@@ -59,6 +59,39 @@ export function fetchGroupBeneficiaries(params) {
   return graphql(payload, ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES);
 }
 
+export function fetchBeneficiary(modulesManager, variables) {
+  return graphqlWithVariables(
+    `
+      query ($beneficiaryUuid: UUID) {
+        beneficiary(id: $beneficiaryUuid) {
+          totalCount
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+          edges {
+            node {
+              id
+              jsonExt
+              individual {
+                uuid,
+                firstName
+                lastName
+                dob
+              }
+              status
+            }
+          }
+        }
+      } 
+    `,
+    variables,
+    ACTION_TYPE.GET_BENEFICIARY,
+  );
+}
+
 export function fetchBenefitPlan(modulesManager, params) {
   const payload = formatPageQuery('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));
   return graphql(payload, ACTION_TYPE.GET_BENEFIT_PLAN);
