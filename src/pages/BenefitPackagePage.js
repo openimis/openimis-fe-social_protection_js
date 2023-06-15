@@ -39,9 +39,7 @@ function BenefitPackagePage({
 
   useEffect(() => {
     if (beneficiaryUuid) {
-      dispatch(fetchBeneficiary(modulesManager, {
-        beneficiaryUuid,
-      }));
+      dispatch(fetchBeneficiary(modulesManager, { beneficiaryUuid }));
     }
     if (benefitPlanUuid) {
       dispatch(fetchBenefitPlan(modulesManager, [`id: "${benefitPlanUuid}"`]));

@@ -13,7 +13,7 @@ import {
 import { Person } from '@material-ui/icons';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import { EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE } from '../constants';
+import { EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE, FIELD_TYPES } from '../constants';
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -58,39 +58,38 @@ class BenefitPackageIndividualPanel extends FormPanel {
 
     const additionalFields = JSON.parse(jsonExt);
 
-    const arrayWithFields = Object.entries(additionalFields).map(([property, value]) => ({
-      field: { [property]: value },
-      fieldType: typeof value,
-    }));
-
-    return arrayWithFields;
+    return Object.entries(additionalFields).map(([property, value]) => {
+      const field = { [property]: value };
+      const fieldType = typeof value;
+      return { fieldType, field };
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
   renderProperType({ fieldType, field }) {
-    const NUMBER = 'number';
-    switch (fieldType) {
-      case NUMBER:
-        return (
-          <NumberInput
-            module="socialProtection"
-            readOnly
-            min={0}
-            displayZero
-            label={Object.keys(field)[0]}
-            value={Object.values(field)[0]}
-          />
-        );
-      default:
-        return (
-          <TextInput
-            module="socialProtection"
-            readOnly
-            label={Object.keys(field)[0]}
-            value={Object.values(field)[0]}
-          />
-        );
+    const { 0: label, 1: value } = Object.entries(field)[0];
+
+    if (fieldType === FIELD_TYPES.INTEGER || fieldType === FIELD_TYPES.NUMBER) {
+      return (
+        <NumberInput
+          module="socialProtection"
+          readOnly
+          min={0}
+          displayZero
+          label={label}
+          value={value}
+        />
+      );
     }
+
+    return (
+      <TextInput
+        module="socialProtection"
+        readOnly
+        label={label}
+        value={value}
+      />
+    );
   }
 
   render() {
