@@ -18,7 +18,6 @@ import {
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import HistoryIcon from '@material-ui/icons/History';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
-import { bindActionCreators } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import {
   DEFAULT_PAGE_SIZE, EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE, ROWS_PER_PAGE_OPTIONS,
