@@ -58,7 +58,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
 
   const itemFormatters = () => {
     const result = [
-      (groupBeneficiary) => groupBeneficiary.id,
+      (groupBeneficiary) => groupBeneficiary.group.id,
       (groupBeneficiary) => groupBeneficiary.status,
     ];
 

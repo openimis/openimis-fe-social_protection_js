@@ -182,6 +182,8 @@ function BenefitPlanBeneficiariesSearcher({
         defaultPageSize={DEFAULT_PAGE_SIZE}
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
+        cachePerTab
+        cacheTabName={status}
         isCustomFiltering
         objectForCustomFiltering={benefitPlan}
         moduleName={MODULE_NAME}

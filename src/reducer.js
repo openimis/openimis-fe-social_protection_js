@@ -181,13 +181,23 @@ function reducer(
         ...state,
         fetchingGroupBeneficiaries: false,
         fetchedGroupBeneficiaries: true,
-        groupBeneficiaries: parseData(action.payload.data.groupBeneficiary)?.map((groupBeneficiary) => ({
-          ...groupBeneficiary,
-          id: decodeId(groupBeneficiary.id),
-        })),
-        beneficiariesPageInfo: pageInfo(action.payload.data.beneficiary),
-        beneficiariesTotalCount: action.payload.data.beneficiary ? action.payload.data.beneficiary.totalCount : null,
-        errorBeneficiaries: formatGraphQLError(action.payload),
+        groupBeneficiaries: parseData(action.payload.data.groupBeneficiary)?.map((groupBeneficiary) => {
+          const response = ({
+            ...groupBeneficiary,
+            id: decodeId(groupBeneficiary.id),
+          });
+          if (response?.group?.id) {
+            response.group = ({
+              ...response.group,
+              id: decodeId(response.group.id),
+            });
+          }
+          return response;
+        }),
+        groupBeneficiariesPageInfo: pageInfo(action.payload.data.groupBeneficiary),
+        groupBeneficiariesTotalCount: action.payload.data.groupBeneficiary
+          ? action.payload.data.groupBeneficiary.totalCount : null,
+        errorGroupBeneficiaries: formatGraphQLError(action.payload),
       };
     case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
