@@ -30,6 +30,7 @@ import {
   BENEFIT_PLAN_LABEL,
 } from '../constants';
 import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';
+import { applyNumberCircle } from '../util/searcher-utils';
 
 function BenefitPlanBeneficiariesSearcher({
   rights,
@@ -48,27 +49,6 @@ function BenefitPlanBeneficiariesSearcher({
   beneficiaryExport,
   errorBeneficiaryExport,
 }) {
-  const applyNumberCircle = (number) => (
-    <div style={{
-      color: '#ffffff',
-      backgroundColor: '#006273',
-      borderRadius: '50%',
-      padding: '5px',
-      minWidth: '40px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontWeight: 'bold',
-      fontSize: '12px',
-      width: '20px',
-      height: '45px',
-      marginTop: '7px',
-    }}
-    >
-      {number}
-    </div>
-  );
-
   const modulesManager = useModulesManager();
   const history = useHistory();
   const fetch = (params) => fetchBeneficiaries(params);

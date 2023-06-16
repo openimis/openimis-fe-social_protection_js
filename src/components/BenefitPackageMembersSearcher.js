@@ -6,6 +6,7 @@ import {
   formatMessage,
   Searcher,
   downloadExport,
+  CLEARED_STATE_FILTER,
 } from '@openimis/fe-core';
 import {
   IconButton,
@@ -20,9 +21,11 @@ import HistoryIcon from '@material-ui/icons/History';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import { connect, useDispatch } from 'react-redux';
 import {
-  DEFAULT_PAGE_SIZE, EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE, ROWS_PER_PAGE_OPTIONS,
+  BENEFIT_PLAN_LABEL,
+  DEFAULT_PAGE_SIZE, EMPTY_STRING, MODULE_NAME, RIGHT_INDIVIDUAL_UPDATE, ROWS_PER_PAGE_OPTIONS,
 } from '../constants';
 import BenefitPackageMembersFilters from './BenefitPackageMembersFilters';
+import { applyNumberCircle } from '../util/searcher-utils';
 
 function BenefitPackageMembersSearcher({
   rights,
@@ -39,10 +42,12 @@ function BenefitPackageMembersSearcher({
   errorMembers,
   membersExport,
   errorMembersExport,
+  benefitPlan,
 }) {
   const dispatch = useDispatch();
 
-  const fetchIndividuals = modulesManager.getRef('individual.actions.fetchIndividuals');
+  const fetchIndividualsRef = modulesManager.getRef('individual.actions.fetchIndividuals');
+
   const downloadIndividualsRef = modulesManager.getRef('individual.actions.downloadIndividuals');
 
   const openIndividual = (individual) => history.push(
@@ -50,7 +55,7 @@ function BenefitPackageMembersSearcher({
     + `/${individual?.id}`,
   );
 
-  const fetch = (params) => dispatch(fetchIndividuals(params));
+  const fetch = (params) => dispatch(fetchIndividualsRef(params));
 
   const downloadIndividuals = (params) => dispatch(downloadIndividualsRef(params));
 
@@ -147,6 +152,8 @@ function BenefitPackageMembersSearcher({
   );
 
   const [failedExport, setFailedExport] = useState(false);
+  const [appliedCustomFilters, setAppliedCustomFilters] = useState([CLEARED_STATE_FILTER]);
+  const [appliedFiltersRowStructure, setAppliedFiltersRowStructure] = useState([CLEARED_STATE_FILTER]);
 
   useEffect(() => {
     setFailedExport(true);
@@ -157,6 +164,10 @@ function BenefitPackageMembersSearcher({
       downloadExport(membersExport, `${formatMessage(intl, 'socialProtection', 'export.filename')}.csv`)();
     }
   }, [membersExport]);
+
+  useEffect(() => {
+    // refresh when appliedCustomFilters is changed
+  }, [appliedCustomFilters]);
 
   return (
     <>
@@ -201,6 +212,15 @@ function BenefitPackageMembersSearcher({
         }}
         exportFieldLabel={formatMessage(intl, 'individual', 'export.label')}
         cacheFiltersKey="individualsFilterCache"
+        isCustomFiltering
+        objectForCustomFiltering={benefitPlan}
+        moduleName={MODULE_NAME}
+        objectType={BENEFIT_PLAN_LABEL}
+        appliedCustomFilters={appliedCustomFilters}
+        setAppliedCustomFilters={setAppliedCustomFilters}
+        appliedFiltersRowStructure={appliedFiltersRowStructure}
+        setAppliedFiltersRowStructure={setAppliedFiltersRowStructure}
+        applyNumberCircle={applyNumberCircle}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">

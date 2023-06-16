@@ -23,7 +23,7 @@ function BenefitPackageMembersTabLabel({
 }
 
 function BenefitPackageMembersTabPanel({
-  value, groupBeneficiaries, modulesManager, rights, history,
+  value, groupBeneficiaries, modulesManager, rights, history, benefitPlan,
 }) {
   if (groupBeneficiaries) {
     return (
@@ -39,6 +39,7 @@ function BenefitPackageMembersTabPanel({
           groupBeneficiaries={groupBeneficiaries}
           rights={rights}
           history={history}
+          benefitPlan={benefitPlan}
         />
       </PublishedComponent>
     );

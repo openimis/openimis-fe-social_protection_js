@@ -32,7 +32,7 @@ const styles = (theme) => ({
 });
 
 function BenefitPackageTabPanel({
-  intl, rights, classes, groupBeneficiaries, modulesManager, history,
+  intl, rights, classes, groupBeneficiaries, modulesManager, history, benefitPlan,
 }) {
   const [activeTab, setActiveTab] = useState(groupBeneficiaries
     ? BENEFIT_PACKAGE_MEMBERS_TAB_VALUE : BENEFIT_PACKAGE_PAYMENTS_TAB_VALUE);
@@ -65,6 +65,7 @@ function BenefitPackageTabPanel({
         groupBeneficiaries={groupBeneficiaries}
         modulesManager={modulesManager}
         history={history}
+        benefitPlan={benefitPlan}
       />
     </Paper>
   );
