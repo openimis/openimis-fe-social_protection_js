@@ -2,50 +2,79 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import {
   formatMessageWithValues,
+  formatDateFromISO,
   Searcher,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from '../constants';
+import { connect, useDispatch } from 'react-redux';
+import { DEFAULT_PAGE_SIZE, EMPTY_STRING, ROWS_PER_PAGE_OPTIONS } from '../constants';
 import BenefitPackageTabFilters from './BenefitPackageTabFilters';
+// import { fetchBeneficiaries } from '../actions';
 
 function BenefitPackageMembersSearcher({
   intl,
-  beneficiariesPageInfo,
+  membersPageInfo,
   readOnly,
+  modulesManager,
+  groupBeneficiaries: { group },
+  members,
+  membersTotalCount,
+  fetchedMembers,
+  fetchingMembers,
+  errorMembers,
 }) {
-  const fetch = () => {};
+  const fetchIndividuals = modulesManager.getRef('individual.actions.fetchIndividuals');
+  const dispatch = useDispatch();
 
-  const headers = () => [
-    'socialProtection.beneficiary.firstName',
-    'socialProtection.beneficiary.lastName',
-    'socialProtection.beneficiary.dob',
-    'socialProtection.beneficiary.status',
-    '',
-  ];
+  // const fetch = (params) => dispatch(fetchBeneficiaries(params));
+  const fetch = (params) => dispatch(fetchIndividuals(params));
+
+  const headers = () => {
+    const headers = [
+      'individual.firstName',
+      'individual.lastName',
+      'individual.dob',
+      '',
+    ];
+    return headers;
+  };
 
   const itemFormatters = () => {
-    const result = [
-      (beneficiary) => beneficiary.individual.firstName,
-      (beneficiary) => beneficiary.individual.lastName,
-      (beneficiary) => beneficiary.individual.dob,
-      (beneficiary) => beneficiary.status,
+    const formatters = [
+      (individual) => individual.firstName,
+      (individual) => individual.lastName,
+      (individual) => (individual.dob ? formatDateFromISO(modulesManager, intl, individual.dob) : EMPTY_STRING),
     ];
-    return result;
+    return formatters;
   };
 
   const sorts = () => [
-    ['individual_FirstName', true],
-    ['individual_LastName', true],
-    ['individual_Dob', true],
+    ['firstName', true],
+    ['lastName', true],
     ['status', false],
   ];
+
+  const defaultFilters = () => {
+    const filters = {
+      isDeleted: {
+        value: false,
+        filter: 'isDeleted: false',
+      },
+    };
+    if (group.id !== null && group.id !== undefined) {
+      filters.groupId = {
+        value: group.id,
+        filter: `groupId: "${group.id}"`,
+      };
+    }
+    return filters;
+  };
 
   const beneficiaryFilter = (props) => (
     <BenefitPackageTabFilters
       intl={props.intl}
       classes={props.classes}
-      filters={props.filterrs}
+      filters={props.filters}
       onChangeFilters={props.onChangeFilters}
       readOnly={readOnly}
     />
@@ -56,40 +85,39 @@ function BenefitPackageMembersSearcher({
       module="benefitPlan"
       FilterPane={beneficiaryFilter}
       fetch={fetch}
-      itemsPageInfo={beneficiariesPageInfo}
+      items={members}
+      itemsPageInfo={membersPageInfo}
+      fetchingItems={fetchingMembers}
+      fetchedItems={fetchedMembers}
+      errorItems={errorMembers}
       tableTitle={formatMessageWithValues(
         intl,
         'socialProtection',
         'beneficiaries.members.searcherResultsTitle',
         {
-          individualsTotalCount: 0,
+          individualsTotalCount: membersTotalCount,
         },
       )}
       headers={headers}
       itemFormatters={itemFormatters}
       sorts={sorts}
+      defaultFilters={defaultFilters()}
       rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
       defaultPageSize={DEFAULT_PAGE_SIZE}
     />
   );
 }
 
-// Temporarily based on beneficiariesPageInfo to enable displaying searcher
 const mapStateToProps = (state) => ({
   rights: state.core?.user?.i_user?.rights ?? [],
-  beneficiariesPageInfo: state.socialProtection.beneficiariesPageInfo,
-  fetchingPayments: null,
-  fetchedPayments: null,
-  payments: null,
-  errorPayments: null,
-  paymentsPageInfo: null,
-  fetchingPaymentsExport: null,
-  fetchedPaymentsExport: null,
-  paymentsExport: null,
-  paymentsExportError: null,
-  paymentsExportPageInfo: null,
+  fetchingMembers: state.individual.fetchingIndividuals,
+  fetchedMembers: state.individual.fetchedIndividuals,
+  errorMembers: state.individual.errorIndividuals,
+  members: state.individual.individuals,
+  membersPageInfo: state.individual.individualsPageInfo,
+  membersTotalCount: state.individual.individualsTotalCount,
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ }, dispatch);
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPackageMembersSearcher));

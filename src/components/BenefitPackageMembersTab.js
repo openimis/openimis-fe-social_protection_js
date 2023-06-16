@@ -22,7 +22,7 @@ function BenefitPackageMembersTabLabel({
   return null;
 }
 
-function BenefitPackageMembersTabPanel({ value, groupBeneficiaries }) {
+function BenefitPackageMembersTabPanel({ value, groupBeneficiaries, modulesManager }) {
   if (groupBeneficiaries) {
     return (
       <PublishedComponent
@@ -31,7 +31,11 @@ function BenefitPackageMembersTabPanel({ value, groupBeneficiaries }) {
         index={BENEFIT_PACKAGE_MEMBERS_TAB_VALUE}
         value={value}
       >
-        <BenefitPackageMembersSearcher readOnly />
+        <BenefitPackageMembersSearcher
+          readOnly
+          modulesManager={modulesManager}
+          groupBeneficiaries={groupBeneficiaries}
+        />
       </PublishedComponent>
     );
   }

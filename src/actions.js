@@ -77,6 +77,7 @@ export function fetchBeneficiariesGroup(modulesManager, variables) {
               jsonExt
               group {
                 uuid,
+                id,
               }
               status
             }
