@@ -22,7 +22,9 @@ function BenefitPackageMembersTabLabel({
   return null;
 }
 
-function BenefitPackageMembersTabPanel({ value, groupBeneficiaries, modulesManager }) {
+function BenefitPackageMembersTabPanel({
+  value, groupBeneficiaries, modulesManager, rights, history,
+}) {
   if (groupBeneficiaries) {
     return (
       <PublishedComponent
@@ -35,6 +37,8 @@ function BenefitPackageMembersTabPanel({ value, groupBeneficiaries, modulesManag
           readOnly
           modulesManager={modulesManager}
           groupBeneficiaries={groupBeneficiaries}
+          rights={rights}
+          history={history}
         />
       </PublishedComponent>
     );
