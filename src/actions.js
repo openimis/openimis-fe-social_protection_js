@@ -185,6 +185,21 @@ export function updateBeneficiary(beneficiary, clientMutationLabel) {
   );
 }
 
+export function updateGroupBeneficiary(beneficiary, clientMutationLabel) {
+  const mutation = formatMutation('updateGroupBeneficiary', formatBeneficiaryGQL(beneficiary), clientMutationLabel);
+  const requestedDateTime = new Date();
+  return graphql(
+    mutation.payload,
+    [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.UPDATE_GROUP_BENEFICIARY), ERROR(ACTION_TYPE.MUTATION)],
+    {
+      actionType: ACTION_TYPE.UPDATE_BENEFIT_PLAN,
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}
+
 export function benefitPlanCodeValidationCheck(mm, variables) {
   return graphqlWithVariables(
     `

@@ -13,9 +13,10 @@ import {
   DialogActions,
   DialogTitle,
 } from '@material-ui/core';
-import { fetchGroupBeneficiaries, downloadGroupBeneficiaries } from '../actions';
-import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from '../constants';
+import { fetchGroupBeneficiaries, downloadGroupBeneficiaries, updateGroupBeneficiary } from '../actions';
+import { DEFAULT_PAGE_SIZE, RIGHT_BENEFICIARY_UPDATE, ROWS_PER_PAGE_OPTIONS } from '../constants';
 import BenefitPlanGroupBeneficiariesFilter from './BenefitPlanGroupBeneficiariesFilter';
+import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
 function BenefitPlanGroupBeneficiariesSearcher({
   intl,
@@ -29,9 +30,11 @@ function BenefitPlanGroupBeneficiariesSearcher({
   groupBeneficiariesPageInfo,
   groupBeneficiariesTotalCount,
   status,
+  rights,
   readOnly,
   groupBeneficiaryExport,
   errorGroupBeneficiaryExport,
+  updateGroupBeneficiary,
 }) {
   const fetch = (params) => fetchGroupBeneficiaries(params);
 
@@ -40,9 +43,28 @@ function BenefitPlanGroupBeneficiariesSearcher({
     'socialProtection.groupBeneficiary.status',
   ];
 
+  const handleStatusOnChange = (groupBeneficiary, status) => {
+    if (groupBeneficiary && status) {
+      const editedGroupBeneficiary = { ...groupBeneficiary, status };
+      updateGroupBeneficiary(
+        editedGroupBeneficiary,
+        formatMessageWithValues(intl, 'socialProtection', 'groupBeneficiary.update.mutationLabel', {
+          id: editedGroupBeneficiary.group.id,
+        }),
+      );
+    }
+  };
+
   const itemFormatters = () => [
     (groupBeneficiary) => groupBeneficiary.group.id,
-    (groupBeneficiary) => groupBeneficiary.status,
+    (groupBeneficiary) => (rights.includes(RIGHT_BENEFICIARY_UPDATE) ? (
+      <BeneficiaryStatusPicker
+        withLabel={false}
+        nullLabel={formatMessage(intl, 'socialProtection', 'any')}
+        value={groupBeneficiary.status}
+        onChange={(status) => handleStatusOnChange(groupBeneficiary, status)}
+      />
+    ) : groupBeneficiary.status),
   ];
 
   const sorts = () => [
@@ -128,6 +150,8 @@ function BenefitPlanGroupBeneficiariesSearcher({
         defaultPageSize={DEFAULT_PAGE_SIZE}
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanGroupBeneficiaryFilterCache"
+        cachePerTab
+        cacheTabName={status}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">
@@ -145,6 +169,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
 }
 
 const mapStateToProps = (state) => ({
+  rights: state.core?.user?.i_user?.rights ?? [],
   fetchingGroupBeneficiaries: state.socialProtection.fetchingGroupBeneficiaries,
   fetchedGroupBeneficiaries: state.socialProtection.fetchedGroupBeneficiaries,
   errorGroupBeneficiaries: state.socialProtection.errorGroupBeneficiaries,
@@ -160,7 +185,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  fetchGroupBeneficiaries, downloadGroupBeneficiaries,
+  fetchGroupBeneficiaries, downloadGroupBeneficiaries, updateGroupBeneficiary,
 }, dispatch);
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanGroupBeneficiariesSearcher));

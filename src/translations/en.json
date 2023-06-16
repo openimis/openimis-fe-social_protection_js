@@ -12,6 +12,7 @@
   "socialProtection.beneficiaries.payments.searcherResultsTitle": "{beneficiariesTotalCount} Payments Found",
   "socialProtection.beneficiaries.grievances.searcherResultsTitle": "{beneficiariesTotalCount} Grievances Found",
   "socialProtection.beneficiary.update.mutationLabel": "Update beneficiary {firstName} {lastName}",
+  "socialProtection.groupBeneficiary.update.mutationLabel": "Update group beneficiary {id}",
   "socialProtection.groupBeneficiaries.searcherResultsTitle": "{groupBeneficiariesTotalCount} Group Beneficiaries",
   "socialProtection.benefitPlan.dateValidTo": "Date to",
   "socialProtection.benefitPlan.dateValidFrom": "Date from",
