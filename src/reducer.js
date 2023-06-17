@@ -30,7 +30,9 @@ export const ACTION_TYPE = {
   BENEFIT_PLAN_SCHEMA_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
   SEARCH_BENEFICIARIES: 'BENEFICIARY_BENEFICIARIES',
   SEARCH_GROUP_BENEFICIARIES: 'GROUP_BENEFICIARY_GROUP_BENEFICIARIES',
+  UPDATE_GROUP_BENEFICIARY: 'GROUP_BENEFICIARY_UPDATE_GROUP_BENEFICIARY',
   GET_BENEFICIARY: 'BENEFICIARY_BENEFICIARY',
+  UPDATE_BENEFICIARY: 'BENEFICIARY_UPDATE_BENEFICIARY',
   BENEFICIARY_EXPORT: 'BENEFICIARY_EXPORT',
   GROUP_BENEFICIARY_EXPORT: 'GROUP_BENEFICIARY_EXPORT',
 };
@@ -497,6 +499,10 @@ function reducer(
       return dispatchMutationResp(state, 'deleteBenefitPlan', action);
     case SUCCESS(ACTION_TYPE.UPDATE_BENEFIT_PLAN):
       return dispatchMutationResp(state, 'updateBenefitPlan', action);
+    case SUCCESS(ACTION_TYPE.UPDATE_BENEFICIARY):
+      return dispatchMutationResp(state, 'updateBeneficiary', action);
+    case SUCCESS(ACTION_TYPE.UPDATE_GROUP_BENEFICIARY):
+      return dispatchMutationResp(state, 'updateGroupBeneficiary', action);
     default:
       return state;
   }
