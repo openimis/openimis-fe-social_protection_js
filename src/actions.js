@@ -59,6 +59,82 @@ export function fetchGroupBeneficiaries(params) {
   return graphql(payload, ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES);
 }
 
+export function fetchBeneficiariesGroup(modulesManager, variables) {
+  return graphqlWithVariables(
+    `
+      query ($groupBeneficiariesUuid: UUID) {
+        groupBeneficiary(id: $groupBeneficiariesUuid) {
+          totalCount
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+          edges {
+            node {
+              id
+              jsonExt
+              group {
+                uuid,
+                id,
+              }
+              status
+            }
+          }
+        }
+      } 
+    `,
+    variables,
+    ACTION_TYPE.GET_BENEFICIARIES_GROUP,
+  );
+}
+
+export function fetchBeneficiary(modulesManager, variables) {
+  return graphqlWithVariables(
+    `
+      query ($beneficiaryUuid: UUID) {
+        beneficiary(id: $beneficiaryUuid) {
+          totalCount
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+          edges {
+            node {
+              id
+              jsonExt
+              individual {
+                uuid,
+                firstName
+                lastName
+                dob
+              }
+              status
+            }
+          }
+        }
+      } 
+    `,
+    variables,
+    ACTION_TYPE.GET_BENEFICIARY,
+  );
+}
+
+export const clearBeneficiary = () => (dispatch) => {
+  dispatch({
+    type: CLEAR(ACTION_TYPE.GET_BENEFICIARY),
+  });
+};
+
+export const clearBeneficiariesGroup = () => (dispatch) => {
+  dispatch({
+    type: CLEAR(ACTION_TYPE.GET_BENEFICIARIES_GROUP),
+  });
+};
+
 export function fetchBenefitPlan(modulesManager, params) {
   const payload = formatPageQuery('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));
   return graphql(payload, ACTION_TYPE.GET_BENEFIT_PLAN);
@@ -101,6 +177,12 @@ function formatBenefitPlanGQL(benefitPlan) {
     ${benefitPlan?.jsonExt ? `jsonExt: ${JSON.stringify(benefitPlan.jsonExt)}` : ''}`;
 }
 
+function formatBeneficiaryGQL(beneficiary) {
+  return `
+    ${beneficiary?.id ? `id: "${beneficiary.id}"` : ''}
+    ${beneficiary?.status ? `status: ${beneficiary.status}` : ''}`;
+}
+
 export function createBenefitPlan(benefitPlan, clientMutationLabel) {
   const mutation = formatMutation('createBenefitPlan', formatBenefitPlanGQL(benefitPlan), clientMutationLabel);
   const requestedDateTime = new Date();
@@ -122,6 +204,36 @@ export function updateBenefitPlan(benefitPlan, clientMutationLabel) {
   return graphql(
     mutation.payload,
     [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.UPDATE_BENEFIT_PLAN), ERROR(ACTION_TYPE.MUTATION)],
+    {
+      actionType: ACTION_TYPE.UPDATE_BENEFIT_PLAN,
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}
+
+export function updateBeneficiary(beneficiary, clientMutationLabel) {
+  const mutation = formatMutation('updateBeneficiary', formatBeneficiaryGQL(beneficiary), clientMutationLabel);
+  const requestedDateTime = new Date();
+  return graphql(
+    mutation.payload,
+    [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.UPDATE_BENEFICIARY), ERROR(ACTION_TYPE.MUTATION)],
+    {
+      actionType: ACTION_TYPE.UPDATE_BENEFIT_PLAN,
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}
+
+export function updateGroupBeneficiary(beneficiary, clientMutationLabel) {
+  const mutation = formatMutation('updateGroupBeneficiary', formatBeneficiaryGQL(beneficiary), clientMutationLabel);
+  const requestedDateTime = new Date();
+  return graphql(
+    mutation.payload,
+    [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.UPDATE_GROUP_BENEFICIARY), ERROR(ACTION_TYPE.MUTATION)],
     {
       actionType: ACTION_TYPE.UPDATE_BENEFIT_PLAN,
       clientMutationId: mutation.clientMutationId,

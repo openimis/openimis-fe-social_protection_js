@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import {
-  withModulesManager,
+  clearConfirm,
+  coreConfirm,
   formatMessage,
   formatMessageWithValues,
-  Searcher,
-  coreConfirm,
-  clearConfirm,
-  journalize,
-  withHistory,
   historyPush,
+  journalize,
+  Searcher,
+  withHistory,
+  withModulesManager,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -18,11 +18,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {
   DEFAULT_PAGE_SIZE,
-  ROWS_PER_PAGE_OPTIONS,
-  RIGHT_BENEFIT_PLAN_UPDATE,
   RIGHT_BENEFIT_PLAN_DELETE,
+  RIGHT_BENEFIT_PLAN_UPDATE,
+  ROWS_PER_PAGE_OPTIONS,
 } from '../constants';
-import { fetchBenefitPlans, deleteBenefitPlan } from '../actions';
+import { deleteBenefitPlan, fetchBenefitPlans } from '../actions';
 import BenefitPlanFilter from './BenefitPlanFilter';
 
 function BenefitPlanSearcher({
@@ -45,6 +45,7 @@ function BenefitPlanSearcher({
   benefitPlansTotalCount,
   individualId,
   groupId,
+  beneficiaryStatus,
 }) {
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
@@ -164,27 +165,30 @@ function BenefitPlanSearcher({
 
   const isRowDisabled = (_, benefitPlan) => deletedBenefitPlanUuids.includes(benefitPlan.id);
 
-  const defaultFilters = () => {
-    const filters = {
-      isDeleted: {
-        value: false,
-        filter: 'isDeleted: false',
-      },
-    };
-    if (individualId !== null && individualId !== undefined) {
-      filters.individualId = {
+  const defaultFilters = () => ({
+    isDeleted: {
+      value: false,
+      filter: 'isDeleted: false',
+    },
+    ...(individualId && {
+      individualId: {
         value: individualId,
         filter: `individualId: "${individualId}"`,
-      };
-    }
-    if (groupId !== null && groupId !== undefined) {
-      filters.groupId = {
+      },
+    }),
+    ...(groupId && {
+      groupId: {
         value: groupId,
         filter: `groupId: "${groupId}"`,
-      };
-    }
-    return filters;
-  };
+      },
+    }),
+    ...(beneficiaryStatus && {
+      beneficiaryStatus: {
+        value: beneficiaryStatus,
+        filter: `beneficiaryStatus: "${beneficiaryStatus}"`,
+      },
+    }),
+  });
 
   const benefitPlanFilter = (props) => (
     <BenefitPlanFilter
@@ -198,7 +202,6 @@ function BenefitPlanSearcher({
 
   return (
     <Searcher
-      key={JSON.stringify(defaultFilters())}
       module="socialProtection"
       FilterPane={benefitPlanFilter}
       fetch={fetch}

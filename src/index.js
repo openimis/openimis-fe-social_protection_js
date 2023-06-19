@@ -6,6 +6,7 @@ import reducer from './reducer';
 import BenefitPlanMainMenu from './menus/BenefitPlanMainMenu';
 import BenefitPlansPage from './pages/BenefitPlansPage';
 import BenefitPlanPage from './pages/BenefitPlanPage';
+import BenefitPackagePage from './pages/BenefitPackagePage';
 import BeneficiaryStatusPicker from './pickers/BeneficiaryStatusPicker';
 import {
   BenefitPlanBeneficiariesListTabPanel,
@@ -27,10 +28,20 @@ import {
   BenefitPlanBeneficiariesGraduatedTabLabel,
   BenefitPlanBeneficiariesGraduatedTabPanel,
 } from './components/BenefitPlanBeneficiariesGraduatedTab';
+import {
+  BenefitPackagePaymentsTabLabel,
+  BenefitPackagePaymentsTabPanel,
+} from './components/BenefitPackagePaymentsTab';
+import {
+  BenefitPackageGrievancesTabLabel,
+  BenefitPackageGrievancesTabPanel,
+} from './components/BenefitPackageGrievancesTab';
 import BenefitPlanSearcher from './components/BenefitPlanSearcher';
+import { BenefitPackageMembersTabLabel, BenefitPackageMembersTabPanel } from './components/BenefitPackageMembersTab';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
+const ROUTE_BENEFIT_PACKAGE = 'benefitPackage';
 
 const DEFAULT_CONFIG = {
   translations: [{ key: 'en', messages: messages_en }],
@@ -39,9 +50,18 @@ const DEFAULT_CONFIG = {
   'core.Router': [
     { path: ROUTE_BENEFIT_PLANS, component: BenefitPlansPage },
     { path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`, component: BenefitPlanPage },
+    {
+      path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/individual/:beneficiary_uuid?`,
+      component: BenefitPackagePage,
+    },
+    {
+      path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/group/:group_beneficiaries_uuid?`,
+      component: BenefitPackagePage,
+    },
   ],
   refs: [
     { key: 'socialProtection.route.benefitPlan', ref: ROUTE_BENEFIT_PLAN },
+    { key: 'socialProtection.route.benefitPackage', ref: ROUTE_BENEFIT_PACKAGE },
     { key: 'socialProtection.BeneficiaryStatusPicker', ref: BeneficiaryStatusPicker },
     { key: 'socialProtection.BenefitPlanSearcher', ref: BenefitPlanSearcher },
   ],
@@ -57,6 +77,16 @@ const DEFAULT_CONFIG = {
     BenefitPlanBeneficiariesActiveTabPanel,
     BenefitPlanBeneficiariesGraduatedTabPanel,
     BenefitPlanBeneficiariesSuspendedTabPanel],
+  'benefitPackage.TabPanel.label': [
+    BenefitPackageMembersTabLabel,
+    BenefitPackagePaymentsTabLabel,
+    BenefitPackageGrievancesTabLabel,
+  ],
+  'benefitPackage.TabPanel.panel': [
+    BenefitPackageMembersTabPanel,
+    BenefitPackagePaymentsTabPanel,
+    BenefitPackageGrievancesTabPanel,
+  ],
 };
 
 export const SocialProtectionModule = (cfg) => ({ ...DEFAULT_CONFIG, ...cfg });
