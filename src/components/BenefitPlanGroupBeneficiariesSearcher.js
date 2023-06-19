@@ -149,7 +149,8 @@ function BenefitPlanGroupBeneficiariesSearcher({
 
   const [failedExport, setFailedExport] = useState(false);
 
-  const isRowDisabled = (_, groupBeneficiary) => updatedGroupBeneficiaries.some((item) => item.id === groupBeneficiary.id);
+  const isRowDisabled = (_, groupBeneficiary) => (
+    updatedGroupBeneficiaries.some((item) => item.id === groupBeneficiary.id));
 
   useEffect(() => {
     setFailedExport(true);

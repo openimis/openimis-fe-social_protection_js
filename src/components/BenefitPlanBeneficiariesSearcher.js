@@ -134,7 +134,8 @@ function BenefitPlanBeneficiariesSearcher({
     return result;
   };
 
-  const isRowDisabled = (_, beneficiary) => updatedBeneficiaries.some((item) => item.id === beneficiary.id);
+  const isRowDisabled = (_, beneficiary) => (
+    updatedBeneficiaries.some((item) => item.id === beneficiary.id));
 
   const sorts = () => [
     ['individual_FirstName', true],
