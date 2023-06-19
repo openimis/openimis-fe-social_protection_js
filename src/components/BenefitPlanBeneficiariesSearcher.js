@@ -213,7 +213,7 @@ function BenefitPlanBeneficiariesSearcher({
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
         cachePerTab
-        cacheTabName={status}
+        cacheTabName={`${benefitPlan?.id}-${status}`}
         isCustomFiltering
         objectForCustomFiltering={benefitPlan}
         moduleName={MODULE_NAME}

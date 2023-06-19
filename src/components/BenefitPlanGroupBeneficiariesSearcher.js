@@ -187,7 +187,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanGroupBeneficiaryFilterCache"
         cachePerTab
-        cacheTabName={status}
+        cacheTabName={`${benefitPlan?.id}-${status}`}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">
