@@ -132,7 +132,7 @@ function BenefitPackageMembersSearcher({
         filter: 'isDeleted: false',
       },
     };
-    if (group.id !== null && group.id !== undefined) {
+    if (group.uuid !== null && group.uuid !== undefined) {
       filters.groupId = {
         value: group.uuid,
         filter: `groupId: "${group.uuid}"`,
