@@ -5,7 +5,7 @@ import { BENEFICIARY_STATUS_LIST } from '../constants';
 
 function BeneficiaryStatusPicker(props) {
   const {
-    required, withNull, readOnly, onChange, value, nullLabel,
+    required, withNull, readOnly, onChange, value, nullLabel, withLabel,
   } = props;
   return (
     <ConstantBasedPicker
@@ -18,6 +18,7 @@ function BeneficiaryStatusPicker(props) {
       onChange={onChange}
       value={value}
       nullLabel={nullLabel}
+      withLabel={withLabel}
     />
   );
 }
