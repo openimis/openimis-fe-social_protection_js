@@ -8,12 +8,13 @@ import {
   TextInput,
   FormPanel,
   formatMessage,
+  createFieldsBasedOnJSON,
+  renderInputComponent,
 } from '@openimis/fe-core';
 import { Person } from '@material-ui/icons';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import { EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE } from '../constants';
-import { createAdditionalField, renderProperType } from '../util/render-jsonExt';
+import { EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE, SOCIAL_PROTECTION_MODULE } from '../constants';
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -34,11 +35,16 @@ function renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes,
         <Grid item>
           <Typography>
             <FormattedMessage
-              module="socialProtection"
+              module={SOCIAL_PROTECTION_MODULE}
               id="socialProtection.benefitPackage.IndividualDetailPanel.title"
             />
             { !!individualUuid && (
-            <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.IndividualDetailPanel.tooltip')}>
+            <Tooltip title={formatMessage(
+              intl,
+              SOCIAL_PROTECTION_MODULE,
+              'benefitPackage.IndividualDetailPanel.tooltip',
+            )}
+            >
               <IconButton onClick={openIndividual} disabled={!rights.includes(RIGHT_INDIVIDUAL_UPDATE)}>
                 <Person />
               </IconButton>
@@ -61,7 +67,7 @@ class BenefitPackageIndividualPanel extends FormPanel {
     } = this.props;
     const { uuid } = individual;
 
-    const jsonExtFields = createAdditionalField(jsonExt);
+    const jsonExtFields = createFieldsBasedOnJSON(jsonExt);
 
     return (
       <>
@@ -71,7 +77,7 @@ class BenefitPackageIndividualPanel extends FormPanel {
         <Grid container className={classes.item}>
           <Grid item xs={3} className={classes.item}>
             <TextInput
-              module="socialProtection"
+              module={SOCIAL_PROTECTION_MODULE}
               label="beneficiary.firstName"
               value={individual.firstName}
               readOnly={readOnly}
@@ -79,7 +85,7 @@ class BenefitPackageIndividualPanel extends FormPanel {
           </Grid>
           <Grid item xs={3} className={classes.item}>
             <TextInput
-              module="socialProtection"
+              module={SOCIAL_PROTECTION_MODULE}
               label="beneficiary.lastName"
               value={individual.lastName}
               readOnly={readOnly}
@@ -88,7 +94,7 @@ class BenefitPackageIndividualPanel extends FormPanel {
           <Grid item xs={3} className={classes.item}>
             <PublishedComponent
               pubRef="core.DatePicker"
-              module="socialProtection"
+              module={SOCIAL_PROTECTION_MODULE}
               label="beneficiary.dob"
               value={individual.dob}
               readOnly={readOnly}
@@ -96,7 +102,7 @@ class BenefitPackageIndividualPanel extends FormPanel {
           </Grid>
           <Grid item xs={3} className={classes.item}>
             <TextInput
-              module="socialProtection"
+              module={SOCIAL_PROTECTION_MODULE}
               label="beneficiary.status"
               value={status ?? EMPTY_STRING}
               readOnly={readOnly}
@@ -104,7 +110,7 @@ class BenefitPackageIndividualPanel extends FormPanel {
           </Grid>
           {jsonExtFields?.map((jsonExtField) => (
             <Grid item xs={3} className={classes.item}>
-              {renderProperType(jsonExtField)}
+              {renderInputComponent(SOCIAL_PROTECTION_MODULE, jsonExtField)}
             </Grid>
           ))}
         </Grid>

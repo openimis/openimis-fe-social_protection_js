@@ -7,12 +7,13 @@ import {
   TextInput,
   FormPanel,
   formatMessage,
+  createFieldsBasedOnJSON,
+  renderInputComponent,
 } from '@openimis/fe-core';
 import { People as PeopleIcon } from '@material-ui/icons';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import { EMPTY_STRING, RIGHT_GROUP_UPDATE } from '../constants';
-import { createAdditionalField, renderProperType } from '../util/render-jsonExt';
+import { EMPTY_STRING, RIGHT_GROUP_UPDATE, SOCIAL_PROTECTION_MODULE } from '../constants';
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -33,11 +34,11 @@ function renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes,
         <Grid item>
           <Typography>
             <FormattedMessage
-              module="socialProtection"
+              module={SOCIAL_PROTECTION_MODULE}
               id="socialProtection.benefitPackage.GroupDetailPanel.title"
             />
             { !!groupUuid && (
-            <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.GroupDetailPanel.tooltip')}>
+            <Tooltip title={formatMessage(intl, SOCIAL_PROTECTION_MODULE, 'benefitPackage.GroupDetailPanel.tooltip')}>
               <IconButton onClick={openGroup} disabled={!rights.includes(RIGHT_GROUP_UPDATE)}>
                 <PeopleIcon />
               </IconButton>
@@ -57,7 +58,7 @@ class BenefitPackageGroupPanel extends FormPanel {
       groupBeneficiaries: { group: { uuid }, status, jsonExt },
     } = this.props;
 
-    const jsonExtFields = createAdditionalField(jsonExt);
+    const jsonExtFields = createFieldsBasedOnJSON(jsonExt);
 
     return (
       <>
@@ -67,7 +68,7 @@ class BenefitPackageGroupPanel extends FormPanel {
         <Grid container className={classes.item}>
           <Grid item xs={3} className={classes.item}>
             <TextInput
-              module="socialProtection"
+              module={SOCIAL_PROTECTION_MODULE}
               label="beneficiary.status"
               value={status ?? EMPTY_STRING}
               readOnly={readOnly}
@@ -75,7 +76,7 @@ class BenefitPackageGroupPanel extends FormPanel {
           </Grid>
           {jsonExtFields?.map((jsonExtField) => (
             <Grid item xs={3} className={classes.item}>
-              {renderProperType(jsonExtField)}
+              {renderInputComponent(SOCIAL_PROTECTION_MODULE, jsonExtField)}
             </Grid>
           ))}
         </Grid>
