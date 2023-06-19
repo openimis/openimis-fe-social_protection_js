@@ -177,65 +177,65 @@ function BenefitPlanBeneficiariesSearcher({
 
   return (
     !!benefitPlan?.id && (
-      <div>
-        <Searcher
-          module="benefitPlan"
-          FilterPane={beneficiaryFilter}
-          fetch={fetch}
-          items={beneficiaries}
-          itemsPageInfo={beneficiariesPageInfo}
-          fetchingItems={fetchingBeneficiaries}
-          fetchedItems={fetchedBeneficiaries}
-          errorItems={errorBeneficiaries}
-          tableTitle={formatMessageWithValues(intl, 'socialProtection', 'beneficiaries.searcherResultsTitle', {
-            beneficiariesTotalCount,
-          })}
-          exportable
-          exportFetch={downloadBeneficiaries}
-          exportFields={[
-            'id',
-            'individual.first_name',
-            'individual.last_name',
-            'individual.dob',
-            'json_ext', // Unfolded by backend and removed from csv
-          ]}
-          exportFieldsColumns={{
-            id: 'ID',
-            individual__first_name: formatMessage(intl, 'socialProtection', 'export.firstName'),
-            individual__last_name: formatMessage(intl, 'socialProtection', 'export.lastName'),
-            individual__dob: formatMessage(intl, 'socialProtection', 'export.dob'),
-          }}
-          exportFieldLabel={formatMessage(intl, 'socialProtection', 'export.label')}
-          headers={headers}
-          itemFormatters={itemFormatters}
-          sorts={sorts}
-          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
-          defaultPageSize={DEFAULT_PAGE_SIZE}
-          defaultFilters={defaultFilters()}
-          cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
-          cachePerTab
-          cacheTabName={`${benefitPlan?.id}-${status}`}
-          isCustomFiltering
-          objectForCustomFiltering={benefitPlan}
-          moduleName={MODULE_NAME}
-          objectType={BENEFIT_PLAN_LABEL}
-          appliedCustomFilters={appliedCustomFilters}
-          setAppliedCustomFilters={setAppliedCustomFilters}
-          appliedFiltersRowStructure={appliedFiltersRowStructure}
-          setAppliedFiltersRowStructure={setAppliedFiltersRowStructure}
-          applyNumberCircle={applyNumberCircle}
-        />
-        {failedExport && (
-        <Dialog fullWidth maxWidth="sm">
-          <DialogTitle>{errorBeneficiaryExport}</DialogTitle>
-          <DialogActions>
-            <Button onClick={setFailedExport(false)} variant="contained">
-              {formatMessage(intl, 'socialProtection', 'ok')}
-            </Button>
-          </DialogActions>
-        </Dialog>
-        )}
-      </div>
+    <div>
+      <Searcher
+        module="benefitPlan"
+        FilterPane={beneficiaryFilter}
+        fetch={fetch}
+        items={beneficiaries}
+        itemsPageInfo={beneficiariesPageInfo}
+        fetchingItems={fetchingBeneficiaries}
+        fetchedItems={fetchedBeneficiaries}
+        errorItems={errorBeneficiaries}
+        tableTitle={formatMessageWithValues(intl, 'socialProtection', 'beneficiaries.searcherResultsTitle', {
+          beneficiariesTotalCount,
+        })}
+        exportable
+        exportFetch={downloadBeneficiaries}
+        exportFields={[
+          'id',
+          'individual.first_name',
+          'individual.last_name',
+          'individual.dob',
+          'json_ext', // Unfolded by backend and removed from csv
+        ]}
+        exportFieldsColumns={{
+          id: 'ID',
+          individual__first_name: formatMessage(intl, 'socialProtection', 'export.firstName'),
+          individual__last_name: formatMessage(intl, 'socialProtection', 'export.lastName'),
+          individual__dob: formatMessage(intl, 'socialProtection', 'export.dob'),
+        }}
+        exportFieldLabel={formatMessage(intl, 'socialProtection', 'export.label')}
+        headers={headers}
+        itemFormatters={itemFormatters}
+        sorts={sorts}
+        rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+        defaultPageSize={DEFAULT_PAGE_SIZE}
+        defaultFilters={defaultFilters()}
+        cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
+        cachePerTab
+        cacheTabName={`${benefitPlan?.id}-${status}`}
+        isCustomFiltering
+        objectForCustomFiltering={benefitPlan}
+        moduleName={MODULE_NAME}
+        objectType={BENEFIT_PLAN_LABEL}
+        appliedCustomFilters={appliedCustomFilters}
+        setAppliedCustomFilters={setAppliedCustomFilters}
+        appliedFiltersRowStructure={appliedFiltersRowStructure}
+        setAppliedFiltersRowStructure={setAppliedFiltersRowStructure}
+        applyNumberCircle={applyNumberCircle}
+      />
+      {failedExport && (
+      <Dialog fullWidth maxWidth="sm">
+        <DialogTitle>{errorBeneficiaryExport}</DialogTitle>
+        <DialogActions>
+          <Button onClick={setFailedExport(false)} variant="contained">
+            {formatMessage(intl, 'socialProtection', 'ok')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      )}
+    </div>
     )
   );
 }
