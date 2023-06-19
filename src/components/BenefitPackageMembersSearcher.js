@@ -134,8 +134,8 @@ function BenefitPackageMembersSearcher({
     };
     if (group.id !== null && group.id !== undefined) {
       filters.groupId = {
-        value: group.id,
-        filter: `groupId: "${group.id}"`,
+        value: group.uuid,
+        filter: `groupId: "${group.uuid}"`,
       };
     }
     return filters;
