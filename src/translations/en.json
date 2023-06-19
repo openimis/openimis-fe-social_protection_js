@@ -9,6 +9,7 @@
   "socialProtection.benefitPlan.deleteButtonTooltip": "Delete",
   "socialProtection.benefitPlan.searcherResultsTitle": "{benefitPlansTotalCount} Benefit Plans",
   "socialProtection.beneficiaries.searcherResultsTitle": "{beneficiariesTotalCount} Beneficiaries",
+  "socialProtection.beneficiaries.members.searcherResultsTitle": "{individualsTotalCount} Individuals Found",
   "socialProtection.beneficiaries.payments.searcherResultsTitle": "{beneficiariesTotalCount} Payments Found",
   "socialProtection.beneficiaries.grievances.searcherResultsTitle": "{beneficiariesTotalCount} Grievances Found",
   "socialProtection.beneficiary.update.mutationLabel": "Update beneficiary {firstName} {lastName}",
@@ -66,11 +67,17 @@
   "socialProtection.export.filename": "beneficiaries_export",
   "socialProtection.validation.benefitPlan.invalidSchema": "Invalid schema",
   "socialProtection.benefitPackage.overviewButtonTooltip": "Show Benefit Package",
+  "socialProtection.benefitPackage.GroupPanel.title": "Group",
   "socialProtection.benefitPackage.GroupDetailPanel.title": "Group Details",
+  "socialProtection.benefitPackage.GroupDetailPanel.tooltip": "Show Group",
   "socialProtection.benefitPackage.IndividualDetailPanel.title": "Individual Details",
   "socialProtection.benefitPackage.IndividualDetailPanel.tooltip": "Show Individual",
   "socialProtection.benefitPackage.BenefitPlanDetailPanel.title": "Benefit Plan Details",
   "socialProtection.benefitPackage.BenefitPlanDetailPanel.tooltip": "Show Benefit Plan",
+  "socialProtection.benefitPackage.benefitPackageMembersTab.label": "Members",
   "socialProtection.benefitPackage.benefitPackagePaymentsTab.label": "Payments",
-  "socialProtection.benefitPackage.benefitPackageGrievancesTab.label": "Grievances"
+  "socialProtection.benefitPackage.benefitPackageGrievancesTab.label": "Grievances",
+  "socialProtection.benefitPackage.members.tooltip.viewDetails": "View individual details",
+  "socialProtection.benefitPackage.members.tooltip.paymentHistory": "Payment History",
+  "socialProtection.benefitPackage.members.tooltip.grievanceHistory": "Grievance History"
 }

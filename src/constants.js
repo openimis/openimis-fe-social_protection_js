@@ -31,6 +31,7 @@ export const BENEFIT_PLAN_BENEFICIARIES_SUSPENDED_TAB_VALUE = 'benefitPlanBenefi
 export const BENEFIT_PLAN_TABS_LABEL_CONTRIBUTION_KEY = 'benefitPlan.TabPanel.label';
 export const BENEFIT_PLAN_TABS_PANEL_CONTRIBUTION_KEY = 'benefitPlan.TabPanel.panel';
 
+export const BENEFIT_PACKAGE_MEMBERS_TAB_VALUE = 'benefitPackageMembersTab';
 export const BENEFIT_PACKAGE_PAYMENTS_TAB_VALUE = 'benefitPackagePaymentsTab';
 export const BENEFIT_PACKAGE_GRIEVANCES_TAB_VALUE = 'benefitPackageGrievancesTab';
 export const BENEFIT_PACKAGE_TABS_LABEL_CONTRIBUTION_KEY = 'benefitPackage.TabPanel.label';
@@ -53,6 +54,7 @@ export const FIELD_TYPES = {
 };
 
 export const MODULE_NAME = 'social_protection';
+export const SOCIAL_PROTECTION_MODULE = 'socialProtection';
 export const BENEFIT_PLAN_LABEL = 'BenefitPlan';
 export const BENEFICIARY_STATUS_LIST = [
   BENEFICIARY_STATUS.POTENTIAL, BENEFICIARY_STATUS.ACTIVE, BENEFICIARY_STATUS.GRADUATED, BENEFICIARY_STATUS.SUSPENDED];

@@ -25,11 +25,14 @@ import PreviewIcon from '@material-ui/icons/ListAlt';
 import { fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary } from '../actions';
 import {
   DEFAULT_PAGE_SIZE,
-  RIGHT_BENEFICIARY_SEARCH, ROWS_PER_PAGE_OPTIONS,
+  RIGHT_BENEFICIARY_SEARCH,
+  ROWS_PER_PAGE_OPTIONS,
   MODULE_NAME,
-  BENEFIT_PLAN_LABEL, RIGHT_BENEFICIARY_UPDATE,
+  BENEFIT_PLAN_LABEL,
+  RIGHT_BENEFICIARY_UPDATE,
 } from '../constants';
 import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';
+import { applyNumberCircle } from '../util/searcher-utils';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
 function BenefitPlanBeneficiariesSearcher({
@@ -50,27 +53,6 @@ function BenefitPlanBeneficiariesSearcher({
   errorBeneficiaryExport,
   updateBeneficiary,
 }) {
-  const applyNumberCircle = (number) => (
-    <div style={{
-      color: '#ffffff',
-      backgroundColor: '#006273',
-      borderRadius: '50%',
-      padding: '5px',
-      minWidth: '40px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontWeight: 'bold',
-      fontSize: '12px',
-      width: '20px',
-      height: '45px',
-      marginTop: '7px',
-    }}
-    >
-      {number}
-    </div>
-  );
-
   const modulesManager = useModulesManager();
   const history = useHistory();
   const fetch = (params) => fetchBeneficiaries(params);
@@ -85,7 +67,7 @@ function BenefitPlanBeneficiariesSearcher({
 
   const openBenefitPackage = (beneficiary) => history.push(`${benefitPlan?.id}/`
   + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
-    + `/${beneficiary?.id}`);
+    + `/individual/${beneficiary?.id}`);
 
   const handleStatusOnChange = (beneficiary, status) => {
     if (beneficiary && status) {
