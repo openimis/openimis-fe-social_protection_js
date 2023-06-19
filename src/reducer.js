@@ -30,7 +30,10 @@ export const ACTION_TYPE = {
   BENEFIT_PLAN_SCHEMA_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
   SEARCH_BENEFICIARIES: 'BENEFICIARY_BENEFICIARIES',
   SEARCH_GROUP_BENEFICIARIES: 'GROUP_BENEFICIARY_GROUP_BENEFICIARIES',
+  UPDATE_GROUP_BENEFICIARY: 'GROUP_BENEFICIARY_UPDATE_GROUP_BENEFICIARY',
   GET_BENEFICIARY: 'BENEFICIARY_BENEFICIARY',
+  GET_BENEFICIARIES_GROUP: 'GROUP_BENEFICIARY_GET_GROUP',
+  UPDATE_BENEFICIARY: 'BENEFICIARY_UPDATE_BENEFICIARY',
   BENEFICIARY_EXPORT: 'BENEFICIARY_EXPORT',
   GROUP_BENEFICIARY_EXPORT: 'GROUP_BENEFICIARY_EXPORT',
 };
@@ -64,6 +67,10 @@ function reducer(
     beneficiaryExport: null,
     beneficiaryExportPageInfo: {},
     errorBeneficiaryExport: null,
+    group: null,
+    fetchingGroup: false,
+    fetchedGroup: false,
+    errorGroup: null,
     fetchingGroupBeneficiaryExport: true,
     fetchedGroupBeneficiaryExport: false,
     groupBeneficiaryExport: null,
@@ -487,6 +494,39 @@ function reducer(
         beneficiary: null,
         errorBeneficiary: null,
       };
+    case REQUEST(ACTION_TYPE.GET_BENEFICIARIES_GROUP):
+      return {
+        ...state,
+        fetchingGroup: true,
+        fetchedGroup: false,
+        group: null,
+        errorGroup: null,
+      };
+    case SUCCESS(ACTION_TYPE.GET_BENEFICIARIES_GROUP):
+      return {
+        ...state,
+        fetchingGroup: false,
+        fetchedGroup: true,
+        group: parseData(action.payload.data.groupBeneficiary)?.map((groupBeneficiary) => ({
+          ...groupBeneficiary,
+          id: decodeId(groupBeneficiary.id),
+        }))?.[0],
+        errorGroup: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.GET_BENEFICIARIES_GROUP):
+      return {
+        ...state,
+        fetchingGroup: false,
+        errorGroup: formatServerError(action.payload),
+      };
+    case CLEAR(ACTION_TYPE.GET_BENEFICIARIES_GROUP):
+      return {
+        ...state,
+        fetchingGroup: false,
+        fetchedGroup: false,
+        group: null,
+        errorGroup: null,
+      };
     case REQUEST(ACTION_TYPE.MUTATION):
       return dispatchMutationReq(state, action);
     case ERROR(ACTION_TYPE.MUTATION):
@@ -497,6 +537,10 @@ function reducer(
       return dispatchMutationResp(state, 'deleteBenefitPlan', action);
     case SUCCESS(ACTION_TYPE.UPDATE_BENEFIT_PLAN):
       return dispatchMutationResp(state, 'updateBenefitPlan', action);
+    case SUCCESS(ACTION_TYPE.UPDATE_BENEFICIARY):
+      return dispatchMutationResp(state, 'updateBeneficiary', action);
+    case SUCCESS(ACTION_TYPE.UPDATE_GROUP_BENEFICIARY):
+      return dispatchMutationResp(state, 'updateGroupBeneficiary', action);
     default:
       return state;
   }

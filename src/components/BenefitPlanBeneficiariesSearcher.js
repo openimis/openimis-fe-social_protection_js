@@ -22,14 +22,18 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import PreviewIcon from '@material-ui/icons/ListAlt';
-import { fetchBeneficiaries, downloadBeneficiaries } from '../actions';
+import { fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary } from '../actions';
 import {
   DEFAULT_PAGE_SIZE,
-  RIGHT_BENEFICIARY_SEARCH, ROWS_PER_PAGE_OPTIONS,
+  RIGHT_BENEFICIARY_SEARCH,
+  ROWS_PER_PAGE_OPTIONS,
   MODULE_NAME,
   BENEFIT_PLAN_LABEL,
+  RIGHT_BENEFICIARY_UPDATE,
 } from '../constants';
 import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';
+import { applyNumberCircle } from '../util/searcher-utils';
+import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
 function BenefitPlanBeneficiariesSearcher({
   rights,
@@ -47,28 +51,8 @@ function BenefitPlanBeneficiariesSearcher({
   readOnly,
   beneficiaryExport,
   errorBeneficiaryExport,
+  updateBeneficiary,
 }) {
-  const applyNumberCircle = (number) => (
-    <div style={{
-      color: '#ffffff',
-      backgroundColor: '#006273',
-      borderRadius: '50%',
-      padding: '5px',
-      minWidth: '40px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontWeight: 'bold',
-      fontSize: '12px',
-      width: '20px',
-      height: '45px',
-      marginTop: '7px',
-    }}
-    >
-      {number}
-    </div>
-  );
-
   const modulesManager = useModulesManager();
   const history = useHistory();
   const fetch = (params) => fetchBeneficiaries(params);
@@ -83,26 +67,52 @@ function BenefitPlanBeneficiariesSearcher({
 
   const openBenefitPackage = (beneficiary) => history.push(`${benefitPlan?.id}/`
   + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
-    + `/${beneficiary?.id}`);
+    + `/individual/${beneficiary?.id}`);
+
+  const handleStatusOnChange = (beneficiary, status) => {
+    if (beneficiary && status) {
+      const editedBeneficiary = { ...beneficiary, status };
+      updateBeneficiary(
+        editedBeneficiary,
+        formatMessageWithValues(intl, 'socialProtection', 'beneficiary.update.mutationLabel', {
+          firstName: beneficiary.individual.firstName,
+          lastName: beneficiary.individual.lastName,
+        }),
+      );
+    }
+  };
 
   const itemFormatters = () => {
     const result = [
       (beneficiary) => beneficiary.individual.firstName,
       (beneficiary) => beneficiary.individual.lastName,
       (beneficiary) => beneficiary.individual.dob,
-      (beneficiary) => beneficiary.status,
+      (beneficiary) => (rights.includes(RIGHT_BENEFICIARY_UPDATE) ? (
+        <BeneficiaryStatusPicker
+          withLabel={false}
+          nullLabel={formatMessage(intl, 'socialProtection', 'any')}
+          value={beneficiary.status}
+          onChange={(status) => handleStatusOnChange(beneficiary, status)}
+        />
+      ) : beneficiary.status),
     ];
+
     if (rights.includes(RIGHT_BENEFICIARY_SEARCH)) {
       result.push((beneficiary) => (
-        <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.overviewButtonTooltip')}>
-          <IconButton
-            onClick={() => openBenefitPackage(beneficiary)}
-          >
+        <Tooltip
+          title={formatMessage(
+            intl,
+            'socialProtection',
+            'benefitPackage.overviewButtonTooltip',
+          )}
+        >
+          <IconButton onClick={() => openBenefitPackage(beneficiary)}>
             <PreviewIcon />
           </IconButton>
         </Tooltip>
       ));
     }
+
     return result;
   };
 
@@ -246,7 +256,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  fetchBeneficiaries, downloadBeneficiaries,
+  fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary,
 }, dispatch);
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesSearcher));
