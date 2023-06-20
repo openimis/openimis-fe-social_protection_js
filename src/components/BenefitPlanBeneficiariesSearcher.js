@@ -154,7 +154,10 @@ function BenefitPlanBeneficiariesSearcher({
 
   useEffect(() => {
     if (beneficiaryExport) {
-      downloadExport(beneficiaryExport, `${formatMessage(intl, 'socialProtection', 'export.filename')}.csv`)();
+      downloadExport(
+        beneficiaryExport,
+        `${formatMessage(intl, 'socialProtection', 'export.filename.beneficiaries')}.csv`,
+      )();
     }
   }, [beneficiaryExport]);
 
@@ -194,7 +197,6 @@ function BenefitPlanBeneficiariesSearcher({
           'individual.first_name',
           'individual.last_name',
           'individual.dob',
-          'individual.date_created',
           'json_ext', // Unfolded by backend and removed from csv
         ]}
         exportFieldsColumns={{
@@ -202,7 +204,6 @@ function BenefitPlanBeneficiariesSearcher({
           individual__first_name: formatMessage(intl, 'socialProtection', 'export.firstName'),
           individual__last_name: formatMessage(intl, 'socialProtection', 'export.lastName'),
           individual__dob: formatMessage(intl, 'socialProtection', 'export.dob'),
-          individual__date_created: formatMessage(intl, 'socialProtection', 'export.dateCreated'),
         }}
         exportFieldLabel={formatMessage(intl, 'socialProtection', 'export.label')}
         headers={headers}
