@@ -148,9 +148,9 @@ export function fetchBenefitPlan(modulesManager, params) {
 
 export function fetchWorkflows() {
   const payload = formatQuery(
-    "workflow",
+    'workflow',
     [],
-    WORKFLOWS_FULL_PROJECTION()
+    WORKFLOWS_FULL_PROJECTION(),
   );
   return graphql(payload, ACTION_TYPE.GET_WORKFLOWS);
 }

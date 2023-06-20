@@ -26,7 +26,6 @@ const BenefitPlanBeneficiariesUploadDialog = ({
   workflows,
   fetchWorkflows
 }) => {
-
   const [isOpen, setIsOpen] = useState(false);
   const [forms, setForms] = useState({});
   
