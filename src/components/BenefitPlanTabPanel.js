@@ -10,7 +10,6 @@ import {
 } from '../constants';
 import BenefitPlanBeneficiariesUploadDialog from '../dialogs/BenefitPlanBeneficiariesUploadDialog';
 
-
 const styles = (theme) => ({
   paper: theme.paper.paper,
   tableTitle: theme.table.title,
