@@ -108,7 +108,7 @@ function BenefitPlanBeneficiariesSearcher({
       (beneficiary) => (rights.includes(RIGHT_BENEFICIARY_UPDATE) ? (
         <BeneficiaryStatusPicker
           withLabel={false}
-          nullLabel={formatMessage(intl, 'socialProtection', 'any')}
+          withNull={false}
           value={beneficiary.status}
           onChange={(status) => handleStatusOnChange(beneficiary, status)}
         />
