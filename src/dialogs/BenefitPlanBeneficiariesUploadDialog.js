@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { Input, Grid } from '@material-ui/core';
-import { injectIntl } from "react-intl";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import { injectIntl } from 'react-intl';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import {
   apiHeaders,
   formatMessage
-} from "@openimis/fe-core";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import WorkflowsPicker from "../pickers/WorkflowsPicker";
-import { fetchWorkflows } from "../actions";
+} from '@openimis/fe-core';
+import { withTheme, withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import WorkflowsPicker from '../pickers/WorkflowsPicker';
+import { fetchWorkflows } from '../actions';
 
 const styles = (theme) => ({
   item: theme.paper.item,
@@ -61,12 +61,12 @@ const BenefitPlanBeneficiariesUploadDialog = ({
     const fileFormat = values.file.type;
     let formData = new FormData();
 
-    formData.append("file", values.file);
+    formData.append('file', values.file);
 
     let urlImport;
 
-    if (fileFormat.includes("/csv")) {
-      formData.append("workflow", values.workflow);
+    if (fileFormat.includes('/csv')) {
+      formData.append('workflow', values.workflow);
       urlImport = `/upload_workflow`;
     }
 
@@ -74,8 +74,8 @@ const BenefitPlanBeneficiariesUploadDialog = ({
       const response = await fetch(urlImport, {
         headers: apiHeaders,
         body: formData,
-        method: "POST",
-        credentials: "same-origin",
+        method: 'POST',
+        credentials: 'same-origin',
       });
 
       const payload = await response.json();
@@ -95,15 +95,15 @@ const BenefitPlanBeneficiariesUploadDialog = ({
     <>
       <Button 
         onClick={handleOpen} 
-        variant="outlined" 
-        color="#DFEDEF" 
+        variant='outlined' 
+        color='#DFEDEF' 
         className={classes.button}
         style={{ 
-          border: "0px",
-          marginTop: "6px"
+          border: '0px',
+          marginTop: '6px'
         }}
       >
-        {formatMessage(intl, "socialProtection", "benefitPlan.benefitPlanBeneficiaries.upload")}
+        {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload')}
       </Button>
       <Dialog 
         open={isOpen} 
@@ -118,39 +118,39 @@ const BenefitPlanBeneficiariesUploadDialog = ({
         <form noValidate>
           <DialogTitle 
             style={{ 
-              marginTop: "10px",
+              marginTop: '10px',
             }}
           >
-            {formatMessage(intl, "socialProtection", "benefitPlan.benefitPlanBeneficiaries.upload.label")}
+            {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload.label')}
           </DialogTitle>
           <DialogContent>
             <div 
-              style={{ backgroundColor: "#DFEDEF", paddingLeft: "10px", paddingBottom: "10px" }}
+              style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}
             >
               <Grid item>
-                <Grid container spacing={4} direction="column">
+                <Grid container spacing={4} direction='column'>
                   <Grid item>
                     <Input
                       onChange={(event) =>
                       handleFieldChange(
-                        "workflows",
-                        "file",
+                        'workflows',
+                        'file',
                         event.target.files[0]
                       )}
                       required
-                      id="import-button"
+                      id='import-button'
                       inputProps={{
-                        accept: ".csv, application/csv, text/csv",
+                        accept: '.csv, application/csv, text/csv',
                       }}
-                      type="file"
+                      type='file'
                     />
                   </Grid>
                   <Grid item>
                     <WorkflowsPicker
-                      module="socialProtection"
-                      label="workflowPicker"
+                      module='socialProtection'
+                      label='workflowPicker'
                       onChange={(value) =>
-                        handleFieldChange("workflows", "workflow", value)
+                        handleFieldChange('workflows', 'workflow', value)
                       }
                       value={()=>getFieldValue()}
                       workflows={workflows}
@@ -163,30 +163,30 @@ const BenefitPlanBeneficiariesUploadDialog = ({
           </DialogContent>
           <DialogActions 
             style={{ 
-              display: "inline", 
-              paddingLeft: "10px",
-              marginTop: "25px",
-              marginBottom: "15px"  
+              display: 'inline', 
+              paddingLeft: '10px',
+              marginTop: '25px',
+              marginBottom: '15px'  
             }}
           >
-            <div style={{ maxWidth: "1000px" }}>
-              <div style={{ float: "left" }}>
+            <div style={{ maxWidth: '1000px' }}>
+              <div style={{ float: 'left' }}>
                 <Button 
                   onClick={handleClose} 
-                  variant="outlined" 
+                  variant='outlined' 
                   autoFocus
                   style={{ 
-                    margin: "0 16px",
-                    marginBottom: "15px" 
+                    margin: '0 16px',
+                    marginBottom: '15px' 
                   }} 
                 >
                   Cancel
                 </Button>
               </div>
-              <div style={{ float: "right", paddingRight: "16px" }} >
+              <div style={{ float: 'right', paddingRight: '16px' }} >
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   onClick={() =>
                     onSubmit(forms.workflows)
                   }
@@ -196,7 +196,7 @@ const BenefitPlanBeneficiariesUploadDialog = ({
                       forms.workflows?.workflow
                     )}
                 >
-                  {formatMessage(intl, "socialProtection", "benefitPlan.benefitPlanBeneficiaries.upload.label")}
+                  {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload.label')}
                 </Button>
               </div>
             </div>
