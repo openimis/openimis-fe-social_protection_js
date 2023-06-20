@@ -56,7 +56,7 @@ function BenefitPackagePage({
       dispatch(fetchBenefitPlan(modulesManager, [`id: "${benefitPlanUuid}"`]));
     }
     if (groupBeneficiariesUuid) {
-      dispatch(fetchBeneficiariesGroup({ groupBeneficiariesUuid }));
+      dispatch(fetchBeneficiariesGroup(modulesManager, { groupBeneficiariesId: groupBeneficiariesUuid }));
     }
   };
 

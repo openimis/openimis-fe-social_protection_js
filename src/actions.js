@@ -62,8 +62,8 @@ export function fetchGroupBeneficiaries(params) {
 export function fetchBeneficiariesGroup(modulesManager, variables) {
   return graphqlWithVariables(
     `
-      query ($groupBeneficiariesUuid: UUID) {
-        groupBeneficiary(id: $groupBeneficiariesUuid) {
+      query ($groupBeneficiariesId: ID) {
+        groupBeneficiary(id: $groupBeneficiariesId) {
           totalCount
           pageInfo {
             hasNextPage
