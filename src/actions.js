@@ -1,5 +1,6 @@
 import {
   graphql,
+  formatQuery,
   formatPageQuery,
   formatPageQueryWithCount,
   formatMutation,
@@ -42,6 +43,11 @@ const GROUP_BENEFICIARY_FULL_PROJECTION = () => [
   'id',
   'group {id}',
   'status',
+];
+
+const WORKFLOWS_FULL_PROJECTION = () => [
+  'name',
+  'group',
 ];
 
 export function fetchBenefitPlans(modulesManager, params) {
@@ -138,6 +144,15 @@ export const clearBeneficiariesGroup = () => (dispatch) => {
 export function fetchBenefitPlan(modulesManager, params) {
   const payload = formatPageQuery('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));
   return graphql(payload, ACTION_TYPE.GET_BENEFIT_PLAN);
+}
+
+export function fetchWorkflows() {
+  const payload = formatQuery(
+    "workflow",
+    [],
+    WORKFLOWS_FULL_PROJECTION()
+  );
+  return graphql(payload, ACTION_TYPE.GET_WORKFLOWS);
 }
 
 export function deleteBenefitPlan(benefitPlan, clientMutationLabel) {

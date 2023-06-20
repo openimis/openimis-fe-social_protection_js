@@ -36,6 +36,7 @@ export const ACTION_TYPE = {
   UPDATE_BENEFICIARY: 'BENEFICIARY_UPDATE_BENEFICIARY',
   BENEFICIARY_EXPORT: 'BENEFICIARY_EXPORT',
   GROUP_BENEFICIARY_EXPORT: 'GROUP_BENEFICIARY_EXPORT',
+  GET_WORKFLOWS: 'GET_WORKFLOWS',
 };
 
 function reducer(
@@ -82,6 +83,12 @@ function reducer(
     groupBeneficiariesPageInfo: {},
     groupBeneficiariesTotalCount: 0,
     errorGroupBeneficiaries: null,
+    fetchingWorkflows: true,
+    fetchedWorkflows: false,
+    workflows: [],
+    workflowsPageInfo: {},
+    workflowsGroupBeneficiaries: null,
+    errorWorkflows: null,
   },
   action,
 ) {
@@ -122,6 +129,15 @@ function reducer(
         groupBeneficiariesPageInfo: {},
         groupBeneficiariesTotalCount: 0,
         errorGroupBeneficiaries: null,
+      };
+    case REQUEST(ACTION_TYPE.GET_WORKFLOWS):
+      return {
+        ...state,
+        fetchingWorkflows: true,
+        fetchedWorkflows: false,
+        workflows: [],
+        workflowsPageInfo: {},
+        errorWorkflows: null,
       };
     case SUCCESS(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
@@ -201,6 +217,15 @@ function reducer(
           ? action.payload.data.groupBeneficiary.totalCount : null,
         errorGroupBeneficiaries: formatGraphQLError(action.payload),
       };
+    case SUCCESS(ACTION_TYPE.GET_WORKFLOWS):
+      return {
+        ...state,
+        fetchingWorkflows: false,
+        fetchedWorkflows: true,
+        workflows: !!action.payload.data.workflow ? action.payload.data.workflow : [],
+        workflowsPageInfo: pageInfo(action.payload.data.benefitPlan),
+        errorWorkflows: formatGraphQLError(action.payload),
+      };
     case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
         ...state,
@@ -224,6 +249,12 @@ function reducer(
         ...state,
         fetchingGroupBeneficiaries: false,
         errorGroupBeneficiaries: formatServerError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.GET_WORKFLOWS):
+      return {
+        ...state,
+        fetchingWorkflows: false,
+        errorWorkflows: formatServerError(action.payload),
       };
     case REQUEST(ACTION_TYPE.BENEFIT_PLAN_CODE_FIELDS_VALIDATION):
       return {
