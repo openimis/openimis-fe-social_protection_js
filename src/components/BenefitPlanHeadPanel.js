@@ -109,6 +109,8 @@ class BenefitPlanHeadPanel extends FormPanel {
             required
             onChange={(v) => this.updateAttribute('dateValidFrom', v)}
             value={benefitPlan?.dateValidFrom ?? ''}
+            // NOTE: maxDate cannot be passed if dateValidTo does not exist.
+            // Passing any other falsy value will block months manipulation.
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...(benefitPlan.dateValidTo ? { maxDate: benefitPlan.dateValidTo } : null)}
           />
