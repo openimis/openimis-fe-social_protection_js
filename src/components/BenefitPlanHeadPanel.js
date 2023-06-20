@@ -109,7 +109,8 @@ class BenefitPlanHeadPanel extends FormPanel {
             required
             onChange={(v) => this.updateAttribute('dateValidFrom', v)}
             value={benefitPlan?.dateValidFrom ?? ''}
-            maxDate={benefitPlan?.dateValidTo ?? ''}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...(benefitPlan.dateValidTo ? { maxDate: benefitPlan.dateValidTo } : null)}
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>
@@ -120,7 +121,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             required
             onChange={(v) => this.updateAttribute('dateValidTo', v)}
             value={benefitPlan?.dateValidTo ?? ''}
-            minDate={benefitPlan?.dateValidFrom ?? new Date().getDate()}
+            minDate={benefitPlan?.dateValidFrom ?? new Date()}
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>
