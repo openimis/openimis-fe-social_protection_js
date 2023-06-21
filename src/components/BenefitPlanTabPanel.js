@@ -58,7 +58,9 @@ function BenefitPlanTabPanel({
             />
           </div>
           <div style={{ float: 'right', paddingRight: '16px' }}>
-            <BenefitPlanBeneficiariesUploadDialog />
+            <BenefitPlanBeneficiariesUploadDialog
+              benefitPlan={benefitPlan}
+            />
           </div>
         </div>
       </Grid>

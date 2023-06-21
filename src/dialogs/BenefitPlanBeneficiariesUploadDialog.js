@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
   apiHeaders,
+  baseApiUrl,
   formatMessage
 } from '@openimis/fe-core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
@@ -24,7 +25,8 @@ const BenefitPlanBeneficiariesUploadDialog = ({
   intl,
   classes,
   workflows,
-  fetchWorkflows
+  fetchWorkflows,
+  benefitPlan
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [forms, setForms] = useState({});
@@ -64,10 +66,12 @@ const BenefitPlanBeneficiariesUploadDialog = ({
     formData.append('file', values.file);
 
     let urlImport;
-
+    
     if (fileFormat.includes('/csv')) {
-      formData.append('workflow', values.workflow);
-      urlImport = `/upload_workflow`;
+      formData.append('benefit_plan', benefitPlan.id);
+      formData.append('workflow_name', values.workflow.name);
+      formData.append('workflow_group', values.workflow.group);
+      urlImport = `${baseApiUrl}/social_protection/import_beneficiaries/`;
     }
 
     try {
@@ -78,13 +82,12 @@ const BenefitPlanBeneficiariesUploadDialog = ({
         credentials: 'same-origin',
       });
 
-      const payload = await response.json();
+      await response.json();
 
       if (response.status >= 400) {
         handleClose();
         return;
       }
-
       handleClose();
     } catch (error) {
       handleClose();
