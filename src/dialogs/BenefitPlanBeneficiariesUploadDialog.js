@@ -115,15 +115,15 @@ function BenefitPlanBeneficiariesUploadDialog({
         }}
       >
         <form noValidate>
-          <DialogTitle 
-            style={{ 
+          <DialogTitle
+            style={{
               marginTop: '10px',
             }}
           >
             {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload.label')}
           </DialogTitle>
           <DialogContent>
-            <div 
+            <div
               style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}
             >
               <Grid item>
@@ -131,23 +131,23 @@ function BenefitPlanBeneficiariesUploadDialog({
                   <Grid item>
                     <Input
                       onChange={(event) =>
-                      handleFieldChange(
-                        'workflows',
-                        'file',
-                        event.target.files[0]
-                      )}
+                        handleFieldChange(
+                          'workflows',
+                          'file',
+                          event.target.files[0]
+                        )}
                       required
-                      id='import-button'
+                      id="import-button"
                       inputProps={{
                         accept: '.csv, application/csv, text/csv',
                       }}
-                      type='file'
+                      type="file"
                     />
                   </Grid>
                   <Grid item>
                     <WorkflowsPicker
-                      module='socialProtection'
-                      label='workflowPicker'
+                      module="socialProtection"
+                      label="workflowPicker"
                       onChange={(value) =>
                         handleFieldChange('workflows', 'workflow', value)
                       }
@@ -172,7 +172,7 @@ function BenefitPlanBeneficiariesUploadDialog({
               <div style={{ float: 'left' }}>
                 <Button 
                   onClick={handleClose} 
-                  variant='outlined' 
+                  variant="outlined" 
                   autoFocus
                   style={{ 
                     margin: '0 16px',
@@ -184,8 +184,8 @@ function BenefitPlanBeneficiariesUploadDialog({
               </div>
               <div style={{ float: 'right', paddingRight: '16px' }} >
                 <Button
-                  variant='contained'
-                  color='primary'
+                  variant="contained"
+                  color="primary"
                   onClick={() =>
                     onSubmit(forms.workflows)
                   }
