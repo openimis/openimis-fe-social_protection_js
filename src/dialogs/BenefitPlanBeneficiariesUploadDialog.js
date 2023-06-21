@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {
   apiHeaders,
   baseApiUrl,
-  formatMessage
+  formatMessage,
 } from '@openimis/fe-core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -21,22 +21,22 @@ const styles = (theme) => ({
   item: theme.paper.item,
 });
 
-const BenefitPlanBeneficiariesUploadDialog = ({
+function BenefitPlanBeneficiariesUploadDialog({
   intl,
   classes,
   workflows,
   fetchWorkflows,
-  benefitPlan
-}) => {
+  benefitPlan,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [forms, setForms] = useState({});
-  
+
   const handleOpen = () => {
     setIsOpen(true);
   };
 
   const handleClose = () => {
-    setForms({})
+    setForms({});
     setIsOpen(false);
   };
 
@@ -54,19 +54,15 @@ const BenefitPlanBeneficiariesUploadDialog = ({
     });
   };
 
-  const getFieldValue = () => {
-    return forms?.workflows?.values?.workflow?.label ?? {};
-  };
+  const getFieldValue = () => forms?.workflows?.values?.workflow?.label ?? {};
 
   const onSubmit = async (values) => {
-
     const fileFormat = values.file.type;
-    let formData = new FormData();
+    const formData = new FormData();
 
     formData.append('file', values.file);
 
     let urlImport;
-    
     if (fileFormat.includes('/csv')) {
       formData.append('benefit_plan', benefitPlan.id);
       formData.append('workflow_name', values.workflow.name);
@@ -96,7 +92,7 @@ const BenefitPlanBeneficiariesUploadDialog = ({
 
   return (
     <>
-      <Button 
+      <Button
         onClick={handleOpen} 
         variant='outlined' 
         color='#DFEDEF' 
