@@ -67,8 +67,8 @@ function BenefitPlanBeneficiariesSearcher({
   ];
 
   const openBenefitPackage = (beneficiary) => history.push(`${benefitPlan?.id}/`
-  + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
-    + `/individual/${beneficiary?.id}`);
+      + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
+      + `/individual/${beneficiary?.id}`);
 
   const addUpdatedBeneficiary = (beneficiary, status) => {
     setUpdatedBeneficiaries((prevState) => {
@@ -236,7 +236,7 @@ function BenefitPlanBeneficiariesSearcher({
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanBeneficiaryFilterCache"
         cachePerTab
-        cacheTabName={status}
+        cacheTabName={`${benefitPlan?.id}-${status}`}
         isCustomFiltering
         objectForCustomFiltering={benefitPlan}
         moduleName={MODULE_NAME}

@@ -209,7 +209,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
         defaultFilters={defaultFilters()}
         cacheFiltersKey="benefitPlanGroupBeneficiaryFilterCache"
         cachePerTab
-        cacheTabName={status}
+        cacheTabName={`${benefitPlan?.id}-${status}`}
         rowDisabled={isRowDisabled}
         rowLocked={isRowDisabled}
       />
