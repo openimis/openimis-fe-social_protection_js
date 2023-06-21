@@ -93,7 +93,7 @@ function BenefitPlanBeneficiariesUploadDialog({
   return (
     <>
       <Button
-        onClick={handleOpen} 
+        onClick={handleOpen}
         variant="outlined"
         color="#DFEDEF"
         className={classes.button}
@@ -127,15 +127,10 @@ function BenefitPlanBeneficiariesUploadDialog({
               style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}
             >
               <Grid item>
-                <Grid container spacing={4} direction='column'>
+                <Grid container spacing={4} direction="column">
                   <Grid item>
                     <Input
-                      onChange={(event) =>
-                        handleFieldChange(
-                          'workflows',
-                          'file',
-                          event.target.files[0]
-                        )}
+                      onChange={(event) => handleFieldChange('workflows', 'file', event.target.files[0])}
                       required
                       id="import-button"
                       inputProps={{
@@ -148,10 +143,8 @@ function BenefitPlanBeneficiariesUploadDialog({
                     <WorkflowsPicker
                       module="socialProtection"
                       label="workflowPicker"
-                      onChange={(value) =>
-                        handleFieldChange('workflows', 'workflow', value)
-                      }
-                      value={()=>getFieldValue()}
+                      onChange={(value) => handleFieldChange('workflows', 'workflow', value)}
+                      value={() => getFieldValue()}
                       workflows={workflows}
                       required
                     />
@@ -160,24 +153,24 @@ function BenefitPlanBeneficiariesUploadDialog({
               </Grid>
             </div>
           </DialogContent>
-          <DialogActions 
-            style={{ 
-              display: 'inline', 
+          <DialogActions
+            style={{
+              display: 'inline',
               paddingLeft: '10px',
               marginTop: '25px',
-              marginBottom: '15px'  
+              marginBottom: '15px'
             }}
           >
             <div style={{ maxWidth: '1000px' }}>
               <div style={{ float: 'left' }}>
-                <Button 
-                  onClick={handleClose} 
-                  variant="outlined" 
+                <Button
+                  onClick={handleClose}
+                  variant="outlined"
                   autoFocus
-                  style={{ 
+                  style={{
                     margin: '0 16px',
-                    marginBottom: '15px' 
-                  }} 
+                    marginBottom: '15px'
+                  }}
                 >
                   Cancel
                 </Button>
@@ -186,9 +179,7 @@ function BenefitPlanBeneficiariesUploadDialog({
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() =>
-                    onSubmit(forms.workflows)
-                  }
+                  onClick={() => onSubmit(forms.workflows)}
                   disabled={
                     !(
                       forms.workflows?.file &&
