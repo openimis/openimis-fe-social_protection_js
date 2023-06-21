@@ -158,7 +158,7 @@ function BenefitPlanBeneficiariesSearcher({
     if (status !== null && status !== undefined) {
       filters.status = {
         value: status,
-        filter: `status: "${status}"`,
+        filter: `status: ${status}`,
       };
     }
 
@@ -189,6 +189,7 @@ function BenefitPlanBeneficiariesSearcher({
       filters={props.filters}
       onChangeFilters={props.onChangeFilters}
       readOnly={readOnly}
+      status={status}
     />
   );
 
