@@ -55,6 +55,7 @@ function BenefitPlanBeneficiariesSearcher({
 }) {
   const modulesManager = useModulesManager();
   const history = useHistory();
+  const [updatedBeneficiaries, setUpdatedBeneficiaries] = useState([]);
   const fetch = (params) => fetchBeneficiaries(params);
 
   const headers = () => [
@@ -69,8 +70,25 @@ function BenefitPlanBeneficiariesSearcher({
       + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
       + `/individual/${beneficiary?.id}`);
 
+  const addUpdatedBeneficiary = (beneficiary, status) => {
+    setUpdatedBeneficiaries((prevState) => {
+      const updatedBeneficiaryExists = prevState.some(
+        (item) => item.id === beneficiary.id && item.status === status,
+      );
+
+      if (!updatedBeneficiaryExists) {
+        return [...prevState, beneficiary];
+      }
+
+      return prevState.filter(
+        (item) => !(item.id === beneficiary.id && item.status === status),
+      );
+    });
+  };
+
   const handleStatusOnChange = (beneficiary, status) => {
     if (beneficiary && status) {
+      addUpdatedBeneficiary(beneficiary, status);
       const editedBeneficiary = { ...beneficiary, status };
       updateBeneficiary(
         editedBeneficiary,
@@ -90,7 +108,7 @@ function BenefitPlanBeneficiariesSearcher({
       (beneficiary) => (rights.includes(RIGHT_BENEFICIARY_UPDATE) ? (
         <BeneficiaryStatusPicker
           withLabel={false}
-          nullLabel={formatMessage(intl, 'socialProtection', 'any')}
+          withNull={false}
           value={beneficiary.status}
           onChange={(status) => handleStatusOnChange(beneficiary, status)}
         />
@@ -116,6 +134,9 @@ function BenefitPlanBeneficiariesSearcher({
     return result;
   };
 
+  const isRowDisabled = (_, beneficiary) => (
+    updatedBeneficiaries.some((item) => item.id === beneficiary.id));
+
   const sorts = () => [
     ['individual_FirstName', true],
     ['individual_LastName', true],
@@ -137,7 +158,7 @@ function BenefitPlanBeneficiariesSearcher({
     if (status !== null && status !== undefined) {
       filters.status = {
         value: status,
-        filter: `status: "${status}"`,
+        filter: `status: ${status}`,
       };
     }
 
@@ -168,6 +189,7 @@ function BenefitPlanBeneficiariesSearcher({
       filters={props.filters}
       onChangeFilters={props.onChangeFilters}
       readOnly={readOnly}
+      status={status}
     />
   );
 
@@ -224,6 +246,8 @@ function BenefitPlanBeneficiariesSearcher({
         appliedFiltersRowStructure={appliedFiltersRowStructure}
         setAppliedFiltersRowStructure={setAppliedFiltersRowStructure}
         applyNumberCircle={applyNumberCircle}
+        rowDisabled={isRowDisabled}
+        rowLocked={isRowDisabled}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">

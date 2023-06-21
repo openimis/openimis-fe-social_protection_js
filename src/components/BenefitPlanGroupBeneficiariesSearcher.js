@@ -51,6 +51,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
 }) {
   const modulesManager = useModulesManager();
   const history = useHistory();
+  const [updatedGroupBeneficiaries, setUpdatedGroupBeneficiaries] = useState([]);
 
   const fetch = (params) => fetchGroupBeneficiaries(params);
 
@@ -63,8 +64,25 @@ function BenefitPlanGroupBeneficiariesSearcher({
   + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
     + `/group/${groupBeneficiary?.id}`);
 
+  const addUpdatedGroupBeneficiary = (groupBeneficiary, status) => {
+    setUpdatedGroupBeneficiaries((prevState) => {
+      const updatedBeneficiaryExists = prevState.some(
+        (item) => item.id === groupBeneficiary.id && item.status === status,
+      );
+
+      if (!updatedBeneficiaryExists) {
+        return [...prevState, groupBeneficiary];
+      }
+
+      return prevState.filter(
+        (item) => !(item.id === groupBeneficiary.id && item.status === status),
+      );
+    });
+  };
+
   const handleStatusOnChange = (groupBeneficiary, status) => {
     if (groupBeneficiary && status) {
+      addUpdatedGroupBeneficiary(groupBeneficiary, status);
       const editedGroupBeneficiary = { ...groupBeneficiary, status };
       updateGroupBeneficiary(
         editedGroupBeneficiary,
@@ -81,7 +99,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
       (groupBeneficiary) => (rights.includes(RIGHT_BENEFICIARY_UPDATE) ? (
         <BeneficiaryStatusPicker
           withLabel={false}
-          nullLabel={formatMessage(intl, 'socialProtection', 'any')}
+          withNull={false}
           value={groupBeneficiary.status}
           onChange={(status) => handleStatusOnChange(groupBeneficiary, status)}
         />
@@ -130,6 +148,9 @@ function BenefitPlanGroupBeneficiariesSearcher({
   };
 
   const [failedExport, setFailedExport] = useState(false);
+
+  const isRowDisabled = (_, groupBeneficiary) => (
+    updatedGroupBeneficiaries.some((item) => item.id === groupBeneficiary.id));
 
   useEffect(() => {
     setFailedExport(true);
@@ -189,6 +210,8 @@ function BenefitPlanGroupBeneficiariesSearcher({
         cacheFiltersKey="benefitPlanGroupBeneficiaryFilterCache"
         cachePerTab
         cacheTabName={`${benefitPlan?.id}-${status}`}
+        rowDisabled={isRowDisabled}
+        rowLocked={isRowDisabled}
       />
       {failedExport && (
       <Dialog fullWidth maxWidth="sm">

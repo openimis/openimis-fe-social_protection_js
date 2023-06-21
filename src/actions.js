@@ -62,8 +62,8 @@ export function fetchGroupBeneficiaries(params) {
 export function fetchBeneficiariesGroup(modulesManager, variables) {
   return graphqlWithVariables(
     `
-      query ($groupBeneficiariesUuid: UUID) {
-        groupBeneficiary(id: $groupBeneficiariesUuid) {
+      query ($groupBeneficiariesId: ID) {
+        groupBeneficiary(id: $groupBeneficiariesId) {
           totalCount
           pageInfo {
             hasNextPage
@@ -93,8 +93,8 @@ export function fetchBeneficiariesGroup(modulesManager, variables) {
 export function fetchBeneficiary(modulesManager, variables) {
   return graphqlWithVariables(
     `
-      query ($beneficiaryUuid: UUID) {
-        beneficiary(id: $beneficiaryUuid) {
+      query ($beneficiaryId: ID) {
+        beneficiary(id: $beneficiaryId) {
           totalCount
           pageInfo {
             hasNextPage
@@ -116,7 +116,7 @@ export function fetchBeneficiary(modulesManager, variables) {
             }
           }
         }
-      } 
+      }
     `,
     variables,
     ACTION_TYPE.GET_BENEFICIARY,
