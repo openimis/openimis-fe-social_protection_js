@@ -94,19 +94,19 @@ function BenefitPlanBeneficiariesUploadDialog({
     <>
       <Button
         onClick={handleOpen} 
-        variant='outlined' 
-        color='#DFEDEF' 
+        variant="outlined"
+        color="#DFEDEF"
         className={classes.button}
-        style={{ 
+        style={{
           border: '0px',
-          marginTop: '6px'
+          marginTop: '6px',
         }}
       >
         {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload')}
       </Button>
-      <Dialog 
-        open={isOpen} 
-        onClose={handleClose} 
+      <Dialog
+        open={isOpen}
+        onClose={handleClose}
         PaperProps={{
           style: {
             width: 600,
