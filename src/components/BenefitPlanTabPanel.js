@@ -8,6 +8,7 @@ import {
   BENEFIT_PLAN_TABS_LABEL_CONTRIBUTION_KEY,
   BENEFIT_PLAN_TABS_PANEL_CONTRIBUTION_KEY,
 } from '../constants';
+import BenefitPlanBeneficiariesUploadDialog from '../dialogs/BenefitPlanBeneficiariesUploadDialog';
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -44,15 +45,24 @@ function BenefitPlanTabPanel({
   return (
     <Paper className={classes.paper}>
       <Grid container className={`${classes.tableTitle} ${classes.tabs}`}>
-        <Contributions
-          contributionKey={BENEFIT_PLAN_TABS_LABEL_CONTRIBUTION_KEY}
-          intl={intl}
-          rights={rights}
-          value={activeTab}
-          onChange={handleChange}
-          isSelected={isSelected}
-          tabStyle={tabStyle}
-        />
+        <div style={{ width: '100%' }}>
+          <div style={{ float: 'left' }}>
+            <Contributions
+              contributionKey={BENEFIT_PLAN_TABS_LABEL_CONTRIBUTION_KEY}
+              intl={intl}
+              rights={rights}
+              value={activeTab}
+              onChange={handleChange}
+              isSelected={isSelected}
+              tabStyle={tabStyle}
+            />
+          </div>
+          <div style={{ float: 'right', paddingRight: '16px' }}>
+            <BenefitPlanBeneficiariesUploadDialog
+              benefitPlan={benefitPlan}
+            />
+          </div>
+        </div>
       </Grid>
       <Contributions
         contributionKey={BENEFIT_PLAN_TABS_PANEL_CONTRIBUTION_KEY}
