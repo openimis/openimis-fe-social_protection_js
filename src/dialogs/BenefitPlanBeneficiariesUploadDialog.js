@@ -158,7 +158,7 @@ function BenefitPlanBeneficiariesUploadDialog({
               display: 'inline',
               paddingLeft: '10px',
               marginTop: '25px',
-              marginBottom: '15px'
+              marginBottom: '15px',
             }}
           >
             <div style={{ maxWidth: '1000px' }}>
@@ -169,22 +169,23 @@ function BenefitPlanBeneficiariesUploadDialog({
                   autoFocus
                   style={{
                     margin: '0 16px',
-                    marginBottom: '15px'
+                    marginBottom: '15px',
                   }}
                 >
                   Cancel
                 </Button>
               </div>
-              <div style={{ float: 'right', paddingRight: '16px' }} >
+              <div style={{ float: 'right', paddingRight: '16px' }}>
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={() => onSubmit(forms.workflows)}
                   disabled={
                     !(
-                      forms.workflows?.file &&
-                      forms.workflows?.workflow
-                    )}
+                      forms.workflows?.file 
+                      && forms.workflows?.workflow
+                    )
+                  }
                 >
                   {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload.label')}
                 </Button>
@@ -195,16 +196,18 @@ function BenefitPlanBeneficiariesUploadDialog({
       </Dialog>
     </>
   );
-};
+}
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   confirmed: state.core.confirmed,
-  workflows: state.socialProtection.workflows
+  workflows: state.socialProtection.workflows,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  fetchWorkflows
+  fetchWorkflows,
 }, dispatch);
 
-export default injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadDialog))));
+export default injectIntl(
+  withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadDialog
+))));
