@@ -222,7 +222,7 @@ function reducer(
         ...state,
         fetchingWorkflows: false,
         fetchedWorkflows: true,
-        workflows: !!action.payload.data.workflow ? action.payload.data.workflow : [],
+        workflows: action.payload.data.workflow || [],
         workflowsPageInfo: pageInfo(action.payload.data.benefitPlan),
         errorWorkflows: formatGraphQLError(action.payload),
       };
