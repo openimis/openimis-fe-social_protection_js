@@ -12,12 +12,11 @@ function WorkflowsPicker({
   withNull = false,
   nullLabel = null,
   withLabel = true,
-}) {
-  
-  const options = Array.isArray(workflows) && workflows !== undefined ?  [
+}) { 
+  const options = Array.isArray(workflows) && workflows !== undefined ? [
     ...workflows.map((workflows) => ({
       value: { name: workflows.name, group: workflows.group },
-      label: workflows.name
+      label: workflows.name,
     }))
   ] : [];
   
