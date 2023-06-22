@@ -209,5 +209,9 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 }, dispatch);
 
 export default injectIntl(
-  withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadDialog
-))));
+  withTheme(
+    withStyles(styles)(
+      connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadDialog)
+    )
+  )
+);

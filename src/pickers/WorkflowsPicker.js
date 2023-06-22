@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import { SelectInput } from "@openimis/fe-core";
-import { formatMessage } from "@openimis/fe-core";
-import { injectIntl } from "react-intl";
+import React, { useEffect } from 'react';
+import { SelectInput, formatMessage } from '@openimis/fe-core';
+import { injectIntl } from 'react-intl';
 
-const WorkflowsPicker = ({
+function WorkflowsPicker({
   intl,
   value,
   label,
@@ -13,7 +12,7 @@ const WorkflowsPicker = ({
   withNull = false,
   nullLabel = null,
   withLabel = true,
-}) => {
+}) {
   
   const options = Array.isArray(workflows) && workflows !== undefined ?  [
     ...workflows.map((workflows) => ({
