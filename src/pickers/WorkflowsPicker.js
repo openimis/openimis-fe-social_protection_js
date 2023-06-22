@@ -12,23 +12,23 @@ function WorkflowsPicker({
   withNull = false,
   nullLabel = null,
   withLabel = true,
-}) { 
+}) {
   const options = Array.isArray(workflows) && workflows !== undefined ? [
     ...workflows.map((workflows) => ({
       value: { name: workflows.name, group: workflows.group },
       label: workflows.name,
-    }))
+    })),
   ] : [];
-  
+
   useEffect(() => {
     if (withNull) {
       options.unshift({
         value: null,
-        label: nullLabel || formatMessage(intl, "bill", "emptyLabel"),
+        label: nullLabel || formatMessage(intl, 'bill', 'emptyLabel'),
       });
     }
   }, []);
-  
+
   return (
     <SelectInput
       module="socialProtection"

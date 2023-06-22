@@ -182,7 +182,7 @@ function BenefitPlanBeneficiariesUploadDialog({
                   onClick={() => onSubmit(forms.workflows)}
                   disabled={
                     !(
-                      forms.workflows?.file 
+                      forms.workflows?.file
                       && forms.workflows?.workflow
                     )
                   }
