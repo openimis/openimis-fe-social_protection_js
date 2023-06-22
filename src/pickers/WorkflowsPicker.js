@@ -39,6 +39,6 @@ function WorkflowsPicker({
       readOnly={readOnly}
     />
   );
-};
+}
 
 export default injectIntl(WorkflowsPicker);
