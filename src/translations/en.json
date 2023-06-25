@@ -84,5 +84,13 @@
   "socialProtection.benefitPackage.members.tooltip.viewDetails": "View individual details",
   "socialProtection.benefitPackage.members.tooltip.paymentHistory": "Payment History",
   "socialProtection.benefitPackage.members.tooltip.grievanceHistory": "Grievance History",
-  "socialProtection.workflowPicker": "Workflow"
+  "socialProtection.workflowPicker": "Workflow",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.dateCreated": "Date",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.sourceType": "Upload Type",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.sourceName": "Upload Source",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.status": "Status",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.error": "Errors",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.errorNone": "None",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.workflow": "Workflow",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistory": "Upload History"
 }

@@ -33,6 +33,13 @@ const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
     modulesManager.getProjection('policyHolder.PolicyHolderPicker.projection')}`,
 ];
 
+const UPLOAD_HISTORY_FULL_PROJECTION = () => [
+  'id',
+  'uuid',
+  'workflow',
+  'dataUpload {dateCreated, dateUpdated, sourceName, sourceType, status, error }',
+];
+
 const BENEFICIARY_FULL_PROJECTION = () => [
   'id',
   'individual {firstName, lastName, dob}',
@@ -99,7 +106,7 @@ export function fetchBeneficiariesGroup(modulesManager, variables) {
 export function fetchBeneficiary(modulesManager, variables) {
   return graphqlWithVariables(
     `
-      query ($beneficiaryId: ID) {
+      query ($beneficiaryId: UUID) {
         beneficiary(id: $beneficiaryId) {
           totalCount
           pageInfo {
@@ -153,6 +160,11 @@ export function fetchWorkflows() {
     WORKFLOWS_FULL_PROJECTION(),
   );
   return graphql(payload, ACTION_TYPE.GET_WORKFLOWS);
+}
+
+export function fetchUploadHistory(params) {
+  const payload = formatPageQueryWithCount('beneficiaryDataUploadHistory', params, UPLOAD_HISTORY_FULL_PROJECTION());
+  return graphql(payload, ACTION_TYPE.GET_BENEFIT_PLAN_UPLOAD_HISTORY);
 }
 
 export function deleteBenefitPlan(benefitPlan, clientMutationLabel) {

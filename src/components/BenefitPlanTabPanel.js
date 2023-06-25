@@ -9,6 +9,7 @@ import {
   BENEFIT_PLAN_TABS_PANEL_CONTRIBUTION_KEY,
 } from '../constants';
 import BenefitPlanBeneficiariesUploadDialog from '../dialogs/BenefitPlanBeneficiariesUploadDialog';
+import BenefitPlanBeneficiariesUploadHistoryDialog from '../dialogs/BenefitPlanBeneficiariesUploadHistoryDialog';
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -59,6 +60,9 @@ function BenefitPlanTabPanel({
           </div>
           <div style={{ float: 'right', paddingRight: '16px' }}>
             <BenefitPlanBeneficiariesUploadDialog
+              benefitPlan={benefitPlan}
+            />
+            <BenefitPlanBeneficiariesUploadHistoryDialog
               benefitPlan={benefitPlan}
             />
           </div>
