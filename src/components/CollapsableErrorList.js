@@ -20,10 +20,10 @@ function CollapsableErrorList({
   intl,
   errors,
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleOpen = () => {
-    setIsOpen(!isOpen);
+    setIsExpanded(!isExpanded);
   };
 
   if (!errors || Object.keys(errors).length === 0) {
@@ -48,9 +48,9 @@ function CollapsableErrorList({
           'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.error',
         )}
         />
-        {isOpen ? <ExpandLess /> : <ExpandMore />}
+        {isExpanded ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
-      <Collapse in={isOpen} timeout="auto" unmountOnExit>
+      <Collapse in={isExpanded} timeout="auto" unmountOnExit>
         { JSON.stringify(errors) }
       </Collapse>
     </>
