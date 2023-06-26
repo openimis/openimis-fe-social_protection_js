@@ -91,123 +91,121 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
           },
         }}
       >
-        <form noValidate>
-          <DialogTitle
-            style={{
-              marginTop: '10px',
-            }}
+        <DialogTitle
+          style={{
+            marginTop: '10px',
+          }}
+        >
+          {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload.label')}
+        </DialogTitle>
+        <DialogContent>
+          <div
+            style={{ backgroundColor: '#DFEDEF' }}
           >
-            {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload.label')}
-          </DialogTitle>
-          <DialogContent>
-            <div
-              style={{ backgroundColor: '#DFEDEF' }}
-            >
 
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead className={classes.header}>
-                    <TableRow className={classes.headerTitle}>
+            <TableContainer component={Paper}>
+              <Table size="small">
+                <TableHead className={classes.header}>
+                  <TableRow className={classes.headerTitle}>
+                    <TableCell>
+                      {formatMessage(
+                        intl,
+                        'socialProtection',
+                        'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.workflow',
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {formatMessage(
+                        intl,
+                        'socialProtection',
+                        'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.dateCreated',
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {formatMessage(
+                        intl,
+                        'socialProtection',
+                        'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.sourceType',
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {formatMessage(
+                        intl,
+                        'socialProtection',
+                        'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.sourceName',
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {formatMessage(
+                        intl,
+                        'socialProtection',
+                        'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.status',
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {formatMessage(
+                        intl,
+                        'socialProtection',
+                        'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.error',
+                      )}
+                    </TableCell>
+                    <TableCell />
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <ProgressOrError progress={fetchingHistory} error={fetchedHistory} />
+                  {records.map((item) => (
+                    <TableRow key={item?.id}>
                       <TableCell>
-                        {formatMessage(
-                          intl,
-                          'socialProtection',
-                          'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.workflow',
-                        )}
+                        { item.workflow }
                       </TableCell>
                       <TableCell>
-                        {formatMessage(
-                          intl,
-                          'socialProtection',
-                          'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.dateCreated',
-                        )}
+                        { formatDateFromISO(modulesManager, intl, item.dataUpload.dateCreated) }
                       </TableCell>
                       <TableCell>
-                        {formatMessage(
-                          intl,
-                          'socialProtection',
-                          'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.sourceType',
-                        )}
+                        { item.dataUpload.sourceType}
                       </TableCell>
                       <TableCell>
-                        {formatMessage(
-                          intl,
-                          'socialProtection',
-                          'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.sourceName',
-                        )}
+                        { item.dataUpload.sourceName}
                       </TableCell>
                       <TableCell>
-                        {formatMessage(
-                          intl,
-                          'socialProtection',
-                          'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.status',
-                        )}
+                        { item.dataUpload.status}
                       </TableCell>
                       <TableCell>
-                        {formatMessage(
-                          intl,
-                          'socialProtection',
-                          'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.error',
-                        )}
+                        <CollapsableErrorList errors={item.dataUpload.error} />
                       </TableCell>
-                      <TableCell />
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <ProgressOrError progress={fetchingHistory} error={fetchedHistory} />
-                    {records.map((item) => (
-                      <TableRow key={item?.id}>
-                        <TableCell>
-                          { item.workflow }
-                        </TableCell>
-                        <TableCell>
-                          { formatDateFromISO(modulesManager, intl, item.dataUpload.dateCreated) }
-                        </TableCell>
-                        <TableCell>
-                          { item.dataUpload.sourceType}
-                        </TableCell>
-                        <TableCell>
-                          { item.dataUpload.sourceName}
-                        </TableCell>
-                        <TableCell>
-                          { item.dataUpload.status}
-                        </TableCell>
-                        <TableCell>
-                          <CollapsableErrorList errors={item.dataUpload.error} />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                  <TableFooter />
-                </Table>
-              </TableContainer>
+                  ))}
+                </TableBody>
+                <TableFooter />
+              </Table>
+            </TableContainer>
+          </div>
+        </DialogContent>
+        <DialogActions
+          style={{
+            display: 'inline',
+            paddingLeft: '10px',
+            marginTop: '25px',
+            marginBottom: '15px',
+          }}
+        >
+          <div style={{ maxWidth: '1000px' }}>
+            <div style={{ float: 'left' }}>
+              <Button
+                onClick={handleClose}
+                variant="outlined"
+                autoFocus
+                style={{
+                  margin: '0 16px',
+                  marginBottom: '15px',
+                }}
+              >
+                Close
+              </Button>
             </div>
-          </DialogContent>
-          <DialogActions
-            style={{
-              display: 'inline',
-              paddingLeft: '10px',
-              marginTop: '25px',
-              marginBottom: '15px',
-            }}
-          >
-            <div style={{ maxWidth: '1000px' }}>
-              <div style={{ float: 'left' }}>
-                <Button
-                  onClick={handleClose}
-                  variant="outlined"
-                  autoFocus
-                  style={{
-                    margin: '0 16px',
-                    marginBottom: '15px',
-                  }}
-                >
-                  Close
-                </Button>
-              </div>
-            </div>
-          </DialogActions>
-        </form>
+          </div>
+        </DialogActions>
       </Dialog>
     </>
   );

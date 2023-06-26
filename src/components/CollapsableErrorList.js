@@ -26,7 +26,7 @@ function CollapsableErrorList({
     setIsExpanded(!isExpanded);
   };
 
-  if (!errors || Object.keys(errors).length === 0) {
+  if (!errors || !Object.keys(errors).length) {
     return (
       <ListItem>
         <ListItemText primary={formatMessage(
