@@ -37,6 +37,7 @@ export const ACTION_TYPE = {
   BENEFICIARY_EXPORT: 'BENEFICIARY_EXPORT',
   GROUP_BENEFICIARY_EXPORT: 'GROUP_BENEFICIARY_EXPORT',
   GET_WORKFLOWS: 'GET_WORKFLOWS',
+  GET_BENEFIT_PLAN_UPLOAD_HISTORY: 'GET_UPLOAD_HISTORY',
 };
 
 function reducer(
@@ -89,6 +90,12 @@ function reducer(
     workflowsPageInfo: {},
     workflowsGroupBeneficiaries: null,
     errorWorkflows: null,
+    fetchingBeneficiaryDataUploadHistory: true,
+    fetchedBeneficiaryDataUploadHistory: false,
+    beneficiaryDataUploadHistory: [],
+    beneficiaryDataUploadHistoryPageInfo: {},
+    beneficiaryDataUploadHistoryGroupBeneficiaries: null,
+    errorBeneficiaryDataUploadHistory: null,
   },
   action,
 ) {
@@ -557,6 +564,34 @@ function reducer(
         fetchedGroup: false,
         group: null,
         errorGroup: null,
+      };
+    case ERROR(ACTION_TYPE.GET_BENEFIT_PLAN_UPLOAD_HISTORY):
+      return {
+        ...state,
+        fetchingBeneficiaryDataUploadHistory: false,
+        errorBeneficiaryDataUploadHistory: formatServerError(action.payload),
+      };
+    case SUCCESS(ACTION_TYPE.GET_BENEFIT_PLAN_UPLOAD_HISTORY):
+      return {
+        ...state,
+        fetchingBeneficiaryDataUploadHistory: false,
+        fetchedBeneficiaryDataUploadHistory: true,
+        beneficiaryDataUploadHistory: parseData(action.payload.data.beneficiaryDataUploadHistory)?.map((data) => ({
+          ...data,
+          id: decodeId(data.id),
+          dataUpload: { ...data.dataUpload, error: JSON.parse(data.dataUpload.error) },
+        })) || [],
+        beneficiaryDataUploadHistoryPageInfo: pageInfo(action.payload.data.beneficiaryDataUploadHistory),
+        errorBeneficiaryDataUploadHistory: formatGraphQLError(action.payload),
+      };
+    case REQUEST(ACTION_TYPE.GET_BENEFIT_PLAN_UPLOAD_HISTORY):
+      return {
+        ...state,
+        fetchingBeneficiaryDataUploadHistory: true,
+        fetchedBeneficiaryDataUploadHistory: false,
+        beneficiaryDataUploadHistory: [],
+        beneficiaryDataUploadHistoryPageInfo: {},
+        errorBeneficiaryDataUploadHistory: null,
       };
     case REQUEST(ACTION_TYPE.MUTATION):
       return dispatchMutationReq(state, action);
