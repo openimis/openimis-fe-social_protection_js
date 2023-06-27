@@ -106,7 +106,7 @@ export function fetchBeneficiariesGroup(modulesManager, variables) {
 export function fetchBeneficiary(modulesManager, variables) {
   return graphqlWithVariables(
     `
-      query ($beneficiaryId: UUID) {
+      query ($beneficiaryId: ID) {
         beneficiary(id: $beneficiaryId) {
           totalCount
           pageInfo {
