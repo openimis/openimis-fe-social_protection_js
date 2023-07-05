@@ -132,8 +132,6 @@ function BenefitPlanTasksSearcher({
     />
   );
 
-  console.log(benefitPlanTasks);
-
   return (
     <Searcher
       module="tasksManagement"
