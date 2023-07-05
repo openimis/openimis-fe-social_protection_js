@@ -2,17 +2,17 @@
 /* eslint-disable default-param-last */
 
 import {
-  formatServerError,
-  formatGraphQLError,
+  decodeId,
+  dispatchMutationErr,
   dispatchMutationReq,
   dispatchMutationResp,
-  dispatchMutationErr,
-  parseData,
+  formatGraphQLError,
+  formatServerError,
   pageInfo,
-  decodeId,
+  parseData,
 } from '@openimis/fe-core';
 import {
-  REQUEST, SUCCESS, ERROR, CLEAR,
+  CLEAR, ERROR, REQUEST, SUCCESS,
 } from './util/action-type';
 
 export const ACTION_TYPE = {
@@ -38,6 +38,7 @@ export const ACTION_TYPE = {
   GROUP_BENEFICIARY_EXPORT: 'GROUP_BENEFICIARY_EXPORT',
   GET_WORKFLOWS: 'GET_WORKFLOWS',
   GET_BENEFIT_PLAN_UPLOAD_HISTORY: 'GET_UPLOAD_HISTORY',
+  SEARCH_BENEFIT_PLAN_TASKS: 'SEARCH_BENEFIT_PLAN_TASKS',
 };
 
 function reducer(
@@ -96,6 +97,12 @@ function reducer(
     beneficiaryDataUploadHistoryPageInfo: {},
     beneficiaryDataUploadHistoryGroupBeneficiaries: null,
     errorBeneficiaryDataUploadHistory: null,
+    fetchingBenefitPlanTasks: false,
+    fetchedBenefitPlanTasks: false,
+    errorBenefitPlanTasks: null,
+    benefitPlanTasks: [],
+    benefitPlanTasksPageInfo: {},
+    benefitPlanTasksTotalCount: 0,
   },
   action,
 ) {
@@ -109,6 +116,16 @@ function reducer(
         benefitPlansPageInfo: {},
         benefitPlansTotalCount: 0,
         errorBenefitPlans: null,
+      };
+    case REQUEST(ACTION_TYPE.SEARCH_BENEFIT_PLAN_TASKS):
+      return {
+        ...state,
+        fetchingBenefitPlanTasks: true,
+        fetchedBenefitPlanTasks: false,
+        benefitPlanTasks: [],
+        benefitPlanTasksPageInfo: {},
+        benefitPlanTasksTotalCount: 0,
+        errorBenefitPlanTasks: null,
       };
     case REQUEST(ACTION_TYPE.GET_BENEFIT_PLAN):
       return {
@@ -167,6 +184,20 @@ function reducer(
         benefitPlansPageInfo: pageInfo(action.payload.data.benefitPlan),
         benefitPlansTotalCount: action.payload.data.benefitPlan ? action.payload.data.benefitPlan.totalCount : null,
         errorBenefitPlans: formatGraphQLError(action.payload),
+      };
+    case SUCCESS(ACTION_TYPE.SEARCH_BENEFIT_PLAN_TASKS):
+      return {
+        ...state,
+        fetchingBenefitPlanTasks: false,
+        fetchedBenefitPlanTasks: true,
+        benefitPlanTasks: parseData(action.payload.data.task)?.map((benefitPlanTask) => ({
+          ...benefitPlanTask,
+          id: decodeId(benefitPlanTask.id),
+        })),
+        benefitPlanTasksPageInfo: pageInfo(action.payload.data.task),
+        benefitPlanTasksTotalCount:
+            action.payload.data.task ? action.payload.data.task.totalCount : null,
+        errorBenefitPlanTasks: formatGraphQLError(action.payload),
       };
     case SUCCESS(ACTION_TYPE.GET_BENEFIT_PLAN):
       return {
@@ -238,6 +269,12 @@ function reducer(
         ...state,
         fetchingBenefitPlans: false,
         errorBenefitPlans: formatServerError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLAN_TASKS):
+      return {
+        ...state,
+        fetchingBenefitPlanTasks: false,
+        errorBenefitPlanTasks: formatServerError(action.payload),
       };
     case ERROR(ACTION_TYPE.GET_BENEFIT_PLAN):
       return {
