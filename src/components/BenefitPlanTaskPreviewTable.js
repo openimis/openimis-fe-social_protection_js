@@ -7,8 +7,9 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@material-ui/core';
 import {
-  formatMessage, PublishedComponent,
+  formatMessage, PublishedComponent, ProgressOrError,
 } from '@openimis/fe-core';
+import { useSelector } from 'react-redux';
 
 const styles = (theme) => ({
   table: theme.table,
@@ -48,6 +49,7 @@ const styles = (theme) => ({
 });
 
 function BenefitPlanTaskPreviewTable({ intl, classes, previewItem }) {
+  const { fetchingBenefitPlanTasks, errorBenefitPlanTasks } = useSelector((state) => state?.socialProtection);
   const headers = () => [
     'benefitPlan.code',
     'benefitPlan.name',
@@ -79,7 +81,11 @@ function BenefitPlanTaskPreviewTable({ intl, classes, previewItem }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* <ProgressOrError progress={fetchingTasks} error={errorTasks} /> */}
+          <ProgressOrError
+            className={classes.center}
+            progress={fetchingBenefitPlanTasks}
+            error={errorBenefitPlanTasks}
+          />
           <TableRow
             className={classes.tableRow}
           >

@@ -154,7 +154,6 @@ function BenefitPlanTasksSearcher({
       onDoubleClick={onDoubleClick}
       defaultFilters={defaultFilters()}
       rowDisabled={isRowDisabled}
-      // rowLocked={isRowDisabled}
       rights={rights}
     />
   );
