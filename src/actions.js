@@ -52,6 +52,19 @@ const GROUP_BENEFICIARY_FULL_PROJECTION = () => [
   'status',
 ];
 
+const TASK_FULL_PROJECTION = () => [
+  'id',
+  'entityId',
+  'source',
+  'status',
+  'executorActionEvent',
+  'businessEvent',
+  'dateCreated',
+  'isDeleted',
+  'taskGroup{id, code, completionPolicy}',
+  'data',
+];
+
 const WORKFLOWS_FULL_PROJECTION = () => [
   'name',
   'group',
@@ -70,6 +83,11 @@ export function fetchBeneficiaries(params) {
 export function fetchGroupBeneficiaries(params) {
   const payload = formatPageQueryWithCount('groupBeneficiary', params, GROUP_BENEFICIARY_FULL_PROJECTION());
   return graphql(payload, ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES);
+}
+
+export function fetchBenefitPlanTasks(params) {
+  const payload = formatPageQueryWithCount('task', params, TASK_FULL_PROJECTION());
+  return graphql(payload, ACTION_TYPE.SEARCH_BENEFIT_PLAN_TASKS);
 }
 
 export function fetchBeneficiariesGroup(modulesManager, variables) {
