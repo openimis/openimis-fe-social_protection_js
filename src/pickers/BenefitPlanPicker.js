@@ -6,8 +6,6 @@ import {
 } from '@openimis/fe-core';
 import { BENEFIT_PLANS_QUANTITY_LIMIT } from '../constants';
 
-{ /* react/jsx-props-no-spreading */ }
-
 function BenefitPlanPicker(props) {
   const {
     multiple,
