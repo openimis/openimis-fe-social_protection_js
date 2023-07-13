@@ -32,7 +32,7 @@ function BenefitPlanPicker(props) {
     query BenefitPlanPicker(
     $search: String, $first: Int, $isDeleted: Boolean
     ) {
-      benefitPlan(search: $search, first: $first, isDeleted: $isDeleted) {
+      benefitPlan(name_Icontains: $search, code_Icontains: $search, first: $first, isDeleted: $isDeleted) {
         edges {
           node {
             id
