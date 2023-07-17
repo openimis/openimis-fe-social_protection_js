@@ -54,9 +54,12 @@ function renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes,
 class BenefitPackageGroupPanel extends FormPanel {
   render() {
     const {
-      classes, readOnly, intl, history, modulesManager, rights,
-      groupBeneficiaries: { group: { uuid }, status, jsonExt },
+      classes, readOnly, intl, history, modulesManager, rights, groupBeneficiaries,
     } = this.props;
+
+    if (!groupBeneficiaries) return null;
+
+    const { group: { uuid }, status, jsonExt } = groupBeneficiaries;
 
     const jsonExtFields = createFieldsBasedOnJSON(jsonExt);
 

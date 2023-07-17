@@ -60,19 +60,21 @@ function renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes,
 class BenefitPackageIndividualPanel extends FormPanel {
   render() {
     const {
-      classes, readOnly, intl, history, modulesManager, rights,
-      beneficiary: {
-        individual, status, jsonExt,
-      },
+      classes, readOnly, intl, history, modulesManager, rights, beneficiary,
     } = this.props;
-    const { uuid } = individual;
+
+    if (!beneficiary) return null;
+
+    const {
+      individual, status, jsonExt,
+    } = beneficiary;
 
     const jsonExtFields = createFieldsBasedOnJSON(jsonExt);
 
     return (
       <>
         <Grid container className={classes.tableTitle}>
-          {renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes, uuid)}
+          {renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes, individual?.uuid)}
         </Grid>
         <Grid container className={classes.item}>
           <Grid item xs={3} className={classes.item}>
