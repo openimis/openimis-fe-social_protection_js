@@ -31,7 +31,7 @@ import {
 } from '../actions';
 import BenefitPlanFilter from './BenefitPlanFilter';
 
-function BenefitPlanSearcher({
+function BenefitPlanSearcherForEntities({
   intl,
   modulesManager,
   history,
@@ -336,5 +336,5 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
 );
 
 export default withHistory(
-  withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanSearcher))),
+  withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanSearcherForEntities))),
 );
