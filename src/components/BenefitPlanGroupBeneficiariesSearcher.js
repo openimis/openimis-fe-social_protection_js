@@ -140,7 +140,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
     if (status !== null && status !== undefined) {
       filters.status = {
         value: status,
-        filter: `status: "${status}"`,
+        filter: `status: ${status}`,
       };
     }
 
