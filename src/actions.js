@@ -13,6 +13,7 @@ import {
 } from './util/action-type';
 
 const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
+  'uuid',
   'id',
   'isDeleted',
   'dateCreated',
@@ -91,10 +92,11 @@ export function fetchBenefitPlanTasks(params) {
 }
 
 export function fetchBeneficiariesGroup(modulesManager, variables) {
+  const [key] = Object.keys(variables);
   return graphqlWithVariables(
     `
-      query ($groupBeneficiariesId: ID) {
-        groupBeneficiary(id: $groupBeneficiariesId) {
+      query ($${key}: ID) {
+        groupBeneficiary(${key === 'group_Id' ? 'group_Id' : 'id'}: $${key}) {
           totalCount
           pageInfo {
             hasNextPage
@@ -122,10 +124,11 @@ export function fetchBeneficiariesGroup(modulesManager, variables) {
 }
 
 export function fetchBeneficiary(modulesManager, variables) {
+  const [key] = Object.keys(variables);
   return graphqlWithVariables(
     `
-      query ($beneficiaryId: ID) {
-        beneficiary(id: $beneficiaryId) {
+      query ($${key}: ID) {
+        beneficiary(${key === 'individual_Id' ? 'individual_Id' : 'id'}: $${key}) {
           totalCount
           pageInfo {
             hasNextPage

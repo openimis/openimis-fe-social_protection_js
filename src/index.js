@@ -37,6 +37,7 @@ import {
   BenefitPackageGrievancesTabPanel,
 } from './components/BenefitPackageGrievancesTab';
 import BenefitPlanSearcher from './components/BenefitPlanSearcher';
+import BenefitPlanSearcherForEntities from './components/BenefitPlanSearcherForEntities';
 import { BenefitPackageMembersTabLabel, BenefitPackageMembersTabPanel } from './components/BenefitPackageMembersTab';
 import BenefitPlanTasksPage from './pages/BenefitPlanTasksPage';
 import BenefitPlanTaskPreviewTable from './components/BenefitPlanTaskPreviewTable';
@@ -67,6 +68,7 @@ const DEFAULT_CONFIG = {
     { key: 'socialProtection.route.benefitPackage', ref: ROUTE_BENEFIT_PACKAGE },
     { key: 'socialProtection.BeneficiaryStatusPicker', ref: BeneficiaryStatusPicker },
     { key: 'socialProtection.BenefitPlanSearcher', ref: BenefitPlanSearcher },
+    { key: 'socialProtection.BenefitPlanSearcherForEntities', ref: BenefitPlanSearcherForEntities },
     { key: 'socialProtection.BenefitPlanTasksPage', ref: BenefitPlanTasksPage },
     { key: 'socialProtection.BenefitPlanTaskPreviewTable', ref: BenefitPlanTaskPreviewTable },
     { key: 'socialProtection.BenefitPlanPicker', ref: BenefitPlanPicker },
