@@ -21,7 +21,9 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import PreviewIcon from '@material-ui/icons/ListAlt';
-import { fetchGroupBeneficiaries, downloadGroupBeneficiaries, updateGroupBeneficiary } from '../actions';
+import {
+  fetchGroupBeneficiaries, downloadGroupBeneficiaries, clearGroupBeneficiaryExport, updateGroupBeneficiary,
+} from '../actions';
 import {
   DEFAULT_PAGE_SIZE,
   RIGHT_GROUP_SEARCH,
@@ -43,6 +45,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
   groupBeneficiaries,
   groupBeneficiariesPageInfo,
   groupBeneficiariesTotalCount,
+  clearGroupBeneficiaryExport,
   status,
   readOnly,
   groupBeneficiaryExport,
@@ -162,6 +165,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
         groupBeneficiaryExport,
         `${formatMessage(intl, 'socialProtection', 'export.filename.groupBeneficiaries')}.csv`,
       )();
+      clearGroupBeneficiaryExport();
     }
   }, [groupBeneficiaryExport]);
 
@@ -245,7 +249,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  fetchGroupBeneficiaries, downloadGroupBeneficiaries, updateGroupBeneficiary,
+  fetchGroupBeneficiaries, downloadGroupBeneficiaries, updateGroupBeneficiary, clearGroupBeneficiaryExport,
 }, dispatch);
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanGroupBeneficiariesSearcher));
