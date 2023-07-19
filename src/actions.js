@@ -388,3 +388,15 @@ export const clearBenefitPlan = () => (dispatch) => {
     type: CLEAR(ACTION_TYPE.GET_BENEFIT_PLAN),
   });
 };
+
+export const clearBeneficiaryExport = () => (dispatch) => {
+  dispatch({
+    type: CLEAR(ACTION_TYPE.BENEFICIARY_EXPORT),
+  });
+};
+
+export const clearGroupBeneficiaryExport = () => (dispatch) => {
+  dispatch({
+    type: CLEAR(ACTION_TYPE.GROUP_BENEFICIARY_EXPORT),
+  });
+};

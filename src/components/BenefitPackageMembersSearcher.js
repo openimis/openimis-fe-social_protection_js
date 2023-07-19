@@ -49,6 +49,7 @@ function BenefitPackageMembersSearcher({
   const fetchIndividualsRef = modulesManager.getRef('individual.actions.fetchIndividuals');
 
   const downloadIndividualsRef = modulesManager.getRef('individual.actions.downloadIndividuals');
+  const clearIndividualExportRef = modulesManager.getRef('individual.actions.clearIndividualExport');
 
   const openIndividual = (individual) => history.push(
     `/${modulesManager.getRef('individual.route.individual')}`
@@ -162,6 +163,7 @@ function BenefitPackageMembersSearcher({
   useEffect(() => {
     if (membersExport) {
       downloadExport(membersExport, `${formatMessage(intl, 'socialProtection', 'export.filename')}.csv`)();
+      dispatch(clearIndividualExportRef());
     }
   }, [membersExport]);
 

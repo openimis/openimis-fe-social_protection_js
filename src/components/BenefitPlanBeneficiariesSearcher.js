@@ -22,7 +22,9 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import PreviewIcon from '@material-ui/icons/ListAlt';
-import { fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary } from '../actions';
+import {
+  fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary, clearBeneficiaryExport,
+} from '../actions';
 import {
   DEFAULT_PAGE_SIZE,
   RIGHT_BENEFICIARY_SEARCH,
@@ -47,6 +49,7 @@ function BenefitPlanBeneficiariesSearcher({
   beneficiaries,
   beneficiariesPageInfo,
   beneficiariesTotalCount,
+  clearBeneficiaryExport,
   status,
   readOnly,
   beneficiaryExport,
@@ -179,6 +182,7 @@ function BenefitPlanBeneficiariesSearcher({
         beneficiaryExport,
         `${formatMessage(intl, 'socialProtection', 'export.filename.beneficiaries')}.csv`,
       )();
+      clearBeneficiaryExport();
     }
   }, [beneficiaryExport]);
 
@@ -281,7 +285,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary,
+  fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary, clearBeneficiaryExport,
 }, dispatch);
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesSearcher));

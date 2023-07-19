@@ -488,6 +488,15 @@ function reducer(
         fetchedBenefitPlan: false,
         benefitPlan: null,
       };
+    case CLEAR(ACTION_TYPE.BENEFICIARY_EXPORT):
+      return {
+        ...state,
+        fetchingBeneficiaryExport: false,
+        fetchedBeneficiaryExport: false,
+        beneficiaryExport: null,
+        beneficiaryExportPageInfo: {},
+        errorBeneficiaryExport: null,
+      };
     case REQUEST(ACTION_TYPE.BENEFICIARY_EXPORT):
       return {
         ...state,
@@ -535,6 +544,15 @@ function reducer(
         ...state,
         fetchingGroupBeneficiaryExport: false,
         errorGroupBeneficiaryExport: formatServerError(action.payload),
+      };
+    case CLEAR(ACTION_TYPE.GROUP_BENEFICIARY_EXPORT):
+      return {
+        ...state,
+        fetchingGroupBeneficiaryExport: false,
+        fetchedGroupBeneficiaryExport: false,
+        groupBeneficiaryExport: null,
+        groupBeneficiaryExportPageInfo: {},
+        errorGroupBeneficiaryExport: null,
       };
     case REQUEST(ACTION_TYPE.GET_BENEFICIARY):
       return {
