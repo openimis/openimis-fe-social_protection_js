@@ -15,6 +15,7 @@
   "socialProtection.beneficiary.update.mutationLabel": "Update beneficiary {firstName} {lastName}",
   "socialProtection.groupBeneficiary.update.mutationLabel": "Update group beneficiary {id}",
   "socialProtection.groupBeneficiaries.searcherResultsTitle": "{groupBeneficiariesTotalCount} Group Beneficiaries",
+  "socialProtection.benefitPlansList.label": "BENEFIT PLANS",
   "socialProtection.benefitPlan.dateValidTo": "Date to",
   "socialProtection.benefitPlan.dateValidFrom": "Date from",
   "socialProtection.benefitPlan.name": "Name",
