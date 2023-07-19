@@ -42,6 +42,7 @@ import { BenefitPackageMembersTabLabel, BenefitPackageMembersTabPanel } from './
 import BenefitPlanTasksPage from './pages/BenefitPlanTasksPage';
 import BenefitPlanTaskPreviewTable from './components/BenefitPlanTaskPreviewTable';
 import BenefitPlanPicker from './pickers/BenefitPlanPicker';
+import { BenefitPlansListTabLabel, BenefitPlansListTabPanel } from './components/BenefitPlansListTab';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -72,6 +73,8 @@ const DEFAULT_CONFIG = {
     { key: 'socialProtection.BenefitPlanTasksPage', ref: BenefitPlanTasksPage },
     { key: 'socialProtection.BenefitPlanTaskPreviewTable', ref: BenefitPlanTaskPreviewTable },
     { key: 'socialProtection.BenefitPlanPicker', ref: BenefitPlanPicker },
+    { key: 'socialProtection.BenefitPlansListTabLabel', ref: BenefitPlansListTabLabel },
+    { key: 'socialProtection.BenefitPlansListTabPanel', ref: BenefitPlansListTabPanel },
   ],
   'benefitPlan.TabPanel.label': [
     BenefitPlanBeneficiariesListTabLabel,
