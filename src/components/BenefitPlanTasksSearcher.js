@@ -1,30 +1,21 @@
-import React, { useEffect, useRef } from 'react';
-import { bindActionCreators } from 'redux';
-import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import React, { useEffect, useRef } from "react";
+import { bindActionCreators } from "redux";
+import { injectIntl } from "react-intl";
+import { connect } from "react-redux";
 import {
-  Searcher,
-  journalize,
   formatMessage,
   formatMessageWithValues,
   historyPush,
+  journalize,
+  Searcher,
   withHistory,
-  withModulesManager,
-} from '@openimis/fe-core';
-import {
-  IconButton,
-  Tooltip,
-} from '@material-ui/core';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import {
-  DEFAULT_PAGE_SIZE,
-  ROWS_PER_PAGE_OPTIONS,
-  BENEFIT_PLAN_TASKS_UPDATE,
-  BENEFIT_PLAN_TASKS_SEARCH,
-  TASK_STATUS,
-} from '../constants';
-import BenefitPlanTasksFilter from './BenefitPlanTasksFilter';
-import { fetchBenefitPlanTasks } from '../actions';
+  withModulesManager
+} from "@openimis/fe-core";
+import { IconButton, Tooltip } from "@material-ui/core";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import { BENEFIT_PLAN_TASKS_SEARCH, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, TASK_STATUS } from "../constants";
+import BenefitPlanTasksFilter from "./BenefitPlanTasksFilter";
+import { fetchBenefitPlanTasks } from "../actions";
 
 function BenefitPlanTasksSearcher({
   intl,
@@ -53,7 +44,7 @@ function BenefitPlanTasksSearcher({
     newTab,
   );
 
-  const onDoubleClick = (task) => rights.includes(BENEFIT_PLAN_TASKS_UPDATE) && openTask(task);
+  const onDoubleClick = (task) => openTask(task);
 
   const headers = () => {
     const headers = [
@@ -80,16 +71,14 @@ function BenefitPlanTasksSearcher({
   ];
 
   const itemFormatters = () => {
-    const formatters = [
+    return [
       (benefitPlanTask) => benefitPlanTask.source,
       (benefitPlanTask) => benefitPlanTask.type,
       (benefitPlanTask) => benefitPlanTask.entity,
       (benefitPlanTask) => benefitPlanTask?.taskGroup?.code,
       (benefitPlanTask) => benefitPlanTask.businessStatus,
       (benefitPlanTask) => benefitPlanTask.status,
-    ];
-    if (rights.includes(BENEFIT_PLAN_TASKS_SEARCH)) {
-      formatters.push((benefitPlanTasks) => (
+      (benefitPlanTasks) => (
         <Tooltip title={formatMessage(intl, 'socialProtection', 'viewDetailsButton.tooltip')}>
           <IconButton
             onClick={() => openTask(benefitPlanTasks)}
@@ -97,9 +86,8 @@ function BenefitPlanTasksSearcher({
             <VisibilityIcon />
           </IconButton>
         </Tooltip>
-      ));
-    }
-    return formatters;
+      ),
+    ];
   };
 
   useEffect(() => {
@@ -114,7 +102,8 @@ function BenefitPlanTasksSearcher({
 
   const rowIdentifier = (benefitPlan) => benefitPlan.id;
 
-  const isRowDisabled = (_, benefitPlanTask) => benefitPlanTask.status !== TASK_STATUS.RECEIVED;
+  // eslint-disable-next-line max-len
+  const isRowDisabled = (_, benefitPlanTask) => benefitPlanTask.status !== TASK_STATUS.ACCEPTED;
 
   const defaultFilters = () => ({
     isDeleted: {
