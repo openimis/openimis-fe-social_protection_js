@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
-import { bindActionCreators } from "redux";
-import { injectIntl } from "react-intl";
-import { connect } from "react-redux";
+import React, { useEffect, useRef } from 'react';
+import { bindActionCreators } from 'redux';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   formatMessage,
   formatMessageWithValues,
@@ -9,13 +9,15 @@ import {
   journalize,
   Searcher,
   withHistory,
-  withModulesManager
-} from "@openimis/fe-core";
-import { IconButton, Tooltip } from "@material-ui/core";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import { BENEFIT_PLAN_TASKS_SEARCH, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, TASK_STATUS } from "../constants";
-import BenefitPlanTasksFilter from "./BenefitPlanTasksFilter";
-import { fetchBenefitPlanTasks } from "../actions";
+  withModulesManager,
+} from '@openimis/fe-core';
+import { IconButton, Tooltip } from '@material-ui/core';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import {
+  BENEFIT_PLAN_TASKS_SEARCH, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, TASK_STATUS,
+} from '../constants';
+import BenefitPlanTasksFilter from './BenefitPlanTasksFilter';
+import { fetchBenefitPlanTasks } from '../actions';
 
 function BenefitPlanTasksSearcher({
   intl,
@@ -70,25 +72,23 @@ function BenefitPlanTasksSearcher({
     ['status', true],
   ];
 
-  const itemFormatters = () => {
-    return [
-      (benefitPlanTask) => benefitPlanTask.source,
-      (benefitPlanTask) => benefitPlanTask.type,
-      (benefitPlanTask) => benefitPlanTask.entity,
-      (benefitPlanTask) => benefitPlanTask?.taskGroup?.code,
-      (benefitPlanTask) => benefitPlanTask.businessStatus,
-      (benefitPlanTask) => benefitPlanTask.status,
-      (benefitPlanTasks) => (
-        <Tooltip title={formatMessage(intl, 'socialProtection', 'viewDetailsButton.tooltip')}>
-          <IconButton
-            onClick={() => openTask(benefitPlanTasks)}
-          >
-            <VisibilityIcon />
-          </IconButton>
-        </Tooltip>
-      ),
-    ];
-  };
+  const itemFormatters = () => [
+    (benefitPlanTask) => benefitPlanTask.source,
+    (benefitPlanTask) => benefitPlanTask.type,
+    (benefitPlanTask) => benefitPlanTask.entity,
+    (benefitPlanTask) => benefitPlanTask?.taskGroup?.code,
+    (benefitPlanTask) => benefitPlanTask.businessStatus,
+    (benefitPlanTask) => benefitPlanTask.status,
+    (benefitPlanTasks) => (
+      <Tooltip title={formatMessage(intl, 'socialProtection', 'viewDetailsButton.tooltip')}>
+        <IconButton
+          onClick={() => openTask(benefitPlanTasks)}
+        >
+          <VisibilityIcon />
+        </IconButton>
+      </Tooltip>
+    ),
+  ];
 
   useEffect(() => {
     if (prevSubmittingMutationRef.current && !submittingMutation) {
