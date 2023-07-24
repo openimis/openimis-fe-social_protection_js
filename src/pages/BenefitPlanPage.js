@@ -130,8 +130,7 @@ function BenefitPlanPage({
   const deleteBenefitPlanCallback = () => deleteBenefitPlan(
     benefitPlan,
     formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-      code: benefitPlan?.code,
-      name: benefitPlan?.name,
+      id: benefitPlan?.id,
     }),
   );
 

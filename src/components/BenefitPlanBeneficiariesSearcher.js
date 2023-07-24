@@ -96,8 +96,7 @@ function BenefitPlanBeneficiariesSearcher({
       updateBeneficiary(
         editedBeneficiary,
         formatMessageWithValues(intl, 'socialProtection', 'beneficiary.update.mutationLabel', {
-          firstName: beneficiary.individual.firstName,
-          lastName: beneficiary.individual.lastName,
+          id: beneficiary.individual.id,
         }),
       );
     }
