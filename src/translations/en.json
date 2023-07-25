@@ -35,6 +35,7 @@
   "socialProtection.beneficiary.beneficiaryStatusPicker": "Status",
   "socialProtection.benefitPlan.saveButton.tooltip.enabled": "Save changes",
   "socialProtection.benefitPlan.saveButton.tooltip.disabled": "Save changes",
+  "socialProtection.viewDetailsButton.tooltip": "Details",
   "socialProtection.beneficiary.beneficiaryStatusPicker.POTENTIAL": "POTENTIAL",
   "socialProtection.beneficiary.beneficiaryStatusPicker.ACTIVE": "ACTIVE",
   "socialProtection.beneficiary.beneficiaryStatusPicker.GRADUATED": "GRADUATED",
