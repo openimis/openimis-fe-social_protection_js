@@ -12,7 +12,9 @@ import {
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import { DESCRIPTION_MAX_LENGTH, MAX_CODE_LENGTH } from '../constants';
+import {
+  DESCRIPTION_MAX_LENGTH, MAX_CODE_LENGTH, RIGHT_SCHEMA_UPDATE,
+} from '../constants';
 import {
   benefitPlanCodeSetValid,
   benefitPlanCodeValidationCheck,
@@ -57,6 +59,7 @@ class BenefitPlanHeadPanel extends FormPanel {
       isBenefitPlanSchemaValidating,
       benefitPlanSchemaValidationError,
       readOnly,
+      rights,
     } = this.props;
     const benefitPlan = { ...edited };
 
@@ -156,6 +159,16 @@ class BenefitPlanHeadPanel extends FormPanel {
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>
+          <TextAreaInput
+            module="socialProtection"
+            label="benefitPlan.description"
+            inputProps={{ maxLength: DESCRIPTION_MAX_LENGTH }}
+            value={benefitPlan?.description}
+            onChange={(v) => this.updateAttribute('description', v)}
+          />
+        </Grid>
+        {rights.includes(RIGHT_SCHEMA_UPDATE) && (
+        <Grid item xs={3} className={classes.item}>
           <ValidatedTextAreaInput
             module="socialProtection"
             label="benefitPlan.schema"
@@ -172,15 +185,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             validationError={benefitPlanSchemaValidationError}
           />
         </Grid>
-        <Grid item xs={3} className={classes.item}>
-          <TextAreaInput
-            module="socialProtection"
-            label="benefitPlan.description"
-            inputProps={{ maxLength: DESCRIPTION_MAX_LENGTH }}
-            value={benefitPlan?.description}
-            onChange={(v) => this.updateAttribute('description', v)}
-          />
-        </Grid>
+        )}
       </Grid>
     );
   }
