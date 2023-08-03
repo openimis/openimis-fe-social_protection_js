@@ -137,7 +137,7 @@ class BenefitPackagePlanPanel extends FormPanel {
                 <TextInput
                   module="socialProtection"
                   label="benefitPlan.institution"
-                  value={!!benefitPlan?.institution && benefitPlan.institution}
+                  value={benefitPlan?.institution ?? ''}
                   readOnly={readOnly}
                 />
               </Grid>
