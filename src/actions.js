@@ -30,8 +30,7 @@ const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
   'ceilingPerBeneficiary',
   'beneficiaryDataSchema',
   'jsonExt',
-  `holder${
-    modulesManager.getProjection('policyHolder.PolicyHolderPicker.projection')}`,
+  'institution',
 ];
 
 const UPLOAD_HISTORY_FULL_PROJECTION = () => [
@@ -215,7 +214,7 @@ function formatBenefitPlanGQL(benefitPlan) {
     ${benefitPlan?.code ? `code: "${formatGQLString(benefitPlan.code)}"` : ''}
     ${benefitPlan?.maxBeneficiaries ? `maxBeneficiaries: ${benefitPlan.maxBeneficiaries}` : ''}
     ${benefitPlan?.ceilingPerBeneficiary ? `ceilingPerBeneficiary: "${benefitPlan.ceilingPerBeneficiary}"` : ''}
-    ${benefitPlan?.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ''}
+    ${benefitPlan?.institution ? `institution: "${formatGQLString(benefitPlan.institution)}"` : ''}
     ${benefitPlan?.type ? `type: ${benefitPlan.type}` : ''}
     ${benefitPlan?.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ''}
     ${benefitPlan?.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ''}

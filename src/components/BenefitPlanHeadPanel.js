@@ -9,6 +9,7 @@ import {
   ValidatedTextAreaInput,
   TextAreaInput,
   PublishedComponent,
+  TextInput,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
@@ -140,12 +141,11 @@ class BenefitPlanHeadPanel extends FormPanel {
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>
-          <PublishedComponent
-            pubRef="policyHolder.PolicyHolderPicker"
+          <TextInput
             module="socialProtection"
-            withNull
-            onChange={(v) => this.updateAttribute('holder', v)}
-            value={!!benefitPlan?.holder && benefitPlan.holder}
+            label="benefitPlan.institution"
+            onChange={(v) => this.updateAttribute('institution', v)}
+            value={!!benefitPlan?.institution && benefitPlan.institution}
           />
         </Grid>
         <Grid item xs={3} className={classes.item}>

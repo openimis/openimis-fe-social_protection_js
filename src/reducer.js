@@ -9,11 +9,9 @@ import {
   formatGraphQLError,
   formatServerError,
   pageInfo,
-  parseData,
-} from '@openimis/fe-core';
-import {
-  CLEAR, ERROR, REQUEST, SUCCESS,
-} from './util/action-type';
+  parseData
+} from "@openimis/fe-core";
+import { CLEAR, ERROR, REQUEST, SUCCESS } from "./util/action-type";
 
 export const ACTION_TYPE = {
   MUTATION: 'BENEFIT_PLAN_MUTATION',
@@ -169,17 +167,10 @@ function reducer(
         fetchingBenefitPlans: false,
         fetchedBenefitPlans: true,
         benefitPlans: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
-          const response = ({
+          return ({
             ...benefitPlan,
             id: decodeId(benefitPlan.id),
           });
-          if (response?.holder?.id) {
-            response.holder = ({
-              ...response.holder,
-              id: decodeId(response.holder.id),
-            });
-          }
-          return response;
         }),
         benefitPlansPageInfo: pageInfo(action.payload.data.benefitPlan),
         benefitPlansTotalCount: action.payload.data.benefitPlan ? action.payload.data.benefitPlan.totalCount : null,
@@ -205,17 +196,10 @@ function reducer(
         fetchingBenefitPlan: false,
         fetchedBenefitPlan: true,
         benefitPlan: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
-          const response = ({
+          return ({
             ...benefitPlan,
             id: decodeId(benefitPlan.id),
           });
-          if (response?.holder?.id) {
-            response.holder = ({
-              ...response.holder,
-              id: decodeId(response.holder.id),
-            });
-          }
-          return response;
         })?.[0],
         errorBenefitPlan: null,
       };
