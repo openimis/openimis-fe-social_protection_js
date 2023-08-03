@@ -9,9 +9,11 @@ import {
   formatGraphQLError,
   formatServerError,
   pageInfo,
-  parseData
-} from "@openimis/fe-core";
-import { CLEAR, ERROR, REQUEST, SUCCESS } from "./util/action-type";
+  parseData,
+} from '@openimis/fe-core';
+import {
+  CLEAR, ERROR, REQUEST, SUCCESS,
+} from './util/action-type';
 
 export const ACTION_TYPE = {
   MUTATION: 'BENEFIT_PLAN_MUTATION',
@@ -166,12 +168,10 @@ function reducer(
         ...state,
         fetchingBenefitPlans: false,
         fetchedBenefitPlans: true,
-        benefitPlans: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
-          return ({
-            ...benefitPlan,
-            id: decodeId(benefitPlan.id),
-          });
-        }),
+        benefitPlans: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => ({
+          ...benefitPlan,
+          id: decodeId(benefitPlan.id),
+        })),
         benefitPlansPageInfo: pageInfo(action.payload.data.benefitPlan),
         benefitPlansTotalCount: action.payload.data.benefitPlan ? action.payload.data.benefitPlan.totalCount : null,
         errorBenefitPlans: formatGraphQLError(action.payload),
@@ -195,12 +195,10 @@ function reducer(
         ...state,
         fetchingBenefitPlan: false,
         fetchedBenefitPlan: true,
-        benefitPlan: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
-          return ({
-            ...benefitPlan,
-            id: decodeId(benefitPlan.id),
-          });
-        })?.[0],
+        benefitPlan: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => ({
+          ...benefitPlan,
+          id: decodeId(benefitPlan.id),
+        }))?.[0],
         errorBenefitPlan: null,
       };
     case SUCCESS(ACTION_TYPE.SEARCH_BENEFICIARIES):
