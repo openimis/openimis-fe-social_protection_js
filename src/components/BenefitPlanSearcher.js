@@ -87,7 +87,7 @@ function BenefitPlanSearcher({
     prevSubmittingMutationRef.current = submittingMutation;
   });
 
-  const fetch = (params) => fetchBenefitPlans(modulesManager, params);
+  const fetch = (params) => fetchBenefitPlans(params);
 
   const headers = () => {
     const headers = [
