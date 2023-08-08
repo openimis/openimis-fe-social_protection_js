@@ -111,7 +111,7 @@ function BenefitPlanSearcherForEntities({
     if (groupId) {
       fetchBeneficiariesGroup(modulesManager, { group_Id: groupId });
     }
-    fetchBenefitPlans(modulesManager, params);
+    fetchBenefitPlans(params);
   };
 
   const headers = () => {

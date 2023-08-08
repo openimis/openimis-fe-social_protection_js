@@ -12,7 +12,7 @@ import {
   CLEAR, ERROR, REQUEST, SUCCESS,
 } from './util/action-type';
 
-const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
+const BENEFIT_PLAN_FULL_PROJECTION = () => [
   'uuid',
   'id',
   'isDeleted',
@@ -30,8 +30,7 @@ const BENEFIT_PLAN_FULL_PROJECTION = (modulesManager) => [
   'ceilingPerBeneficiary',
   'beneficiaryDataSchema',
   'jsonExt',
-  `holder${
-    modulesManager.getProjection('policyHolder.PolicyHolderPicker.projection')}`,
+  'institution',
 ];
 
 const UPLOAD_HISTORY_FULL_PROJECTION = () => [
@@ -71,8 +70,8 @@ const WORKFLOWS_FULL_PROJECTION = () => [
   'group',
 ];
 
-export function fetchBenefitPlans(modulesManager, params) {
-  const payload = formatPageQueryWithCount('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION(modulesManager));
+export function fetchBenefitPlans(params) {
+  const payload = formatPageQueryWithCount('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION());
   return graphql(payload, ACTION_TYPE.SEARCH_BENEFIT_PLANS);
 }
 
@@ -215,7 +214,7 @@ function formatBenefitPlanGQL(benefitPlan) {
     ${benefitPlan?.code ? `code: "${formatGQLString(benefitPlan.code)}"` : ''}
     ${benefitPlan?.maxBeneficiaries ? `maxBeneficiaries: ${benefitPlan.maxBeneficiaries}` : ''}
     ${benefitPlan?.ceilingPerBeneficiary ? `ceilingPerBeneficiary: "${benefitPlan.ceilingPerBeneficiary}"` : ''}
-    ${benefitPlan?.holder?.id ? `holderId: "${benefitPlan.holder.id}"` : ''}
+    ${benefitPlan?.institution ? `institution: "${formatGQLString(benefitPlan.institution)}"` : ''}
     ${benefitPlan?.type ? `type: ${benefitPlan.type}` : ''}
     ${benefitPlan?.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(benefitPlan.dateValidFrom)}"` : ''}
     ${benefitPlan?.dateValidTo ? `dateValidTo: "${dateTimeToDate(benefitPlan.dateValidTo)}"` : ''}
