@@ -21,7 +21,6 @@
   "socialProtection.benefitPlan.name": "Name",
   "socialProtection.benefitPlan.type": "Type",
   "socialProtection.benefitPlan.code": "Code",
-  "socialProtection.benefitPlan.institution": "Institution",
   "socialProtection.benefitPlan.maxBeneficiaries": "Max Beneficiaries",
   "socialProtection.benefitPlan.jsonExt": "json_ext",
   "socialProtection.benefitPlan.schema": "Schema",

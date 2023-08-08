@@ -134,10 +134,10 @@ class BenefitPackagePlanPanel extends FormPanel {
                 />
               </Grid>
               <Grid item xs={3} className={classes.item}>
-                <TextInput
+                <PublishedComponent
+                  pubRef="policyHolder.PolicyHolderPicker"
                   module="socialProtection"
-                  label="benefitPlan.institution"
-                  value={benefitPlan?.institution ?? ''}
+                  value={!!benefitPlan?.holder && benefitPlan.holder}
                   readOnly={readOnly}
                 />
               </Grid>
