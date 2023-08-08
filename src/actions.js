@@ -71,7 +71,7 @@ const WORKFLOWS_FULL_PROJECTION = () => [
 ];
 
 export function fetchBenefitPlans(params) {
-  const payload = formatPageQueryWithCount('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION);
+  const payload = formatPageQueryWithCount('benefitPlan', params, BENEFIT_PLAN_FULL_PROJECTION());
   return graphql(payload, ACTION_TYPE.SEARCH_BENEFIT_PLANS);
 }
 
