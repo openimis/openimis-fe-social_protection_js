@@ -21,8 +21,6 @@ import { fetchBenefitPlanTasks } from '../actions';
 
 function BenefitPlanTasksSearcher({
   intl,
-  modulesManager,
-  history,
   rights,
   fetchingTasks,
   errorTasks,
@@ -33,20 +31,12 @@ function BenefitPlanTasksSearcher({
   benefitPlanTasks,
   benefitPlanTasksPageInfo,
   benefitPlanTasksTotalCount,
+  openTask,
+  onDoubleClick,
 }) {
   const prevSubmittingMutationRef = useRef();
 
   const fetch = (params) => fetchBenefitPlanTasks(params);
-
-  const openTask = (task, newTab = false) => historyPush(
-    modulesManager,
-    history,
-    'tasksManagement.route.task',
-    [task?.id],
-    newTab,
-  );
-
-  const onDoubleClick = (task) => openTask(task);
 
   const headers = () => {
     const headers = [
