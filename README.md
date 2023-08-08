@@ -52,6 +52,7 @@ None
 
 ## Other Modules Redux State Bindings
 * `state.core.user`, to access user info (rights,...)
+* `state.policyHolder`, to retrieve Policy Holders for their respective pickers
 
 ## Configurations Options
 None
