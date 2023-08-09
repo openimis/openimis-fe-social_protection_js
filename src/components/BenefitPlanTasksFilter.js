@@ -100,7 +100,7 @@ function BenefitPlanTasksFilter({
             {
               id: 'status',
               value,
-              filter: `status: "${value}"`,
+              filter: `status: ${value}`,
             },
           ])}
         />

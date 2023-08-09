@@ -168,19 +168,10 @@ function reducer(
         ...state,
         fetchingBenefitPlans: false,
         fetchedBenefitPlans: true,
-        benefitPlans: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
-          const response = ({
-            ...benefitPlan,
-            id: decodeId(benefitPlan.id),
-          });
-          if (response?.holder?.id) {
-            response.holder = ({
-              ...response.holder,
-              id: decodeId(response.holder.id),
-            });
-          }
-          return response;
-        }),
+        benefitPlans: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => ({
+          ...benefitPlan,
+          id: decodeId(benefitPlan.id),
+        })),
         benefitPlansPageInfo: pageInfo(action.payload.data.benefitPlan),
         benefitPlansTotalCount: action.payload.data.benefitPlan ? action.payload.data.benefitPlan.totalCount : null,
         errorBenefitPlans: formatGraphQLError(action.payload),
@@ -204,19 +195,10 @@ function reducer(
         ...state,
         fetchingBenefitPlan: false,
         fetchedBenefitPlan: true,
-        benefitPlan: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => {
-          const response = ({
-            ...benefitPlan,
-            id: decodeId(benefitPlan.id),
-          });
-          if (response?.holder?.id) {
-            response.holder = ({
-              ...response.holder,
-              id: decodeId(response.holder.id),
-            });
-          }
-          return response;
-        })?.[0],
+        benefitPlan: parseData(action.payload.data.benefitPlan)?.map((benefitPlan) => ({
+          ...benefitPlan,
+          id: decodeId(benefitPlan.id),
+        }))?.[0],
         errorBenefitPlan: null,
       };
     case SUCCESS(ACTION_TYPE.SEARCH_BENEFICIARIES):
