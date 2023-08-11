@@ -44,7 +44,10 @@ import { BenefitPackageMembersTabLabel, BenefitPackageMembersTabPanel } from './
 import BenefitPlanTaskPreviewTable from './components/BenefitPlanTaskPreviewTable';
 import BenefitPlanPicker from './pickers/BenefitPlanPicker';
 import { BenefitPlansListTabLabel, BenefitPlansListTabPanel } from './components/BenefitPlansListTab';
-import BenefitPlanTasksSearcher from "./components/BenefitPlanTasksSearcher";
+import {
+  BenefitPlanTaskItemFormatters,
+  BenefitPlanTaskTableHeaders,
+} from './components/tasks/BenefitPlanTasks';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -72,7 +75,6 @@ const DEFAULT_CONFIG = {
     { key: 'socialProtection.BeneficiaryStatusPicker', ref: BeneficiaryStatusPicker },
     { key: 'socialProtection.BenefitPlanSearcher', ref: BenefitPlanSearcher },
     { key: 'socialProtection.BenefitPlanSearcherForEntities', ref: BenefitPlanSearcherForEntities },
-    { key: 'socialProtection.BenefitPlanTasksSearcher', ref: BenefitPlanTasksSearcher },
     { key: 'socialProtection.BenefitPlanTaskPreviewTable', ref: BenefitPlanTaskPreviewTable },
     { key: 'socialProtection.BenefitPlanPicker', ref: BenefitPlanPicker },
     { key: 'socialProtection.BenefitPlansListTabLabel', ref: BenefitPlansListTabLabel },
@@ -100,14 +102,11 @@ const DEFAULT_CONFIG = {
     BenefitPackagePaymentsTabPanel,
     BenefitPackageGrievancesTabPanel,
   ],
-  'tasksManagement.taskSearcher': [{
-    pubRef: 'socialProtection.BenefitPlanTasksSearcher',
+  'tasksManagement.tasks': [{
     text: <FormattedMessage module="socialProtection" id="benefitPlan.tasks.update.title" />,
-  }],
-  'tasksManagement.taskPreview': [{
-    pubRef: 'socialProtection.BenefitPlanTaskPreviewTable',
-    taskSource: 'Benefit Plan Update',
-    text: <FormattedMessage module="socialProtection" id="benefitPlan.tasks.update.title" />,
+    tableHeaders: BenefitPlanTaskTableHeaders,
+    itemFormatters: BenefitPlanTaskItemFormatters,
+    taskSource: 'BenefitPlanService',
   }],
 };
 
