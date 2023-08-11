@@ -1,12 +1,15 @@
+import React from 'react';
+import { FormattedMessage } from '@openimis/fe-core';
+
 const BenefitPlanTaskTableHeaders = () => [
-  'benefitPlan.code',
-  'benefitPlan.name',
-  'benefitPlan.type',
-  'benefitPlan.dateValidFrom',
-  'benefitPlan.dateValidTo',
-  'benefitPlan.maxBeneficiaries',
-  'benefitPlan.institution',
-  'benefitPlan.schema',
+  <FormattedMessage module="socialProtection" id="benefitPlan.code" />,
+  <FormattedMessage module="socialProtection" id="benefitPlan.name" />,
+  <FormattedMessage module="socialProtection" id="benefitPlan.type" />,
+  <FormattedMessage module="socialProtection" id="benefitPlan.dateValidFrom" />,
+  <FormattedMessage module="socialProtection" id="benefitPlan.dateValidTo" />,
+  <FormattedMessage module="socialProtection" id="benefitPlan.maxBeneficiaries" />,
+  <FormattedMessage module="socialProtection" id="benefitPlan.institution" />,
+  <FormattedMessage module="socialProtection" id="benefitPlan.schema" />,
 ];
 
 const BenefitPlanTaskItemFormatters = () => [
