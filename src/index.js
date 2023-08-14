@@ -48,7 +48,7 @@ import {
   BenefitPlanTaskItemFormatters,
   BenefitPlanTaskTableHeaders,
 } from './components/tasks/BenefitPlanTasks';
-import { BeneficiaryTaskItemFormatters, BeneficiaryTaskTableHeaders } from "./components/tasks/BeneficiaryTasks";
+import { BeneficiaryTaskItemFormatters, BeneficiaryTaskTableHeaders } from './components/tasks/BeneficiaryTasks';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
