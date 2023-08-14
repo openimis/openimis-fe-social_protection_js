@@ -96,5 +96,9 @@
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.errorNone": "None",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.workflow": "Workflow",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistory": "Upload History",
-  "socialProtection.benefitPlan.tasks.searcherResultsTitle": "{benefitPlanTasksTotalCount} Tasks"
+  "socialProtection.benefitPlan.tasks.searcherResultsTitle": "{benefitPlanTasksTotalCount} Tasks",
+  "socialProtection.benefitPlan.tasks.update.title": "Benefit Plan Update Tasks",
+  "socialProtection.beneficiary.tasks.title": "Beneficiary Tasks",
+  "socialProtection.beneficiary.task.individual.id": "Individual",
+  "socialProtection.beneficiary.task.benefitPlan.id": "Benefit Plan"
 }

@@ -1,6 +1,8 @@
 // Disable due to core architecture
 /* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
+import React from 'react';
+import { FormattedMessage } from '@openimis/fe-core';
 import messages_en from './translations/en.json';
 import reducer from './reducer';
 import BenefitPlanMainMenu from './menus/BenefitPlanMainMenu';
@@ -39,10 +41,14 @@ import {
 import BenefitPlanSearcher from './components/BenefitPlanSearcher';
 import BenefitPlanSearcherForEntities from './components/BenefitPlanSearcherForEntities';
 import { BenefitPackageMembersTabLabel, BenefitPackageMembersTabPanel } from './components/BenefitPackageMembersTab';
-import BenefitPlanTasksPage from './pages/BenefitPlanTasksPage';
 import BenefitPlanTaskPreviewTable from './components/BenefitPlanTaskPreviewTable';
 import BenefitPlanPicker from './pickers/BenefitPlanPicker';
 import { BenefitPlansListTabLabel, BenefitPlansListTabPanel } from './components/BenefitPlansListTab';
+import {
+  BenefitPlanTaskItemFormatters,
+  BenefitPlanTaskTableHeaders,
+} from './components/tasks/BenefitPlanTasks';
+import { BeneficiaryTaskItemFormatters, BeneficiaryTaskTableHeaders } from './components/tasks/BeneficiaryTasks';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -70,7 +76,6 @@ const DEFAULT_CONFIG = {
     { key: 'socialProtection.BeneficiaryStatusPicker', ref: BeneficiaryStatusPicker },
     { key: 'socialProtection.BenefitPlanSearcher', ref: BenefitPlanSearcher },
     { key: 'socialProtection.BenefitPlanSearcherForEntities', ref: BenefitPlanSearcherForEntities },
-    { key: 'socialProtection.BenefitPlanTasksPage', ref: BenefitPlanTasksPage },
     { key: 'socialProtection.BenefitPlanTaskPreviewTable', ref: BenefitPlanTaskPreviewTable },
     { key: 'socialProtection.BenefitPlanPicker', ref: BenefitPlanPicker },
     { key: 'socialProtection.BenefitPlansListTabLabel', ref: BenefitPlansListTabLabel },
@@ -98,6 +103,18 @@ const DEFAULT_CONFIG = {
     BenefitPackagePaymentsTabPanel,
     BenefitPackageGrievancesTabPanel,
   ],
+  'tasksManagement.tasks': [{
+    text: <FormattedMessage module="socialProtection" id="benefitPlan.tasks.update.title" />,
+    tableHeaders: BenefitPlanTaskTableHeaders,
+    itemFormatters: BenefitPlanTaskItemFormatters,
+    taskSource: ['BenefitPlanService'],
+  },
+  {
+    text: <FormattedMessage module="socialProtection" id="beneficiary.tasks.title" />,
+    tableHeaders: BeneficiaryTaskTableHeaders,
+    itemFormatters: BeneficiaryTaskItemFormatters,
+    taskSource: ['BeneficiaryService'],
+  }],
 };
 
 export const SocialProtectionModule = (cfg) => ({ ...DEFAULT_CONFIG, ...cfg });
