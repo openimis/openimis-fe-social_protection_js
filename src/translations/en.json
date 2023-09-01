@@ -100,5 +100,6 @@
   "socialProtection.benefitPlan.tasks.update.title": "Benefit Plan Update Tasks",
   "socialProtection.beneficiary.tasks.title": "Beneficiary Tasks",
   "socialProtection.beneficiary.task.individual.id": "Individual",
-  "socialProtection.beneficiary.task.benefitPlan.id": "Benefit Plan"
+  "socialProtection.beneficiary.task.benefitPlan.id": "Benefit Plan",
+  "socialProtection.calculation.tasks.title": "Payment Verification Tasks"
 }
