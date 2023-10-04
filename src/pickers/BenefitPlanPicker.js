@@ -50,12 +50,25 @@ function BenefitPlanPicker(props) {
   const benefitPlans = data?.benefitPlan?.edges.map((edge) => edge.node) ?? [];
   const shouldShowTooltip = benefitPlans?.length >= BENEFIT_PLANS_QUANTITY_LIMIT && !value && !currentString;
 
+  const sortAlphabetically = (data) => {
+    if (benefitPlans.length > 0) {
+      return benefitPlans.sort((a, b) => {
+        const codeA = a.code.toUpperCase();
+        const codeB = b.code.toUpperCase();
+        if (codeA < codeB) return -1;
+        if (codeA > codeB) return 1;
+        return 0;
+      });
+    }
+    return data;
+  };
+
   return (
     <Autocomplete
       multiple={multiple}
       error={error}
       readOnly={readOnly}
-      options={benefitPlans ?? []}
+      options={sortAlphabetically(benefitPlans ?? [])}
       isLoading={isLoading}
       value={value}
       getOptionLabel={(option) => `${option.code} ${option.name}`}
