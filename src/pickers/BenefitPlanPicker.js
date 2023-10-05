@@ -27,13 +27,12 @@ function BenefitPlanPicker(props) {
   const [currentString, setCurrentString] = useState('');
   const { formatMessage, formatMessageWithValues } = useTranslations('socialProtection', modulesManager);
 
-  /* eslint-disable max-len */
   const { isLoading, data, error } = useGraphqlQuery(
     `
     query BenefitPlanPicker(
     $search: String, $first: Int, $isDeleted: Boolean
     ) {
-      benefitPlan(name_Icontains: $search, code_Icontains: $search, first: $first, isDeleted: $isDeleted, sortAlphabetically: true) {
+      benefitPlan(search: $search, first: $first, isDeleted: $isDeleted, sortAlphabetically: true) {
         edges {
           node {
             id
@@ -47,7 +46,6 @@ function BenefitPlanPicker(props) {
     filters,
     { skip: true },
   );
-  /* eslint-enable max-len */
 
   const benefitPlans = data?.benefitPlan?.edges.map((edge) => edge.node) ?? [];
   const shouldShowTooltip = benefitPlans?.length >= BENEFIT_PLANS_QUANTITY_LIMIT && !value && !currentString;
