@@ -53,6 +53,10 @@ import {
   CalculationSocialProtectionItemFormatters,
   CalculationSocialProtectionTableHeaders,
 } from './components/tasks/CalculationSocialProtectionTasks';
+import {
+  ValidateImportValidItemsItemFormatters,
+  ValidateImportValidItemsTaskTableHeaders,
+} from './components/tasks/ValidateImportValidItems';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -124,6 +128,12 @@ const DEFAULT_CONFIG = {
     tableHeaders: CalculationSocialProtectionTableHeaders,
     itemFormatters: CalculationSocialProtectionItemFormatters,
     taskSource: ['calcrule_social_protection'],
+  },
+  {
+    text: <FormattedMessage module="individual" id="individual.tasks.validation_import_valid_items.title" />,
+    tableHeaders: ValidateImportValidItemsTaskTableHeaders,
+    itemFormatters: ValidateImportValidItemsItemFormatters,
+    taskSource: ['import_valid_items'],
   }],
 };
 
