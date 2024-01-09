@@ -57,10 +57,6 @@ import {
   ValidateImportValidItemsItemFormatters,
   ValidateImportValidItemsTaskTableHeaders,
 } from './components/tasks/ValidateImportValidItems';
-import {
-  ValidateDownloadInvalidItemsItemFormatters,
-  ValidateDownloadInvalidItemsTaskTableHeaders,
-} from './components/tasks/ValidateDownloadInvalidItems';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -138,12 +134,6 @@ const DEFAULT_CONFIG = {
     tableHeaders: ValidateImportValidItemsTaskTableHeaders,
     itemFormatters: ValidateImportValidItemsItemFormatters,
     taskSource: ['import_valid_items'],
-  },
-  {
-    text: <FormattedMessage module="socialProtection" id="tasks.validation_import_valid_items.title" />,
-    tableHeaders: ValidateDownloadInvalidItemsTaskTableHeaders,
-    itemFormatters: ValidateDownloadInvalidItemsItemFormatters,
-    taskSource: ['download_invalid_items'],
   }],
 };
 
