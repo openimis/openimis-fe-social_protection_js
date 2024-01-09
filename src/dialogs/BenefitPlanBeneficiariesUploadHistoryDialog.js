@@ -181,7 +181,7 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                       </TableCell>
                       <TableCell>
                         <Button
-                          onClick={downloadInvalidItemsFromUpload(item.dataUpload.uuid)}
+                          onClick={() => downloadInvalidItemsFromUpload(item.dataUpload.uuid)}
                           variant="outlined"
                           autoFocus
                           style={{
