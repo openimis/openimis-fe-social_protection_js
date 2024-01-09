@@ -27,6 +27,7 @@ import { bindActionCreators } from 'redux';
 import CollapsableErrorList from '../components/CollapsableErrorList';
 import { fetchUploadHistory } from '../actions';
 import { downloadInvalidItems } from '../util/export';
+import { UPLOAD_STATUS } from '../constants';
 
 const styles = (theme) => ({
   item: theme.paper.item,
@@ -180,17 +181,21 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                         <CollapsableErrorList errors={item.dataUpload.error} />
                       </TableCell>
                       <TableCell>
-                        <Button
-                          onClick={() => downloadInvalidItemsFromUpload(item.dataUpload.uuid)}
-                          variant="outlined"
-                          autoFocus
-                          style={{
-                            margin: '0 16px',
-                            marginBottom: '15px',
-                          }}
-                        >
-                          Download Invalid Items
-                        </Button>
+                        {[
+                          UPLOAD_STATUS.WAITING_FOR_VERIFICATION,
+                          UPLOAD_STATUS.PARTIAL_SUCCESS].includes(item.dataUpload.status) && (
+                          <Button
+                            onClick={() => downloadInvalidItemsFromUpload(item.dataUpload.uuid)}
+                            variant="outlined"
+                            autoFocus
+                            style={{
+                              margin: '0 16px',
+                              marginBottom: '15px',
+                            }}
+                          >
+                            Download Invalid Items
+                          </Button>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}

@@ -71,6 +71,16 @@ export const FIELD_TYPES = {
   STRING: 'string',
 };
 
+export const UPLOAD_STATUS = {
+  PENDING: 'PENDING',
+  TRIGGERED: 'TRIGGERED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  SUCCESS: 'SUCCESS',
+  PARTIAL_SUCCESS: 'PARTIAL_SUCCESS',
+  WAITING_FOR_VERIFICATION: 'WAITING_FOR_VERIFICATION',
+  FAIL: 'FAIL',
+};
+
 export const MODULE_NAME = 'social_protection';
 export const SOCIAL_PROTECTION_MODULE = 'socialProtection';
 export const BENEFIT_PLAN_LABEL = 'BenefitPlan';
