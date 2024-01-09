@@ -26,6 +26,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CollapsableErrorList from '../components/CollapsableErrorList';
 import { fetchUploadHistory } from '../actions';
+import { downloadInvalidItems } from '../util/export';
 
 const styles = (theme) => ({
   item: theme.paper.item,
@@ -50,6 +51,10 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
 
   const handleClose = () => {
     setIsOpen(false);
+  };
+
+  const downloadInvalidItemsFromUpload = (uploadId) => {
+    downloadInvalidItems(uploadId);
   };
 
   useEffect(() => {
@@ -173,6 +178,19 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                       </TableCell>
                       <TableCell>
                         <CollapsableErrorList errors={item.dataUpload.error} />
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          onClick={downloadInvalidItemsFromUpload(item.dataUpload.uuid)}
+                          variant="outlined"
+                          autoFocus
+                          style={{
+                            margin: '0 16px',
+                            marginBottom: '15px',
+                          }}
+                        >
+                          Download Invalid Items
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
