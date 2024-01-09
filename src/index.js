@@ -130,7 +130,7 @@ const DEFAULT_CONFIG = {
     taskSource: ['calcrule_social_protection'],
   },
   {
-    text: <FormattedMessage module="socialProtection" id="tasks.validation_import_valid_items.title" />,
+    text: <FormattedMessage module="socialProtection" id="validation_import_valid_items.tasks.title" />,
     tableHeaders: ValidateImportValidItemsTaskTableHeaders,
     itemFormatters: ValidateImportValidItemsItemFormatters,
     taskSource: ['import_valid_items'],
