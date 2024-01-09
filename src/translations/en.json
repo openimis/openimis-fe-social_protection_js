@@ -103,12 +103,5 @@
   "socialProtection.beneficiary.task.benefitPlan.id": "Benefit Plan",
   "socialProtection.calculation.tasks.title": "Payment Verification Tasks",
   "socialProtection.BenefitPlanPicker.placeholder": "Please select a Benefit Plan",
-  "socialProtection.tasks": {
-    "validation_import_valid_items": {
-      "title": "Import Valid Items Task"
-    },
-    "validation_downalod_valid_items": {
-      "title": "Download Invalid Items Task"
-    }
-  }
+  "socialProtection.validation_import_valid_items.tasks.title": "Import Valid Items Task"
 }
