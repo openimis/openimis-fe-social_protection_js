@@ -38,6 +38,7 @@ export const ACTION_TYPE = {
   GROUP_BENEFICIARY_EXPORT: 'GROUP_BENEFICIARY_EXPORT',
   GET_WORKFLOWS: 'GET_WORKFLOWS',
   GET_BENEFIT_PLAN_UPLOAD_HISTORY: 'GET_UPLOAD_HISTORY',
+  GET_FIELDS_FROM_BF_SCHEMA: 'GET_FIELDS_FROM_BF_SCHEMA',
 };
 
 function reducer(
@@ -96,10 +97,22 @@ function reducer(
     beneficiaryDataUploadHistoryPageInfo: {},
     beneficiaryDataUploadHistoryGroupBeneficiaries: null,
     errorBeneficiaryDataUploadHistory: null,
+    fieldsFromBfSchema: [],
+    fetchingFieldsFromBfSchema: false,
+    fetchedFieldsFromBfSchema: false,
+    errorFieldsFromBfSchema: null,
   },
   action,
 ) {
   switch (action.type) {
+    case REQUEST(ACTION_TYPE.GET_FIELDS_FROM_BF_SCHEMA):
+      return {
+        ...state,
+        fieldsFromBfSchema: [],
+        fetchingFieldsFromBfSchema: true,
+        fetchedFieldsFromBfSchema: false,
+        errorFieldsFromBfSchema: null,
+      };
     case REQUEST(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
         ...state,
@@ -159,6 +172,14 @@ function reducer(
         benefitPlansTotalCount: action.payload.data.benefitPlan ? action.payload.data.benefitPlan.totalCount : null,
         errorBenefitPlans: formatGraphQLError(action.payload),
       };
+    case SUCCESS(ACTION_TYPE.GET_FIELDS_FROM_BF_SCHEMA):
+      return {
+        ...state,
+        fieldsFromBfSchema: action?.payload?.data?.benefitPlanSchemaField?.schemaFields || [],
+        fetchingFieldsFromBfSchema: false,
+        fetchedFieldsFromBfSchema: true,
+        errorFieldsFromBfSchema: formatGraphQLError(action.payload),
+      };
     case SUCCESS(ACTION_TYPE.GET_BENEFIT_PLAN):
       return {
         ...state,
@@ -214,6 +235,12 @@ function reducer(
         workflows: action.payload.data.workflow || [],
         workflowsPageInfo: pageInfo(action.payload.data.benefitPlan),
         errorWorkflows: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.GET_FIELDS_FROM_BF_SCHEMA):
+      return {
+        ...state,
+        fetchingFieldsFromBfSchema: false,
+        errorFieldsFromBfSchema: formatGraphQLError(action.payload),
       };
     case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
