@@ -57,6 +57,7 @@ import {
   ValidateImportValidItemsItemFormatters,
   ValidateImportValidItemsTaskTableHeaders,
 } from './components/tasks/ValidateImportValidItems';
+import { fetchBenefitPlanSchemaFields } from './actions';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -88,6 +89,7 @@ const DEFAULT_CONFIG = {
     { key: 'socialProtection.BenefitPlanPicker', ref: BenefitPlanPicker },
     { key: 'socialProtection.BenefitPlansListTabLabel', ref: BenefitPlansListTabLabel },
     { key: 'socialProtection.BenefitPlansListTabPanel', ref: BenefitPlansListTabPanel },
+    { key: 'socialProtection.fetchBenefitPlanSchemaFields', ref: fetchBenefitPlanSchemaFields },
   ],
   'benefitPlan.TabPanel.label': [
     BenefitPlanBeneficiariesListTabLabel,
@@ -135,6 +137,7 @@ const DEFAULT_CONFIG = {
     itemFormatters: ValidateImportValidItemsItemFormatters,
     taskSource: ['import_valid_items'],
   }],
+
 };
 
 export const SocialProtectionModule = (cfg) => ({ ...DEFAULT_CONFIG, ...cfg });

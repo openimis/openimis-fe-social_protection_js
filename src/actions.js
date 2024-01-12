@@ -72,6 +72,11 @@ export function fetchGroupBeneficiaries(params) {
   return graphql(payload, ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES);
 }
 
+export function fetchBenefitPlanSchemaFields(params) {
+  const payload = formatQuery('benefitPlanSchemaField', params, ['schemaFields']);
+  return graphql(payload, ACTION_TYPE.GET_FIELDS_FROM_BF_SCHEMA);
+}
+
 export function fetchBeneficiariesGroup(modulesManager, variables) {
   const [key] = Object.keys(variables);
   return graphqlWithVariables(

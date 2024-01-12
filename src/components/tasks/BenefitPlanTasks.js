@@ -20,7 +20,7 @@ const BenefitPlanTaskItemFormatters = () => [
   (benefitPlan) => benefitPlan?.date_valid_to,
   (benefitPlan) => benefitPlan?.max_beneficiaries,
   (benefitPlan) => benefitPlan?.institution,
-  (benefitPlan) => benefitPlan?.beneficiary_data_schema,
+  (benefitPlan) => JSON.stringify(benefitPlan?.beneficiary_data_schema),
 ];
 
 export { BenefitPlanTaskTableHeaders, BenefitPlanTaskItemFormatters };
