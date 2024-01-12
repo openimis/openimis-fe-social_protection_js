@@ -37,7 +37,7 @@ const UPLOAD_HISTORY_FULL_PROJECTION = () => [
   'id',
   'uuid',
   'workflow',
-  'dataUpload {dateCreated, dateUpdated, sourceName, sourceType, status, error }',
+  'dataUpload {uuid, dateCreated, dateUpdated, sourceName, sourceType, status, error }',
 ];
 
 const BENEFICIARY_FULL_PROJECTION = () => [
