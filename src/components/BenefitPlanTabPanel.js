@@ -7,6 +7,7 @@ import {
   BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE,
   BENEFIT_PLAN_TABS_LABEL_CONTRIBUTION_KEY,
   BENEFIT_PLAN_TABS_PANEL_CONTRIBUTION_KEY,
+  DEDUPLICATION_SELECT_FIELD_DIALOG_CONTRIBUTION_KEY,
 } from '../constants';
 import BenefitPlanBeneficiariesUploadDialog from '../dialogs/BenefitPlanBeneficiariesUploadDialog';
 import BenefitPlanBeneficiariesUploadHistoryDialog from '../dialogs/BenefitPlanBeneficiariesUploadHistoryDialog';
@@ -59,6 +60,11 @@ function BenefitPlanTabPanel({
             />
           </div>
           <div style={{ float: 'right', paddingRight: '16px' }}>
+            <Contributions
+              contributionKey={DEDUPLICATION_SELECT_FIELD_DIALOG_CONTRIBUTION_KEY}
+              intl={intl}
+              benefitPlan={benefitPlan}
+            />
             <BenefitPlanBeneficiariesUploadDialog
               benefitPlan={benefitPlan}
             />
