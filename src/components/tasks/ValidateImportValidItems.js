@@ -9,10 +9,10 @@ const ValidateImportValidItemsTaskTableHeaders = () => [
 ];
 
 const ValidateImportValidItemsItemFormatters = () => [
-  (jsonExt) => jsonExt?.benefit_plan_code,
-  (jsonExt) => jsonExt?.source_name,
-  (jsonExt) => jsonExt?.workflow,
-  (jsonExt) => jsonExt?.percentage_of_invalid_items ?? '-',
+  (dataUpload, jsonExt) => jsonExt?.benefit_plan_code,
+  (dataUpload, jsonExt) => jsonExt?.source_name,
+  (dataUpload, jsonExt) => jsonExt?.workflow,
+  (dataUpload, jsonExt) => jsonExt?.percentage_of_invalid_items ?? '-',
 ];
 
 export { ValidateImportValidItemsTaskTableHeaders, ValidateImportValidItemsItemFormatters };
