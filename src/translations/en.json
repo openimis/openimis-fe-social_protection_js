@@ -103,5 +103,9 @@
   "socialProtection.beneficiary.task.benefitPlan.id": "Benefit Plan",
   "socialProtection.calculation.tasks.title": "Payment Verification Tasks",
   "socialProtection.BenefitPlanPicker.placeholder": "Please select a Benefit Plan",
-  "socialProtection.validation_import_valid_items.tasks.title": "Import Valid Items Task"
+  "socialProtection.validation_import_valid_items.tasks.title": "Import Valid Items Task",
+  "socialProtection.benefitUploadRecord.benefitPlanCode": "Benefit plan code",
+  "socialProtection.benefitUploadRecord.sourceName": "Filename",
+  "socialProtection.benefitUploadRecord.workflow": "Workflow",
+  "socialProtection.benefitUploadRecord.percentageOfInvalidItems": "Percentage of invalid items"
 }
