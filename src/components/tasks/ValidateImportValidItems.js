@@ -12,7 +12,7 @@ const ValidateImportValidItemsItemFormatters = () => [
   (dataUpload, jsonExt) => jsonExt?.benefit_plan_code,
   (dataUpload, jsonExt) => jsonExt?.source_name,
   (dataUpload, jsonExt) => jsonExt?.workflow,
-  (dataUpload, jsonExt) => `${jsonExt?.percentage_of_invalid_items} %` ?? '-',
+  (dataUpload, jsonExt) => `${jsonExt?.percentage_of_invalid_items ?? 0} %`,
 ];
 
 export { ValidateImportValidItemsTaskTableHeaders, ValidateImportValidItemsItemFormatters };
