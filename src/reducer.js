@@ -198,6 +198,7 @@ function reducer(
         fetchedBeneficiaries: true,
         beneficiaries: parseData(action.payload.data.beneficiary)?.map((beneficiary) => ({
           ...beneficiary,
+          benefitPlan: { id: beneficiary?.benefitPlan?.id ? decodeId(beneficiary.benefitPlan.id) : null },
           id: decodeId(beneficiary.id),
         })),
         beneficiariesPageInfo: pageInfo(action.payload.data.beneficiary),
@@ -541,6 +542,7 @@ function reducer(
         fetchedBeneficiary: true,
         beneficiary: parseData(action.payload.data.beneficiary).map((beneficiary) => ({
           ...beneficiary,
+          benefitPlan: { id: beneficiary?.benefitPlan?.id ? decodeId(beneficiary.benefitPlan.id) : null },
           id: decodeId(beneficiary.id),
         }))?.[0],
         error: formatGraphQLError(action.payload),

@@ -42,6 +42,7 @@ const UPLOAD_HISTORY_FULL_PROJECTION = () => [
 
 const BENEFICIARY_FULL_PROJECTION = () => [
   'id',
+  'benefitPlan {id}',
   'individual {firstName, lastName, dob}',
   'status',
 ];
@@ -214,6 +215,7 @@ function formatBenefitPlanGQL(benefitPlan) {
 function formatBeneficiaryGQL(beneficiary) {
   return `
     ${beneficiary?.id ? `id: "${beneficiary.id}"` : ''}
+    ${beneficiary?.benefitPlan?.id ? `benefitPlanId: "${beneficiary.benefitPlan.id}"` : ''}
     ${beneficiary?.status ? `status: ${beneficiary.status}` : ''}`;
 }
 
