@@ -40,10 +40,24 @@ function CollapsableErrorList({
     );
   }
 
+  const renderValue = (value) => {
+    if (typeof value === 'object' && value !== null && !(value instanceof Array)) {
+      console.log(value)
+      return (
+        <ListItemText primary={JSON.stringify(value)} style={{ marginLeft: '40px' }} />
+      );
+    } else {
+      // It's a string or an array, render directly
+      return <ListItemText primary={value} style={{ marginLeft: '40px' }} />;
+    }
+  };
+  
   const formatErrorMessage = (errorObj) => {
     try {
       // Initialize an array to hold formatted error messages
       const formattedMessages = [];
+
+
 
       // Iterate over the object keys and format the message
       for (const [key, value] of Object.entries(errorObj)) {
@@ -54,7 +68,7 @@ function CollapsableErrorList({
           <ErrorIcon/><ListItemText primary={key} style={{ marginLeft: '20px' }} primaryTypographyProps={{ style: { fontWeight: 'bold' } }}/>
         </ListItem>
         <ListItem>
-          <ListItemText primary={value}  style={{ marginLeft: '40px' }}/>
+        {renderValue(value)}
         </ListItem>
         </>
           );
@@ -64,6 +78,7 @@ function CollapsableErrorList({
       return formattedMessages
     } catch (e) {
       // Fallback in case of parsing error
+      console.log(e)
       return "Error parsing the error message.";
     }
   };
