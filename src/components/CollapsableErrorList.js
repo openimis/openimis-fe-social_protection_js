@@ -42,7 +42,6 @@ function CollapsableErrorList({
 
   const renderValue = (value) => {
     if (typeof value === 'object' && value !== null && !(value instanceof Array)) {
-      console.log(value)
       return (
         <ListItemText primary={JSON.stringify(value)} style={{ marginLeft: '40px' }} />
       );
