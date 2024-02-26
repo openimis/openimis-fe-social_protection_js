@@ -63,7 +63,7 @@ function BenefitPlanPicker(props) {
       setCurrentString={setCurrentString}
       filterOptions={filter}
       filterSelectedOptions={filterSelectedOptions}
-      onInputChange={(search) => setFilters({ first: BENEFIT_PLANS_QUANTITY_LIMIT, search, isDeleted: false })}
+      onInputChange={(search) => setFilters({ search, isDeleted: false })}
       renderInput={(inputProps) => (
         <Tooltip
           title={
