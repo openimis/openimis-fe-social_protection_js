@@ -22,9 +22,11 @@ import {
 import BenefitPlanHeadPanel from '../components/BenefitPlanHeadPanel';
 import BenefitPlanTabPanel from '../components/BenefitPlanTabPanel';
 import { ACTION_TYPE } from '../reducer';
+import BenefitPlanEligibilityCriteriaPanel from '../components/BenefitPlanEligibilityCriteriaPanel';
 
 const styles = (theme) => ({
   page: theme.page,
+  paper: theme.paper.classes,
 });
 
 function BenefitPlanPage({
@@ -145,6 +147,14 @@ function BenefitPlanPage({
     );
   };
 
+  const getBenefitPlanPanels = () => {
+    const panels = [BenefitPlanEligibilityCriteriaPanel];
+    if (rights.includes(RIGHT_BENEFICIARY_SEARCH)) {
+      panels.push(BenefitPlanTabPanel);
+    }
+    return panels;
+  };
+
   const actions = [
     !!benefitPlan && {
       doIt: openDeleteBenefitPlanConfirmDialog,
@@ -158,6 +168,7 @@ function BenefitPlanPage({
     <div className={classes.page}>
       <Form
         module="socialProtection"
+        classes={classes}
         title={formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.pageTitle', titleParams(benefitPlan))}
         titleParams={titleParams(benefitPlan)}
         openDirty
@@ -169,7 +180,7 @@ function BenefitPlanPage({
         canSave={canSave}
         save={handleSave}
         HeadPanel={BenefitPlanHeadPanel}
-        Panels={rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPlanTabPanel] : []}
+        Panels={getBenefitPlanPanels()}
         rights={rights}
         actions={actions}
         setConfirmedAction={setConfirmedAction}
