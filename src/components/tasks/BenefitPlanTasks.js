@@ -10,6 +10,7 @@ const BenefitPlanTaskTableHeaders = () => [
   <FormattedMessage module="socialProtection" id="benefitPlan.maxBeneficiaries" />,
   <FormattedMessage module="socialProtection" id="benefitPlan.institution" />,
   <FormattedMessage module="socialProtection" id="benefitPlan.schema" />,
+  <FormattedMessage module="socialProtection" id="benefitPlan.jsonExt" />,
 ];
 
 const BenefitPlanTaskItemFormatters = () => [
@@ -21,6 +22,7 @@ const BenefitPlanTaskItemFormatters = () => [
   (benefitPlan) => benefitPlan?.max_beneficiaries,
   (benefitPlan) => benefitPlan?.institution,
   (benefitPlan) => JSON.stringify(benefitPlan?.beneficiary_data_schema),
+  (benefitPlan) => JSON.stringify(benefitPlan?.json_ext),
 ];
 
 export { BenefitPlanTaskTableHeaders, BenefitPlanTaskItemFormatters };

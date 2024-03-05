@@ -107,5 +107,6 @@
   "socialProtection.benefitUploadRecord.benefitPlanCode": "Benefit plan code",
   "socialProtection.benefitUploadRecord.sourceName": "Filename",
   "socialProtection.benefitUploadRecord.workflow": "Workflow",
-  "socialProtection.benefitUploadRecord.percentageOfInvalidItems": "Percentage of invalid items"
+  "socialProtection.benefitUploadRecord.percentageOfInvalidItems": "Percentage of invalid items",
+  "socialProtection.benefitPlan.BenefitPlanEligibilityCriteriaPanel.title": "Default Enrollment Criteria"
 }

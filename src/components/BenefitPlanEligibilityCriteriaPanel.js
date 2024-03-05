@@ -1,74 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  PublishedComponent,
-  useModulesManager,
-  useTranslations,
-  fetchCustomFilter,
-  decodeId,
+  decodeId, fetchCustomFilter, PublishedComponent, useModulesManager, useTranslations,
 } from '@openimis/fe-core';
+import { makeStyles } from '@material-ui/styles';
 import AddCircle from '@material-ui/icons/Add';
 import {
-  Paper,
-  Button,
-  Grid,
+  Button, Divider, Grid, Paper, Typography,
 } from '@material-ui/core';
 import { CLEARED_STATE_FILTER } from '../constants';
+import { isBase64Encoded } from '../util/advanced-criteria-utils';
+
+const useStyles = makeStyles((theme) => ({
+  paper: theme.paper.paper,
+  paperHeader: theme.paper.paperHeader,
+  tableTitle: theme.table.title,
+  item: theme.paper.item,
+}));
 
 function BenefitPlanEligibilityCriteriaPanel({
-  classes,
   confirmed,
+  edited,
   benefitPlan,
+  onEditedChanged,
 }) {
+  const classes = useStyles();
   const dispatch = useDispatch();
-  const additionalParams = benefitPlan ? { benefitPlan: `${benefitPlan.id}` } : null;
-  const [appliedCustomFilters, setAppliedCustomFilters] = useState([CLEARED_STATE_FILTER]);
-  const [appliedFiltersRowStructure, setAppliedFiltersRowStructure] = useState([CLEARED_STATE_FILTER]);
-  const moduleName = 'individual';
-  const objectType = 'Individual';
+  const editedBenefitPlan = edited;
+  const additionalParams = editedBenefitPlan ? { benefitPlan: `${editedBenefitPlan.id}` } : null;
+  const moduleFilterName = 'individual';
+  const objectFilterType = 'Individual';
   const modulesManager = useModulesManager();
-  const { formatMessage } = useTranslations('social_protection', modulesManager);
-  const [currentFilter, setCurrentFilter] = useState({
-    field: '', filter: '', type: '', value: '', amount: '',
-  });
+  const { formatMessage } = useTranslations('socialProtection', modulesManager);
   const customFilters = useSelector((state) => state.core.customFilters);
+  const [filters, setFilters] = useState([]);
 
-  function isBase64Encoded(str) {
-    // Base64 encoded strings can only contain characters from [A-Za-z0-9+/=]
-    const base64RegExp = /^[A-Za-z0-9+/=]+$/;
-    return base64RegExp.test(str);
-  }
-
-  function isEmptyObject(obj) {
-    return Object.keys(obj).length === 0;
-  }
-
-  const getDefaultAppliedCustomFilters = () => {
+  const getAdvancedCriteria = () => {
     const { jsonExt } = benefitPlan ?? {};
     try {
       const jsonData = JSON.parse(jsonExt);
-      const advancedCriteria = jsonData.advanced_criteria || [];
-      return advancedCriteria.map(({ customFilterCondition }) => {
-        const [field, filter, typeValue] = customFilterCondition.split('__');
-        const [type, value] = typeValue.split('=');
-        return {
-          customFilterCondition,
-          field,
-          filter,
-          type,
-          value,
-        };
-      });
+      return jsonData?.advanced_criteria || [];
     } catch (error) {
       return [];
     }
   };
 
-  const [filters, setFilters] = useState(getDefaultAppliedCustomFilters());
+  const isReadOnly = () => getAdvancedCriteria().length > 0;
 
   const handleRemoveFilter = () => {
-    setAppliedFiltersRowStructure([CLEARED_STATE_FILTER]);
-    setFilters([CLEARED_STATE_FILTER]);
+    setFilters([]);
   };
   const handleAddFilter = () => {
     setFilters([...filters, CLEARED_STATE_FILTER]);
@@ -92,88 +72,111 @@ function BenefitPlanEligibilityCriteriaPanel({
     return params;
   };
 
-  useEffect(() => {
-    if (benefitPlan && isEmptyObject(benefitPlan) === false) {
-      let paramsToFetchFilters = [];
-      if (objectType === 'Individual') {
-        paramsToFetchFilters = createParams(
-          moduleName,
-          objectType,
-          isBase64Encoded(benefitPlan.id) ? decodeId(benefitPlan.id) : benefitPlan.id,
-          additionalParams,
-        );
-      } else {
-        paramsToFetchFilters = createParams(
-          moduleName,
-          objectType,
-          additionalParams,
-        );
-      }
-      fetchFilters(paramsToFetchFilters);
-    }
-  }, [benefitPlan]);
+  const arraysAreEqual = (arr1, arr2) => JSON.stringify(arr1) === JSON.stringify(arr2);
 
-  useEffect(() => {}, [filters]);
+  useEffect(() => {
+    if (editedBenefitPlan?.id) {
+      const criteria = getAdvancedCriteria();
+      if (criteria?.length && !arraysAreEqual(criteria, filters)) {
+        setFilters(criteria);
+      } else if (!criteria?.length) {
+        const paramsToFetchFilters = createParams(
+          moduleFilterName,
+          objectFilterType,
+          isBase64Encoded(editedBenefitPlan.id) ? decodeId(editedBenefitPlan.id) : editedBenefitPlan.id,
+          additionalParams,
+        );
+        fetchFilters(paramsToFetchFilters);
+      }
+    }
+  }, [editedBenefitPlan]);
+
+  useEffect(() => {
+    if (editedBenefitPlan?.id && !isReadOnly()) {
+      const { jsonExt } = editedBenefitPlan;
+      const jsonData = JSON.parse(jsonExt);
+      const json = { ...jsonData, advanced_criteria: filters };
+
+      if (!filters.length) {
+        delete json.advanced_criteria;
+      } else if (!!filters.length && !filters[0].field) {
+        delete json.advanced_criteria;
+      }
+
+      const appendedJsonExt = Object.keys(json).length === 0 ? benefitPlan.jsonExt : JSON.stringify(json);
+
+      onEditedChanged({ ...editedBenefitPlan, jsonExt: appendedJsonExt });
+    }
+  }, [filters]);
 
   return (
-    <Paper>
-      {filters.map((filter, index) => (
-        // eslint-disable-next-line react/react-in-jsx-scope
-        <PublishedComponent
-          pubRef="individual.AdvancedCriteriaRowValue"
-          customFilters={customFilters}
-          currentFilter={filter}
-          index={index}
-          setCurrentFilter={setCurrentFilter}
-          filters={filters}
-          setFilters={setFilters}
-          readOnly={confirmed}
-        />
-      ))}
-      { !confirmed ? (
-      // eslint-disable-next-line react/react-in-jsx-scope
-        <div
-          style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}
-        >
-          <AddCircle
-            style={{
-              border: 'thin solid',
-              borderRadius: '40px',
-              width: '16px',
-              height: '16px',
-            }}
-            onClick={handleAddFilter}
-            disabled={confirmed}
-          />
-          <Button
-            onClick={handleAddFilter}
-            variant="outlined"
-            style={{
-              border: '0px',
-              marginBottom: '6px',
-              fontSize: '0.8rem',
-            }}
-            disabled={confirmed}
-          >
-            {formatMessage('individual.enrollment.addFilters')}
-          </Button>
-        </div>
-      // eslint-disable-next-line react/jsx-no-useless-fragment
-      ) : (<></>) }
-      <div>
-        <div style={{ float: 'left' }}>
-          <Button
-            onClick={handleRemoveFilter}
-            variant="outlined"
-            style={{
-              border: '0px',
-            }}
-            disabled={confirmed}
-          >
-            {formatMessage('individual.enrollment.clearAllFilters')}
-          </Button>
-        </div>
-      </div>
+    <Paper className={classes.paper}>
+      <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
+        <Grid item xs={12}>
+          <Typography variant="h6" className={classes.tableTitle}>
+            {formatMessage('benefitPlan.BenefitPlanEligibilityCriteriaPanel.title')}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Divider />
+        </Grid>
+        <Grid container className={classes.item}>
+          {filters.map((filter, index) => (
+            // eslint-disable-next-line react/react-in-jsx-scope
+            <PublishedComponent
+              pubRef="individual.AdvancedCriteriaRowValue"
+              customFilters={customFilters}
+              currentFilter={filter}
+              index={index}
+              setCurrentFilter={() => {}}
+              filters={filters}
+              setFilters={setFilters}
+              readOnly={isReadOnly()}
+            />
+          ))}
+          {!isReadOnly() && (
+            // eslint-disable-next-line react/jsx-no-useless-fragment
+            <>
+              <div style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}>
+                <AddCircle
+                  style={{
+                    border: 'thin solid',
+                    borderRadius: '40px',
+                    width: '16px',
+                    height: '16px',
+                  }}
+                  onClick={handleAddFilter}
+                  disabled={confirmed}
+                />
+                <Button
+                  onClick={handleAddFilter}
+                  variant="outlined"
+                  style={{
+                    border: '0px',
+                    marginBottom: '6px',
+                    fontSize: '0.8rem',
+                  }}
+                  disabled={confirmed}
+                >
+                  {formatMessage('individual.enrollment.addFilters')}
+                </Button>
+              </div>
+              <div style={{ float: 'left' }}>
+                <Button
+                  onClick={handleRemoveFilter}
+                  variant="outlined"
+                  style={{
+                    border: '0px',
+                  }}
+                  disabled={confirmed}
+                >
+                  {formatMessage('individual.enrollment.clearAllFilters')}
+                </Button>
+              </div>
+            </>
+          )}
+        </Grid>
+      </Grid>
     </Paper>
   );
 }

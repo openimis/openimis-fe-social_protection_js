@@ -54,6 +54,7 @@ function BenefitPlanPage({
 }) {
   const [editedBenefitPlan, setEditedBenefitPlan] = useState({});
   const [confirmedAction, setConfirmedAction] = useState(() => null);
+  const [reset, setReset] = useState(() => false);
   const prevSubmittingMutationRef = useRef();
 
   useEffect(() => {
@@ -76,13 +77,23 @@ function BenefitPlanPage({
         back();
       }
     }
+    if (mutation?.clientMutationId && !benefitPlanUuid) {
+      fetchBenefitPlan(modulesManager, [`clientMutationId: "${mutation.clientMutationId}"`]);
+    }
   }, [submittingMutation]);
 
   useEffect(() => {
     prevSubmittingMutationRef.current = submittingMutation;
   });
 
-  useEffect(() => setEditedBenefitPlan(benefitPlan), [benefitPlan]);
+  useEffect(() => {
+    setEditedBenefitPlan(benefitPlan);
+    if (!benefitPlanUuid && benefitPlan?.id) {
+      const benefitPlanRouteRef = modulesManager.getRef('socialProtection.route.benefitPlan');
+      history.replace(`/${benefitPlanRouteRef}/${benefitPlan.id}`);
+      setReset(true);
+    }
+  }, [benefitPlan]);
 
   useEffect(() => () => clearBenefitPlan(), []);
 
@@ -148,7 +159,10 @@ function BenefitPlanPage({
   };
 
   const getBenefitPlanPanels = () => {
-    const panels = [BenefitPlanEligibilityCriteriaPanel];
+    const panels = [];
+    if (benefitPlan?.id && benefitPlan?.beneficiaryDataSchema) {
+      panels.push(BenefitPlanEligibilityCriteriaPanel);
+    }
     if (rights.includes(RIGHT_BENEFICIARY_SEARCH)) {
       panels.push(BenefitPlanTabPanel);
     }
@@ -172,10 +186,11 @@ function BenefitPlanPage({
         title={formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.pageTitle', titleParams(benefitPlan))}
         titleParams={titleParams(benefitPlan)}
         openDirty
-        benefitPlan={editedBenefitPlan}
+        benefitPlan={benefitPlan}
         edited={editedBenefitPlan}
         onEditedChanged={setEditedBenefitPlan}
         back={back}
+        reset={reset}
         mandatoryFieldsEmpty={isMandatoryFieldsEmpty}
         canSave={canSave}
         save={handleSave}
