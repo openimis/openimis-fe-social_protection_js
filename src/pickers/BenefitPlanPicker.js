@@ -38,6 +38,7 @@ function BenefitPlanPicker(props) {
             id
             code
             name
+            jsonExt
           }
         }
       }

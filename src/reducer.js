@@ -460,6 +460,7 @@ function reducer(
         errorBenefitPlan: null,
         fetchedBenefitPlan: false,
         benefitPlan: null,
+        mutation: null,
       };
     case CLEAR(ACTION_TYPE.BENEFICIARY_EXPORT):
       return {
