@@ -57,6 +57,11 @@ import {
   ValidateImportValidItemsItemFormatters,
   ValidateImportValidItemsTaskTableHeaders,
 } from './components/tasks/ValidateImportValidItems';
+import {
+  UploadResolutionTaskTableHeaders,
+  UploadResolutionItemFormatters,
+  UploadConfirmationPanel
+} from './components/tasks/BeneficiaryUploadApprovalTask';
 import { fetchBenefitPlanSchemaFields } from './actions';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
@@ -133,11 +138,12 @@ const DEFAULT_CONFIG = {
   },
   {
     text: <FormattedMessage module="socialProtection" id="validation_import_valid_items.tasks.title" />,
-    tableHeaders: ValidateImportValidItemsTaskTableHeaders,
-    itemFormatters: ValidateImportValidItemsItemFormatters,
+    tableHeaders: UploadResolutionTaskTableHeaders,
+    itemFormatters: UploadResolutionItemFormatters,
     taskSource: ['import_valid_items'],
-  }],
-
+    confirmationPanel: UploadConfirmationPanel
+  },
+ ],
 };
 
 export const SocialProtectionModule = (cfg) => ({ ...DEFAULT_CONFIG, ...cfg });

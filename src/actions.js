@@ -6,6 +6,7 @@ import {
   formatMutation,
   formatGQLString,
   graphqlWithVariables,
+  prepareMutation
 } from '@openimis/fe-core';
 import { ACTION_TYPE } from './reducer';
 import {
@@ -173,6 +174,44 @@ export function fetchWorkflows() {
 export function fetchUploadHistory(params) {
   const payload = formatPageQueryWithCount('beneficiaryDataUploadHistory', params, UPLOAD_HISTORY_FULL_PROJECTION());
   return graphql(payload, ACTION_TYPE.GET_BENEFIT_PLAN_UPLOAD_HISTORY);
+}
+
+
+export function fetchPendingBeneficiaryUploads(variables) {
+
+  return graphqlWithVariables(
+    `
+      query (
+        $upload_Id: ID, $individual_Id_Isnull: Boolean
+        ${variables.after? `,$after: String` : ''} 
+        ${variables.before? `,$before: String` : ''}
+        ${variables.pageSize? `,$pageSize: Int` : ''}
+        ${variables.isDeleted !== undefined? `,$isDeleted: Boolean` : ''}
+      ) {
+        individualDataSource(
+          upload_Id: $upload_Id, individual_Id_Isnull:$individual_Id_Isnull, 
+          ${variables.isDeleted !== undefined? `,isDeleted: $isDeleted` : ''}
+          ${variables.before? `,before:$before, last:$pageSize` : ''}
+          ${!variables.before? `,first:$pageSize` : ''}
+          ${variables.after? `,after:$after` : ''}
+        )
+        {
+          totalCount
+          pageInfo { hasNextPage, hasPreviousPage, startCursor, endCursor}
+          edges
+          {
+            node
+            {
+              id, uuid, jsonExt, individual { id, lastName }
+              
+            }
+          }
+        }
+      }
+    `,
+    variables,
+    ACTION_TYPE.GET_PENDING_BENEFICIARIES_UPLOAD,
+  );
 }
 
 export function deleteBenefitPlan(benefitPlan, clientMutationLabel) {
@@ -388,3 +427,90 @@ export const clearGroupBeneficiaryExport = () => (dispatch) => {
     type: CLEAR(ACTION_TYPE.GROUP_BENEFICIARY_EXPORT),
   });
 };
+
+
+// formatTaskResolveGQL and  resolveTask are exact copy of one from tasksManagement. 
+// However, import from other @openimis/fe-{modue} than fe-core is not possible.
+export const formatTaskResolveGQL = (task, user, approveOrFail, additionalData) => `
+  ${task?.id ? `id: "${task.id}"` : ''}
+  ${user && approveOrFail ? `businessStatus: "{\\"${user.id}\\": \\"${approveOrFail}\\"}"` : ''}
+  ${additionalData ? `additionalData: "${JSON.stringify(additionalData)}"` : ''}
+  `;
+
+export function resolveTask(task, clientMutationLabel, user, approveOrFail, additionalData = null) {
+    const mutationType = 'resolveTask'; // 'resolveTask'
+    const mutationInput = formatTaskResolveGQL(task, user, approveOrFail, additionalData);
+    const ACTION = ACTION_TYPE.RESOLVE_TASK;
+    const mutation = formatMutation(mutationType, mutationInput, clientMutationLabel);
+    const requestedDateTime = new Date();
+
+
+    const userId = user?.id
+
+    const mutation2 = prepareMutation(`mutation ($clientMutationLabel:String, $clientMutationId: String, $id:UUID!, 
+      $businessStatus: JSONString!, ${additionalData ? '$additionalData: JSONString!' : ''}
+    ) {
+      resolveTask(
+      input: {
+        clientMutationId: $clientMutationId
+        clientMutationLabel: $clientMutationLabel
+  
+        id: $id
+        businessStatus: $businessStatus
+        ${additionalData ?  'additionalData: $additionalData' : ''}
+              }
+            ) {
+              clientMutationId
+              internalId
+            }
+          }`,
+          {
+            id: task?.id,
+            businessStatus: (() => {
+              if (!userId) return undefined;
+              
+              switch (approveOrFail) {
+                case 'APPROVED':
+                case 'FAILED':
+                  return JSON.stringify({[userId]: approveOrFail});
+                case 'ACCEPT':
+                case 'REJECT':
+                  return JSON.stringify({[userId]: {[approveOrFail]: additionalData}});
+                default:
+                  throw new Error("Invalid approveOrFail value");
+              }
+            })(),
+            additionalData: additionalData ? JSON.stringify({entries: additionalData, decision: additionalData}) : undefined
+          }
+          ,
+          {
+            id: task?.id,
+            businessStatus: (() => {
+              if (!userId) return undefined;
+              
+              switch (approveOrFail) {
+                case 'APPROVED':
+                case 'FAILED':
+                  return JSON.stringify({[userId]: approveOrFail});
+                case 'ACCEPT':
+                case 'REJECT':
+                  return JSON.stringify({[userId]: {[approveOrFail]: additionalData}});
+                default:
+                  throw new Error("Invalid approveOrFail value");
+              }
+            })(),
+            additionalData: additionalData ? JSON.stringify({entries: additionalData, decision: additionalData}) : undefined
+          }
+          )
+
+    user.clientMutationId = mutation.clientMutationId;
+
+    return   graphqlWithVariables(
+      mutation2.operation,
+      {
+        ...mutation2.variables.input,
+      },
+      ["TASK_MANAGEMENT_MUTATION_REQ", "TASK_MANAGEMENT_MUTATION_RESP", "TASK_MANAGEMENT_MUTATION_ERR"],
+      { requestedDateTime, clientMutationId: mutation.clientMutationId, clientMutationLabel, userId: user.id },
+    );
+}
