@@ -1,20 +1,32 @@
 import { baseApiUrl } from '@openimis/fe-core';
 
-export default function downloadInvalidItems(uploadId) {
-  const url = new URL(
-    `${window.location.origin}${baseApiUrl}/social_protection/download_invalid_items/?upload_id=${uploadId}`,
-  );
+function downloadFile(url, filename) {
   fetch(url)
     .then((response) => response.blob())
     .then((blob) => {
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'invalid_items.csv';
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     })
     .catch((error) => {
-      console.error('Export failed, reason: ', error);
+      // eslint-disable-next-line no-console
+      console.error('Download failed, reason: ', error);
     });
+}
+
+export function downloadInvalidItems(uploadId) {
+  const baseUrl = `${window.location.origin}${baseApiUrl}/social_protection/download_invalid_items/`;
+  const queryParams = new URLSearchParams({ upload_id: uploadId });
+  const url = `${baseUrl}?${queryParams.toString()}`;
+  downloadFile(url, 'invalid_items.csv');
+}
+
+export function downloadBeneficiaryUploadFile(benefitPlanId, filename) {
+  const baseUrl = `${window.location.origin}${baseApiUrl}/social_protection/download_beneficiary_upload_file/`;
+  const queryParams = new URLSearchParams({ benefit_plan_id: benefitPlanId, filename });
+  const url = `${baseUrl}?${queryParams.toString()}`;
+  downloadFile(url, filename);
 }
