@@ -22,9 +22,11 @@ import {
 import BenefitPlanHeadPanel from '../components/BenefitPlanHeadPanel';
 import BenefitPlanTabPanel from '../components/BenefitPlanTabPanel';
 import { ACTION_TYPE } from '../reducer';
+import BenefitPlanEligibilityCriteriaPanel from '../components/BenefitPlanEligibilityCriteriaPanel';
 
 const styles = (theme) => ({
   page: theme.page,
+  paper: theme.paper.classes,
 });
 
 function BenefitPlanPage({
@@ -52,6 +54,7 @@ function BenefitPlanPage({
 }) {
   const [editedBenefitPlan, setEditedBenefitPlan] = useState({});
   const [confirmedAction, setConfirmedAction] = useState(() => null);
+  const [reset, setReset] = useState(() => false);
   const prevSubmittingMutationRef = useRef();
 
   useEffect(() => {
@@ -74,13 +77,23 @@ function BenefitPlanPage({
         back();
       }
     }
+    if (mutation?.clientMutationId && !benefitPlanUuid) {
+      fetchBenefitPlan(modulesManager, [`clientMutationId: "${mutation.clientMutationId}"`]);
+    }
   }, [submittingMutation]);
 
   useEffect(() => {
     prevSubmittingMutationRef.current = submittingMutation;
   });
 
-  useEffect(() => setEditedBenefitPlan(benefitPlan), [benefitPlan]);
+  useEffect(() => {
+    setEditedBenefitPlan(benefitPlan);
+    if (!benefitPlanUuid && benefitPlan?.id) {
+      const benefitPlanRouteRef = modulesManager.getRef('socialProtection.route.benefitPlan');
+      history.replace(`/${benefitPlanRouteRef}/${benefitPlan.id}`);
+      setReset(true);
+    }
+  }, [benefitPlan]);
 
   useEffect(() => () => clearBenefitPlan(), []);
 
@@ -145,6 +158,17 @@ function BenefitPlanPage({
     );
   };
 
+  const getBenefitPlanPanels = () => {
+    const panels = [];
+    if (benefitPlan?.id && benefitPlan?.beneficiaryDataSchema) {
+      panels.push(BenefitPlanEligibilityCriteriaPanel);
+    }
+    if (rights.includes(RIGHT_BENEFICIARY_SEARCH)) {
+      panels.push(BenefitPlanTabPanel);
+    }
+    return panels;
+  };
+
   const actions = [
     !!benefitPlan && {
       doIt: openDeleteBenefitPlanConfirmDialog,
@@ -158,18 +182,20 @@ function BenefitPlanPage({
     <div className={classes.page}>
       <Form
         module="socialProtection"
+        classes={classes}
         title={formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.pageTitle', titleParams(benefitPlan))}
         titleParams={titleParams(benefitPlan)}
         openDirty
-        benefitPlan={editedBenefitPlan}
+        benefitPlan={benefitPlan}
         edited={editedBenefitPlan}
         onEditedChanged={setEditedBenefitPlan}
         back={back}
+        reset={reset}
         mandatoryFieldsEmpty={isMandatoryFieldsEmpty}
         canSave={canSave}
         save={handleSave}
         HeadPanel={BenefitPlanHeadPanel}
-        Panels={rights.includes(RIGHT_BENEFICIARY_SEARCH) ? [BenefitPlanTabPanel] : []}
+        Panels={getBenefitPlanPanels()}
         rights={rights}
         actions={actions}
         setConfirmedAction={setConfirmedAction}

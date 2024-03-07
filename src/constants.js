@@ -97,5 +97,19 @@ export const BENEFIT_PLAN_TYPE_LIST = [BENEFIT_PLAN_TYPE.INDIVIDUAL, BENEFIT_PLA
 
 export const BENEFIT_PLANS_QUANTITY_LIMIT = 15;
 
+
 export const APPROVED = 'APPROVED';
 export const FAILED = 'FAILED';
+export const INTEGER = 'integer';
+export const STRING = 'string';
+export const BOOLEAN = 'boolean';
+export const DATE = 'date';
+
+export const BOOL_OPTIONS = [
+  { value: 'True', label: 'True' },
+  { value: 'False', label: 'False' },
+];
+
+export const CLEARED_STATE_FILTER = {
+  field: '', filter: '', type: '', value: '',
+};
