@@ -113,5 +113,7 @@
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.downloadUploadFile": "Download Upload File",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.downloadInvalidItems": "Download Invalid Items",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.alert.sameFileName": "Filename exists for given Benefit Plan. Please change the filename.",
-  "socialProtection.benefitPlan.benefitPlanBeneficiaries.alert.header": "Error during file upload."
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.alert.header": "Error during file upload.",
+  "socialProtection.benefitPlan.benefitPlanTabPanel.createPayroll": "CREATE PAYROLL",
+  "socialProtection.benefitPlan.benefitPlanTabPanel.createPayroll.tooltip": "Create Payment Plan first."
 }

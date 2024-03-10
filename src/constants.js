@@ -82,7 +82,7 @@ export const UPLOAD_STATUS = {
   FAIL: 'FAIL',
 };
 
-export const MODULE_NAME = 'social_protection';
+export const MODULE_NAME = 'socialProtection';
 export const SOCIAL_PROTECTION_MODULE = 'socialProtection';
 export const BENEFIT_PLAN_LABEL = 'BenefitPlan';
 export const BENEFICIARY_STATUS_LIST = [
@@ -109,3 +109,7 @@ export const BOOL_OPTIONS = [
 export const CLEARED_STATE_FILTER = {
   field: '', filter: '', type: '', value: '',
 };
+
+export const PAYROLL_CREATE_RIGHTS_PUB_REF = 'payroll.payrollCreateRight';
+
+export const PAYROLL_PAYROLL_ROUTE = 'payroll.route.payroll';
