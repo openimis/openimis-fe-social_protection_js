@@ -64,7 +64,7 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
 
   useEffect(() => {
     if (isOpen) {
-      const params = [`benefitPlan_Id:"${benefitPlan.id}"`];
+      const params = [`benefitPlan_Id:"${benefitPlan.id}", orderBy: ["-dateCreated"]`];
       fetchUploadHistory(params);
     }
   }, [isOpen]);
@@ -195,10 +195,7 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                         <CollapsableErrorList errors={item.dataUpload.error} />
                       </TableCell>
                       <TableCell>
-                        {[
-                          UPLOAD_STATUS.WAITING_FOR_VERIFICATION,
-                          UPLOAD_STATUS.PARTIAL_SUCCESS,
-                        ].includes(item.dataUpload.status) ? (
+                        {[UPLOAD_STATUS.PARTIAL_SUCCESS].includes(item.dataUpload.status) && (
                           <Button
                             onClick={() => downloadInvalidItemsFromUpload(item.dataUpload.uuid)}
                             variant="outlined"
@@ -208,15 +205,9 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                               marginBottom: '15px',
                             }}
                           >
-                            {formatMessage(
-                              intl,
-                              'socialProtection',
-                              'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.downloadInvalidItems',
-                            )}
+                            Download Invalid Items
                           </Button>
-                          ) : (
-                            <div style={{ width: '120px' }} /> // Render a blank placeholder
-                          )}
+                        )}
                       </TableCell>
                       <TableCell>
                         <Button

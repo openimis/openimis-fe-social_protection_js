@@ -96,6 +96,9 @@ export const BENEFIT_PLAN_TYPE = {
 export const BENEFIT_PLAN_TYPE_LIST = [BENEFIT_PLAN_TYPE.INDIVIDUAL, BENEFIT_PLAN_TYPE.GROUP];
 
 export const BENEFIT_PLANS_QUANTITY_LIMIT = 15;
+
+export const APPROVED = 'APPROVED';
+export const FAILED = 'FAILED';
 export const INTEGER = 'integer';
 export const STRING = 'string';
 export const BOOLEAN = 'boolean';
