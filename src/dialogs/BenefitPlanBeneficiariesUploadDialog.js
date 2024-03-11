@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Grid, Typography } from '@material-ui/core';
+import { Input, Grid } from '@material-ui/core';
 import { injectIntl } from 'react-intl';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
