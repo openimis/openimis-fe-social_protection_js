@@ -6,7 +6,7 @@ import {
   formatMutation,
   formatGQLString,
   graphqlWithVariables,
-  prepareMutation
+  prepareMutation,
 } from '@openimis/fe-core';
 import { ACTION_TYPE } from './reducer';
 import {
@@ -38,7 +38,7 @@ const UPLOAD_HISTORY_FULL_PROJECTION = () => [
   'id',
   'uuid',
   'workflow',
-  'dataUpload {uuid, dateCreated, dateUpdated, sourceName, sourceType, status, error }',
+  'dataUpload {uuid, dateCreated, dateUpdated, sourceName, sourceType, status, error, userCreated {username} }',
 ];
 
 const BENEFICIARY_FULL_PROJECTION = () => [
@@ -176,24 +176,22 @@ export function fetchUploadHistory(params) {
   return graphql(payload, ACTION_TYPE.GET_BENEFIT_PLAN_UPLOAD_HISTORY);
 }
 
-
 export function fetchPendingBeneficiaryUploads(variables) {
-
   return graphqlWithVariables(
     `
       query (
         $upload_Id: ID, $individual_Id_Isnull: Boolean
-        ${variables.after? `,$after: String` : ''} 
-        ${variables.before? `,$before: String` : ''}
-        ${variables.pageSize? `,$pageSize: Int` : ''}
-        ${variables.isDeleted !== undefined? `,$isDeleted: Boolean` : ''}
+        ${variables.after ? ',$after: String' : ''} 
+        ${variables.before ? ',$before: String' : ''}
+        ${variables.pageSize ? ',$pageSize: Int' : ''}
+        ${variables.isDeleted !== undefined ? ',$isDeleted: Boolean' : ''}
       ) {
         individualDataSource(
           upload_Id: $upload_Id, individual_Id_Isnull:$individual_Id_Isnull, 
-          ${variables.isDeleted !== undefined? `,isDeleted: $isDeleted` : ''}
-          ${variables.before? `,before:$before, last:$pageSize` : ''}
-          ${!variables.before? `,first:$pageSize` : ''}
-          ${variables.after? `,after:$after` : ''}
+          ${variables.isDeleted !== undefined ? ',isDeleted: $isDeleted' : ''}
+          ${variables.before ? ',before:$before, last:$pageSize' : ''}
+          ${!variables.before ? ',first:$pageSize' : ''}
+          ${variables.after ? ',after:$after' : ''}
         )
         {
           totalCount
@@ -428,8 +426,7 @@ export const clearGroupBeneficiaryExport = () => (dispatch) => {
   });
 };
 
-
-// formatTaskResolveGQL and  resolveTask are exact copy of one from tasksManagement. 
+// formatTaskResolveGQL and  resolveTask are exact copy of one from tasksManagement.
 // However, import from other @openimis/fe-{modue} than fe-core is not possible.
 export const formatTaskResolveGQL = (task, user, approveOrFail, additionalData) => `
   ${task?.id ? `id: "${task.id}"` : ''}
@@ -438,16 +435,16 @@ export const formatTaskResolveGQL = (task, user, approveOrFail, additionalData) 
   `;
 
 export function resolveTask(task, clientMutationLabel, user, approveOrFail, additionalData = null) {
-    const mutationType = 'resolveTask'; // 'resolveTask'
-    const mutationInput = formatTaskResolveGQL(task, user, approveOrFail, additionalData);
-    const ACTION = ACTION_TYPE.RESOLVE_TASK;
-    const mutation = formatMutation(mutationType, mutationInput, clientMutationLabel);
-    const requestedDateTime = new Date();
+  const mutationType = 'resolveTask'; // 'resolveTask'
+  const mutationInput = formatTaskResolveGQL(task, user, approveOrFail, additionalData);
+  const ACTION = ACTION_TYPE.RESOLVE_TASK;
+  const mutation = formatMutation(mutationType, mutationInput, clientMutationLabel);
+  const requestedDateTime = new Date();
 
+  const userId = user?.id;
 
-    const userId = user?.id
-
-    const mutation2 = prepareMutation(`mutation ($clientMutationLabel:String, $clientMutationId: String, $id:UUID!, 
+  const mutation2 = prepareMutation(
+    `mutation ($clientMutationLabel:String, $clientMutationId: String, $id:UUID!, 
       $businessStatus: JSONString!, ${additionalData ? '$additionalData: JSONString!' : ''}
     ) {
       resolveTask(
@@ -457,60 +454,61 @@ export function resolveTask(task, clientMutationLabel, user, approveOrFail, addi
   
         id: $id
         businessStatus: $businessStatus
-        ${additionalData ?  'additionalData: $additionalData' : ''}
+        ${additionalData ? 'additionalData: $additionalData' : ''}
               }
             ) {
               clientMutationId
               internalId
             }
           }`,
-          {
-            id: task?.id,
-            businessStatus: (() => {
-              if (!userId) return undefined;
-              
-              switch (approveOrFail) {
-                case 'APPROVED':
-                case 'FAILED':
-                  return JSON.stringify({[userId]: approveOrFail});
-                case 'ACCEPT':
-                case 'REJECT':
-                  return JSON.stringify({[userId]: {[approveOrFail]: additionalData}});
-                default:
-                  throw new Error("Invalid approveOrFail value");
-              }
-            })(),
-            additionalData: additionalData ? JSON.stringify({entries: additionalData, decision: additionalData}) : undefined
-          }
-          ,
-          {
-            id: task?.id,
-            businessStatus: (() => {
-              if (!userId) return undefined;
-              
-              switch (approveOrFail) {
-                case 'APPROVED':
-                case 'FAILED':
-                  return JSON.stringify({[userId]: approveOrFail});
-                case 'ACCEPT':
-                case 'REJECT':
-                  return JSON.stringify({[userId]: {[approveOrFail]: additionalData}});
-                default:
-                  throw new Error("Invalid approveOrFail value");
-              }
-            })(),
-            additionalData: additionalData ? JSON.stringify({entries: additionalData, decision: additionalData}) : undefined
-          }
-          )
+    {
+      id: task?.id,
+      businessStatus: (() => {
+        if (!userId) return undefined;
 
-    user.clientMutationId = mutation.clientMutationId;
+        switch (approveOrFail) {
+          case 'APPROVED':
+          case 'FAILED':
+            return JSON.stringify({ [userId]: approveOrFail });
+          case 'ACCEPT':
+          case 'REJECT':
+            return JSON.stringify({ [userId]: { [approveOrFail]: additionalData } });
+          default:
+            throw new Error('Invalid approveOrFail value');
+        }
+      })(),
+      additionalData: additionalData ? JSON.stringify({ entries: additionalData, decision: additionalData }) : undefined,
+    },
+    {
+      id: task?.id,
+      businessStatus: (() => {
+        if (!userId) return undefined;
 
-    return   graphqlWithVariables(
-      mutation2.operation,
-      {
-        ...mutation2.variables.input,
-      },
-      ["TASK_MANAGEMENT_MUTATION_REQ", "TASK_MANAGEMENT_MUTATION_RESP", "TASK_MANAGEMENT_MUTATION_ERR"],
-      { requestedDateTime, clientMutationId: mutation.clientMutationId, clientMutationLabel, userId: user.id },
-    );
+        switch (approveOrFail) {
+          case 'APPROVED':
+          case 'FAILED':
+            return JSON.stringify({ [userId]: approveOrFail });
+          case 'ACCEPT':
+          case 'REJECT':
+            return JSON.stringify({ [userId]: { [approveOrFail]: additionalData } });
+          default:
+            throw new Error('Invalid approveOrFail value');
+        }
+      })(),
+      additionalData: additionalData ? JSON.stringify({ entries: additionalData, decision: additionalData }) : undefined,
+    },
+  );
+
+  user.clientMutationId = mutation.clientMutationId;
+
+  return graphqlWithVariables(
+    mutation2.operation,
+    {
+      ...mutation2.variables.input,
+    },
+    ['TASK_MANAGEMENT_MUTATION_REQ', 'TASK_MANAGEMENT_MUTATION_RESP', 'TASK_MANAGEMENT_MUTATION_ERR'],
+    {
+      requestedDateTime, clientMutationId: mutation.clientMutationId, clientMutationLabel, userId: user.id,
+    },
+  );
 }
