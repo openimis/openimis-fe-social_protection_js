@@ -264,7 +264,10 @@ const intl = useIntl();
             onClose={onClose}
             module="socialProtection"
             confirmTitle="taskConfirmation.title"
-            confirmMessage={formatMessageWithValues(intl, "socialProtection", "atomicApprove", { count: selectedRecords.length })}
+            confirmMessage={approveOrFail === 'ACCEPT'? 
+              formatMessageWithValues(intl, "socialProtection", "atomicApprove", { count: selectedRecords.length }) : 
+              formatMessageWithValues(intl, "socialProtection", "atomicReject", { count: selectedRecords.length })
+            }
             confirmationButton="dialogActions.continue"
             rejectionButton="dialogActions.goBack"
         />
@@ -412,7 +415,10 @@ const UploadConfirmationPanel = ({defaultAction, defaultDisabled}) => {
             onClose={onClose}
             module="socialProtection"
             confirmTitle="taskConfirmation.title"
-            confirmMessage={formatMessage(intl, "socialProtection", "bulkApprove")}
+            confirmMessage={approveOrFail === APPROVED ? 
+               formatMessage(intl, "socialProtection", "bulkApprove") : 
+               formatMessage(intl, "socialProtection", "bulkReject")
+              }
             confirmationButton="dialogActions.continue"
             rejectionButton="dialogActions.goBack"
         />
