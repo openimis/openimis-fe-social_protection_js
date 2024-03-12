@@ -166,7 +166,7 @@ export function fetchBenefitPlan(modulesManager, params) {
 export function fetchWorkflows() {
   const payload = formatQuery(
     'workflow',
-    [],
+    ['group: "socialProtection"'],
     WORKFLOWS_FULL_PROJECTION(),
   );
   return graphql(payload, ACTION_TYPE.GET_WORKFLOWS);
