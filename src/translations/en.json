@@ -126,5 +126,12 @@
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.alert.sameFileName": "Filename exists for given Benefit Plan. Please change the filename.",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.alert.header": "Error during file upload.",
   "socialProtection.benefitPlan.benefitPlanTabPanel.createPayroll": "CREATE PAYROLL",
-  "socialProtection.benefitPlan.benefitPlanTabPanel.createPayroll.tooltip": "Create Payment Plan first."
+  "socialProtection.benefitPlan.benefitPlanTabPanel.createPayroll.tooltip": "Create Payment Plan first.",
+  "socialProtection.benefitPlanChangelog.label": "Changelog",
+  "socialProtection.benefitPlan.userUpdated": "User Updated",
+  "socialProtection.benefitPlan.version": "Version",
+  "socialProtection.benefitPlan.dateUpdated": "Date Updated",
+  "socialProtection.benefitPlan.searcherResultsTitleHistory": "{benefitPlansHistoryTotalCount} Historical Records Found",
+  "socialProtection.benefitPlan.benefitPlanSchema.label": "Benefit Plan Schema",
+  "socialProtection.benefitPlan.schema.showSchema": "Show Schema"
 }

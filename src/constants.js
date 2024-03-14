@@ -116,3 +116,4 @@ export const CLEARED_STATE_FILTER = {
 export const PAYROLL_CREATE_RIGHTS_PUB_REF = 'payroll.payrollCreateRight';
 
 export const PAYROLL_PAYROLL_ROUTE = 'payroll.route.payroll';
+export const BENEFIT_PLAN_CHANGELOG_TAB_VALUE = 'BenefitPlanChangelogTab';
