@@ -61,6 +61,8 @@ import {
 import { fetchBenefitPlanSchemaFields } from './actions';
 import BenefitPlanHistorySearcher from './components/BenefitPlanHistorySearcher';
 import { BenefitPlanChangelogTabLabel, BenefitPlanChangelogTabPanel } from './components/BenefitPlanChangelogTab';
+import { BenefitPlanTaskTabLabel, BenefitPlanTaskTabPanel } from './components/BenefitPlanTaskTab';
+import { BENEFIT_PLAN_LABEL } from './constants';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -102,6 +104,7 @@ const DEFAULT_CONFIG = {
     BenefitPlanBeneficiariesGraduatedTabLabel,
     BenefitPlanBeneficiariesSuspendedTabLabel,
     BenefitPlanChangelogTabLabel,
+    BenefitPlanTaskTabLabel,
   ],
   'benefitPlan.TabPanel.panel': [
     BenefitPlanBeneficiariesListTabPanel,
@@ -110,6 +113,7 @@ const DEFAULT_CONFIG = {
     BenefitPlanBeneficiariesGraduatedTabPanel,
     BenefitPlanBeneficiariesSuspendedTabPanel,
     BenefitPlanChangelogTabPanel,
+    BenefitPlanTaskTabPanel,
   ],
   'benefitPackage.TabPanel.label': [
     BenefitPackageMembersTabLabel,
@@ -126,6 +130,7 @@ const DEFAULT_CONFIG = {
     tableHeaders: BenefitPlanTaskTableHeaders,
     itemFormatters: BenefitPlanTaskItemFormatters,
     taskSource: ['BenefitPlanService'],
+    taskCode: BENEFIT_PLAN_LABEL,
   },
   {
     text: <FormattedMessage module="socialProtection" id="beneficiary.tasks.title" />,
