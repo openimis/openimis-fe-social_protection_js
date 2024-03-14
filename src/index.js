@@ -54,15 +54,13 @@ import {
   CalculationSocialProtectionTableHeaders,
 } from './components/tasks/CalculationSocialProtectionTasks';
 import {
-  ValidateImportValidItemsItemFormatters,
-  ValidateImportValidItemsTaskTableHeaders,
-} from './components/tasks/ValidateImportValidItems';
-import {
   UploadResolutionTaskTableHeaders,
   UploadResolutionItemFormatters,
-  UploadConfirmationPanel
+  UploadConfirmationPanel,
 } from './components/tasks/BeneficiaryUploadApprovalTask';
 import { fetchBenefitPlanSchemaFields } from './actions';
+import BenefitPlanHistorySearcher from './components/BenefitPlanHistorySearcher';
+import { BenefitPlanChangelogTabLabel, BenefitPlanChangelogTabPanel } from './components/BenefitPlanChangelogTab';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -95,19 +93,24 @@ const DEFAULT_CONFIG = {
     { key: 'socialProtection.BenefitPlansListTabLabel', ref: BenefitPlansListTabLabel },
     { key: 'socialProtection.BenefitPlansListTabPanel', ref: BenefitPlansListTabPanel },
     { key: 'socialProtection.fetchBenefitPlanSchemaFields', ref: fetchBenefitPlanSchemaFields },
+    { key: 'socialProtection.BenefitPlanHistorySearcher', ref: BenefitPlanHistorySearcher },
   ],
   'benefitPlan.TabPanel.label': [
     BenefitPlanBeneficiariesListTabLabel,
     BenefitPlanBeneficiariesPotentialTabLabel,
     BenefitPlanBeneficiariesActiveTabLabel,
     BenefitPlanBeneficiariesGraduatedTabLabel,
-    BenefitPlanBeneficiariesSuspendedTabLabel],
+    BenefitPlanBeneficiariesSuspendedTabLabel,
+    BenefitPlanChangelogTabLabel,
+  ],
   'benefitPlan.TabPanel.panel': [
     BenefitPlanBeneficiariesListTabPanel,
     BenefitPlanBeneficiariesPotentialTabPanel,
     BenefitPlanBeneficiariesActiveTabPanel,
     BenefitPlanBeneficiariesGraduatedTabPanel,
-    BenefitPlanBeneficiariesSuspendedTabPanel],
+    BenefitPlanBeneficiariesSuspendedTabPanel,
+    BenefitPlanChangelogTabPanel,
+  ],
   'benefitPackage.TabPanel.label': [
     BenefitPackageMembersTabLabel,
     BenefitPackagePaymentsTabLabel,
@@ -141,9 +144,9 @@ const DEFAULT_CONFIG = {
     tableHeaders: UploadResolutionTaskTableHeaders,
     itemFormatters: UploadResolutionItemFormatters,
     taskSource: ['import_valid_items'],
-    confirmationPanel: UploadConfirmationPanel
+    confirmationPanel: UploadConfirmationPanel,
   },
- ],
+  ],
 };
 
 export const SocialProtectionModule = (cfg) => ({ ...DEFAULT_CONFIG, ...cfg });

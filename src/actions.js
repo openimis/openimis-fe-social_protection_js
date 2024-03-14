@@ -33,6 +33,8 @@ const BENEFIT_PLAN_FULL_PROJECTION = () => [
   'jsonExt',
   'institution',
   'hasPaymentPlans',
+  'version',
+  'userUpdated {username}',
 ];
 
 const UPLOAD_HISTORY_FULL_PROJECTION = () => [
@@ -211,6 +213,11 @@ export function fetchPendingBeneficiaryUploads(variables) {
     variables,
     ACTION_TYPE.GET_PENDING_BENEFICIARIES_UPLOAD,
   );
+}
+
+export function fetchBenefitPlanHistory(params) {
+  const payload = formatPageQueryWithCount('benefitPlanHistory', params, BENEFIT_PLAN_FULL_PROJECTION());
+  return graphql(payload, ACTION_TYPE.SEARCH_BENEFIT_PLANS_HISTORY);
 }
 
 export function deleteBenefitPlan(benefitPlan, clientMutationLabel) {
