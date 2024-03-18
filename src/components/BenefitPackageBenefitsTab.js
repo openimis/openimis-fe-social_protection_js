@@ -18,7 +18,7 @@ function BenefitPackageBenefitsTabLabel({
 }
 
 function BenefitPackageBenefitsTabPanel({
-  value, beneficiary, rights, classes,
+  value, beneficiary, rights, classes, benefitPlan,
 }) {
   return (
     <PublishedComponent
@@ -32,6 +32,7 @@ function BenefitPackageBenefitsTabPanel({
         individualUuid={beneficiary?.individual?.uuid}
         rights={rights}
         classes={classes}
+        benefitPlan={benefitPlan}
       />
     </PublishedComponent>
   );
