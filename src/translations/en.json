@@ -82,7 +82,7 @@
   "socialProtection.benefitPackage.BenefitPlanDetailPanel.title": "Benefit Plan Details",
   "socialProtection.benefitPackage.BenefitPlanDetailPanel.tooltip": "Show Benefit Plan",
   "socialProtection.benefitPackage.benefitPackageMembersTab.label": "Members",
-  "socialProtection.benefitPackage.benefitPackagePaymentsTab.label": "Payments",
+  "socialProtection.benefitPackage.benefitPackageBenefitsTab.label": "Benefits",
   "socialProtection.benefitPackage.benefitPackageGrievancesTab.label": "Grievances",
   "socialProtection.benefitPackage.members.tooltip.viewDetails": "View individual details",
   "socialProtection.benefitPackage.members.tooltip.paymentHistory": "Payment History",
