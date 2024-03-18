@@ -20,6 +20,7 @@ function BenefitPackageBenefitsTabLabel({
 function BenefitPackageBenefitsTabPanel({
   value, beneficiary, rights, classes, benefitPlan,
 }) {
+  if (!beneficiary) return null;
   return (
     <PublishedComponent
       pubRef="policyHolder.TabPanel"
