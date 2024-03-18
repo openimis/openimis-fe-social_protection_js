@@ -7,6 +7,7 @@ import {
   journalize,
   Searcher,
   withHistory,
+  formatDateFromISO,
   withModulesManager,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
@@ -21,6 +22,7 @@ import BenefitPlanSchemaModal from '../dialogs/BenefitPlanSchemaModal';
 
 function BenefitPlanHistorySearcher({
   intl,
+  modulesManager,
   fetchBenefitPlanHistory,
   fetchingBenefitPlansHistory,
   errorBenefitPlansHistory,
@@ -56,8 +58,12 @@ function BenefitPlanHistorySearcher({
       (benefitPlansHistory) => benefitPlansHistory.code,
       (benefitPlansHistory) => benefitPlansHistory.name,
       (benefitPlansHistory) => benefitPlansHistory.type,
-      (benefitPlansHistory) => benefitPlansHistory.dateValidFrom,
-      (benefitPlansHistory) => benefitPlansHistory.dateValidTo,
+      (benefitPlansHistory) => (benefitPlansHistory.dateValidFrom
+        ? formatDateFromISO(modulesManager, intl, benefitPlansHistory.dateValidFrom)
+        : ''),
+      (benefitPlansHistory) => (benefitPlansHistory.dateValidTo
+        ? formatDateFromISO(modulesManager, intl, benefitPlansHistory.dateValidTo)
+        : ''),
       (benefitPlansHistory) => benefitPlansHistory.maxBeneficiaries,
       (benefitPlansHistory) => benefitPlansHistory.institution,
       (benefitPlansHistory) => benefitPlansHistory.type,
