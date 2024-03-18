@@ -6,7 +6,7 @@ import { withTheme, withStyles } from '@material-ui/core/styles';
 import {
   BENEFIT_PACKAGE_TABS_LABEL_CONTRIBUTION_KEY,
   BENEFIT_PACKAGE_TABS_PANEL_CONTRIBUTION_KEY,
-  BENEFIT_PACKAGE_PAYMENTS_TAB_VALUE,
+  BENEFIT_PACKAGE_BENEFITS_TAB_VALUE,
   BENEFIT_PACKAGE_MEMBERS_TAB_VALUE,
 } from '../constants';
 
@@ -32,10 +32,10 @@ const styles = (theme) => ({
 });
 
 function BenefitPackageTabPanel({
-  intl, rights, classes, groupBeneficiaries, modulesManager, history, benefitPlan,
+  intl, rights, classes, groupBeneficiaries, modulesManager, history, benefitPlan, beneficiary,
 }) {
   const [activeTab, setActiveTab] = useState(groupBeneficiaries
-    ? BENEFIT_PACKAGE_MEMBERS_TAB_VALUE : BENEFIT_PACKAGE_PAYMENTS_TAB_VALUE);
+    ? BENEFIT_PACKAGE_MEMBERS_TAB_VALUE : BENEFIT_PACKAGE_BENEFITS_TAB_VALUE);
 
   const isSelected = (tab) => tab === activeTab;
 
@@ -66,6 +66,7 @@ function BenefitPackageTabPanel({
         modulesManager={modulesManager}
         history={history}
         benefitPlan={benefitPlan}
+        beneficiary={beneficiary}
       />
     </Paper>
   );

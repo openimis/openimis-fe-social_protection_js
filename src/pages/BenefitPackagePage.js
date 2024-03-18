@@ -96,7 +96,6 @@ function BenefitPackagePage({
   };
 
   const panelsConfig = configurePanels(beneficiaryUuid);
-
   return (
     <div className={classes.page}>
       {dependenciesFetched && (

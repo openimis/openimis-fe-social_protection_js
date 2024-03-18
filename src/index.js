@@ -31,9 +31,9 @@ import {
   BenefitPlanBeneficiariesGraduatedTabPanel,
 } from './components/BenefitPlanBeneficiariesGraduatedTab';
 import {
-  BenefitPackagePaymentsTabLabel,
-  BenefitPackagePaymentsTabPanel,
-} from './components/BenefitPackagePaymentsTab';
+  BenefitPackageBenefitsTabLabel,
+  BenefitPackageBenefitsTabPanel,
+} from './components/BenefitPackageBenefitsTab';
 import {
   BenefitPackageGrievancesTabLabel,
   BenefitPackageGrievancesTabPanel,
@@ -117,12 +117,12 @@ const DEFAULT_CONFIG = {
   ],
   'benefitPackage.TabPanel.label': [
     BenefitPackageMembersTabLabel,
-    BenefitPackagePaymentsTabLabel,
+    BenefitPackageBenefitsTabLabel,
     BenefitPackageGrievancesTabLabel,
   ],
   'benefitPackage.TabPanel.panel': [
     BenefitPackageMembersTabPanel,
-    BenefitPackagePaymentsTabPanel,
+    BenefitPackageBenefitsTabPanel,
     BenefitPackageGrievancesTabPanel,
   ],
   'tasksManagement.tasks': [{
