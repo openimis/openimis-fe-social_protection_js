@@ -68,7 +68,9 @@ function BenefitPlanHistorySearcher({
       (benefitPlansHistory) => benefitPlansHistory.institution,
       (benefitPlansHistory) => benefitPlansHistory.type,
       (benefitPlansHistory) => benefitPlansHistory.version,
-      (benefitPlansHistory) => benefitPlansHistory.dateUpdated,
+      (benefitPlansHistory) => (benefitPlansHistory.dateUpdated
+        ? formatDateFromISO(modulesManager, intl, benefitPlansHistory.dateUpdated)
+        : ''),
       (benefitPlansHistory) => benefitPlansHistory.userUpdated.username,
       (benefitPlansHistory) => (
         <BenefitPlanSchemaModal
