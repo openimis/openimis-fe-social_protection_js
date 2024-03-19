@@ -166,6 +166,13 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                         'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.error',
                       )}
                     </TableCell>
+                    <TableCell>
+                      {formatMessage(
+                        intl,
+                        'socialProtection',
+                        'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.validationErrors',
+                      )}
+                    </TableCell>
                     <TableCell />
                   </TableRow>
                 </TableHead>
@@ -205,7 +212,11 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                               marginBottom: '15px',
                             }}
                           >
-                            Download Invalid Items
+                            {formatMessage(
+                              intl,
+                              'socialProtection',
+                              'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.downloadInvalidItems',
+                            )}
                           </Button>
                         )}
                       </TableCell>
