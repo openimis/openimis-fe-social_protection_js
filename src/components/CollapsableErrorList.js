@@ -68,7 +68,7 @@ function CollapsableErrorList({
               <ListItemText
                 primary={key}
                 style={{ marginLeft: '20px' }}
-                primaryTypographyProps={{ style: { fontWeight: 'bold' } }} 
+                primaryTypographyProps={{ style: { fontWeight: 'bold' } }}
               />
             </ListItem>
             <ListItem>
@@ -82,6 +82,7 @@ function CollapsableErrorList({
       return formattedMessages;
     } catch (e) {
       // Fallback in case of parsing error
+      // eslint-disable-next-line
       console.log(e);
       return 'Error parsing the error message.';
     }
