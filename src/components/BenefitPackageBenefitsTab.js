@@ -18,8 +18,9 @@ function BenefitPackageBenefitsTabLabel({
 }
 
 function BenefitPackageBenefitsTabPanel({
-  value, beneficiary, rights, classes,
+  value, beneficiary, rights, classes, benefitPlan, groupBeneficiaries,
 }) {
+  if (!beneficiary) return null;
   return (
     <PublishedComponent
       pubRef="policyHolder.TabPanel"
@@ -32,6 +33,8 @@ function BenefitPackageBenefitsTabPanel({
         individualUuid={beneficiary?.individual?.uuid}
         rights={rights}
         classes={classes}
+        benefitPlan={benefitPlan}
+        groupBeneficiaries={groupBeneficiaries}
       />
     </PublishedComponent>
   );
