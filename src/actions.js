@@ -445,6 +445,7 @@ export const formatTaskResolveGQL = (task, user, approveOrFail, additionalData) 
 export function resolveTask(task, clientMutationLabel, user, approveOrFail, additionalData = null) {
   const mutationType = 'resolveTask'; // 'resolveTask'
   const mutationInput = formatTaskResolveGQL(task, user, approveOrFail, additionalData);
+  // eslint-disable-next-line
   const ACTION = ACTION_TYPE.RESOLVE_TASK;
   const mutation = formatMutation(mutationType, mutationInput, clientMutationLabel);
   const requestedDateTime = new Date();
@@ -485,6 +486,7 @@ export function resolveTask(task, clientMutationLabel, user, approveOrFail, addi
             throw new Error('Invalid approveOrFail value');
         }
       })(),
+      // eslint-disable-next-line max-len
       additionalData: additionalData ? JSON.stringify({ entries: additionalData, decision: additionalData }) : undefined,
     },
     {
@@ -503,10 +505,12 @@ export function resolveTask(task, clientMutationLabel, user, approveOrFail, addi
             throw new Error('Invalid approveOrFail value');
         }
       })(),
+      // eslint-disable-next-line max-len
       additionalData: additionalData ? JSON.stringify({ entries: additionalData, decision: additionalData }) : undefined,
     },
   );
 
+  // eslint-disable-next-line no-param-reassign
   user.clientMutationId = mutation.clientMutationId;
 
   return graphqlWithVariables(

@@ -18,7 +18,7 @@ function BenefitPackageBenefitsTabLabel({
 }
 
 function BenefitPackageBenefitsTabPanel({
-  value, beneficiary, rights, classes, benefitPlan,
+  value, beneficiary, rights, classes, benefitPlan, groupBeneficiaries,
 }) {
   if (!beneficiary) return null;
   return (
@@ -34,6 +34,7 @@ function BenefitPackageBenefitsTabPanel({
         rights={rights}
         classes={classes}
         benefitPlan={benefitPlan}
+        groupBeneficiaries={groupBeneficiaries}
       />
     </PublishedComponent>
   );
