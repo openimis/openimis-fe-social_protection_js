@@ -67,7 +67,6 @@ const intl = useIntl();
   const queryPrms = () => { 
     return {
     'upload_Id': jsonExt?.data_upload_id, 
-    'individual_Id_Isnull': isTaskResolved()  ? undefined : true, 
     'isDeleted': isTaskResolved()  ? undefined : false 
   }}
 
