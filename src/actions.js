@@ -32,7 +32,6 @@ const BENEFIT_PLAN_FULL_PROJECTION = () => [
   'beneficiaryDataSchema',
   'jsonExt',
   'institution',
-  'hasPaymentPlans',
   'version',
   'userUpdated {username}',
 ];
