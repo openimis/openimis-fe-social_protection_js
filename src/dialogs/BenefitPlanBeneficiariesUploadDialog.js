@@ -10,12 +10,14 @@ import {
   apiHeaders,
   baseApiUrl,
   formatMessage,
+  coreAlert,
 } from '@openimis/fe-core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import WorkflowsPicker from '../pickers/WorkflowsPicker';
 import { fetchWorkflows } from '../actions';
+import { EMPTY_STRING } from '../constants';
 
 const styles = (theme) => ({
   item: theme.paper.item,
@@ -27,6 +29,7 @@ function BenefitPlanBeneficiariesUploadDialog({
   workflows,
   fetchWorkflows,
   benefitPlan,
+  coreAlert,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [forms, setForms] = useState({});
@@ -78,13 +81,17 @@ function BenefitPlanBeneficiariesUploadDialog({
         credentials: 'same-origin',
       });
 
-      await response.json();
-
-      if (response.status >= 400) {
+      if (response.ok) {
         handleClose();
         return;
       }
-      handleClose();
+
+      const errorHeader = formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.alert.header');
+      const errorMessage = response.status === 409
+        ? formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.alert.sameFileName')
+        : EMPTY_STRING;
+
+      coreAlert(errorHeader, errorMessage);
     } catch (error) {
       handleClose();
     }
@@ -206,6 +213,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchWorkflows,
+  coreAlert,
 }, dispatch);
 
 export default injectIntl(

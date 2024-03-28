@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-import { Paper, Grid } from '@material-ui/core';
-import { Contributions } from '@openimis/fe-core';
+import {
+  Paper, Grid, Button, Tooltip,
+} from '@material-ui/core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import {
+  Contributions, useHistory, useModulesManager, useTranslations,
+} from '@openimis/fe-core';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE,
   BENEFIT_PLAN_TABS_LABEL_CONTRIBUTION_KEY,
   BENEFIT_PLAN_TABS_PANEL_CONTRIBUTION_KEY,
-  DEDUPLICATION_SELECT_FIELD_DIALOG_CONTRIBUTION_KEY,
+  DEDUPLICATION_SELECT_FIELD_DIALOG_CONTRIBUTION_KEY, MODULE_NAME, PAYROLL_CREATE_RIGHTS_PUB_REF, PAYROLL_PAYROLL_ROUTE,
 } from '../constants';
 import BenefitPlanBeneficiariesUploadDialog from '../dialogs/BenefitPlanBeneficiariesUploadDialog';
 import BenefitPlanBeneficiariesUploadHistoryDialog from '../dialogs/BenefitPlanBeneficiariesUploadHistoryDialog';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   paper: theme.paper.paper,
   tableTitle: theme.table.title,
   tabs: {
@@ -31,11 +35,15 @@ const styles = (theme) => ({
     fontSize: '0.875rem',
     textTransform: 'none',
   },
-});
+}));
 
 function BenefitPlanTabPanel({
-  intl, rights, classes, benefitPlan, setConfirmedAction,
+  intl, rights, benefitPlan, setConfirmedAction,
 }) {
+  const classes = useStyles();
+  const modulesManager = useModulesManager();
+  const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
+  const history = useHistory();
   const [activeTab, setActiveTab] = useState(BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE);
 
   const isSelected = (tab) => tab === activeTab;
@@ -43,6 +51,14 @@ function BenefitPlanTabPanel({
   const tabStyle = (tab) => (isSelected(tab) ? classes.selectedTab : classes.unselectedTab);
 
   const handleChange = (_, tab) => setActiveTab(tab);
+
+  const payrollCreateRights = modulesManager.getRef(PAYROLL_CREATE_RIGHTS_PUB_REF);
+
+  const handleCreatePayrollButton = () => {
+    history.push(
+      `/${modulesManager.getRef(PAYROLL_PAYROLL_ROUTE)}/null/null/${benefitPlan.id}`,
+    );
+  };
 
   return (
     <Paper className={classes.paper}>
@@ -60,6 +76,29 @@ function BenefitPlanTabPanel({
             />
           </div>
           <div style={{ float: 'right', paddingRight: '16px' }}>
+            {rights.includes(payrollCreateRights) && (
+            <Tooltip
+              title={formatMessage('benefitPlan.benefitPlanTabPanel.createPayroll.tooltip')}
+              disableHoverListener={benefitPlan?.hasPaymentPlans}
+            >
+              <span>
+                <Button
+                  onClick={handleCreatePayrollButton}
+                  variant="outlined"
+                  color="#DFEDEF"
+                  disabled={!benefitPlan?.hasPaymentPlans}
+                  className={classes.button}
+                  style={{
+                    border: '0px',
+                    marginTop: '6px',
+                  }}
+                >
+                  {formatMessage('benefitPlan.benefitPlanTabPanel.createPayroll')}
+                </Button>
+              </span>
+            </Tooltip>
+            )}
+
             <Contributions
               contributionKey={DEDUPLICATION_SELECT_FIELD_DIALOG_CONTRIBUTION_KEY}
               intl={intl}
@@ -85,4 +124,4 @@ function BenefitPlanTabPanel({
   );
 }
 
-export default injectIntl(withTheme(withStyles(styles)(BenefitPlanTabPanel)));
+export default injectIntl(BenefitPlanTabPanel);

@@ -20,6 +20,7 @@ import {
   DialogTitle,
   IconButton,
   Tooltip,
+  DialogContent,
 } from '@material-ui/core';
 import PreviewIcon from '@material-ui/icons/ListAlt';
 import {
@@ -172,7 +173,9 @@ function BenefitPlanBeneficiariesSearcher({
   const [appliedFiltersRowStructure, setAppliedFiltersRowStructure] = useState([CLEARED_STATE_FILTER]);
 
   useEffect(() => {
-    setFailedExport(true);
+    if (errorBeneficiaryExport) {
+      setFailedExport(true);
+    }
   }, [errorBeneficiaryExport]);
 
   useEffect(() => {
@@ -183,6 +186,8 @@ function BenefitPlanBeneficiariesSearcher({
       )();
       clearBeneficiaryExport();
     }
+
+    return setFailedExport(false);
   }, [beneficiaryExport]);
 
   const beneficiaryFilter = (props) => (
@@ -253,14 +258,17 @@ function BenefitPlanBeneficiariesSearcher({
         rowLocked={isRowDisabled}
       />
       {failedExport && (
-      <Dialog fullWidth maxWidth="sm">
-        <DialogTitle>{errorBeneficiaryExport}</DialogTitle>
-        <DialogActions>
-          <Button onClick={setFailedExport(false)} variant="contained">
-            {formatMessage(intl, 'socialProtection', 'ok')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog open={failedExport} fullWidth maxWidth="sm">
+          <DialogTitle>{errorBeneficiaryExport?.message}</DialogTitle>
+          <DialogContent>
+            <strong>{`${errorBeneficiaryExport?.code}: `}</strong>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setFailedExport(false)} color="primary" variant="contained">
+              {formatMessage(intl, 'socialProtection', 'ok')}
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </div>
     )

@@ -15,6 +15,7 @@ import { injectIntl } from 'react-intl';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 import { RIGHT_BENEFIT_PLAN_UPDATE, RIGHT_SCHEMA_UPDATE } from '../constants';
+import BenefitPlanSchemaModal from '../dialogs/BenefitPlanSchemaModal';
 
 const styles = (theme) => ({
   tableTitle: theme.table.title,
@@ -150,14 +151,11 @@ class BenefitPackagePlanPanel extends FormPanel {
                 />
               </Grid>
               {rights.includes(RIGHT_SCHEMA_UPDATE) && (
-              <Grid item xs={3} className={classes.item}>
-                <TextInput
-                  module="socialProtection"
-                  label="benefitPlan.schema"
-                  value={benefitPlan?.beneficiaryDataSchema}
-                  readOnly={readOnly}
-                />
-              </Grid>
+                <Grid item xs={3} className={classes.item}>
+                  <BenefitPlanSchemaModal
+                    benefitPlan={benefitPlan}
+                  />
+                </Grid>
               )}
             </Grid>
           </Paper>

@@ -44,7 +44,7 @@ export const BENEFIT_PLAN_TABS_PANEL_CONTRIBUTION_KEY = 'benefitPlan.TabPanel.pa
 export const DEDUPLICATION_SELECT_FIELD_DIALOG_CONTRIBUTION_KEY = 'deduplication.deduplicationFieldSelectionDialog';
 
 export const BENEFIT_PACKAGE_MEMBERS_TAB_VALUE = 'benefitPackageMembersTab';
-export const BENEFIT_PACKAGE_PAYMENTS_TAB_VALUE = 'benefitPackagePaymentsTab';
+export const BENEFIT_PACKAGE_BENEFITS_TAB_VALUE = 'benefitPackageBenefitsTab';
 export const BENEFIT_PACKAGE_GRIEVANCES_TAB_VALUE = 'benefitPackageGrievancesTab';
 export const BENEFIT_PACKAGE_TABS_LABEL_CONTRIBUTION_KEY = 'benefitPackage.TabPanel.label';
 export const BENEFIT_PACKAGE_TABS_PANEL_CONTRIBUTION_KEY = 'benefitPackage.TabPanel.panel';
@@ -82,7 +82,7 @@ export const UPLOAD_STATUS = {
   FAIL: 'FAIL',
 };
 
-export const MODULE_NAME = 'social_protection';
+export const MODULE_NAME = 'socialProtection';
 export const SOCIAL_PROTECTION_MODULE = 'socialProtection';
 export const BENEFIT_PLAN_LABEL = 'BenefitPlan';
 export const BENEFICIARY_STATUS_LIST = [
@@ -96,6 +96,9 @@ export const BENEFIT_PLAN_TYPE = {
 export const BENEFIT_PLAN_TYPE_LIST = [BENEFIT_PLAN_TYPE.INDIVIDUAL, BENEFIT_PLAN_TYPE.GROUP];
 
 export const BENEFIT_PLANS_QUANTITY_LIMIT = 15;
+
+export const APPROVED = 'APPROVED';
+export const FAILED = 'FAILED';
 export const INTEGER = 'integer';
 export const STRING = 'string';
 export const BOOLEAN = 'boolean';
@@ -109,3 +112,11 @@ export const BOOL_OPTIONS = [
 export const CLEARED_STATE_FILTER = {
   field: '', filter: '', type: '', value: '',
 };
+
+export const PAYROLL_CREATE_RIGHTS_PUB_REF = 'payroll.payrollCreateRight';
+
+export const PAYROLL_PAYROLL_ROUTE = 'payroll.route.payroll';
+export const BENEFIT_PLAN_CHANGELOG_TAB_VALUE = 'BenefitPlanChangelogTab';
+export const TASK_CONTRIBUTION_KEY = 'tasksManagement.tasks';
+export const BENEFIT_PLAN_TASK_TAB_VALUE = 'BenefitPlanTaskTab';
+export const BENEFITS_CONTRIBUTION_KEY = 'payroll.benefitConsumptionPayrollSearcher';

@@ -10,6 +10,7 @@ import {
   Searcher,
   withHistory,
   withModulesManager,
+  formatDateFromISO,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -159,8 +160,8 @@ function BenefitPlanSearcherForEntities({
       (benefitPlan) => benefitPlan.code,
       (benefitPlan) => benefitPlan.name,
       (benefitPlan) => benefitPlan.type,
-      (benefitPlan) => benefitPlan.dateValidFrom,
-      (benefitPlan) => benefitPlan.dateValidTo,
+      (benefitPlan) => formatDateFromISO(modulesManager, intl, benefitPlan.dateValidFrom),
+      (benefitPlan) => formatDateFromISO(modulesManager, intl, benefitPlan.dateValidTo),
       (benefitPlan) => benefitPlan.maxBeneficiaries,
     ];
     if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE)) {
