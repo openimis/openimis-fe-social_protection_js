@@ -79,15 +79,14 @@ function BenefitPlanEligibilityCriteriaPanel({
       const criteria = getAdvancedCriteria();
       if (criteria?.length && !arraysAreEqual(criteria, filters)) {
         setFilters(criteria);
-      } else if (!criteria?.length) {
-        const paramsToFetchFilters = createParams(
-          moduleFilterName,
-          objectFilterType,
-          isBase64Encoded(editedBenefitPlan.id) ? decodeId(editedBenefitPlan.id) : editedBenefitPlan.id,
-          additionalParams,
-        );
-        fetchFilters(paramsToFetchFilters);
       }
+      const paramsToFetchFilters = createParams(
+        moduleFilterName,
+        objectFilterType,
+        isBase64Encoded(editedBenefitPlan.id) ? decodeId(editedBenefitPlan.id) : editedBenefitPlan.id,
+        additionalParams,
+      );
+      fetchFilters(paramsToFetchFilters);
     }
   }, [editedBenefitPlan]);
 

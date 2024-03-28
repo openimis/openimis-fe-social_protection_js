@@ -19,6 +19,7 @@ import {
   DialogTitle,
   IconButton,
   Tooltip,
+  DialogContent,
 } from '@material-ui/core';
 import PreviewIcon from '@material-ui/icons/ListAlt';
 import {
@@ -156,7 +157,9 @@ function BenefitPlanGroupBeneficiariesSearcher({
     updatedGroupBeneficiaries.some((item) => item.id === groupBeneficiary.id));
 
   useEffect(() => {
-    setFailedExport(true);
+    if (errorGroupBeneficiaryExport) {
+      setFailedExport(true);
+    }
   }, [errorGroupBeneficiaryExport]);
 
   useEffect(() => {
@@ -167,6 +170,8 @@ function BenefitPlanGroupBeneficiariesSearcher({
       )();
       clearGroupBeneficiaryExport();
     }
+
+    return setFailedExport(false);
   }, [groupBeneficiaryExport]);
 
   const groupBeneficiaryFilter = (props) => (
@@ -218,14 +223,18 @@ function BenefitPlanGroupBeneficiariesSearcher({
         rowLocked={isRowDisabled}
       />
       {failedExport && (
-      <Dialog fullWidth maxWidth="sm">
-        <DialogTitle>{errorGroupBeneficiaryExport}</DialogTitle>
-        <DialogActions>
-          <Button onClick={setFailedExport(false)} variant="contained">
-            {formatMessage(intl, 'socialProtection', 'ok')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog open={failedExport} fullWidth maxWidth="sm">
+          <DialogTitle>{errorGroupBeneficiaryExport?.message}</DialogTitle>
+          <DialogContent>
+            <strong>{`${errorGroupBeneficiaryExport?.code}: `}</strong>
+            {errorGroupBeneficiaryExport?.detail}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setFailedExport(false)} color="primary" variant="contained">
+              {formatMessage(intl, 'socialProtection', 'ok')}
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </div>
     )

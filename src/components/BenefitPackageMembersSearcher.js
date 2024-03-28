@@ -15,6 +15,7 @@ import {
   Button,
   DialogActions,
   DialogTitle,
+  DialogContent,
 } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import HistoryIcon from '@material-ui/icons/History';
@@ -157,7 +158,9 @@ function BenefitPackageMembersSearcher({
   const [appliedFiltersRowStructure, setAppliedFiltersRowStructure] = useState([CLEARED_STATE_FILTER]);
 
   useEffect(() => {
-    setFailedExport(true);
+    if (errorMembersExport) {
+      setFailedExport(true);
+    }
   }, [errorMembersExport]);
 
   useEffect(() => {
@@ -165,6 +168,8 @@ function BenefitPackageMembersSearcher({
       downloadExport(membersExport, `${formatMessage(intl, 'socialProtection', 'export.filename')}.csv`)();
       dispatch(clearIndividualExportRef());
     }
+
+    return setFailedExport(false);
   }, [membersExport]);
 
   useEffect(() => {
@@ -225,14 +230,18 @@ function BenefitPackageMembersSearcher({
         applyNumberCircle={applyNumberCircle}
       />
       {failedExport && (
-      <Dialog fullWidth maxWidth="sm">
-        <DialogTitle>{errorMembersExport}</DialogTitle>
-        <DialogActions>
-          <Button onClick={setFailedExport(false)} variant="contained">
-            {formatMessage(intl, 'socialProtection', 'ok')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog open={failedExport} fullWidth maxWidth="sm">
+          <DialogTitle>{errorMembersExport?.message}</DialogTitle>
+          <DialogContent>
+            <strong>{`${errorMembersExport?.code}: `}</strong>
+            {errorMembersExport?.detail}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setFailedExport(false)} color="primary" variant="contained">
+              {formatMessage(intl, 'socialProtection', 'ok')}
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </>
   );

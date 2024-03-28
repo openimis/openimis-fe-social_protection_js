@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
   formatMessage,
-  formatDateFromISO,
+  formatDateTimeFromISO,
   ProgressOrError,
   withModulesManager,
 } from '@openimis/fe-core';
@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CollapsableErrorList from '../components/CollapsableErrorList';
 import { fetchUploadHistory } from '../actions';
-import downloadInvalidItems from '../util/export';
+import { downloadBeneficiaryUploadFile, downloadInvalidItems } from '../util/export';
 import { UPLOAD_STATUS } from '../constants';
 
 const styles = (theme) => ({
@@ -58,9 +58,13 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
     downloadInvalidItems(uploadId);
   };
 
+  const downloadFile = (filename) => {
+    downloadBeneficiaryUploadFile(benefitPlan?.id, filename);
+  };
+
   useEffect(() => {
     if (isOpen) {
-      const params = [`benefitPlan_Id:"${benefitPlan.id}"`];
+      const params = [`benefitPlan_Id:"${benefitPlan.id}", orderBy: ["-dateCreated"]`];
       fetchUploadHistory(params);
     }
   }, [isOpen]);
@@ -92,8 +96,9 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
             top: '50%',
             left: '50%',
             transform: 'translate(-50%,-50%)',
-            width: '75%',
-            maxWidth: '75%',
+            width: '85%',
+            maxWidth: '85%',
+            maxHeight: '75%',
           },
         }}
       >
@@ -152,7 +157,21 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                       {formatMessage(
                         intl,
                         'socialProtection',
+                        'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.user',
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {formatMessage(
+                        intl,
+                        'socialProtection',
                         'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.error',
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {formatMessage(
+                        intl,
+                        'socialProtection',
+                        'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.validationErrors',
                       )}
                     </TableCell>
                     <TableCell />
@@ -166,7 +185,7 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                         { item.workflow }
                       </TableCell>
                       <TableCell>
-                        { formatDateFromISO(modulesManager, intl, item.dataUpload.dateCreated) }
+                        { formatDateTimeFromISO(modulesManager, intl, item.dataUpload.dateCreated) }
                       </TableCell>
                       <TableCell>
                         { item.dataUpload.sourceType}
@@ -178,12 +197,13 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                         { item.dataUpload.status}
                       </TableCell>
                       <TableCell>
+                        { item.dataUpload.userCreated.username}
+                      </TableCell>
+                      <TableCell>
                         <CollapsableErrorList errors={item.dataUpload.error} />
                       </TableCell>
                       <TableCell>
-                        {[
-                          UPLOAD_STATUS.WAITING_FOR_VERIFICATION,
-                          UPLOAD_STATUS.PARTIAL_SUCCESS].includes(item.dataUpload.status) && (
+                        {[UPLOAD_STATUS.PARTIAL_SUCCESS].includes(item.dataUpload.status) && (
                           <Button
                             onClick={() => downloadInvalidItemsFromUpload(item.dataUpload.uuid)}
                             variant="outlined"
@@ -193,9 +213,30 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                               marginBottom: '15px',
                             }}
                           >
-                            Download Invalid Items
+                            {formatMessage(
+                              intl,
+                              'socialProtection',
+                              'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.downloadInvalidItems',
+                            )}
                           </Button>
                         )}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          onClick={() => downloadFile(item.dataUpload.sourceName)}
+                          variant="outlined"
+                          autoFocus
+                          style={{
+                            margin: '0 16px',
+                            marginBottom: '15px',
+                          }}
+                        >
+                          {formatMessage(
+                            intl,
+                            'socialProtection',
+                            'benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.downloadUploadFile',
+                          )}
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
