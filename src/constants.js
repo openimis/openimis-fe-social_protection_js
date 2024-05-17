@@ -121,3 +121,4 @@ export const TASK_CONTRIBUTION_KEY = 'tasksManagement.tasks';
 export const BENEFIT_PLAN_TASK_TAB_VALUE = 'BenefitPlanTaskTab';
 export const BENEFITS_CONTRIBUTION_KEY = 'payroll.benefitConsumptionPayrollSearcher';
 export const PYTHON_DEFAULT_IMPORT_WORKFLOW = 'Python Beneficiaries Upload';
+export const BENEFICIARIES_QUANTITY_LIMIT = 100;
