@@ -4,7 +4,7 @@ import { TextField, Tooltip } from '@material-ui/core';
 import {
   Autocomplete, useModulesManager, useTranslations, useGraphqlQuery,
 } from '@openimis/fe-core';
-import { BENEFIT_PLANS_QUANTITY_LIMIT } from '../constants';
+import { BENEFIT_PLANS_QUANTITY_LIMIT, BENEFIT_PLAN_TYPE } from '../constants';
 
 function BenefitPlanPicker(props) {
   const {
@@ -20,7 +20,7 @@ function BenefitPlanPicker(props) {
     onChange,
     filter,
     filterSelectedOptions,
-    type = 'INDIVIDUAL',
+    type = BENEFIT_PLAN_TYPE.INDIVIDUAL,
   } = props;
 
   const modulesManager = useModulesManager();
