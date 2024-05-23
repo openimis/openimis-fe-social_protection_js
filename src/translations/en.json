@@ -135,5 +135,7 @@
   "socialProtection.benefitPlan.searcherResultsTitleHistory": "{benefitPlansHistoryTotalCount} Historical Records Found",
   "socialProtection.benefitPlan.benefitPlanSchema.label": "Benefit Plan Schema",
   "socialProtection.benefitPlan.schema.showSchema": "Show Schema",
-  "socialProtection.benefitPlanTasks.label": "Tasks"
+  "socialProtection.benefitPlanTasks.label": "Tasks",
+  "socialProtection.group.code": "Code",
+  "socialProtection.groupBeneficiary.code": "Code"
 }
