@@ -30,9 +30,14 @@ import {
   RIGHT_GROUP_SEARCH,
   RIGHT_BENEFICIARY_UPDATE,
   ROWS_PER_PAGE_OPTIONS,
+  CLEARED_STATE_FILTER,
+  BENEFIT_PLAN_LABEL,
+  MODULE_NAME,
 } from '../constants';
 import BenefitPlanGroupBeneficiariesFilter from './BenefitPlanGroupBeneficiariesFilter';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
+import { applyNumberCircle } from '../util/searcher-utils';
+
 
 function BenefitPlanGroupBeneficiariesSearcher({
   rights,
@@ -152,6 +157,8 @@ function BenefitPlanGroupBeneficiariesSearcher({
   };
 
   const [failedExport, setFailedExport] = useState(false);
+  const [appliedCustomFilters, setAppliedCustomFilters] = useState([CLEARED_STATE_FILTER]);
+  const [appliedFiltersRowStructure, setAppliedFiltersRowStructure] = useState([CLEARED_STATE_FILTER]);
 
   const isRowDisabled = (_, groupBeneficiary) => (
     updatedGroupBeneficiaries.some((item) => item.id === groupBeneficiary.id));
@@ -183,6 +190,11 @@ function BenefitPlanGroupBeneficiariesSearcher({
       readOnly={readOnly}
     />
   );
+
+  useEffect(() => {
+    // refresh when appliedCustomFilters is changed
+  }, [appliedCustomFilters]);
+
   return (
     !!benefitPlan?.id && (
     <div>
@@ -219,6 +231,15 @@ function BenefitPlanGroupBeneficiariesSearcher({
         cacheFiltersKey="benefitPlanGroupBeneficiaryFilterCache"
         cachePerTab
         cacheTabName={`${benefitPlan?.id}-${status}`}
+        isCustomFiltering
+        objectForCustomFiltering={benefitPlan}
+        moduleName={MODULE_NAME}
+        objectType={BENEFIT_PLAN_LABEL}
+        appliedCustomFilters={appliedCustomFilters}
+        setAppliedCustomFilters={setAppliedCustomFilters}
+        appliedFiltersRowStructure={appliedFiltersRowStructure}
+        setAppliedFiltersRowStructure={setAppliedFiltersRowStructure}
+        applyNumberCircle={applyNumberCircle}
         rowDisabled={isRowDisabled}
         rowLocked={isRowDisabled}
       />
