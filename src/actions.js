@@ -52,7 +52,7 @@ const BENEFICIARY_FULL_PROJECTION = () => [
 
 const GROUP_BENEFICIARY_FULL_PROJECTION = () => [
   'id',
-  'group {id}',
+  'group {id, code}',
   'status',
 ];
 

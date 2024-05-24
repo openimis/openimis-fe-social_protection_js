@@ -60,7 +60,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
   const fetch = (params) => fetchGroupBeneficiaries(params);
 
   const headers = () => [
-    'socialProtection.groupBeneficiary.id',
+    'socialProtection.groupBeneficiary.code',
     'socialProtection.groupBeneficiary.status',
   ];
 
@@ -99,7 +99,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
 
   const itemFormatters = () => {
     const result = [
-      (groupBeneficiary) => groupBeneficiary.group.id,
+      (groupBeneficiary) => groupBeneficiary.group.code,
       (groupBeneficiary) => (rights.includes(RIGHT_BENEFICIARY_UPDATE) ? (
         <BeneficiaryStatusPicker
           withLabel={false}
