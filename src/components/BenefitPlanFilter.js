@@ -7,6 +7,7 @@ import _debounce from 'lodash/debounce';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
+import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 
 function BenefitPlanFilter({
   intl, classes, filters, onChangeFilters, showStatuses,
@@ -64,6 +65,21 @@ function BenefitPlanFilter({
           label="benefitPlan.name"
           value={filterTextFieldValue('name')}
           onChange={onChangeStringFilter('name', CONTAINS_LOOKUP)}
+        />
+      </Grid>
+      <Grid item xs={3} className={classes.item}>
+        <BenefitPlanTypePicker
+          module="socialProtection"
+          label="beneficiary.benefitPlanTypePicker"
+          value={filterValue('type')}
+          onChange={(v) => onChangeFilters([
+            {
+              id: 'type',
+              value: v,
+              filter: `type: ${v}`,
+            },
+          ])}
+          withNull={false}
         />
       </Grid>
       <Grid item xs={2} className={classes.item}>
