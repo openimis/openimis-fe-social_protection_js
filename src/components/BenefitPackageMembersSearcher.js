@@ -134,7 +134,6 @@ function BenefitPackageMembersSearcher({
   }, [errorMembersExport]);
 
   useEffect(() => {
-    console.log(membersExport, 'members export');
     if (membersExport) {
       downloadExport(membersExport, `${formatMessage(intl, 'socialProtection', 'export.filename')}.csv`)();
       dispatch(clearIndividualExportRef());
