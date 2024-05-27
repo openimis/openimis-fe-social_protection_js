@@ -18,12 +18,10 @@ import {
   DialogContent,
 } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import HistoryIcon from '@material-ui/icons/History';
-import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import { connect, useDispatch } from 'react-redux';
 import {
   BENEFIT_PLAN_LABEL,
-  DEFAULT_PAGE_SIZE, EMPTY_STRING, MODULE_NAME, RIGHT_INDIVIDUAL_UPDATE, ROWS_PER_PAGE_OPTIONS,
+  DEFAULT_PAGE_SIZE, EMPTY_STRING, INDIVIDUAL_LABEL, INDIVIDUAL_MODULE_NAME, MODULE_NAME, RIGHT_INDIVIDUAL_UPDATE, ROWS_PER_PAGE_OPTIONS,
 } from '../constants';
 import BenefitPackageMembersFilters from './BenefitPackageMembersFilters';
 import { applyNumberCircle } from '../util/searcher-utils';
@@ -79,34 +77,6 @@ function BenefitPackageMembersSearcher({
       (individual) => individual.lastName,
       (individual) => (individual.dob ? formatDateFromISO(modulesManager, intl, individual.dob) : EMPTY_STRING),
     ];
-    if (rights.includes(RIGHT_INDIVIDUAL_UPDATE)) {
-      formatters.push(() => (
-        <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.members.tooltip.paymentHistory')}>
-          { /* TODO: Implement payments */ }
-          { /* Blocked by: Payments has to be implemented to show payments history */ }
-          { /* Additional notes: Right in if statement has to be adjusted */}
-          <IconButton
-            disabled
-          >
-            <HistoryIcon />
-          </IconButton>
-        </Tooltip>
-      ));
-    }
-    if (rights.includes(RIGHT_INDIVIDUAL_UPDATE)) {
-      formatters.push(() => (
-        <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.members.tooltip.grievanceHistory')}>
-          { /* TODO: Implement grievances */ }
-          { /* Blocked by: Grievances has to be implemented to show grievances history */ }
-          { /* Additional notes: Right in if statement has to be adjusted */}
-          <IconButton
-            disabled
-          >
-            <SentimentVeryDissatisfiedIcon />
-          </IconButton>
-        </Tooltip>
-      ));
-    }
     if (rights.includes(RIGHT_INDIVIDUAL_UPDATE)) {
       formatters.push((individual) => (
         <Tooltip title={formatMessage(intl, 'socialProtection', 'benefitPackage.members.tooltip.viewDetails')}>
@@ -164,6 +134,7 @@ function BenefitPackageMembersSearcher({
   }, [errorMembersExport]);
 
   useEffect(() => {
+    console.log(membersExport, 'members export');
     if (membersExport) {
       downloadExport(membersExport, `${formatMessage(intl, 'socialProtection', 'export.filename')}.csv`)();
       dispatch(clearIndividualExportRef());
@@ -220,9 +191,9 @@ function BenefitPackageMembersSearcher({
         exportFieldLabel={formatMessage(intl, 'individual', 'export.label')}
         cacheFiltersKey="individualsFilterCache"
         isCustomFiltering
-        objectForCustomFiltering={benefitPlan}
-        moduleName={MODULE_NAME}
-        objectType={BENEFIT_PLAN_LABEL}
+        additionalCustomFilterParams={{ type: 'INDIVIDUAL' }}
+        moduleName={INDIVIDUAL_MODULE_NAME}
+        objectType={INDIVIDUAL_LABEL}
         appliedCustomFilters={appliedCustomFilters}
         setAppliedCustomFilters={setAppliedCustomFilters}
         appliedFiltersRowStructure={appliedFiltersRowStructure}
@@ -256,10 +227,10 @@ const mapStateToProps = (state) => ({
   membersPageInfo: state.individual.individualsPageInfo,
   membersTotalCount: state.individual.individualsTotalCount,
   fetchingMembersExport: state.individual.fetchingIndividualsExport,
-  fetchedGroupsExport: state.individual.fetchedIndividualsExport,
-  membersExport: state.individual.individualsExport,
-  membersExportPageInfo: state.individual.individualsExportPageInfo,
-  errorMembersGroup: state.individual.errorIndividualsExport,
+  fetchedGroupsExport: state.individual.fetchedIndividualExport,
+  membersExport: state.individual.individualExport,
+  membersExportPageInfo: state.individual.individualExportPageInfo,
+  errorMembersGroup: state.individual.errorIndividualExport,
 });
 
 export default injectIntl(connect(mapStateToProps, null)(BenefitPackageMembersSearcher));
