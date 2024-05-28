@@ -20,8 +20,8 @@ import {
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { connect, useDispatch } from 'react-redux';
 import {
-  BENEFIT_PLAN_LABEL,
-  DEFAULT_PAGE_SIZE, EMPTY_STRING, INDIVIDUAL_LABEL, INDIVIDUAL_MODULE_NAME, MODULE_NAME, RIGHT_INDIVIDUAL_UPDATE, ROWS_PER_PAGE_OPTIONS,
+  DEFAULT_PAGE_SIZE, EMPTY_STRING, INDIVIDUAL_LABEL,
+  INDIVIDUAL_MODULE_NAME, RIGHT_INDIVIDUAL_UPDATE, ROWS_PER_PAGE_OPTIONS,
 } from '../constants';
 import BenefitPackageMembersFilters from './BenefitPackageMembersFilters';
 import { applyNumberCircle } from '../util/searcher-utils';
@@ -41,7 +41,6 @@ function BenefitPackageMembersSearcher({
   errorMembers,
   membersExport,
   errorMembersExport,
-  benefitPlan,
 }) {
   const dispatch = useDispatch();
 
@@ -188,7 +187,6 @@ function BenefitPackageMembersSearcher({
           dob: formatMessage(intl, 'individual', 'export.dob'),
         }}
         exportFieldLabel={formatMessage(intl, 'individual', 'export.label')}
-        cacheFiltersKey="individualsFilterCache"
         isCustomFiltering
         additionalCustomFilterParams={{ type: 'INDIVIDUAL' }}
         moduleName={INDIVIDUAL_MODULE_NAME}
