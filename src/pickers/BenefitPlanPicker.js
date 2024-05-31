@@ -51,13 +51,11 @@ function BenefitPlanPicker(props) {
   );
 
   let benefitPlans = [];
+  const edges = data?.benefitPlan?.edges?.map((edge) => edge.node) ?? [];
   if (type === BENEFIT_PLAN_TYPE.EVERY_TYPE) {
-    benefitPlans = data?.benefitPlan?.edges
-      .map((edge) => edge.node) ?? [];
+    benefitPlans = edges;
   } else {
-    benefitPlans = data?.benefitPlan?.edges
-      .map((edge) => edge.node)
-      .filter((node) => node.type === type) ?? [];
+    benefitPlans = edges.filter((node) => node.type === type);
   }
   const shouldShowTooltip = benefitPlans?.length >= BENEFIT_PLANS_QUANTITY_LIMIT && !value && !currentString;
 
