@@ -34,6 +34,7 @@ const BENEFIT_PLAN_FULL_PROJECTION = () => [
   'institution',
   'version',
   'userUpdated {username}',
+  'hasPaymentPlans',
 ];
 
 const UPLOAD_HISTORY_FULL_PROJECTION = () => [
