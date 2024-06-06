@@ -53,7 +53,7 @@ const BENEFICIARY_FULL_PROJECTION = () => [
 
 const GROUP_BENEFICIARY_FULL_PROJECTION = () => [
   'id',
-  'group {id, code}',
+  'group {id, code, head {uuid}}',
   'status',
 ];
 
@@ -102,6 +102,7 @@ export function fetchBeneficiariesGroup(modulesManager, variables) {
               group {
                 uuid,
                 id,
+                head{uuid},
               }
               status
             }
