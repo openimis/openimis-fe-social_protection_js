@@ -15,9 +15,10 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PauseIcon from '@material-ui/icons/Pause';
 import { RIGHT_BENEFICIARY_SEARCH, RIGHT_BENEFIT_PLAN_UPDATE } from '../constants';
 import {
-  fetchBenefitPlan, deleteBenefitPlan, updateBenefitPlan, clearBenefitPlan, createBenefitPlan,
+  fetchBenefitPlan, deleteBenefitPlan, closeBenefitPlan, updateBenefitPlan, clearBenefitPlan, createBenefitPlan,
 } from '../actions';
 import BenefitPlanHeadPanel from '../components/BenefitPlanHeadPanel';
 import BenefitPlanTabPanel from '../components/BenefitPlanTabPanel';
@@ -38,6 +39,7 @@ function BenefitPlanPage({
   benefitPlan,
   fetchBenefitPlan,
   deleteBenefitPlan,
+  closeBenefitPlan,
   updateBenefitPlan,
   coreConfirm,
   clearConfirm,
@@ -147,6 +149,13 @@ function BenefitPlanPage({
     }),
   );
 
+  const stopBenefitPlanCallback = () => closeBenefitPlan(
+    benefitPlan,
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
+      id: benefitPlan?.id,
+    }),
+  );
+
   const openDeleteBenefitPlanConfirmDialog = () => {
     setConfirmedAction(() => deleteBenefitPlanCallback);
     coreConfirm(
@@ -155,6 +164,17 @@ function BenefitPlanPage({
         name: benefitPlan?.name,
       }),
       formatMessage(intl, 'socialProtection', 'benefitPlan.delete.confirm.message'),
+    );
+  };
+
+  const openStopBenefitPlanConfirmDialog = () => {
+    setConfirmedAction(() => stopBenefitPlanCallback);
+    coreConfirm(
+      formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.suspend.confirm.title', {
+        code: benefitPlan?.code,
+        name: benefitPlan?.name,
+      }),
+      formatMessage(intl, 'socialProtection', 'benefitPlan.suspend.confirm.message'),
     );
   };
 
@@ -174,6 +194,10 @@ function BenefitPlanPage({
       doIt: openDeleteBenefitPlanConfirmDialog,
       icon: <DeleteIcon />,
       tooltip: formatMessage(intl, 'socialProtection', 'deleteButtonTooltip'),
+    }, {
+      doIt: openStopBenefitPlanConfirmDialog,
+      icon: <PauseIcon />,
+      tooltip: formatMessage(intl, 'socialProtection', 'stopButtonTooltip'),
     },
   ];
 
@@ -231,6 +255,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchBenefitPlan,
   clearBenefitPlan,
   deleteBenefitPlan,
+  closeBenefitPlan,
   updateBenefitPlan,
   coreConfirm,
   clearConfirm,
