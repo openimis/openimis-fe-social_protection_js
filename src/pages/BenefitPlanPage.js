@@ -194,7 +194,7 @@ function BenefitPlanPage({
       doIt: openDeleteBenefitPlanConfirmDialog,
       icon: <DeleteIcon />,
       tooltip: formatMessage(intl, 'socialProtection', 'deleteButtonTooltip'),
-    }, {
+    }, !!benefitPlan && {
       doIt: openStopBenefitPlanConfirmDialog,
       icon: <PauseIcon />,
       tooltip: formatMessage(intl, 'socialProtection', 'stopButtonTooltip'),
