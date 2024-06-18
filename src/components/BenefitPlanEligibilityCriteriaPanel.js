@@ -86,7 +86,7 @@ function BenefitPlanEligibilityCriteriaPanel({
       );
       fetchFilters(paramsToFetchFilters);
     }
-  }, [editedBenefitPlan]);
+  }, [editedBenefitPlan?.id]);
 
   useEffect(() => {
     if (editedBenefitPlan?.id) {
