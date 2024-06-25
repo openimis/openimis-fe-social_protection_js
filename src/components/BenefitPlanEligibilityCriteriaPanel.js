@@ -45,8 +45,6 @@ function BenefitPlanEligibilityCriteriaPanel({
     }
   };
 
-  const isReadOnly = () => getAdvancedCriteria().length > 0;
-
   const handleRemoveFilter = () => {
     setFilters([]);
   };
@@ -88,10 +86,10 @@ function BenefitPlanEligibilityCriteriaPanel({
       );
       fetchFilters(paramsToFetchFilters);
     }
-  }, [editedBenefitPlan]);
+  }, [editedBenefitPlan?.id]);
 
   useEffect(() => {
-    if (editedBenefitPlan?.id && !isReadOnly()) {
+    if (editedBenefitPlan?.id) {
       const { jsonExt } = editedBenefitPlan;
       const jsonData = JSON.parse(jsonExt);
       const json = { ...jsonData, advanced_criteria: filters };
@@ -130,50 +128,44 @@ function BenefitPlanEligibilityCriteriaPanel({
               setCurrentFilter={() => {}}
               filters={filters}
               setFilters={setFilters}
-              readOnly={isReadOnly()}
             />
           ))}
-          {!isReadOnly() && (
-            // eslint-disable-next-line react/jsx-no-useless-fragment
-            <>
-              <div style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}>
-                <AddCircle
-                  style={{
-                    border: 'thin solid',
-                    borderRadius: '40px',
-                    width: '16px',
-                    height: '16px',
-                  }}
-                  onClick={handleAddFilter}
-                  disabled={confirmed}
-                />
-                <Button
-                  onClick={handleAddFilter}
-                  variant="outlined"
-                  style={{
-                    border: '0px',
-                    marginBottom: '6px',
-                    fontSize: '0.8rem',
-                  }}
-                  disabled={confirmed}
-                >
-                  {formatMessage('individual.enrollment.addFilters')}
-                </Button>
-              </div>
-              <div style={{ float: 'left' }}>
-                <Button
-                  onClick={handleRemoveFilter}
-                  variant="outlined"
-                  style={{
-                    border: '0px',
-                  }}
-                  disabled={confirmed}
-                >
-                  {formatMessage('individual.enrollment.clearAllFilters')}
-                </Button>
-              </div>
-            </>
-          )}
+          <div style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}>
+            <AddCircle
+              style={{
+                border: 'thin solid',
+                borderRadius: '40px',
+                width: '16px',
+                height: '16px',
+              }}
+              onClick={handleAddFilter}
+              disabled={confirmed}
+            />
+            <Button
+              onClick={handleAddFilter}
+              variant="outlined"
+              style={{
+                border: '0px',
+                marginBottom: '6px',
+                fontSize: '0.8rem',
+              }}
+              disabled={confirmed}
+            >
+              {formatMessage('individual.enrollment.addFilters')}
+            </Button>
+          </div>
+          <div style={{ float: 'left' }}>
+            <Button
+              onClick={handleRemoveFilter}
+              variant="outlined"
+              style={{
+                border: '0px',
+              }}
+              disabled={confirmed}
+            >
+              {formatMessage('individual.enrollment.clearAllFilters')}
+            </Button>
+          </div>
         </Grid>
       </Grid>
     </Paper>
