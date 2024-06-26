@@ -31,9 +31,9 @@ import {
   BenefitPlanBeneficiariesGraduatedTabPanel,
 } from './components/BenefitPlanBeneficiariesGraduatedTab';
 import {
-  BenefitPackagePaymentsTabLabel,
-  BenefitPackagePaymentsTabPanel,
-} from './components/BenefitPackagePaymentsTab';
+  BenefitPackageBenefitsTabLabel,
+  BenefitPackageBenefitsTabPanel,
+} from './components/BenefitPackageBenefitsTab';
 import {
   BenefitPackageGrievancesTabLabel,
   BenefitPackageGrievancesTabPanel,
@@ -53,6 +53,16 @@ import {
   CalculationSocialProtectionItemFormatters,
   CalculationSocialProtectionTableHeaders,
 } from './components/tasks/CalculationSocialProtectionTasks';
+import {
+  UploadResolutionTaskTableHeaders,
+  UploadResolutionItemFormatters,
+  UploadConfirmationPanel,
+} from './components/tasks/BeneficiaryUploadApprovalTask';
+import { fetchBenefitPlanSchemaFields } from './actions';
+import BenefitPlanHistorySearcher from './components/BenefitPlanHistorySearcher';
+import { BenefitPlanChangelogTabLabel, BenefitPlanChangelogTabPanel } from './components/BenefitPlanChangelogTab';
+import { BenefitPlanTaskTabLabel, BenefitPlanTaskTabPanel } from './components/BenefitPlanTaskTab';
+import { BENEFIT_PLAN_LABEL } from './constants';
 
 const ROUTE_BENEFIT_PLANS = 'benefitPlans';
 const ROUTE_BENEFIT_PLAN = 'benefitPlans/benefitPlan';
@@ -84,27 +94,35 @@ const DEFAULT_CONFIG = {
     { key: 'socialProtection.BenefitPlanPicker', ref: BenefitPlanPicker },
     { key: 'socialProtection.BenefitPlansListTabLabel', ref: BenefitPlansListTabLabel },
     { key: 'socialProtection.BenefitPlansListTabPanel', ref: BenefitPlansListTabPanel },
+    { key: 'socialProtection.fetchBenefitPlanSchemaFields', ref: fetchBenefitPlanSchemaFields },
+    { key: 'socialProtection.BenefitPlanHistorySearcher', ref: BenefitPlanHistorySearcher },
   ],
   'benefitPlan.TabPanel.label': [
     BenefitPlanBeneficiariesListTabLabel,
     BenefitPlanBeneficiariesPotentialTabLabel,
     BenefitPlanBeneficiariesActiveTabLabel,
     BenefitPlanBeneficiariesGraduatedTabLabel,
-    BenefitPlanBeneficiariesSuspendedTabLabel],
+    BenefitPlanBeneficiariesSuspendedTabLabel,
+    BenefitPlanChangelogTabLabel,
+    BenefitPlanTaskTabLabel,
+  ],
   'benefitPlan.TabPanel.panel': [
     BenefitPlanBeneficiariesListTabPanel,
     BenefitPlanBeneficiariesPotentialTabPanel,
     BenefitPlanBeneficiariesActiveTabPanel,
     BenefitPlanBeneficiariesGraduatedTabPanel,
-    BenefitPlanBeneficiariesSuspendedTabPanel],
+    BenefitPlanBeneficiariesSuspendedTabPanel,
+    BenefitPlanChangelogTabPanel,
+    BenefitPlanTaskTabPanel,
+  ],
   'benefitPackage.TabPanel.label': [
     BenefitPackageMembersTabLabel,
-    BenefitPackagePaymentsTabLabel,
+    BenefitPackageBenefitsTabLabel,
     BenefitPackageGrievancesTabLabel,
   ],
   'benefitPackage.TabPanel.panel': [
     BenefitPackageMembersTabPanel,
-    BenefitPackagePaymentsTabPanel,
+    BenefitPackageBenefitsTabPanel,
     BenefitPackageGrievancesTabPanel,
   ],
   'tasksManagement.tasks': [{
@@ -112,6 +130,7 @@ const DEFAULT_CONFIG = {
     tableHeaders: BenefitPlanTaskTableHeaders,
     itemFormatters: BenefitPlanTaskItemFormatters,
     taskSource: ['BenefitPlanService'],
+    taskCode: BENEFIT_PLAN_LABEL,
   },
   {
     text: <FormattedMessage module="socialProtection" id="beneficiary.tasks.title" />,
@@ -124,7 +143,15 @@ const DEFAULT_CONFIG = {
     tableHeaders: CalculationSocialProtectionTableHeaders,
     itemFormatters: CalculationSocialProtectionItemFormatters,
     taskSource: ['calcrule_social_protection'],
-  }],
+  },
+  {
+    text: <FormattedMessage module="socialProtection" id="validation_import_valid_items.tasks.title" />,
+    tableHeaders: UploadResolutionTaskTableHeaders,
+    itemFormatters: UploadResolutionItemFormatters,
+    taskSource: ['import_valid_items'],
+    confirmationPanel: UploadConfirmationPanel,
+  },
+  ],
 };
 
 export const SocialProtectionModule = (cfg) => ({ ...DEFAULT_CONFIG, ...cfg });

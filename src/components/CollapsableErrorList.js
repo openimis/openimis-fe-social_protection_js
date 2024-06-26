@@ -10,6 +10,9 @@ import {
   ListItemText,
   Collapse,
 } from '@material-ui/core';
+
+import ErrorIcon from '@material-ui/icons/ErrorOutline';
+
 import { withTheme, withStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
@@ -39,6 +42,52 @@ function CollapsableErrorList({
     );
   }
 
+  const renderValue = (value) => {
+    if (typeof value === 'object' && value !== null && !(value instanceof Array)) {
+      return (
+        <ListItemText primary={JSON.stringify(value)} style={{ marginLeft: '40px' }} />
+      );
+    }
+    // It's a string or an array, render directly
+    return <ListItemText primary={value} style={{ marginLeft: '40px' }} />;
+  };
+
+  const formatErrorMessage = (errorObj) => {
+    try {
+      // Initialize an array to hold formatted error messages
+      const formattedMessages = [];
+
+      // Iterate over the object keys and format the message
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [key, value] of Object.entries(errorObj)) {
+        formattedMessages.push(
+          <>
+
+            <ListItem>
+              <ErrorIcon />
+              <ListItemText
+                primary={key}
+                style={{ marginLeft: '20px' }}
+                primaryTypographyProps={{ style: { fontWeight: 'bold' } }}
+              />
+            </ListItem>
+            <ListItem>
+              {renderValue(value)}
+            </ListItem>
+          </>,
+        );
+      }
+
+      // Join the formatted messages with line breaks for display
+      return formattedMessages;
+    } catch (e) {
+      // Fallback in case of parsing error
+      // eslint-disable-next-line
+      console.log(e);
+      return 'Error parsing the error message.';
+    }
+  };
+
   return (
     <>
       <ListItem button onClick={handleOpen}>
@@ -51,7 +100,7 @@ function CollapsableErrorList({
         {isExpanded ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-        { JSON.stringify(errors) }
+        <pre>{formatErrorMessage(errors)}</pre>
       </Collapse>
     </>
   );

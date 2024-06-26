@@ -17,6 +17,7 @@ import {
 
 export const ACTION_TYPE = {
   MUTATION: 'BENEFIT_PLAN_MUTATION',
+  TASK_MUTATION: 'TASK_MANAGEMENT_MUTATION',
   SEARCH_BENEFIT_PLANS: 'BENEFIT_PLAN_BENEFIT_PLANS',
   GET_BENEFIT_PLAN: 'BENEFIT_PLAN_BENEFIT_PLAN',
   CREATE_BENEFIT_PLAN: 'BENEFIT_PLAN_CREATE_BENEFIT_PLAN',
@@ -38,6 +39,10 @@ export const ACTION_TYPE = {
   GROUP_BENEFICIARY_EXPORT: 'GROUP_BENEFICIARY_EXPORT',
   GET_WORKFLOWS: 'GET_WORKFLOWS',
   GET_BENEFIT_PLAN_UPLOAD_HISTORY: 'GET_UPLOAD_HISTORY',
+  GET_FIELDS_FROM_BF_SCHEMA: 'GET_FIELDS_FROM_BF_SCHEMA',
+  GET_PENDING_BENEFICIARIES_UPLOAD: 'GET_PENDING_BENEFICIARIES_UPLOAD',
+  RESOLVE_TASK: 'TASK_MANAGEMENT_RESOLVE_TASK',
+  SEARCH_BENEFIT_PLANS_HISTORY: 'BENEFIT_PLAN_BENEFIT_PLANS_HISTORY',
 };
 
 function reducer(
@@ -96,10 +101,41 @@ function reducer(
     beneficiaryDataUploadHistoryPageInfo: {},
     beneficiaryDataUploadHistoryGroupBeneficiaries: null,
     errorBeneficiaryDataUploadHistory: null,
+    fieldsFromBfSchema: [],
+    fetchingFieldsFromBfSchema: false,
+    fetchedFieldsFromBfSchema: false,
+    errorFieldsFromBfSchema: null,
+    pendingBeneficiaries: [],
+    fetchingPendingBeneficiaries: true,
+    fetchedPendingBeneficiaries: false,
+    errorPendingBeneficiaries: null,
+    pendingBeneficiariesPageInfo: {},
+    fetchingBenefitPlansHistory: false,
+    errorBenefitPlansHistory: null,
+    fetchedBenefitPlansHistory: false,
+    benefitPlansHistory: [],
+    benefitPlansHistoryPageInfo: {},
+    benefitPlansHistoryTotalCount: 0,
   },
   action,
 ) {
   switch (action.type) {
+    case REQUEST(ACTION_TYPE.GET_FIELDS_FROM_BF_SCHEMA):
+      return {
+        ...state,
+        fieldsFromBfSchema: [],
+        fetchingFieldsFromBfSchema: true,
+        fetchedFieldsFromBfSchema: false,
+        errorFieldsFromBfSchema: null,
+      };
+    case REQUEST(ACTION_TYPE.GET_PENDING_BENEFICIARIES_UPLOAD):
+      return {
+        ...state,
+        pendingBeneficiaries: [],
+        fetchingPendingBeneficiaries: true,
+        fetchedPendingBeneficiaries: false,
+        errorPendingBeneficiaries: null,
+      };
     case REQUEST(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
         ...state,
@@ -159,6 +195,26 @@ function reducer(
         benefitPlansTotalCount: action.payload.data.benefitPlan ? action.payload.data.benefitPlan.totalCount : null,
         errorBenefitPlans: formatGraphQLError(action.payload),
       };
+    case SUCCESS(ACTION_TYPE.GET_FIELDS_FROM_BF_SCHEMA):
+      return {
+        ...state,
+        fieldsFromBfSchema: action?.payload?.data?.benefitPlanSchemaField?.schemaFields || [],
+        fetchingFieldsFromBfSchema: false,
+        fetchedFieldsFromBfSchema: true,
+        errorFieldsFromBfSchema: formatGraphQLError(action.payload),
+      };
+    case SUCCESS(ACTION_TYPE.GET_PENDING_BENEFICIARIES_UPLOAD):
+      return {
+        ...state,
+        pendingBeneficiaries: parseData(action.payload.data.individualDataSource)?.map((i) => ({
+          ...i,
+          id: decodeId(i.id),
+        })),
+        pendingBeneficiariesPageInfo: pageInfo(action.payload.data.individualDataSource),
+        fetchingPendingBeneficiaries: false,
+        fetchedPendingBeneficiaries: true,
+        errorPendingBeneficiaries: formatGraphQLError(action.payload),
+      };
     case SUCCESS(ACTION_TYPE.GET_BENEFIT_PLAN):
       return {
         ...state,
@@ -177,6 +233,7 @@ function reducer(
         fetchedBeneficiaries: true,
         beneficiaries: parseData(action.payload.data.beneficiary)?.map((beneficiary) => ({
           ...beneficiary,
+          benefitPlan: { id: beneficiary?.benefitPlan?.id ? decodeId(beneficiary.benefitPlan.id) : null },
           id: decodeId(beneficiary.id),
         })),
         beneficiariesPageInfo: pageInfo(action.payload.data.beneficiary),
@@ -214,6 +271,18 @@ function reducer(
         workflows: action.payload.data.workflow || [],
         workflowsPageInfo: pageInfo(action.payload.data.benefitPlan),
         errorWorkflows: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.GET_FIELDS_FROM_BF_SCHEMA):
+      return {
+        ...state,
+        fetchingFieldsFromBfSchema: false,
+        errorFieldsFromBfSchema: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.GET_PENDING_BENEFICIARIES_UPLOAD):
+      return {
+        ...state,
+        fetchingPendingBeneficiaries: false,
+        errorFieldsFromBfSchema: formatGraphQLError(action.payload),
       };
     case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
@@ -432,6 +501,7 @@ function reducer(
         errorBenefitPlan: null,
         fetchedBenefitPlan: false,
         benefitPlan: null,
+        mutation: null,
       };
     case CLEAR(ACTION_TYPE.BENEFICIARY_EXPORT):
       return {
@@ -514,6 +584,7 @@ function reducer(
         fetchedBeneficiary: true,
         beneficiary: parseData(action.payload.data.beneficiary).map((beneficiary) => ({
           ...beneficiary,
+          benefitPlan: { id: beneficiary?.benefitPlan?.id ? decodeId(beneficiary.benefitPlan.id) : null },
           id: decodeId(beneficiary.id),
         }))?.[0],
         error: formatGraphQLError(action.payload),
@@ -593,6 +664,36 @@ function reducer(
         beneficiaryDataUploadHistoryPageInfo: {},
         errorBeneficiaryDataUploadHistory: null,
       };
+    case REQUEST(ACTION_TYPE.SEARCH_BENEFIT_PLANS_HISTORY):
+      return {
+        ...state,
+        fetchingBenefitPlansHistory: true,
+        fetchedBenefitPlansHistory: false,
+        benefitPlansHistory: [],
+        benefitPlansHistoryPageInfo: {},
+        benefitPlansHistoryTotalCount: 0,
+        errorBenefitPlansHistory: null,
+      };
+    case SUCCESS(ACTION_TYPE.SEARCH_BENEFIT_PLANS_HISTORY):
+      return {
+        ...state,
+        fetchingBenefitPlansHistory: false,
+        fetchedBenefitPlansHistory: true,
+        benefitPlansHistory: parseData(action.payload.data.benefitPlanHistory)?.map((benefitPlanHistory) => ({
+          ...benefitPlanHistory,
+          id: decodeId(benefitPlanHistory.id),
+        })),
+        benefitPlansHistoryPageInfo: pageInfo(action.payload.data.benefitPlanHistory),
+        // eslint-disable-next-line max-len
+        benefitPlansHistoryTotalCount: action.payload.data.benefitPlanHistory ? action.payload.data.benefitPlanHistory.totalCount : null,
+        errorBenefitPlansHistory: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.SEARCH_BENEFIT_PLANS_HISTORY):
+      return {
+        ...state,
+        fetchingBenefitPlansHistory: false,
+        errorBenefitPlansHistory: formatServerError(action.payload),
+      };
     case REQUEST(ACTION_TYPE.MUTATION):
       return dispatchMutationReq(state, action);
     case ERROR(ACTION_TYPE.MUTATION):
@@ -607,6 +708,12 @@ function reducer(
       return dispatchMutationResp(state, 'updateBeneficiary', action);
     case SUCCESS(ACTION_TYPE.UPDATE_GROUP_BENEFICIARY):
       return dispatchMutationResp(state, 'updateGroupBeneficiary', action);
+    case SUCCESS(ACTION_TYPE.RESOLVE_TASK):
+      return dispatchMutationResp(state, 'resolveTask', action);
+    case REQUEST(ACTION_TYPE.TASK_MUTATION):
+      return dispatchMutationReq(state, action);
+    case ERROR(ACTION_TYPE.TASK_MUTATION):
+      return dispatchMutationErr(state, action);
     default:
       return state;
   }

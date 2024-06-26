@@ -8,8 +8,8 @@ const BeneficiaryTaskTableHeaders = () => [
 ];
 
 const BeneficiaryTaskItemFormatters = () => [
-  (beneficiary, jsonExt) => jsonExt?.individual_identity,
-  (beneficiary, jsonExt) => jsonExt?.benefit_plan_string,
+  (beneficiary) => beneficiary?.id,
+  (beneficiary) => beneficiary?.benefit_plan_id,
   (beneficiary) => beneficiary?.status,
 ];
 
