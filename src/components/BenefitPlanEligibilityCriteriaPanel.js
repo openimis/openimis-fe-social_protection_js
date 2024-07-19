@@ -8,7 +8,7 @@ import AddCircle from '@material-ui/icons/Add';
 import {
   Button, Divider, Grid, Paper, Typography,
 } from '@material-ui/core';
-import { CLEARED_STATE_FILTER } from '../constants';
+import { CLEARED_STATE_FILTER, BENEFICIARY_STATUS } from '../constants';
 import { isBase64Encoded } from '../util/advanced-criteria-utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +23,7 @@ function BenefitPlanEligibilityCriteriaPanel({
   edited,
   benefitPlan,
   onEditedChanged,
+  activeTab,
 }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -31,9 +32,12 @@ function BenefitPlanEligibilityCriteriaPanel({
   const moduleFilterName = 'individual';
   const objectFilterType = 'Individual';
   const modulesManager = useModulesManager();
-  const { formatMessage } = useTranslations('socialProtection', modulesManager);
+  const { formatMessage, formatMessageWithValues } = useTranslations('socialProtection', modulesManager);
   const customFilters = useSelector((state) => state.core.customFilters);
   const [filters, setFilters] = useState([]);
+  const show = Object.values(BENEFICIARY_STATUS).some((value) => (
+    activeTab.toUpperCase().includes(value)
+  ));
 
   const getAdvancedCriteria = () => {
     const { jsonExt } = benefitPlan ?? {};
@@ -106,12 +110,17 @@ function BenefitPlanEligibilityCriteriaPanel({
     }
   }, [filters]);
 
+  const beneficiaryStatus = formatMessage(`benefitPlan.${activeTab.replace('Tab', '')}.label`);
+
   return (
+    show && (
     <Paper className={classes.paper}>
       <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
         <Grid item xs={12}>
           <Typography variant="h6" className={classes.tableTitle}>
-            {formatMessage('benefitPlan.BenefitPlanEligibilityCriteriaPanel.title')}
+            {formatMessageWithValues('benefitPlan.BenefitPlanEligibilityCriteriaPanel.title', {
+              beneficiaryStatus,
+            })}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -169,6 +178,7 @@ function BenefitPlanEligibilityCriteriaPanel({
         </Grid>
       </Grid>
     </Paper>
+    )
   );
 }
 
