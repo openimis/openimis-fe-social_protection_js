@@ -191,6 +191,8 @@ function BenefitPlanGroupBeneficiariesSearcher({
     />
   );
 
+  const additionalParams = benefitPlan ? { benefitPlan: `${benefitPlan.id}` } : null;
+
   useEffect(() => {
     // refresh when appliedCustomFilters is changed
   }, [appliedCustomFilters]);
@@ -233,8 +235,9 @@ function BenefitPlanGroupBeneficiariesSearcher({
         cacheTabName={`${benefitPlan?.id}-${status}`}
         isCustomFiltering
         objectForCustomFiltering={benefitPlan}
-        moduleName={MODULE_NAME}
-        objectType={BENEFIT_PLAN_LABEL}
+        moduleName="individual"
+        objectType="Individual"
+        additionalCustomFilterParams={additionalParams}
         appliedCustomFilters={appliedCustomFilters}
         setAppliedCustomFilters={setAppliedCustomFilters}
         appliedFiltersRowStructure={appliedFiltersRowStructure}
