@@ -31,13 +31,10 @@ import {
   RIGHT_BENEFICIARY_UPDATE,
   ROWS_PER_PAGE_OPTIONS,
   CLEARED_STATE_FILTER,
-  BENEFIT_PLAN_LABEL,
-  MODULE_NAME,
 } from '../constants';
 import BenefitPlanGroupBeneficiariesFilter from './BenefitPlanGroupBeneficiariesFilter';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 import { applyNumberCircle } from '../util/searcher-utils';
-
 
 function BenefitPlanGroupBeneficiariesSearcher({
   rights,

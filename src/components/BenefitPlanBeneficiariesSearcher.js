@@ -30,8 +30,6 @@ import {
   DEFAULT_PAGE_SIZE,
   RIGHT_BENEFICIARY_SEARCH,
   ROWS_PER_PAGE_OPTIONS,
-  MODULE_NAME,
-  BENEFIT_PLAN_LABEL,
   RIGHT_BENEFICIARY_UPDATE,
 } from '../constants';
 import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';

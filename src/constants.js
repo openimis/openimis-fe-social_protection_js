@@ -65,6 +65,8 @@ export const BENEFICIARY_STATUS = {
   SUSPENDED: 'SUSPENDED',
 };
 
+export const DEFAULT_BENEFICIARY_STATUS = 'POTENTIAL';
+
 export const FIELD_TYPES = {
   INTEGER: 'integer',
   NUMBER: 'number',

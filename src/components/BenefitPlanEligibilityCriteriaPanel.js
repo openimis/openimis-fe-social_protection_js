@@ -8,7 +8,11 @@ import AddCircle from '@material-ui/icons/Add';
 import {
   Button, Divider, Grid, Paper, Typography,
 } from '@material-ui/core';
-import { CLEARED_STATE_FILTER, BENEFICIARY_STATUS } from '../constants';
+import {
+  CLEARED_STATE_FILTER,
+  BENEFICIARY_STATUS,
+  DEFAULT_BENEFICIARY_STATUS,
+} from '../constants';
 import { isBase64Encoded } from '../util/advanced-criteria-utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +39,6 @@ function BenefitPlanEligibilityCriteriaPanel({
   const { formatMessage, formatMessageWithValues } = useTranslations('socialProtection', modulesManager);
   const customFilters = useSelector((state) => state.core.customFilters);
   const [filters, setFilters] = useState([]);
-  const defaultFilterStatus = 'POTENTIAL';
 
   const status = Object.values(BENEFICIARY_STATUS).find((value) => (
     activeTab.toUpperCase().includes(value)
@@ -50,7 +53,7 @@ function BenefitPlanEligibilityCriteriaPanel({
     // For backward compatibility POTENTIAL status take on the old filters
     let criteria = jsonData?.advanced_criteria || {};
     if (Array.isArray(criteria)) {
-      criteria = { [defaultFilterStatus]: criteria };
+      criteria = { [DEFAULT_BENEFICIARY_STATUS]: criteria };
     }
 
     return criteria[status] || [];
@@ -105,8 +108,8 @@ function BenefitPlanEligibilityCriteriaPanel({
       const jsonData = JSON.parse(jsonExt);
       let advancedCriteria = jsonData?.advanced_criteria || {};
       // migrate old advanced_criteria
-      if (Array.isArray(jsonData?.advanced_criteria)) {
-        advancedCriteria = { [defaultFilterStatus]: jsonData?.advanced_criteria };
+      if (Array.isArray(advancedCriteria)) {
+        advancedCriteria = { [DEFAULT_BENEFICIARY_STATUS]: jsonData?.advanced_criteria };
       }
       const editedAdvancedCriteria = { ...advancedCriteria, [status]: filters };
       const json = { ...jsonData, advanced_criteria: editedAdvancedCriteria };
