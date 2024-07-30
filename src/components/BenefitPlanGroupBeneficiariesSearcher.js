@@ -31,13 +31,10 @@ import {
   RIGHT_BENEFICIARY_UPDATE,
   ROWS_PER_PAGE_OPTIONS,
   CLEARED_STATE_FILTER,
-  BENEFIT_PLAN_LABEL,
-  MODULE_NAME,
 } from '../constants';
 import BenefitPlanGroupBeneficiariesFilter from './BenefitPlanGroupBeneficiariesFilter';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 import { applyNumberCircle } from '../util/searcher-utils';
-
 
 function BenefitPlanGroupBeneficiariesSearcher({
   rights,
@@ -191,6 +188,8 @@ function BenefitPlanGroupBeneficiariesSearcher({
     />
   );
 
+  const additionalParams = benefitPlan ? { benefitPlan: `${benefitPlan.id}` } : null;
+
   useEffect(() => {
     // refresh when appliedCustomFilters is changed
   }, [appliedCustomFilters]);
@@ -233,8 +232,9 @@ function BenefitPlanGroupBeneficiariesSearcher({
         cacheTabName={`${benefitPlan?.id}-${status}`}
         isCustomFiltering
         objectForCustomFiltering={benefitPlan}
-        moduleName={MODULE_NAME}
-        objectType={BENEFIT_PLAN_LABEL}
+        moduleName="individual"
+        objectType="Individual"
+        additionalCustomFilterParams={additionalParams}
         appliedCustomFilters={appliedCustomFilters}
         setAppliedCustomFilters={setAppliedCustomFilters}
         appliedFiltersRowStructure={appliedFiltersRowStructure}

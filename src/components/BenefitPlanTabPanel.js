@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function BenefitPlanTabPanel({
-  intl, rights, benefitPlan, setConfirmedAction,
+  intl, rights, benefitPlan, setConfirmedAction, onActiveTabChange,
 }) {
   const classes = useStyles();
   const modulesManager = useModulesManager();
@@ -50,7 +50,10 @@ function BenefitPlanTabPanel({
 
   const tabStyle = (tab) => (isSelected(tab) ? classes.selectedTab : classes.unselectedTab);
 
-  const handleChange = (_, tab) => setActiveTab(tab);
+  const handleChange = (_, tab) => {
+    setActiveTab(tab);
+    onActiveTabChange(tab);
+  };
 
   const payrollCreateRights = modulesManager.getRef(PAYROLL_CREATE_RIGHTS_PUB_REF);
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   decodeId, fetchCustomFilter, PublishedComponent, useModulesManager, useTranslations,
@@ -8,7 +8,11 @@ import AddCircle from '@material-ui/icons/Add';
 import {
   Button, Divider, Grid, Paper, Typography,
 } from '@material-ui/core';
-import { CLEARED_STATE_FILTER } from '../constants';
+import {
+  CLEARED_STATE_FILTER,
+  BENEFICIARY_STATUS,
+  DEFAULT_BENEFICIARY_STATUS,
+} from '../constants';
 import { isBase64Encoded } from '../util/advanced-criteria-utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +27,7 @@ function BenefitPlanEligibilityCriteriaPanel({
   edited,
   benefitPlan,
   onEditedChanged,
+  activeTab,
 }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -31,19 +36,28 @@ function BenefitPlanEligibilityCriteriaPanel({
   const moduleFilterName = 'individual';
   const objectFilterType = 'Individual';
   const modulesManager = useModulesManager();
-  const { formatMessage } = useTranslations('socialProtection', modulesManager);
+  const { formatMessage, formatMessageWithValues } = useTranslations('socialProtection', modulesManager);
   const customFilters = useSelector((state) => state.core.customFilters);
   const [filters, setFilters] = useState([]);
 
-  const getAdvancedCriteria = () => {
-    const { jsonExt } = benefitPlan ?? {};
-    try {
-      const jsonData = JSON.parse(jsonExt);
-      return jsonData?.advanced_criteria || [];
-    } catch (error) {
-      return [];
+  const status = Object.values(BENEFICIARY_STATUS).find((value) => (
+    activeTab.toUpperCase().includes(value)
+  ));
+  const show = status !== undefined;
+
+  const getAdvancedCriteria = useCallback((status) => {
+    const jsonExt = benefitPlan?.jsonExt || '{}';
+    const jsonData = JSON.parse(jsonExt);
+
+    // Note: advanced_criteria is migrated from [filters] to {status: filters}
+    // For backward compatibility POTENTIAL status take on the old filters
+    let criteria = jsonData?.advanced_criteria || {};
+    if (Array.isArray(criteria)) {
+      criteria = { [DEFAULT_BENEFICIARY_STATUS]: criteria };
     }
-  };
+
+    return criteria[status] || [];
+  }, [benefitPlan?.jsonExt]);
 
   const handleRemoveFilter = () => {
     setFilters([]);
@@ -74,8 +88,8 @@ function BenefitPlanEligibilityCriteriaPanel({
 
   useEffect(() => {
     if (editedBenefitPlan?.id) {
-      const criteria = getAdvancedCriteria();
-      if (criteria?.length && !arraysAreEqual(criteria, filters)) {
+      const criteria = getAdvancedCriteria(status);
+      if (!arraysAreEqual(criteria, filters)) {
         setFilters(criteria);
       }
       const paramsToFetchFilters = createParams(
@@ -86,32 +100,43 @@ function BenefitPlanEligibilityCriteriaPanel({
       );
       fetchFilters(paramsToFetchFilters);
     }
-  }, [editedBenefitPlan?.id]);
+  }, [editedBenefitPlan?.id, status]);
 
   useEffect(() => {
     if (editedBenefitPlan?.id) {
       const { jsonExt } = editedBenefitPlan;
       const jsonData = JSON.parse(jsonExt);
-      const json = { ...jsonData, advanced_criteria: filters };
+      let advancedCriteria = jsonData?.advanced_criteria || {};
+      // migrate old advanced_criteria
+      if (Array.isArray(advancedCriteria)) {
+        advancedCriteria = { [DEFAULT_BENEFICIARY_STATUS]: jsonData?.advanced_criteria };
+      }
+      const editedAdvancedCriteria = { ...advancedCriteria, [status]: filters };
+      const json = { ...jsonData, advanced_criteria: editedAdvancedCriteria };
 
       if (!filters.length) {
-        delete json.advanced_criteria;
+        delete json.advanced_criteria[status];
       } else if (!!filters.length && !filters[0].field) {
-        delete json.advanced_criteria;
+        delete json.advanced_criteria[status];
       }
 
       const appendedJsonExt = Object.keys(json).length === 0 ? benefitPlan.jsonExt : JSON.stringify(json);
 
       onEditedChanged({ ...editedBenefitPlan, jsonExt: appendedJsonExt });
     }
-  }, [filters]);
+  }, [filters, status]);
+
+  const beneficiaryStatus = formatMessage(`benefitPlan.${activeTab.replace('Tab', '')}.label`);
 
   return (
+    show && (
     <Paper className={classes.paper}>
       <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
         <Grid item xs={12}>
           <Typography variant="h6" className={classes.tableTitle}>
-            {formatMessage('benefitPlan.BenefitPlanEligibilityCriteriaPanel.title')}
+            {formatMessageWithValues('benefitPlan.BenefitPlanEligibilityCriteriaPanel.title', {
+              beneficiaryStatus,
+            })}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -169,6 +194,7 @@ function BenefitPlanEligibilityCriteriaPanel({
         </Grid>
       </Grid>
     </Paper>
+    )
   );
 }
 

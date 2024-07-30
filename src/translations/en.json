@@ -124,7 +124,7 @@
   "socialProtection.benefitUploadRecord.sourceName": "Filename",
   "socialProtection.benefitUploadRecord.workflow": "Workflow",
   "socialProtection.benefitUploadRecord.percentageOfInvalidItems": "Percentage of invalid items",
-  "socialProtection.benefitPlan.BenefitPlanEligibilityCriteriaPanel.title": "Default Enrollment Criteria",
+  "socialProtection.benefitPlan.BenefitPlanEligibilityCriteriaPanel.title": "{beneficiaryStatus} Beneficiary Enrollment Criteria",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.downloadUploadFile": "Download Upload File",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.downloadInvalidItems": "Download Invalid Items",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.uploadHistoryTable.validationErrors": "Validation Errors",

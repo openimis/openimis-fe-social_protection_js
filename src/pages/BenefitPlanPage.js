@@ -16,7 +16,11 @@ import _ from 'lodash';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PauseIcon from '@material-ui/icons/Pause';
-import { RIGHT_BENEFICIARY_SEARCH, RIGHT_BENEFIT_PLAN_UPDATE } from '../constants';
+import {
+  BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE,
+  RIGHT_BENEFICIARY_SEARCH,
+  RIGHT_BENEFIT_PLAN_UPDATE,
+} from '../constants';
 import {
   fetchBenefitPlan, deleteBenefitPlan, closeBenefitPlan, updateBenefitPlan, clearBenefitPlan, createBenefitPlan,
 } from '../actions';
@@ -178,6 +182,8 @@ function BenefitPlanPage({
     );
   };
 
+  const [childActiveTab, setChildActiveTab] = useState(BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE);
+
   const getBenefitPlanPanels = () => {
     const panels = [];
     if (benefitPlan?.id && benefitPlan?.beneficiaryDataSchema) {
@@ -220,6 +226,8 @@ function BenefitPlanPage({
         save={handleSave}
         HeadPanel={BenefitPlanHeadPanel}
         Panels={getBenefitPlanPanels()}
+        onActiveTabChange={setChildActiveTab}
+        activeTab={childActiveTab}
         rights={rights}
         actions={actions}
         setConfirmedAction={setConfirmedAction}

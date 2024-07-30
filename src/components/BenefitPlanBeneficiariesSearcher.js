@@ -30,8 +30,6 @@ import {
   DEFAULT_PAGE_SIZE,
   RIGHT_BENEFICIARY_SEARCH,
   ROWS_PER_PAGE_OPTIONS,
-  MODULE_NAME,
-  BENEFIT_PLAN_LABEL,
   RIGHT_BENEFICIARY_UPDATE,
 } from '../constants';
 import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';
@@ -201,6 +199,8 @@ function BenefitPlanBeneficiariesSearcher({
     />
   );
 
+  const additionalParams = benefitPlan ? { benefitPlan: `${benefitPlan.id}` } : null;
+
   useEffect(() => {
     // refresh when appliedCustomFilters is changed
   }, [appliedCustomFilters]);
@@ -247,8 +247,9 @@ function BenefitPlanBeneficiariesSearcher({
         cacheTabName={`${benefitPlan?.id}-${status}`}
         isCustomFiltering
         objectForCustomFiltering={benefitPlan}
-        moduleName={MODULE_NAME}
-        objectType={BENEFIT_PLAN_LABEL}
+        moduleName="individual"
+        objectType="Individual"
+        additionalCustomFilterParams={additionalParams}
         appliedCustomFilters={appliedCustomFilters}
         setAppliedCustomFilters={setAppliedCustomFilters}
         appliedFiltersRowStructure={appliedFiltersRowStructure}
