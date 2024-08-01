@@ -23,6 +23,7 @@ import { fetchWorkflows } from '../actions';
 import {
   BENEFIT_PLAN_TYPE, EMPTY_STRING, MODULE_NAME, PYTHON_DEFAULT_IMPORT_WORKFLOW,
 } from '../constants';
+import downloadTemplate from '../util/export';
 
 const styles = (theme) => ({
   item: theme.paper.item,
@@ -102,6 +103,10 @@ function BenefitPlanBeneficiariesUploadDialog({
   };
 
   const getFieldValue = () => forms?.workflows?.workflow?.name ?? {};
+
+  const downloadExampleTemplate = (benefitPlanId) => {
+    downloadTemplate(benefitPlanId);
+  };
 
   const onSubmit = async (values) => {
     const fileFormat = values.file.type;
@@ -261,6 +266,15 @@ function BenefitPlanBeneficiariesUploadDialog({
                 </Button>
               </div>
               <div style={{ float: 'right', paddingRight: '16px' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => downloadExampleTemplate(benefitPlan.id)}
+                  style={{ marginRight: '8px' }}
+                >
+                  {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.template')}
+                </Button>
+                <></><></>
                 <Button
                   variant="contained"
                   color="primary"
