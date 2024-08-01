@@ -30,3 +30,25 @@ export function downloadBeneficiaryUploadFile(benefitPlanId, filename) {
   const url = `${baseUrl}?${queryParams.toString()}`;
   downloadFile(url, filename);
 }
+
+export default function downloadTemplate(benefitPlan) {
+  const url = new URL(
+    `${window.location.origin}${baseApiUrl}/social_protection/download_template_benefit_plan_file/`,
+  );
+  url.searchParams.append('benefit_plan_uuid', benefitPlan);
+
+  fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'beneficiary_upload_template.csv';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.error('Export failed, reason: ', error);
+    });
+}
