@@ -49,6 +49,7 @@ const BENEFICIARY_FULL_PROJECTION = () => [
   'benefitPlan {id}',
   'individual {firstName, lastName, dob}',
   'status',
+  'isEligible',
 ];
 
 const GROUP_BENEFICIARY_FULL_PROJECTION = () => [
