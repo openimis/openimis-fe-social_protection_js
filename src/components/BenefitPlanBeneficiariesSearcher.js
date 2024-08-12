@@ -128,8 +128,8 @@ function BenefitPlanBeneficiariesSearcher({
     ];
 
     if (status) {
-      const yes = formatMessage(intl, 'socialProtection', 'yes');
-      const no = formatMessage(intl, 'socialProtection', 'no');
+      const yes = formatMessage(intl, 'socialProtection', 'beneficiary.isEligible.true');
+      const no = formatMessage(intl, 'socialProtection', 'beneficiary.isEligible.false');
       result.push((beneficiary) => (
         beneficiary.isEligible
           ? <Tooltip title={yes} placement="right"><CheckCircleIcon aria-label={yes} /></Tooltip>

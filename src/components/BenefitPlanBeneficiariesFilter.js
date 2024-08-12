@@ -3,7 +3,7 @@ import _debounce from 'lodash/debounce';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@material-ui/core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import { TextInput, PublishedComponent, formatMessage } from '@openimis/fe-core';
+import { TextInput, PublishedComponent, formatMessage, ConstantBasedPicker } from '@openimis/fe-core';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
@@ -11,6 +11,8 @@ import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 function BenefitPlanBeneficiariesFilter({
   intl, classes, filters, onChangeFilters, readOnly, status,
 }) {
+  const any = formatMessage(intl, 'socialProtection', 'any');
+
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
   const filterValue = (filterName) => filters?.[filterName]?.value;
@@ -75,7 +77,7 @@ function BenefitPlanBeneficiariesFilter({
           label="beneficiary.beneficiaryStatusPicker"
           withNull
           readOnly={readOnly}
-          nullLabel={formatMessage(intl, 'socialProtection', 'any')}
+          nullLabel={any}
           value={status || filterValue('status')}
           onChange={(value) => onChangeFilters([
             {
@@ -86,6 +88,25 @@ function BenefitPlanBeneficiariesFilter({
           ])}
         />
       </Grid>
+      {status && (
+        <Grid item xs={2} className={classes.item}>
+          <ConstantBasedPicker
+            module="socialProtection"
+            label="beneficiary.isEligible"
+            constants={['true', 'false']}
+            withNull
+            nullLabel={any}
+            value={filterValue('isEligible')}
+            onChange={(value) => onChangeFilters([
+              {
+                id: 'isEligible',
+                value,
+                filter: `isEligible: ${value}`,
+              },
+            ])}
+          />
+        </Grid>
+      )}
     </Grid>
   );
 }
