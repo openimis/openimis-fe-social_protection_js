@@ -23,6 +23,8 @@ import {
   DialogContent,
 } from '@material-ui/core';
 import PreviewIcon from '@material-ui/icons/ListAlt';
+import ErrorIcon from '@material-ui/icons/Error';
+import CheckCircleIcon from '@material-ui/icons/CheckCircleOutline';
 import {
   fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary, clearBeneficiaryExport,
 } from '../actions';
@@ -60,13 +62,22 @@ function BenefitPlanBeneficiariesSearcher({
   const [updatedBeneficiaries, setUpdatedBeneficiaries] = useState([]);
   const fetch = (params) => fetchBeneficiaries(params);
 
-  const headers = () => [
-    'socialProtection.beneficiary.firstName',
-    'socialProtection.beneficiary.lastName',
-    'socialProtection.beneficiary.dob',
-    'socialProtection.beneficiary.status',
-    '',
-  ];
+  const headers = () => {
+    const baseHeaders = [
+      'socialProtection.beneficiary.firstName',
+      'socialProtection.beneficiary.lastName',
+      'socialProtection.beneficiary.dob',
+      'socialProtection.beneficiary.status',
+    ];
+
+    if (status) {
+      baseHeaders.push('socialProtection.beneficiary.isEligible');
+    }
+
+    baseHeaders.push('');
+
+    return baseHeaders;
+  };
 
   const openBenefitPackage = (beneficiary) => history.push(`${benefitPlan?.id}/`
       + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
@@ -115,6 +126,16 @@ function BenefitPlanBeneficiariesSearcher({
         />
       ) : beneficiary.status),
     ];
+
+    if (status) {
+      const yes = formatMessage(intl, 'socialProtection', 'beneficiary.isEligible.true');
+      const no = formatMessage(intl, 'socialProtection', 'beneficiary.isEligible.false');
+      result.push((beneficiary) => (
+        beneficiary.isEligible
+          ? <Tooltip title={yes} placement="right"><CheckCircleIcon aria-label={yes} /></Tooltip>
+          : <Tooltip title={no} placement="right"><ErrorIcon aria-label={no} /></Tooltip>
+      ));
+    }
 
     if (rights.includes(RIGHT_BENEFICIARY_SEARCH)) {
       result.push((beneficiary) => (
