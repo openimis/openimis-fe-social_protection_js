@@ -22,6 +22,8 @@ import {
   DialogContent,
 } from '@material-ui/core';
 import PreviewIcon from '@material-ui/icons/ListAlt';
+import ErrorIcon from '@material-ui/icons/Error';
+import CheckCircleIcon from '@material-ui/icons/CheckCircleOutline';
 import {
   fetchGroupBeneficiaries, downloadGroupBeneficiaries, clearGroupBeneficiaryExport, updateGroupBeneficiary,
 } from '../actions';
@@ -61,10 +63,20 @@ function BenefitPlanGroupBeneficiariesSearcher({
 
   const fetch = (params) => fetchGroupBeneficiaries(params);
 
-  const headers = () => [
-    'socialProtection.groupBeneficiary.code',
-    'socialProtection.groupBeneficiary.status',
-  ];
+  const headers = () => {
+    const baseHeaders = [
+      'socialProtection.groupBeneficiary.code',
+      'socialProtection.groupBeneficiary.status',
+    ];
+
+    if (status) {
+      baseHeaders.push('socialProtection.beneficiary.isEligible');
+    }
+
+    baseHeaders.push('');
+
+    return baseHeaders;
+  };
 
   const openBenefitPackage = (groupBeneficiary) => history.push(`${benefitPlan?.id}/`
   + `${modulesManager.getRef('socialProtection.route.benefitPackage')}`
@@ -111,6 +123,16 @@ function BenefitPlanGroupBeneficiariesSearcher({
         />
       ) : groupBeneficiary.status),
     ];
+
+    if (status) {
+      const yes = formatMessage(intl, 'socialProtection', 'beneficiary.isEligible.true');
+      const no = formatMessage(intl, 'socialProtection', 'beneficiary.isEligible.false');
+      result.push((beneficiary) => (
+        beneficiary.isEligible
+          ? <Tooltip title={yes} placement="right"><CheckCircleIcon aria-label={yes} /></Tooltip>
+          : <Tooltip title={no} placement="right"><ErrorIcon aria-label={no} /></Tooltip>
+      ));
+    }
 
     if (rights.includes(RIGHT_GROUP_SEARCH)) {
       result.push((groupBeneficiary) => (
@@ -185,6 +207,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
       filters={props.filters}
       onChangeFilters={props.onChangeFilters}
       readOnly={readOnly}
+      status={status}
     />
   );
 
