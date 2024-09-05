@@ -2,15 +2,17 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@material-ui/core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import { formatMessage, TextInput } from '@openimis/fe-core';
+import { formatMessage, TextInput, ConstantBasedPicker } from '@openimis/fe-core';
 import _debounce from 'lodash/debounce';
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 import { DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 
-function BenefitPlanBeneficiariesFilter({
-  intl, classes, filters, onChangeFilters, readOnly,
+function BenefitPlanGroupBeneficiariesFilter({
+  intl, classes, filters, onChangeFilters, readOnly, status,
 }) {
+  const any = formatMessage(intl, 'socialProtection', 'any');
+
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
   const filterTextFieldValue = (filterName) => filters?.[filterName]?.value ?? EMPTY_STRING;
@@ -42,8 +44,8 @@ function BenefitPlanBeneficiariesFilter({
           label="beneficiary.beneficiaryStatusPicker"
           withNull
           readOnly={readOnly}
-          nullLabel={formatMessage(intl, 'socialProtection', 'any')}
-          value={filterValue('status')}
+          nullLabel={any}
+          value={status || filterValue('status')}
           onChange={(value) => onChangeFilters([
             {
               id: 'status',
@@ -53,10 +55,29 @@ function BenefitPlanBeneficiariesFilter({
           ])}
         />
       </Grid>
+      {status && (
+        <Grid item xs={2} className={classes.item}>
+          <ConstantBasedPicker
+            module="socialProtection"
+            label="beneficiary.isEligible"
+            constants={['true', 'false']}
+            withNull
+            nullLabel={any}
+            value={filterValue('isEligible')}
+            onChange={(value) => onChangeFilters([
+              {
+                id: 'isEligible',
+                value,
+                filter: `isEligible: ${value}`,
+              },
+            ])}
+          />
+        </Grid>
+      )}
     </Grid>
   );
 }
 
 export default injectIntl(withTheme(withStyles(defaultFilterStyles)(
-  BenefitPlanBeneficiariesFilter,
+  BenefitPlanGroupBeneficiariesFilter,
 )));

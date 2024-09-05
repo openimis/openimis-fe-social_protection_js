@@ -56,6 +56,7 @@ const GROUP_BENEFICIARY_FULL_PROJECTION = () => [
   'id',
   'group {id, code, head {uuid}}',
   'status',
+  'isEligible',
 ];
 
 const WORKFLOWS_FULL_PROJECTION = () => [
