@@ -119,7 +119,7 @@ function BenefitPlanBeneficiariesUploadDialog({
       formData.append('benefit_plan', benefitPlan.id);
       formData.append('workflow_name', values.workflow.name);
       formData.append('workflow_group', values.workflow.group);
-      formData.append('group_aggregation_column', groupAggregationHeader);
+      if (groupAggregationHeader) formData.append('group_aggregation_column', groupAggregationHeader);
       urlImport = `${baseApiUrl}/social_protection/import_beneficiaries/`;
     }
 
