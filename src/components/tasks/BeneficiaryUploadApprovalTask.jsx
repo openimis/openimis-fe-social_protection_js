@@ -7,7 +7,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import {
-  Paper, Fab, makeStyles, Grid, Checkbox, FormControlLabel, Divider, GridItem,
+  Paper, Fab, makeStyles, Grid, Checkbox, FormControlLabel, Divider,
 } from '@material-ui/core';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {

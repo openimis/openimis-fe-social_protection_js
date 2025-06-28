@@ -19,9 +19,11 @@ const styles = (theme) => ({
 });
 
 function BenefitPlansPage(props) {
+  
   const {
     intl, classes, rights, modulesManager, history,
   } = props;
+ 
 
   const onAdd = () => historyPush(
     modulesManager,

@@ -1,7 +1,7 @@
 // Disable due to core architecture
 /* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
-import flatten from 'flat';
+import {flatten }from 'flat';
 import React from 'react';
 import { Tune } from '@material-ui/icons';
 import { FormattedMessage } from '@openimis/fe-core';
