@@ -2,10 +2,10 @@
 import React from 'react';
 
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import { withTheme, withStyles } from '@mui/styles';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   formatMessage, PublishedComponent, ProgressOrError,
 } from '@openimis/fe-core';

@@ -3,10 +3,10 @@ import {
   Helmet, withModulesManager, formatMessage, withTooltip, historyPush,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import { withTheme, withStyles } from '@mui/styles';
 import { connect } from 'react-redux';
-import { Fab } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Fab } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import {
   RIGHT_BENEFIT_PLAN_CREATE,
   RIGHT_BENEFIT_PLAN_SEARCH, SOCIAL_PROTECTION_ROUTE_BENEFIT_PLAN,

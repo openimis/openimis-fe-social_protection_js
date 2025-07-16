@@ -3,7 +3,7 @@
 /* eslint-disable import/prefer-default-export */
 import {flatten }from 'flat';
 import React from 'react';
-import { Tune } from '@material-ui/icons';
+import { Tune } from '@mui/icons-material';
 import { FormattedMessage } from '@openimis/fe-core';
 import messages_en from './translations/en.json';
 import reducer from './reducer';

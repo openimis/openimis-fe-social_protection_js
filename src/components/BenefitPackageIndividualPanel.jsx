@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Grid, Typography, IconButton, Tooltip,
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   FormattedMessage,
   PublishedComponent,
@@ -11,9 +11,9 @@ import {
   createFieldsBasedOnJSON,
   renderInputComponent,
 } from '@openimis/fe-core';
-import { Person } from '@material-ui/icons';
+import { Person } from '@mui/icons-material';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import { withTheme, withStyles } from '@mui/styles';
 import { EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE, SOCIAL_PROTECTION_MODULE } from '../constants';
 
 const styles = (theme) => ({

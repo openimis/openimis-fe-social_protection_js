@@ -3,11 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   decodeId, fetchCustomFilter, PublishedComponent, useModulesManager, useTranslations,
 } from '@openimis/fe-core';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@mui/styles';
 import AddCircle from '@material-ui/icons/Add';
-import {
-  Button, Divider, Grid, Paper, Typography,
-} from '@material-ui/core';
+import { Button, Divider, Grid, Paper, Typography } from '@mui/material';
 import {
   CLEARED_STATE_FILTER,
   BENEFICIARY_STATUS,

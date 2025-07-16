@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tab } from '@material-ui/core';
+import { Tab } from '@mui/material';
 import { formatMessage, PublishedComponent } from '@openimis/fe-core';
 import { BENEFIT_PACKAGE_BENEFITS_TAB_VALUE, BENEFITS_CONTRIBUTION_KEY } from '../constants';
 

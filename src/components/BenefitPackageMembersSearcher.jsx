@@ -16,8 +16,8 @@ import {
   DialogActions,
   DialogTitle,
   DialogContent,
-} from '@material-ui/core';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+} from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { connect, useDispatch } from 'react-redux';
 import {
   DEFAULT_PAGE_SIZE, EMPTY_STRING, INDIVIDUAL_LABEL,

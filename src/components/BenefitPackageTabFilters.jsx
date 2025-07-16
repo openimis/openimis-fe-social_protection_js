@@ -1,8 +1,8 @@
 import React from 'react';
 import _debounce from 'lodash/debounce';
 import { injectIntl } from 'react-intl';
-import { Grid } from '@material-ui/core';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import { Grid } from '@mui/material';
+import { withTheme, withStyles } from '@mui/styles';
 import { TextInput, PublishedComponent, formatMessage } from '@openimis/fe-core';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';

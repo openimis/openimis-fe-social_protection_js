@@ -6,9 +6,8 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import {
-  Paper, Fab, makeStyles, Grid, Checkbox, FormControlLabel, Divider,
-} from '@material-ui/core';
+import { Paper, Fab, Grid, Checkbox, FormControlLabel, Divider } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {
   Table, coreConfirm, SelectDialog,

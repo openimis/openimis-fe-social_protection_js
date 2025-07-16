@@ -8,7 +8,7 @@ import {
   useModulesManager,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import { withTheme, withStyles } from '@mui/styles';
 import BenefitPackageTabPanel from '../components/BenefitPackageTabPanel';
 import BenefitPackagePlanPanel from '../components/BenefitPackagePlanPanel';
 import { RIGHT_BENEFICIARY_SEARCH } from '../constants';

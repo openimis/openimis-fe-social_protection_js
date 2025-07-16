@@ -21,10 +21,10 @@ import {
   IconButton,
   Tooltip,
   DialogContent,
-} from '@material-ui/core';
-import PreviewIcon from '@material-ui/icons/ListAlt';
-import ErrorIcon from '@material-ui/icons/Error';
-import CheckCircleIcon from '@material-ui/icons/CheckCircleOutline';
+} from '@mui/material';
+import PreviewIcon from '@mui/icons-material/ListAlt';
+import ErrorIcon from '@mui/icons-material/Error';
+import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import {
   fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary, clearBeneficiaryExport,
 } from '../actions';

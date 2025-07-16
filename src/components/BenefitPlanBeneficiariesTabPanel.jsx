@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Grid, Tab, Button, Tooltip,
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   Contributions,
   formatMessage,

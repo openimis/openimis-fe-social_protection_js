@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import { connect } from 'react-redux';
 import {
   FormPanel,
@@ -10,7 +10,7 @@ import {
   withModulesManager,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import { withTheme, withStyles } from '@mui/styles';
 import {
   projectNameSetValid,
   projectNameValidationCheck,

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Grid, Typography, Paper, Divider, IconButton, Tooltip,
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   FormattedMessage,
   PublishedComponent,
@@ -10,9 +10,9 @@ import {
   FormPanel,
   formatMessage,
 } from '@openimis/fe-core';
-import PreviewIcon from '@material-ui/icons/ListAlt';
+import PreviewIcon from '@mui/icons-material/ListAlt';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import { withTheme, withStyles } from '@mui/styles';
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 import { RIGHT_BENEFIT_PLAN_UPDATE, RIGHT_SCHEMA_UPDATE } from '../constants';
 import BenefitPlanSchemaModal from '../dialogs/BenefitPlanSchemaModal';

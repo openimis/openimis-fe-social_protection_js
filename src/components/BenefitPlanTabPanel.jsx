@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import {
-  Paper, Grid,
-} from '@material-ui/core';
+import { Paper, Grid } from '@mui/material';
 import { injectIntl } from 'react-intl';
 import {
   Contributions,
 } from '@openimis/fe-core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import {
   BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE,
   BENEFIT_PLAN_TABS_LABEL_CONTRIBUTION_KEY,
