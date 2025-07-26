@@ -4,7 +4,7 @@ import {
   decodeId, fetchCustomFilter, PublishedComponent, useModulesManager, useTranslations,
 } from '@openimis/fe-core';
 import { makeStyles } from '@mui/styles';
-import AddCircle from '@material-ui/icons/Add';
+import AddCircle from '@mui/icons-material/Add';
 import { Button, Divider, Grid, Paper, Typography } from '@mui/material';
 import {
   CLEARED_STATE_FILTER,

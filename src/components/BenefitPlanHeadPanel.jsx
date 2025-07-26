@@ -12,7 +12,7 @@ import {
   TextInput,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import { withTheme, withStyles } from '@mui/styles';
 import {
   DESCRIPTION_MAX_LENGTH, MAX_CODE_LENGTH, RIGHT_SCHEMA_UPDATE,
 } from '../constants';
@@ -168,23 +168,23 @@ class BenefitPlanHeadPanel extends FormPanel {
           />
         </Grid>
         {rights.includes(RIGHT_SCHEMA_UPDATE) && (
-        <Grid item xs={3} className={classes.item}>
-          <ValidatedTextAreaInput
-            module="socialProtection"
-            label="benefitPlan.schema"
-            onChange={(v) => this.updateAttribute('beneficiaryDataSchema', v)}
-            value={benefitPlan?.beneficiaryDataSchema}
-            codeTakenLabel="socialProtection.validation.benefitPlan.invalidSchema"
-            itemQueryIdentifier="bfSchema"
-            action={benefitPlanSchemaValidationCheck}
-            clearAction={benefitPlanSchemaValidationClear}
-            setValidAction={benefitPlanSchemaSetValid}
-            shouldValidate={() => true}
-            isValid={isBenefitPlanSchemaValid}
-            isValidating={isBenefitPlanSchemaValidating}
-            validationError={benefitPlanSchemaValidationError}
-          />
-        </Grid>
+          <Grid item xs={3} className={classes.item}>
+            <ValidatedTextAreaInput
+              module="socialProtection"
+              label="benefitPlan.schema"
+              onChange={(v) => this.updateAttribute('beneficiaryDataSchema', v)}
+              value={benefitPlan?.beneficiaryDataSchema}
+              codeTakenLabel="socialProtection.validation.benefitPlan.invalidSchema"
+              itemQueryIdentifier="bfSchema"
+              action={benefitPlanSchemaValidationCheck}
+              clearAction={benefitPlanSchemaValidationClear}
+              setValidAction={benefitPlanSchemaSetValid}
+              shouldValidate={() => true}
+              isValid={isBenefitPlanSchemaValid}
+              isValidating={isBenefitPlanSchemaValidating}
+              validationError={benefitPlanSchemaValidationError}
+            />
+          </Grid>
         )}
       </Grid>
     );

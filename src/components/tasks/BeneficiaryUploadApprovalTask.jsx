@@ -19,8 +19,8 @@ import {
   formatMessage,
   formatMessageWithValues,
 } from '@openimis/fe-core';
-import ClearIcon from '@material-ui/icons/Clear';
-import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import CheckIcon from '@mui/icons-material/Check';
 
 import { useIntl } from 'react-intl';
 import { TASK_STATUS, APPROVED, FAILED } from '../../constants';

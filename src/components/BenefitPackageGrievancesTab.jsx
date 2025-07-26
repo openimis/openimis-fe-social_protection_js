@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tab } from '@material-ui/core';
+import { Tab } from '@mui/material';
 import { formatMessage, PublishedComponent } from '@openimis/fe-core';
 import { BENEFIT_PACKAGE_GRIEVANCES_TAB_VALUE } from '../constants';
 import BenefitPackageGrievancesSearcher from './BenefitPackageGrievancesSearcher';
