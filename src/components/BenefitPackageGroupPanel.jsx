@@ -12,25 +12,28 @@ import {
 } from '@openimis/fe-core';
 import { People as PeopleIcon } from '@mui/icons-material';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { EMPTY_STRING, RIGHT_GROUP_UPDATE, SOCIAL_PROTECTION_MODULE } from '../constants';
 
-const styles = (theme) => ({
-  tableTitle: theme.table.title,
-  item: theme.paper.item,
-  paper: theme.paper.paper,
-  fullHeight: {
-    height: '100%',
-  },
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  ...theme.table.title,
+}));
+
+const StyledGridItem = styled(Grid)(({ theme }) => ({
+  ...theme.paper.item,
+}));
+
+const StyledFullHeight = styled(Grid)({
+  height: '100%',
 });
 
-function renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes, groupUuid) {
+function renderHeadPanelSubtitle(rights, intl, history, modulesManager, groupUuid) {
   const openGroup = () => history.push(`/${modulesManager.getRef('individual.route.group')}`
   + `/${groupUuid}`);
 
   return (
     <Grid item>
-      <Grid container align="center" justify="center" direction="column" className={classes.fullHeight}>
+      <StyledFullHeight container align="center" justify="center" direction="column">
         <Grid item>
           <Typography>
             <FormattedMessage
@@ -46,47 +49,42 @@ function renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes,
             )}
           </Typography>
         </Grid>
-      </Grid>
+      </StyledFullHeight>
     </Grid>
   );
 }
 
-class BenefitPackageGroupPanel extends FormPanel {
-  render() {
-    const {
-      classes, readOnly, intl, history, modulesManager, rights, groupBeneficiaries,
-    } = this.props;
+function BenefitPackageGroupPanel({
+  readOnly, intl, history, modulesManager, rights, groupBeneficiaries,
+}) {
+  if (!groupBeneficiaries) return null;
 
-    if (!groupBeneficiaries) return null;
+  const { group: { uuid }, status, jsonExt } = groupBeneficiaries;
 
-    const { group: { uuid }, status, jsonExt } = groupBeneficiaries;
+  const jsonExtFields = createFieldsBasedOnJSON(jsonExt);
 
-    const jsonExtFields = createFieldsBasedOnJSON(jsonExt);
-
-    return (
-      <>
-        <Grid container className={classes.tableTitle}>
-          {renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes, uuid)}
-        </Grid>
-        <Grid container className={classes.item}>
-          <Grid item xs={3} className={classes.item}>
-            <TextInput
-              module={SOCIAL_PROTECTION_MODULE}
-              label="beneficiary.status"
-              value={status ?? EMPTY_STRING}
-              readOnly={readOnly}
-            />
-          </Grid>
-          {jsonExtFields?.map((jsonExtField) => (
-            <Grid item xs={3} className={classes.item}>
-              {renderInputComponent(SOCIAL_PROTECTION_MODULE, jsonExtField)}
-            </Grid>
-          ))}
-        </Grid>
-
-      </>
-    );
-  }
+  return (
+    <>
+      <StyledGrid container>
+        {renderHeadPanelSubtitle(rights, intl, history, modulesManager, uuid)}
+      </StyledGrid>
+      <Grid container>
+        <StyledGridItem item xs={3}>
+          <TextInput
+            module={SOCIAL_PROTECTION_MODULE}
+            label="beneficiary.status"
+            value={status ?? EMPTY_STRING}
+            readOnly={readOnly}
+          />
+        </StyledGridItem>
+        {jsonExtFields?.map((jsonExtField) => (
+          <StyledGridItem item xs={3}>
+            {renderInputComponent(SOCIAL_PROTECTION_MODULE, jsonExtField)}
+          </StyledGridItem>
+        ))}
+      </Grid>
+    </>
+  );
 }
 
-export default injectIntl(withTheme(withStyles(styles)(BenefitPackageGroupPanel)));
+export default injectIntl(BenefitPackageGroupPanel);

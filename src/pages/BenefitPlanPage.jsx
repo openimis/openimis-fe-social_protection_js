@@ -13,7 +13,7 @@ import { injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
 import {
@@ -29,14 +29,16 @@ import BenefitPlanTabPanel from '../components/BenefitPlanTabPanel';
 import { ACTION_TYPE } from '../reducer';
 import BenefitPlanEligibilityCriteriaPanel from '../components/BenefitPlanEligibilityCriteriaPanel';
 
-const styles = (theme) => ({
-  page: theme.page,
-  paper: theme.paper.classes,
-});
+const StyledPage = styled('div')(({ theme }) => ({
+  ...theme.page,
+}));
+
+const StyledPaper = styled('div')(({ theme }) => ({
+  ...theme.paper.classes,
+}));
 
 function BenefitPlanPage({
   intl,
-  classes,
   rights,
   history,
   benefitPlanUuid,
@@ -101,181 +103,142 @@ function BenefitPlanPage({
     }
   }, [benefitPlan]);
 
-  useEffect(() => () => clearBenefitPlan(), []);
-
   const titleParams = (benefitPlan) => ({
     code: benefitPlan?.code,
     name: benefitPlan?.name,
   });
 
   const isMandatoryFieldsEmpty = () => {
-    if (
-      !!editedBenefitPlan?.code
-      && !!editedBenefitPlan?.name
-      && !!editedBenefitPlan?.dateValidFrom
-      && !!editedBenefitPlan?.dateValidTo
-      && !!editedBenefitPlan?.type
-    ) {
-      return false;
-    }
-    return true;
+    const mandatoryFields = ['code', 'name', 'dateValidFrom', 'dateValidTo', 'type'];
+    return mandatoryFields.some((field) => !editedBenefitPlan[field]);
   };
+
   const isValid = () => (
-    (editedBenefitPlan?.code ? isBenefitPlanCodeValid : true)
-    && (editedBenefitPlan?.name ? isBenefitPlanNameValid : true)
-    && (editedBenefitPlan?.beneficiaryDataSchema ? isBenefitPlanSchemaValid : true));
+    isBenefitPlanNameValid && isBenefitPlanCodeValid && isBenefitPlanSchemaValid
+  );
 
   const doesBenefitPlanChange = () => {
-    if (_.isEqual(benefitPlan, editedBenefitPlan)) return false;
-    return true;
+    return !_.isEqual(editedBenefitPlan, benefitPlan);
   };
 
   const canSave = () => !isMandatoryFieldsEmpty() && isValid() && doesBenefitPlanChange();
 
   const handleSave = () => {
-    if (benefitPlan?.id) {
-      updateBenefitPlan(
-        editedBenefitPlan,
-        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.update.mutationLabel', titleParams(benefitPlan)),
-      );
+    if (benefitPlanUuid) {
+      updateBenefitPlan(modulesManager, editedBenefitPlan);
     } else {
-      createBenefitPlan(
-        editedBenefitPlan,
-        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.create.mutationLabel', titleParams(benefitPlan)),
-      );
+      createBenefitPlan(modulesManager, editedBenefitPlan);
     }
   };
 
   const deleteBenefitPlanCallback = () => deleteBenefitPlan(
+    modulesManager,
     benefitPlan,
-    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-      id: benefitPlan?.id,
-    }),
+    formatMessage(intl, 'socialProtection', 'benefitPlan.deleteSuccess'),
   );
 
   const stopBenefitPlanCallback = () => closeBenefitPlan(
+    modulesManager,
     benefitPlan,
-    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-      id: benefitPlan?.id,
-    }),
+    formatMessage(intl, 'socialProtection', 'benefitPlan.closeSuccess'),
   );
 
   const openDeleteBenefitPlanConfirmDialog = () => {
-    setConfirmedAction(() => deleteBenefitPlanCallback);
     coreConfirm(
-      formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.confirm.title', {
-        code: benefitPlan?.code,
-        name: benefitPlan?.name,
-      }),
-      formatMessage(intl, 'socialProtection', 'benefitPlan.delete.confirm.message'),
+      formatMessage(intl, 'socialProtection', 'benefitPlan.deleteConfirm.title'),
+      formatMessage(intl, 'socialProtection', 'benefitPlan.deleteConfirm.message'),
+      deleteBenefitPlanCallback,
     );
   };
 
   const openStopBenefitPlanConfirmDialog = () => {
-    setConfirmedAction(() => stopBenefitPlanCallback);
     coreConfirm(
-      formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.suspend.confirm.title', {
-        code: benefitPlan?.code,
-        name: benefitPlan?.name,
-      }),
-      formatMessage(intl, 'socialProtection', 'benefitPlan.suspend.confirm.message'),
+      formatMessage(intl, 'socialProtection', 'benefitPlan.closeConfirm.title'),
+      formatMessage(intl, 'socialProtection', 'benefitPlan.closeConfirm.message'),
+      stopBenefitPlanCallback,
     );
   };
 
-  const [childActiveTab, setChildActiveTab] = useState(BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE);
-
   const getBenefitPlanPanels = () => {
     const panels = [];
-    if (benefitPlan?.id && benefitPlan?.beneficiaryDataSchema) {
-      panels.push(BenefitPlanEligibilityCriteriaPanel);
-    }
     if (rights.includes(RIGHT_BENEFICIARY_SEARCH)) {
       panels.push(BenefitPlanTabPanel);
+    }
+    if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE)) {
+      panels.push(BenefitPlanEligibilityCriteriaPanel);
     }
     return panels;
   };
 
-  const actions = [
-    !!benefitPlan && {
-      doIt: openDeleteBenefitPlanConfirmDialog,
-      icon: <DeleteIcon />,
-      tooltip: formatMessage(intl, 'socialProtection', 'deleteButtonTooltip'),
-    }, !!benefitPlan && {
-      doIt: openStopBenefitPlanConfirmDialog,
-      icon: <PauseIcon />,
-      tooltip: formatMessage(intl, 'socialProtection', 'stopButtonTooltip'),
-    },
-  ];
-
   return (
-    rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) && (
-    <div className={classes.page}>
+    <StyledPage>
       <Form
         module="socialProtection"
-        className={classes}
-        title="benefitPlan.pageTitle"
-        titleParams={titleParams(benefitPlan)}
+        title={formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.pageTitle', titleParams(benefitPlan))}
         openDirty
-        benefitPlan={benefitPlan}
-        edited={editedBenefitPlan}
-        onEditedChanged={setEditedBenefitPlan}
         back={back}
-        reset={reset}
-        mandatoryFieldsEmpty={isMandatoryFieldsEmpty}
-        canSave={canSave}
-        save={handleSave}
         HeadPanel={BenefitPlanHeadPanel}
         Panels={getBenefitPlanPanels()}
-        onActiveTabChange={setChildActiveTab}
-        activeTab={childActiveTab}
-        rights={rights}
-        actions={actions}
+        edited={editedBenefitPlan}
+        onEditedChanged={setEditedBenefitPlan}
+        canSave={canSave}
+        onSave={handleSave}
+        submittingMutation={submittingMutation}
+        confirmedAction={confirmedAction}
         setConfirmedAction={setConfirmedAction}
-        readOnly={!!benefitPlanUuid}
-        saveTooltip={formatMessage(
-          intl,
-          'socialProtection',
-          `benefitPlan.saveButton.tooltip.${canSave() ? 'enabled' : 'disabled'}`,
-        )}
+        reset={reset}
+        setReset={setReset}
+        rights={rights}
+        intl={intl}
+        history={history}
+        modulesManager={modulesManager}
+        benefitPlan={benefitPlan}
+        activeTab={BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE}
+        actions={[
+          {
+            name: 'delete',
+            icon: <DeleteIcon />,
+            handler: openDeleteBenefitPlanConfirmDialog,
+            disabled: !benefitPlan?.id || submittingMutation,
+            tooltip: formatMessage(intl, 'socialProtection', 'benefitPlan.deleteButton.tooltip'),
+          },
+          {
+            name: 'stop',
+            icon: <PauseIcon />,
+            handler: openStopBenefitPlanConfirmDialog,
+            disabled: !benefitPlan?.id || submittingMutation,
+            tooltip: formatMessage(intl, 'socialProtection', 'benefitPlan.closeButton.tooltip'),
+          },
+        ]}
       />
-    </div>
-    )
+    </StyledPage>
   );
 }
 
 const mapStateToProps = (state, props) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   benefitPlanUuid: props.match.params.benefit_plan_uuid,
-  confirmed: state.core.confirmed,
-  fetchingBenefitPlans: state.socialProtection.fetchingBenefitPlans,
-  fetchedBenefitPlans: state.socialProtection.fetchedBenefitPlans,
   benefitPlan: state.socialProtection.benefitPlan,
-  errorBenefitPlan: state.socialProtection.errorBenefitPlan,
+  confirmed: state.core.confirmed,
   submittingMutation: state.socialProtection.submittingMutation,
   mutation: state.socialProtection.mutation,
-  isBenefitPlanCodeValid: state.socialProtection.validationFields?.benefitPlanCode?.isValid,
   isBenefitPlanNameValid: state.socialProtection.validationFields?.benefitPlanName?.isValid,
+  isBenefitPlanCodeValid: state.socialProtection.validationFields?.benefitPlanCode?.isValid,
   isBenefitPlanSchemaValid: state.socialProtection.validationFields?.benefitPlanSchema?.isValid,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  createBenefitPlan,
   fetchBenefitPlan,
-  clearBenefitPlan,
   deleteBenefitPlan,
   closeBenefitPlan,
   updateBenefitPlan,
+  clearBenefitPlan,
+  createBenefitPlan,
   coreConfirm,
   clearConfirm,
   journalize,
 }, dispatch);
 
-
-
-export default withHistory(
-  withModulesManager(injectIntl(withTheme(withStyles(styles)(
-    connect(mapStateToProps, mapDispatchToProps)(
-      BenefitPlanPage,
-    ),
-  )))),
-);
+export default withModulesManager(injectIntl(withHistory(connect(mapStateToProps, mapDispatchToProps)(
+  BenefitPlanPage,
+))));

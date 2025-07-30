@@ -13,12 +13,6 @@ import {
 
 import ErrorIcon from '@mui/icons-material/ErrorOutline';
 
-import { withTheme, withStyles } from '@mui/styles';
-
-const styles = (theme) => ({
-  item: theme.paper.item,
-});
-
 function CollapsableErrorList({
   intl,
   errors,
@@ -106,8 +100,4 @@ function CollapsableErrorList({
   );
 }
 
-export default injectIntl(
-  withTheme(
-    withStyles(styles)(CollapsableErrorList),
-  ),
-);
+export default injectIntl(CollapsableErrorList);

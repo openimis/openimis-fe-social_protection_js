@@ -2,14 +2,22 @@ import React from 'react';
 import _debounce from 'lodash/debounce';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { TextInput, PublishedComponent, formatMessage } from '@openimis/fe-core';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  ...defaultFilterStyles(theme).form,
+}));
+
+const StyledGridItem = styled(Grid)(({ theme }) => ({
+  ...defaultFilterStyles(theme).item,
+}));
+
 function BenefitPackageTabFilters({
-  intl, classes, filters, onChangeFilters,
+  intl, filters, onChangeFilters,
 }) {
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
@@ -38,24 +46,24 @@ function BenefitPackageTabFilters({
   };
 
   return (
-    <Grid container className={classes.form}>
-      <Grid item xs={2} className={classes.item}>
+    <StyledGrid container>
+      <StyledGridItem item xs={2}>
         <TextInput
           module="socialProtection"
           label="beneficiary.firstName"
           value={filterTextFieldValue('individual_FirstName')}
           onChange={onChangeStringFilter('individual_FirstName', CONTAINS_LOOKUP)}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <TextInput
           module="socialProtection"
           label="beneficiary.lastName"
           value={filterTextFieldValue('individual_LastName')}
           onChange={onChangeStringFilter('individual_LastName', CONTAINS_LOOKUP)}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -69,8 +77,8 @@ function BenefitPackageTabFilters({
             },
           ])}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryPicker.label"
           withNull
@@ -84,11 +92,9 @@ function BenefitPackageTabFilters({
             },
           ])}
         />
-      </Grid>
-    </Grid>
+      </StyledGridItem>
+    </StyledGrid>
   );
 }
 
-export default injectIntl(withTheme(withStyles(defaultFilterStyles)(
-  BenefitPackageTabFilters,
-)));
+export default injectIntl(BenefitPackageTabFilters);

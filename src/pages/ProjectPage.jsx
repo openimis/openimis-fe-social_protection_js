@@ -12,7 +12,7 @@ import {
 import { injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect, useDispatch } from 'react-redux';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UndoIcon from '@mui/icons-material/Undo';
 import _ from 'lodash';
@@ -29,16 +29,16 @@ import { ACTION_TYPE } from '../reducer';
 import ProjectHeadPanel from '../components/ProjectHeadPanel';
 import { RIGHT_BENEFIT_PLAN_UPDATE } from '../constants';
 
-const styles = (theme) => ({
-  page: theme.page,
-  form: {
-    paper: theme.paper.classes,
-  },
-});
+const StyledPage = styled('div')(({ theme }) => ({
+  ...theme.page,
+}));
+
+const StyledForm = styled('div')(({ theme }) => ({
+  paper: theme.paper.classes,
+}));
 
 function ProjectPage({
   intl,
-  classes,
   rights,
   modulesManager,
   projectUuid,
@@ -229,10 +229,9 @@ function ProjectPage({
   ];
 
   return rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) && (
-    <div className={classes.page}>
+    <StyledPage>
       <Form
         module="socialProtection"
-        className={classes.form}
         title="project.pageTitle"
         openDirty
         edited={editedProject}
@@ -251,7 +250,7 @@ function ProjectPage({
           formatMessage(intl, 'socialProtection', 'project.saveButton.tooltip')
         }
       />
-    </div>
+    </StyledPage>
   );
 }
 
@@ -281,10 +280,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
 
 export default withModulesManager(
   injectIntl(
-    withTheme(
-      withStyles(styles)(
-        connect(mapStateToProps, mapDispatchToProps)(ProjectPage),
-      ),
-    ),
+    connect(mapStateToProps, mapDispatchToProps)(ProjectPage),
   ),
 );

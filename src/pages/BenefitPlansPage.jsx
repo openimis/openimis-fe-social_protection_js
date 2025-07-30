@@ -3,7 +3,7 @@ import {
   Helmet, withModulesManager, formatMessage, withTooltip, historyPush,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,15 +13,18 @@ import {
 } from '../constants';
 import BenefitPlanSearcher from '../components/BenefitPlanSearcher';
 
-const styles = (theme) => ({
-  page: theme.page,
-  fab: theme.fab,
-});
+const StyledPage = styled('div')(({ theme }) => ({
+  ...theme.page,
+}));
+
+const StyledFab = styled('div')(({ theme }) => ({
+  ...theme.fab,
+}));
 
 function BenefitPlansPage(props) {
   
   const {
-    intl, classes, rights, modulesManager, history,
+    intl, rights, modulesManager, history,
   } = props;
  
 
@@ -33,19 +36,19 @@ function BenefitPlansPage(props) {
 
   return (
     rights.includes(RIGHT_BENEFIT_PLAN_SEARCH) && (
-    <div className={classes.page}>
+    <StyledPage>
       <Helmet title={formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanHelmet')} />
       <BenefitPlanSearcher rights={rights} />
       {rights.includes(RIGHT_BENEFIT_PLAN_CREATE)
         && withTooltip(
-          <div className={classes.fab}>
+          <StyledFab>
             <Fab color="primary" onClick={onAdd}>
               <AddIcon />
             </Fab>
-          </div>,
+          </StyledFab>,
           formatMessage(intl, 'socialProtection', 'createButton.tooltip'),
         )}
-    </div>
+    </StyledPage>
     )
   );
 }
@@ -54,6 +57,6 @@ const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
 });
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(
+export default withModulesManager(injectIntl(
   connect(mapStateToProps)(BenefitPlansPage),
-))));
+));

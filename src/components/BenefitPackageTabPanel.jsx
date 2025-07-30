@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Paper, Grid } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { Contributions } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@mui/styles';
 import {
   BENEFIT_PACKAGE_TABS_LABEL_CONTRIBUTION_KEY,
   BENEFIT_PACKAGE_TABS_PANEL_CONTRIBUTION_KEY,
@@ -10,42 +10,31 @@ import {
   BENEFIT_PACKAGE_MEMBERS_TAB_VALUE,
 } from '../constants';
 
-const styles = (theme) => ({
-  paper: theme.paper.paper,
-  tableTitle: theme.table.title,
-  tabs: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  selectedTab: {
-    borderBottom: '4px solid white',
-  },
-  unselectedTab: {
-    borderBottom: '4px solid transparent',
-  },
-  button: {
-    marginLeft: 'auto',
-    padding: theme.spacing(1),
-    fontSize: '0.875rem',
-    textTransform: 'none',
-  },
-});
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  ...theme.paper.paper,
+}));
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  ...theme.table.title,
+  display: 'flex',
+  alignItems: 'center',
+}));
 
 function BenefitPackageTabPanel({
-  intl, rights, classes, groupBeneficiaries, modulesManager, history, benefitPlan, beneficiary,
+  intl, rights, groupBeneficiaries, modulesManager, history, benefitPlan, beneficiary,
 }) {
   const [activeTab, setActiveTab] = useState(groupBeneficiaries
     ? BENEFIT_PACKAGE_MEMBERS_TAB_VALUE : BENEFIT_PACKAGE_BENEFITS_TAB_VALUE);
 
   const isSelected = (tab) => tab === activeTab;
 
-  const tabStyle = (tab) => (isSelected(tab) ? classes.selectedTab : classes.unselectedTab);
+  const tabStyle = (tab) => (isSelected(tab) ? 'selected' : 'unselected');
 
   const handleChange = (_, tab) => setActiveTab(tab);
 
   return (
-    <Paper className={classes.paper}>
-      <Grid container className={`${classes.tableTitle} ${classes.tabs}`}>
+    <StyledPaper>
+      <StyledGrid container>
         <Contributions
           contributionKey={BENEFIT_PACKAGE_TABS_LABEL_CONTRIBUTION_KEY}
           intl={intl}
@@ -57,7 +46,7 @@ function BenefitPackageTabPanel({
           groupBeneficiaries={groupBeneficiaries}
           modulesManager={modulesManager}
         />
-      </Grid>
+      </StyledGrid>
       <Contributions
         contributionKey={BENEFIT_PACKAGE_TABS_PANEL_CONTRIBUTION_KEY}
         rights={rights}
@@ -68,8 +57,8 @@ function BenefitPackageTabPanel({
         benefitPlan={benefitPlan}
         beneficiary={beneficiary}
       />
-    </Paper>
+    </StyledPaper>
   );
 }
 
-export default injectIntl(withTheme(withStyles(styles)(BenefitPackageTabPanel)));
+export default injectIntl(BenefitPackageTabPanel);

@@ -10,18 +10,17 @@ import {
   formatMessage,
   TextInput,
 } from '@openimis/fe-core';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchWorkflows } from '../actions';
 
-const styles = (theme) => ({
-  item: theme.paper.item,
-});
+const StyledButton = styled(Button)(({ theme }) => ({
+  ...theme.paper.item,
+}));
 
 function BenefitPlanSchemaDialog({
   intl,
-  classes,
   benefitPlan,
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,18 +35,17 @@ function BenefitPlanSchemaDialog({
 
   return (
     <>
-      <Button
+      <StyledButton
         onClick={handleOpen}
         variant="outlined"
         color="#DFEDEF"
-        className={classes.button}
         style={{
           border: '0px',
           marginTop: '6px',
         }}
       >
         {formatMessage(intl, 'socialProtection', 'benefitPlan.schema.showSchema')}
-      </Button>
+      </StyledButton>
       <Dialog
         open={isOpen}
         onClose={handleClose}
@@ -126,9 +124,5 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 }, dispatch);
 
 export default injectIntl(
-  withTheme(
-    withStyles(styles)(
-      connect(mapStateToProps, mapDispatchToProps)(BenefitPlanSchemaDialog),
-    ),
-  ),
+  connect(mapStateToProps, mapDispatchToProps)(BenefitPlanSchemaDialog),
 );

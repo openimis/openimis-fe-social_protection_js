@@ -12,46 +12,56 @@ import {
 } from '@openimis/fe-core';
 import PreviewIcon from '@mui/icons-material/ListAlt';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 import { RIGHT_BENEFIT_PLAN_UPDATE, RIGHT_SCHEMA_UPDATE } from '../constants';
 import BenefitPlanSchemaModal from '../dialogs/BenefitPlanSchemaModal';
 
-const styles = (theme) => ({
-  tableTitle: theme.table.title,
-  item: theme.paper.item,
-  paper: theme.paper.paper,
-  paperHeader: theme.paper.header,
-  fullHeight: {
-    height: '100%',
-  },
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  ...theme.table.title,
+}));
+
+const StyledGridItem = styled(Grid)(({ theme }) => ({
+  ...theme.paper.item,
+}));
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  ...theme.paper.paper,
+}));
+
+const StyledPaperHeader = styled(Grid)(({ theme }) => ({
+  ...theme.paper.header,
+}));
+
+const StyledFullHeight = styled(Grid)({
+  height: '100%',
 });
 
-function renderHeadPanelTitle(classes, benefitPlanTitle) {
+function renderHeadPanelTitle(benefitPlanTitle) {
   return (
-    <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
+    <StyledPaperHeader container alignItems="center" direction="row">
       <Grid item xs={8}>
-        <Grid container alignItems="center" className={classes.tableTitle}>
+        <StyledGrid container alignItems="center">
           {!!benefitPlanTitle && (
           <Grid item>
             <Typography variant="h6">
-              <FormattedMessage module={module} id={benefitPlanTitle} />
+              <FormattedMessage module="socialProtection" id={benefitPlanTitle} />
             </Typography>
           </Grid>
           )}
-        </Grid>
+        </StyledGrid>
       </Grid>
-    </Grid>
+    </StyledPaperHeader>
   );
 }
 
-function renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes, benefitPlan) {
+function renderHeadPanelSubtitle(rights, intl, history, modulesManager, benefitPlan) {
   const openBenefitPlan = () => history.push(`/${modulesManager.getRef('socialProtection.route.benefitPlan')}`
   + `/${benefitPlan?.id}`);
 
   return (
     <Grid item>
-      <Grid container align="center" justify="center" direction="column" className={classes.fullHeight}>
+      <StyledFullHeight container align="center" justify="center" direction="column">
         <Typography>
           <Grid item>
             <FormattedMessage
@@ -67,102 +77,98 @@ function renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes,
             )}
           </Grid>
         </Typography>
+      </StyledFullHeight>
+    </Grid>
+  );
+}
+
+function BenefitPackagePlanPanel({
+  benefitPlanTitle, benefitPlan, readOnly, intl, history, modulesManager, rights,
+}) {
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+        <StyledPaper>
+          {renderHeadPanelTitle(benefitPlanTitle)}
+          <Grid item xs={12}>
+            <Divider />
+          </Grid>
+          <StyledGrid container>
+            {renderHeadPanelSubtitle(rights, intl, history, modulesManager, benefitPlan)}
+          </StyledGrid>
+          <Grid container>
+            <StyledGridItem item xs={3}>
+              <TextInput
+                module="socialProtection"
+                label="benefitPlan.code"
+                value={benefitPlan?.code ?? ''}
+                readOnly={readOnly}
+              />
+            </StyledGridItem>
+            <StyledGridItem item xs={3}>
+              <TextInput
+                module="socialProtection"
+                label="benefitPlan.name"
+                value={benefitPlan?.name ?? ''}
+                readOnly={readOnly}
+              />
+            </StyledGridItem>
+            <StyledGridItem item xs={3}>
+              <PublishedComponent
+                pubRef="core.DatePicker"
+                module="socialProtection"
+                label="benefitPlan.dateValidFrom"
+                value={benefitPlan?.dateValidFrom ?? ''}
+                readOnly={readOnly}
+              />
+            </StyledGridItem>
+            <StyledGridItem item xs={3}>
+              <PublishedComponent
+                pubRef="core.DatePicker"
+                module="socialProtection"
+                label="benefitPlan.dateValidTo"
+                value={benefitPlan?.dateValidTo ?? ''}
+                readOnly={readOnly}
+              />
+            </StyledGridItem>
+            <StyledGridItem item xs={3}>
+              <NumberInput
+                min={0}
+                displayZero
+                module="socialProtection"
+                label="benefitPlan.maxBeneficiaries"
+                value={benefitPlan?.maxBeneficiaries ?? ''}
+                readOnly={readOnly}
+              />
+            </StyledGridItem>
+            <StyledGridItem item xs={3}>
+              <TextInput
+                module="socialProtection"
+                label="benefitPlan.institution"
+                value={benefitPlan?.institution ?? ''}
+                readOnly={readOnly}
+              />
+            </StyledGridItem>
+            <StyledGridItem item xs={3}>
+              <BenefitPlanTypePicker
+                module="socialProtection"
+                label="beneficiary.benefitPlanTypePicker"
+                value={!!benefitPlan?.type && benefitPlan.type}
+                readOnly={readOnly}
+              />
+            </StyledGridItem>
+            {rights.includes(RIGHT_SCHEMA_UPDATE) && (
+              <StyledGridItem item xs={3}>
+                <BenefitPlanSchemaModal
+                  benefitPlan={benefitPlan}
+                />
+              </StyledGridItem>
+            )}
+          </Grid>
+        </StyledPaper>
       </Grid>
     </Grid>
   );
 }
 
-class BenefitPackagePlanPanel extends FormPanel {
-  render() {
-    const {
-      classes, benefitPlanTitle, benefitPlan, readOnly, intl, history, modulesManager, rights,
-    } = this.props;
-
-    return (
-      <Grid container>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            {renderHeadPanelTitle(classes, benefitPlanTitle)}
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-            <Grid container className={classes.tableTitle}>
-              {renderHeadPanelSubtitle(rights, intl, history, modulesManager, classes, benefitPlan)}
-            </Grid>
-            <Grid container className={classes.item}>
-              <Grid item xs={3} className={classes.item}>
-                <TextInput
-                  module="socialProtection"
-                  label="benefitPlan.code"
-                  value={benefitPlan?.code ?? ''}
-                  readOnly={readOnly}
-                />
-              </Grid>
-              <Grid item xs={3} className={classes.item}>
-                <TextInput
-                  module="socialProtection"
-                  label="benefitPlan.name"
-                  value={benefitPlan?.name ?? ''}
-                  readOnly={readOnly}
-                />
-              </Grid>
-              <Grid item xs={3} className={classes.item}>
-                <PublishedComponent
-                  pubRef="core.DatePicker"
-                  module="socialProtection"
-                  label="benefitPlan.dateValidFrom"
-                  value={benefitPlan?.dateValidFrom ?? ''}
-                  readOnly={readOnly}
-                />
-              </Grid>
-              <Grid item xs={3} className={classes.item}>
-                <PublishedComponent
-                  pubRef="core.DatePicker"
-                  module="socialProtection"
-                  label="benefitPlan.dateValidTo"
-                  value={benefitPlan?.dateValidTo ?? ''}
-                  readOnly={readOnly}
-                />
-              </Grid>
-              <Grid item xs={3} className={classes.item}>
-                <NumberInput
-                  min={0}
-                  displayZero
-                  module="socialProtection"
-                  label="benefitPlan.maxBeneficiaries"
-                  value={benefitPlan?.maxBeneficiaries ?? ''}
-                  readOnly={readOnly}
-                />
-              </Grid>
-              <Grid item xs={3} className={classes.item}>
-                <TextInput
-                  module="socialProtection"
-                  label="benefitPlan.institution"
-                  value={benefitPlan?.institution ?? ''}
-                  readOnly={readOnly}
-                />
-              </Grid>
-              <Grid item xs={3} className={classes.item}>
-                <BenefitPlanTypePicker
-                  module="socialProtection"
-                  label="beneficiary.benefitPlanTypePicker"
-                  value={!!benefitPlan?.type && benefitPlan.type}
-                  readOnly={readOnly}
-                />
-              </Grid>
-              {rights.includes(RIGHT_SCHEMA_UPDATE) && (
-                <Grid item xs={3} className={classes.item}>
-                  <BenefitPlanSchemaModal
-                    benefitPlan={benefitPlan}
-                  />
-                </Grid>
-              )}
-            </Grid>
-          </Paper>
-        </Grid>
-      </Grid>
-    );
-  }
-}
-
-export default injectIntl(withTheme(withStyles(styles)(BenefitPackagePlanPanel)));
+export default injectIntl(BenefitPackagePlanPanel);

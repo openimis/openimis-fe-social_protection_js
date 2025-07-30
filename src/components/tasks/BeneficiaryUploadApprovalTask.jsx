@@ -7,7 +7,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Paper, Fab, Grid, Checkbox, FormControlLabel, Divider } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {
   Table, coreConfirm, SelectDialog,
@@ -26,24 +26,24 @@ import { useIntl } from 'react-intl';
 import { TASK_STATUS, APPROVED, FAILED } from '../../constants';
 import { fetchPendingBeneficiaryUploads, resolveTask } from '../../actions';
 
-const useStyles = makeStyles((theme) => ({
-  paper: theme.paper.paper,
-  title: theme.paper.title,
-  button: theme.paper.button,
-  fabContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  fabHeaderContainer: {
-    justifyContent: 'center',
-    textAlign: 'center',
-    fontSize: '16px',
-    fontWeight: 'bold',
-  },
-  fab: {
-    margin: theme.spacing(1),
-  },
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  ...theme.paper.paper,
+}));
 
+const StyledFabContainer = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+});
+
+const StyledFabHeaderContainer = styled('div')({
+  justifyContent: 'center',
+  textAlign: 'center',
+  fontSize: '16px',
+  fontWeight: 'bold',
+});
+
+const StyledFab = styled('div')(({ theme }) => ({
+  margin: theme.spacing(1),
 }));
 
 function BeneficiaryUploadTaskDisplay({
@@ -129,7 +129,7 @@ function BeneficiaryUploadTaskDisplay({
 
   useEffect(() => setKeys(organizeData(pending)), [pending]);
 
-  const classes = useStyles();
+
   const beneficiaryUuids = (businessData?.ids || []).map((id) => id.uuid);
   const beneficiaries = (businessData?.ids || []).map((id) => {
     // eslint-disable-next-line camelcase
@@ -294,13 +294,13 @@ function BeneficiaryUploadTaskDisplay({
     && (
     <>
       {' '}
-      <Paper className={classes.paper}>
-        <div className={classes.fabHeaderContainer}>
+      <StyledPaper>
+        <StyledFabHeaderContainer>
           {formatMessage(intl, 'socialProtection', 'resolveSelectedTasks')}
           <Divider />
-        </div>
-        <div className={classes.fabContainer}>
-          <div className={classes.fab}>
+        </StyledFabHeaderContainer>
+        <StyledFabContainer>
+          <StyledFab>
             <Fab
               color="primary"
               disabled={disabled || task?.status === TASK_STATUS.RECEIVED || isRowDisabled() || selectedRecords.length === 0}
@@ -309,8 +309,8 @@ function BeneficiaryUploadTaskDisplay({
               <CheckIcon />
             </Fab>
             {formatMessage(intl, 'socialProtection', 'acceptSelected')}
-          </div>
-          <div className={classes.fab}>
+          </StyledFab>
+          <StyledFab>
             <Fab
               color="primary"
               disabled={disabled || task?.status === TASK_STATUS.RECEIVED || isRowDisabled() || selectedRecords.length === 0}
@@ -319,9 +319,9 @@ function BeneficiaryUploadTaskDisplay({
               <ClearIcon />
             </Fab>
             {formatMessage(intl, 'socialProtection', 'rejectSelected')}
-          </div>
-        </div>
-      </Paper>
+          </StyledFab>
+        </StyledFabContainer>
+      </StyledPaper>
     </>
     )}
     </>
@@ -342,7 +342,7 @@ const UploadResolutionItemFormatters = () => [
 
 function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
   const intl = useIntl();
-  const classes = useStyles();
+
   const { task } = useSelector((state) => state.tasksManagement);
   const currentUser = useSelector((state) => state.core.user);
   const [disabled, setDisable] = useState(defaultDisabled);
@@ -412,13 +412,13 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
         confirmationButton="dialogActions.continue"
         rejectionButton="dialogActions.goBack"
       />
-      <Paper className={classes.paper}>
-        <div className={classes.fabHeaderContainer}>
+      <StyledPaper>
+        <StyledFabHeaderContainer>
           {formatMessage(intl, 'socialProtection', 'resolveAllRemainingTasks')}
           <Divider />
-        </div>
-        <div className={classes.fabContainer}>
-          <div className={classes.fab}>
+        </StyledFabHeaderContainer>
+        <StyledFabContainer>
+          <StyledFab>
             <Fab
               color="primary"
               disabled={disabled || isRowDisabled()}
@@ -428,8 +428,8 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
             </Fab>
             {formatMessage(intl, 'socialProtection', 'approveAll')}
 
-          </div>
-          <div className={classes.fab}>
+          </StyledFab>
+          <StyledFab>
             <Fab
               color="primary"
               disabled={disabled || task?.status === TASK_STATUS.RECEIVED || isRowDisabled()}
@@ -438,9 +438,9 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
               <ClearIcon />
             </Fab>
             {formatMessage(intl, 'socialProtection', 'rejectAll')}
-          </div>
-        </div>
-      </Paper>
+          </StyledFab>
+        </StyledFabContainer>
+      </StyledPaper>
     </>
   );
 }

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   decodeId, fetchCustomFilter, PublishedComponent, useModulesManager, useTranslations,
 } from '@openimis/fe-core';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import AddCircle from '@mui/icons-material/Add';
 import { Button, Divider, Grid, Paper, Typography } from '@mui/material';
 import {
@@ -13,11 +13,20 @@ import {
 } from '../constants';
 import { isBase64Encoded } from '../util/advanced-criteria-utils';
 
-const useStyles = makeStyles((theme) => ({
-  paper: theme.paper.paper,
-  paperHeader: theme.paper.paperHeader,
-  tableTitle: theme.table.title,
-  item: theme.paper.item,
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  ...theme.paper.paper,
+}));
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  ...theme.paper.paperHeader,
+}));
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  ...theme.table.title,
+}));
+
+const StyledFiltersGrid = styled(Grid)(({ theme }) => ({
+  ...theme.paper.item,
 }));
 
 function BenefitPlanEligibilityCriteriaPanel({
@@ -27,7 +36,6 @@ function BenefitPlanEligibilityCriteriaPanel({
   onEditedChanged,
   activeTab,
 }) {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const editedBenefitPlan = edited;
   const additionalParams = editedBenefitPlan ? { benefitPlan: `${editedBenefitPlan.id}` } : null;
@@ -128,19 +136,19 @@ function BenefitPlanEligibilityCriteriaPanel({
 
   return (
     show && (
-    <Paper className={classes.paper}>
-      <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
+    <StyledPaper>
+      <StyledGrid container alignItems="center" direction="row">
         <Grid item xs={12}>
-          <Typography variant="h6" className={classes.tableTitle}>
+          <StyledTypography variant="h6">
             {formatMessageWithValues('benefitPlan.BenefitPlanEligibilityCriteriaPanel.title', {
               beneficiaryStatus,
             })}
-          </Typography>
+          </StyledTypography>
         </Grid>
         <Grid item xs={12}>
           <Divider />
         </Grid>
-        <Grid container className={classes.item}>
+        <StyledFiltersGrid container>
           {filters.map((filter, index) => (
             // eslint-disable-next-line react/react-in-jsx-scope
             <PublishedComponent
@@ -189,9 +197,9 @@ function BenefitPlanEligibilityCriteriaPanel({
               {formatMessage('individual.enrollment.clearAllFilters')}
             </Button>
           </div>
-        </Grid>
-      </Grid>
-    </Paper>
+        </StyledFiltersGrid>
+      </StyledGrid>
+    </StyledPaper>
     )
   );
 }

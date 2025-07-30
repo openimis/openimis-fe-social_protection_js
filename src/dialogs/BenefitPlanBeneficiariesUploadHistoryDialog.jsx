@@ -21,7 +21,7 @@ import {
   TableContainer,
   Paper,
 } from '@mui/material';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CollapsableErrorList from '../components/CollapsableErrorList';
@@ -29,14 +29,21 @@ import { fetchUploadHistory } from '../actions';
 import { downloadBeneficiaryUploadFile, downloadInvalidItems } from '../util/export';
 import { UPLOAD_STATUS } from '../constants';
 
-const styles = (theme) => ({
-  item: theme.paper.item,
-});
+const StyledButton = styled(Button)(({ theme }) => ({
+  ...theme.paper.item,
+}));
+
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
+  ...theme.paper.item,
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  ...theme.paper.item,
+}));
 
 function BenefitPlanBeneficiariesUploadHistoryDialog({
   modulesManager,
   intl,
-  classes,
   fetchUploadHistory,
   benefitPlan,
   history,
@@ -75,18 +82,17 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
 
   return (
     <>
-      <Button
+      <StyledButton
         onClick={handleOpen}
         variant="outlined"
         color="#DFEDEF"
-        className={classes.button}
         style={{
           border: '0px',
           marginTop: '6px',
         }}
       >
         {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.uploadHistory')}
-      </Button>
+      </StyledButton>
       <Dialog
         open={isOpen}
         onClose={handleClose}
@@ -116,8 +122,8 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
 
             <TableContainer component={Paper}>
               <Table size="small">
-                <TableHead className={classes.header}>
-                  <TableRow className={classes.headerTitle}>
+                <StyledTableHead>
+                  <StyledTableRow>
                     <TableCell>
                       {formatMessage(
                         intl,
@@ -175,8 +181,8 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
                       )}
                     </TableCell>
                     <TableCell />
-                  </TableRow>
-                </TableHead>
+                  </StyledTableRow>
+                </StyledTableHead>
                 <TableBody>
                   <ProgressOrError progress={fetchingHistory} error={fetchedHistory} />
                   {records.map((item) => (
@@ -288,9 +294,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 }, dispatch);
 
 export default injectIntl(
-  withModulesManager(withTheme(
-    withStyles(styles)(
-      connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadHistoryDialog),
-    ),
-  )),
+  withModulesManager(
+    connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadHistoryDialog),
+  ),
 );

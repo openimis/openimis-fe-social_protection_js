@@ -2,7 +2,7 @@ import React from 'react';
 import _debounce from 'lodash/debounce';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import {
   TextInput, PublishedComponent, formatMessage, ConstantBasedPicker,
 } from '@openimis/fe-core';
@@ -10,8 +10,16 @@ import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constan
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  ...defaultFilterStyles(theme).form,
+}));
+
+const StyledGridItem = styled(Grid)(({ theme }) => ({
+  ...defaultFilterStyles(theme).item,
+}));
+
 function BenefitPlanBeneficiariesFilter({
-  intl, classes, filters, onChangeFilters, readOnly, status,
+  intl, filters, onChangeFilters, readOnly, status,
 }) {
   const any = formatMessage(intl, 'socialProtection', 'any');
 
@@ -42,24 +50,24 @@ function BenefitPlanBeneficiariesFilter({
   };
 
   return (
-    <Grid container className={classes.form}>
-      <Grid item xs={2} className={classes.item}>
+    <StyledGrid container>
+      <StyledGridItem item xs={2}>
         <TextInput
           module="socialProtection"
           label="beneficiary.firstName"
           value={filterTextFieldValue('individual_FirstName')}
           onChange={onChangeStringFilter('individual_FirstName', CONTAINS_LOOKUP)}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <TextInput
           module="socialProtection"
           label="beneficiary.lastName"
           value={filterTextFieldValue('individual_LastName')}
           onChange={onChangeStringFilter('individual_LastName', CONTAINS_LOOKUP)}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -73,8 +81,8 @@ function BenefitPlanBeneficiariesFilter({
             },
           ])}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryStatusPicker"
           withNull
@@ -89,9 +97,9 @@ function BenefitPlanBeneficiariesFilter({
             },
           ])}
         />
-      </Grid>
+      </StyledGridItem>
       {status && (
-        <Grid item xs={2} className={classes.item}>
+        <StyledGridItem item xs={2}>
           <ConstantBasedPicker
             module="socialProtection"
             label="beneficiary.isEligible"
@@ -107,7 +115,7 @@ function BenefitPlanBeneficiariesFilter({
               },
             ])}
           />
-        </Grid>
+        </StyledGridItem>
       )}
       <Grid item xs={12}>
         <PublishedComponent
@@ -118,10 +126,8 @@ function BenefitPlanBeneficiariesFilter({
           anchor="parentLocation"
         />
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 }
 
-export default injectIntl(withTheme(withStyles(defaultFilterStyles)(
-  BenefitPlanBeneficiariesFilter,
-)));
+export default injectIntl(BenefitPlanBeneficiariesFilter);

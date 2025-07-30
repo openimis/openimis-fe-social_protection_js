@@ -1,15 +1,23 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { formatMessage, TextInput, ConstantBasedPicker, PublishedComponent } from '@openimis/fe-core';
 import _debounce from 'lodash/debounce';
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 import { DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  ...defaultFilterStyles(theme).form,
+}));
+
+const StyledGridItem = styled(Grid)(({ theme }) => ({
+  ...defaultFilterStyles(theme).item,
+}));
+
 function BenefitPlanGroupBeneficiariesFilter({
-  classes, filters, onChangeFilters, readOnly, status,
+  filters, onChangeFilters, readOnly, status,
 }) {
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
@@ -28,16 +36,16 @@ function BenefitPlanGroupBeneficiariesFilter({
   };
 
   return (
-    <Grid container className={classes.form}>
-      <Grid item xs={2} className={classes.item}>
+    <StyledGrid container>
+      <StyledGridItem item xs={2}>
         <TextInput
           module="socialProtection"
           label="group.code"
           value={filterTextFieldValue('group_Code_Icontains')}
           onChange={onChangeStringFilter('group_Code_Icontains')}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryStatusPicker"
           withNull
@@ -52,9 +60,9 @@ function BenefitPlanGroupBeneficiariesFilter({
             },
           ])}
         />
-      </Grid>
+      </StyledGridItem>
       {status && (
-        <Grid item xs={2} className={classes.item}>
+        <StyledGridItem item xs={2}>
           <ConstantBasedPicker
             module="socialProtection"
             label="beneficiary.isEligible"
@@ -70,7 +78,7 @@ function BenefitPlanGroupBeneficiariesFilter({
               },
             ])}
           />
-        </Grid>
+        </StyledGridItem>
       )}
       <Grid item xs={12}>
         <PublishedComponent
@@ -81,10 +89,8 @@ function BenefitPlanGroupBeneficiariesFilter({
           anchor="parentLocation"
         />
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 }
 
-export default withTheme(withStyles(defaultFilterStyles)(
-  BenefitPlanGroupBeneficiariesFilter,
-));
+export default injectIntl(BenefitPlanGroupBeneficiariesFilter);

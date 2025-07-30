@@ -2,14 +2,22 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import { TextInput, PublishedComponent, formatMessage } from '@openimis/fe-core';
 import { Grid } from '@mui/material';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import _debounce from 'lodash/debounce';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  ...defaultFilterStyles(theme).form,
+}));
+
+const StyledGridItem = styled(Grid)(({ theme }) => ({
+  ...defaultFilterStyles(theme).item,
+}));
+
 function BenefitPlanHistoryFilter({
-  intl, classes, filters, onChangeFilters, showStatuses,
+  intl, filters, onChangeFilters, showStatuses,
 }) {
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
@@ -38,24 +46,24 @@ function BenefitPlanHistoryFilter({
   };
 
   return (
-    <Grid container className={classes.form}>
-      <Grid item xs={2} className={classes.item}>
+    <StyledGrid container>
+      <StyledGridItem item xs={2}>
         <TextInput
           module="socialProtection"
           label="benefitPlan.code"
           value={filterTextFieldValue('code')}
           onChange={onChangeStringFilter('code', CONTAINS_LOOKUP)}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <TextInput
           module="socialProtection"
           label="benefitPlan.name"
           value={filterTextFieldValue('name')}
           onChange={onChangeStringFilter('name', CONTAINS_LOOKUP)}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -69,8 +77,8 @@ function BenefitPlanHistoryFilter({
             },
           ])}
         />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
+      </StyledGridItem>
+      <StyledGridItem item xs={2}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -84,9 +92,9 @@ function BenefitPlanHistoryFilter({
             },
           ])}
         />
-      </Grid>
+      </StyledGridItem>
       {showStatuses && (
-        <Grid item xs={2} className={classes.item}>
+        <StyledGridItem item xs={2}>
           <BeneficiaryStatusPicker
             label="beneficiary.beneficiaryStatusPicker"
             withNull
@@ -100,10 +108,10 @@ function BenefitPlanHistoryFilter({
               },
             ])}
           />
-        </Grid>
+        </StyledGridItem>
       )}
-    </Grid>
+    </StyledGrid>
   );
 }
 
-export default injectIntl(withTheme(withStyles(defaultFilterStyles)(BenefitPlanHistoryFilter)));
+export default injectIntl(BenefitPlanHistoryFilter);

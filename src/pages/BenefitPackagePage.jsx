@@ -8,7 +8,7 @@ import {
   useModulesManager,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import BenefitPackageTabPanel from '../components/BenefitPackageTabPanel';
 import BenefitPackagePlanPanel from '../components/BenefitPackagePlanPanel';
 import { RIGHT_BENEFICIARY_SEARCH } from '../constants';
@@ -23,14 +23,13 @@ import {
 } from '../actions';
 import BenefitPackageGroupPanel from '../components/BenefitPackageGroupPanel';
 
-const styles = (theme) => ({
-  page: theme.page,
-});
+const StyledPage = styled('div')(({ theme }) => ({
+  ...theme.page,
+}));
 
 function BenefitPackagePage({
   rights,
   intl,
-  classes,
   beneficiaryUuid,
   beneficiary,
   fetchedBeneficiary,
@@ -97,7 +96,7 @@ function BenefitPackagePage({
 
   const panelsConfig = configurePanels(beneficiaryUuid);
   return (
-    <div className={classes.page}>
+    <StyledPage>
       {dependenciesFetched && (
       <Form
         module="socialProtection"
@@ -127,7 +126,7 @@ function BenefitPackagePage({
         readOnly
       />
       )}
-    </div>
+    </StyledPage>
   );
 }
 
@@ -144,6 +143,6 @@ const mapStateToProps = (state, props) => ({
   fetchedGroupBeneficiaries: state.socialProtection.fetchedGroup,
 });
 
-export default injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, null)(
+export default injectIntl(connect(mapStateToProps, null)(
   BenefitPackagePage,
-))));
+));

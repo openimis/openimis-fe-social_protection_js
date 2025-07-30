@@ -18,7 +18,7 @@ import {
   coreAlert,
   FormattedMessage,
 } from '@openimis/fe-core';
-import { withTheme, withStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import WorkflowsPicker from '../pickers/WorkflowsPicker';
@@ -28,13 +28,12 @@ import {
 } from '../constants';
 import downloadTemplate from '../util/export';
 
-const styles = (theme) => ({
-  item: theme.paper.item,
-});
+const StyledButton = styled(Button)(({ theme }) => ({
+  ...theme.paper.item,
+}));
 
 function BenefitPlanBeneficiariesUploadDialog({
   intl,
-  classes,
   workflows,
   fetchWorkflows,
   benefitPlan,
@@ -170,18 +169,17 @@ function BenefitPlanBeneficiariesUploadDialog({
 
   return (
     <>
-      <Button
+      <StyledButton
         onClick={handleOpen}
         variant="outlined"
         color="#DFEDEF"
-        className={classes.button}
         style={{
           border: '0px',
           marginTop: '6px',
         }}
       >
         {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload')}
-      </Button>
+      </StyledButton>
       <Dialog
         open={isOpen}
         onClose={handleClose}
@@ -333,9 +331,5 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 }, dispatch);
 
 export default injectIntl(
-  withTheme(
-    withStyles(styles)(
-      connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadDialog),
-    ),
-  ),
+  connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadDialog),
 );

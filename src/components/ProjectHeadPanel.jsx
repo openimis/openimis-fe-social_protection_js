@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
 import {
   FormPanel,
@@ -10,7 +11,6 @@ import {
   withModulesManager,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@mui/styles';
 import {
   projectNameSetValid,
   projectNameValidationCheck,
@@ -19,124 +19,124 @@ import {
 import ProjectStatusPicker from '../pickers/ProjectStatusPicker';
 import ActivityPicker from '../pickers/ActivityPicker';
 
-const styles = (theme) => ({
-  item: theme.paper.item,
-});
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  ...theme.paper.item,
+}));
 
-class ProjectHeadPanel extends FormPanel {
-  shouldValidate(inputValue, savedValue) {
+const StyledGridItem = styled(Grid)(({ theme }) => ({
+  ...theme.paper.item,
+}));
+
+function ProjectHeadPanel({
+  edited,
+  isProjectNameValid,
+  isProjectNameValidating,
+  projectNameValidationError,
+  savedProjectName,
+  readOnly,
+  updateAttribute,
+}) {
+  const project = { ...edited };
+  const isNewProject = !project?.id;
+
+  const shouldValidate = (inputValue, savedValue) => {
     if (!savedValue) return false;
-    return !this.props.edited?.id || inputValue !== savedValue;
-  }
+    return !edited?.id || inputValue !== savedValue;
+  };
 
-  render() {
-    const {
-      edited,
-      classes,
-      isProjectNameValid,
-      isProjectNameValidating,
-      projectNameValidationError,
-      savedProjectName,
-      readOnly,
-    } = this.props;
+  return (
+    <StyledGrid container>
+      <StyledGridItem item xs={4}>
+        <ValidatedTextInput
+          module="socialProtection"
+          label="project.name"
+          value={project?.name ?? ''}
+          required
+          readOnly={readOnly}
+          onChange={(v) => updateAttribute('name', v)}
+          itemQueryIdentifier="projectName"
+          additionalQueryArgs={{
+            benefitPlanId: project?.benefitPlan?.id,
+          }}
+          action={projectNameValidationCheck}
+          clearAction={projectNameValidationClear}
+          setValidAction={projectNameSetValid}
+          shouldValidate={(v) => shouldValidate(v, savedProjectName)}
+          codeTakenLabel="project.name.alreadyTaken"
+          isValid={isProjectNameValid}
+          isValidating={isProjectNameValidating}
+          validationError={projectNameValidationError}
+        />
+      </StyledGridItem>
 
-    const project = { ...edited };
-    const isNewProject = !project?.id;
+      <StyledGridItem item xs={4}>
+        <ActivityPicker
+          label="project.activity"
+          required
+          withNull={false}
+          readOnly={readOnly}
+          value={project?.activity}
+          onChange={(v) => updateAttribute('activity', v)}
+        />
+      </StyledGridItem>
 
-    return (
-      <Grid container className={classes.item}>
-        <Grid item xs={4} className={classes.item}>
-          <ValidatedTextInput
-            module="socialProtection"
-            label="project.name"
-            value={project?.name ?? ''}
-            required
-            readOnly={readOnly}
-            onChange={(v) => this.updateAttribute('name', v)}
-            itemQueryIdentifier="projectName"
-            additionalQueryArgs={{
-              benefitPlanId: project?.benefitPlan?.id,
-            }}
-            action={projectNameValidationCheck}
-            clearAction={projectNameValidationClear}
-            setValidAction={projectNameSetValid}
-            shouldValidate={(v) => this.shouldValidate(v, savedProjectName)}
-            codeTakenLabel="project.name.alreadyTaken"
-            isValid={isProjectNameValid}
-            isValidating={isProjectNameValidating}
-            validationError={projectNameValidationError}
-          />
-        </Grid>
+      <StyledGridItem item xs={4}>
+        <PublishedComponent
+          pubRef="location.LocationCascader"
+          module="socialProtection"
+          label="Location"
+          required
+          withNull={false}
+          readOnly={readOnly}
+          value={project?.location}
+          onChange={(v) => updateAttribute('location', v)}
+        />
+      </StyledGridItem>
 
-        <Grid item xs={4} className={classes.item}>
-          <ActivityPicker
-            label="project.activity"
-            required
-            withNull={false}
-            readOnly={readOnly}
-            value={project?.activity}
-            onChange={(v) => this.updateAttribute('activity', v)}
-          />
-        </Grid>
+      <StyledGridItem item xs={4}>
+        <NumberInput
+          module="socialProtection"
+          label="project.targetBeneficiaries"
+          required
+          readOnly={readOnly}
+          min={1}
+          value={project?.targetBeneficiaries}
+          onChange={(v) => updateAttribute('targetBeneficiaries', v)}
+        />
+      </StyledGridItem>
 
-        <Grid item xs={4} className={classes.item}>
-          <PublishedComponent
-            pubRef="location.LocationCascader"
-            module="socialProtection"
-            label="Location"
-            required
-            withNull={false}
-            readOnly={readOnly}
-            value={project?.location}
-            onChange={(v) => this.updateAttribute('location', v)}
-          />
-        </Grid>
+      <StyledGridItem item xs={4}>
+        <NumberInput
+          module="socialProtection"
+          label="project.workingDays"
+          required
+          readOnly={readOnly}
+          min={1}
+          value={project?.workingDays}
+          onChange={(v) => updateAttribute('workingDays', v)}
+        />
+      </StyledGridItem>
 
-        <Grid item xs={4} className={classes.item}>
-          <NumberInput
-            module="socialProtection"
-            label="project.targetBeneficiaries"
-            required
-            readOnly={readOnly}
-            min={1}
-            value={project?.targetBeneficiaries}
-            onChange={(v) => this.updateAttribute('targetBeneficiaries', v)}
-          />
-        </Grid>
+      <StyledGridItem item xs={4}>
+        <ProjectStatusPicker
+          required
+          readOnly={readOnly || isNewProject}
+          value={project?.status || 'PREPARATION'}
+          onChange={(v) => updateAttribute('status', v)}
+          withNull={false}
+        />
+      </StyledGridItem>
 
-        <Grid item xs={4} className={classes.item}>
-          <NumberInput
-            module="socialProtection"
-            label="project.workingDays"
-            required
-            readOnly={readOnly}
-            min={1}
-            value={project?.workingDays}
-            onChange={(v) => this.updateAttribute('workingDays', v)}
-          />
-        </Grid>
-
-        <Grid item xs={4} className={classes.item}>
-          <ProjectStatusPicker
-            required
-            readOnly={readOnly || isNewProject}
-            value={project?.status || 'PREPARATION'}
-            onChange={(v) => this.updateAttribute('status', v)}
-            withNull={false}
-          />
-        </Grid>
-
-        <Grid item xs={4} className={classes.item}>
-          <TextInput
-            module="socialProtection"
-            label="project.benefitPlan"
-            value={project?.benefitPlan?.name ?? ''}
-            readOnly
-          />
-        </Grid>
-      </Grid>
-    );
-  }
+      <StyledGridItem item xs={4}>
+        <TextInput
+          module="socialProtection"
+          label="project.benefitPlan"
+          value={project?.benefitPlan?.name ?? ''}
+          readOnly
+        />
+      </StyledGridItem>
+    </StyledGrid>
+  );
 }
 
 const mapStateToProps = (state) => ({
@@ -146,6 +146,6 @@ const mapStateToProps = (state) => ({
   savedProjectName: state.socialProtection?.project?.name,
 });
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(
+export default withModulesManager(injectIntl(
   connect(mapStateToProps)(ProjectHeadPanel),
-))));
+));
