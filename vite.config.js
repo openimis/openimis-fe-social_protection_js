@@ -5,7 +5,7 @@ import svgr from 'vite-plugin-svgr';
 
 const noExternal = [
   '@mui/material',
-  '@mui/utils',
+ 
   '@mui/system',
   '@mui/icons-material',
   '@mui/styled-engine',
@@ -89,13 +89,13 @@ export default defineConfig({
         '@mui/material',
         '@mui/icons-material',
         '@mui/system',
-        '@material-ui/pickers',
+       
         '@date-io/core',
         '@date-io/moment',
         'flat',
         /^@babel.*/,
         /^@date-io\/.*/,
-        /^@material-ui\/.*/,
+      
         /^@openimis.*/,
       ],
       output: {
