@@ -5,7 +5,7 @@
   "description": "openIMIS Frontend Social Protection module",
   "repository": "openimis/openimis-fe-social_protection_js",
   "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "module": "dist/index.es",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
