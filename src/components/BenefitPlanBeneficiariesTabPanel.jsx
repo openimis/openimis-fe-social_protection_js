@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
-  Grid, Tab, Button, Tooltip,
-} from '@mui/material';
+  Grid,
+  Tab,
+  Button,
+  Tooltip,
+} from "@mui/material";
 import {
   Contributions,
   formatMessage,
   useHistory,
   useModulesManager,
   useTranslations,
-} from '@openimis/fe-core';
+} from "@openimis/fe-core";
 import {
   MODULE_NAME,
   BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE,
@@ -18,12 +21,15 @@ import {
   DEDUPLICATION_SELECT_FIELD_DIALOG_CONTRIBUTION_KEY,
   PAYROLL_CREATE_RIGHTS_PUB_REF,
   PAYROLL_PAYROLL_ROUTE,
-} from '../constants';
-import BenefitPlanBeneficiariesUploadDialog from '../dialogs/BenefitPlanBeneficiariesUploadDialog';
-import BenefitPlanBeneficiariesUploadHistoryDialog from '../dialogs/BenefitPlanBeneficiariesUploadHistoryDialog';
+} from "../constants";
+import BenefitPlanBeneficiariesUploadDialog from "../dialogs/BenefitPlanBeneficiariesUploadDialog";
+import BenefitPlanBeneficiariesUploadHistoryDialog from "../dialogs/BenefitPlanBeneficiariesUploadHistoryDialog";
 
 function BenefitPlanBeneficiariesTabLabel({
-  intl, onChange, tabStyle, isSelected,
+  intl,
+  onChange,
+  tabStyle,
+  isSelected,
 }) {
   return (
     <Tab
@@ -31,13 +37,21 @@ function BenefitPlanBeneficiariesTabLabel({
       className={tabStyle(BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE)}
       selected={isSelected(BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE)}
       value={BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE}
-      label={formatMessage(intl, 'socialProtection', 'benefitPlan.beneficiaries.tabGroup.label')}
+      label={formatMessage(
+        intl,
+        "socialProtection",
+        "benefitPlan.beneficiaries.tabGroup.label"
+      )}
     />
   );
 }
 
 function BenefitPlanBeneficiariesTabPanel({
-  intl, rights, benefitPlan, setConfirmedAction, value, classes,
+  intl,
+  rights,
+  benefitPlan,
+  setConfirmedAction,
+  value,
 }) {
   if (value !== BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE) {
     return null;
@@ -46,10 +60,13 @@ function BenefitPlanBeneficiariesTabPanel({
   const history = useHistory();
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
-  const [activeTab, setActiveTab] = useState(BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE);
+  const [activeTab, setActiveTab] = useState(
+    BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE
+  );
 
   const isSelected = (tab) => tab === activeTab;
-  const tabStyle = (tab) => (isSelected(tab) ? classes.selectedTab : classes.unselectedTab);
+  const tabStyle = (tab) =>
+    isSelected(tab) ? "selected-tab" : "unselected-tab";
 
   const handleChange = (_, tab) => {
     setActiveTab(tab);
@@ -59,15 +76,15 @@ function BenefitPlanBeneficiariesTabPanel({
 
   const handleCreatePayrollButton = () => {
     history.push(
-      `/${modulesManager.getRef(PAYROLL_PAYROLL_ROUTE)}/null/null/${benefitPlan.id}`,
+      `/${modulesManager.getRef(PAYROLL_PAYROLL_ROUTE)}/null/null/${benefitPlan.id}`
     );
   };
 
   return (
     <Grid container>
-      <Grid item xs={12} style={{ paddingLeft: '10px' }}>
-        <div style={{ width: '100%' }}>
-          <div style={{ float: 'left' }}>
+      <Grid item xs={12} style={{ paddingLeft: "10px" }}>
+        <div style={{ width: "100%" }}>
+          <div style={{ float: "left" }}>
             <Contributions
               contributionKey={BENEFIT_PLAN_BENEFICIARY_TABS_LABEL_CONTRIBUTION_KEY}
               intl={intl}
@@ -78,28 +95,32 @@ function BenefitPlanBeneficiariesTabPanel({
               tabStyle={tabStyle}
             />
           </div>
-          <div style={{ float: 'right', paddingRight: '16px' }}>
+          <div style={{ float: "right", paddingRight: "16px" }}>
             {rights.includes(payrollCreateRights) && (
-            <Tooltip
-              title={formatMessage('benefitPlan.benefitPlanTabPanel.createPayroll.tooltip')}
-              disableHoverListener={benefitPlan?.hasPaymentPlans}
-            >
-              <span>
-                <Button
-                  onClick={handleCreatePayrollButton}
-                  variant="outlined"
-                  color="#DFEDEF"
-                  disabled={!benefitPlan?.hasPaymentPlans}
-                  className={classes.button}
-                  style={{
-                    border: '0px',
-                    marginTop: '6px',
-                  }}
-                >
-                  {formatMessage('benefitPlan.benefitPlanTabPanel.createPayroll')}
-                </Button>
-              </span>
-            </Tooltip>
+              <Tooltip
+                title={formatMessage(
+                  "benefitPlan.benefitPlanTabPanel.createPayroll.tooltip"
+                )}
+                disableHoverListener={benefitPlan?.hasPaymentPlans}
+              >
+                <span>
+                  <Button
+                    onClick={handleCreatePayrollButton}
+                    variant="outlined"
+                    disabled={!benefitPlan?.hasPaymentPlans}
+                    sx={{
+                      border: 0,
+                      marginTop: "6px",
+                      backgroundColor: "#DFEDEF", // keep your old color
+                      textTransform: "none",
+                    }}
+                  >
+                    {formatMessage(
+                      "benefitPlan.benefitPlanTabPanel.createPayroll"
+                    )}
+                  </Button>
+                </span>
+              </Tooltip>
             )}
 
             <Contributions
@@ -107,9 +128,7 @@ function BenefitPlanBeneficiariesTabPanel({
               intl={intl}
               benefitPlan={benefitPlan}
             />
-            <BenefitPlanBeneficiariesUploadDialog
-              benefitPlan={benefitPlan}
-            />
+            <BenefitPlanBeneficiariesUploadDialog benefitPlan={benefitPlan} />
             <BenefitPlanBeneficiariesUploadHistoryDialog
               benefitPlan={benefitPlan}
             />
@@ -129,4 +148,7 @@ function BenefitPlanBeneficiariesTabPanel({
   );
 }
 
-export { BenefitPlanBeneficiariesTabLabel, BenefitPlanBeneficiariesTabPanel };
+export {
+  BenefitPlanBeneficiariesTabLabel,
+  BenefitPlanBeneficiariesTabPanel,
+};

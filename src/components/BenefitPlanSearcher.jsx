@@ -52,15 +52,15 @@ function BenefitPlanSearcher({
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
   const prevSubmittingMutationRef = useRef();
 
-  const openDeleteBenefitPlanConfirmDialog = () => coreConfirm(
+  const openDeleteBenefitPlanConfirmDialog = (benefitPlan) => coreConfirm(
     formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.confirm.title', {
-      code: benefitPlanToDelete.code,
-      name: benefitPlanToDelete.name,
+      code: benefitPlan?.code,
+      name: benefitPlan?.name,
     }),
     formatMessage(intl, 'socialProtection', 'benefitPlan.delete.confirm.message'),
   );
 
-  useEffect(() => benefitPlanToDelete && openDeleteBenefitPlanConfirmDialog(), [benefitPlanToDelete]);
+  useEffect(() => benefitPlanToDelete && openDeleteBenefitPlanConfirmDialog(benefitPlanToDelete), [benefitPlanToDelete]);
 
   useEffect(() => {
     if (benefitPlanToDelete && confirmed) {

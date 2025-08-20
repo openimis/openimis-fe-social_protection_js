@@ -70,11 +70,11 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && benefitPlan?.id) {
       const params = [`benefitPlan_Id:"${benefitPlan.id}", orderBy: ["-dateCreated"]`];
       fetchUploadHistory(params);
     }
-  }, [isOpen]);
+  }, [isOpen, benefitPlan?.id]);
 
   useEffect(() => {
     setRecords(history);

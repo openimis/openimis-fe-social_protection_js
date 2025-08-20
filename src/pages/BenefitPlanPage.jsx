@@ -110,7 +110,7 @@ function BenefitPlanPage({
 
   const isMandatoryFieldsEmpty = () => {
     const mandatoryFields = ['code', 'name', 'dateValidFrom', 'dateValidTo', 'type'];
-    return mandatoryFields.some((field) => !editedBenefitPlan[field]);
+    return mandatoryFields.some((field) => !editedBenefitPlan?.[field]);
   };
 
   const isValid = () => (
