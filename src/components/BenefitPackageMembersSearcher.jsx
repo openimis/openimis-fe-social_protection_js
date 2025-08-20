@@ -138,7 +138,6 @@ function BenefitPackageMembersSearcher({
       dispatch(clearIndividualExportRef());
     }
 
-    return setFailedExport(false);
   }, [membersExport]);
 
   useEffect(() => {

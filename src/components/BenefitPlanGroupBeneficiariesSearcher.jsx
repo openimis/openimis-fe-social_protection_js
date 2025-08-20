@@ -214,7 +214,6 @@ function BenefitPlanGroupBeneficiariesSearcher({
       clearGroupBeneficiaryExport();
     }
 
-    return setFailedExport(false);
   }, [groupBeneficiaryExport]);
 
   const groupBeneficiaryFilter = (props) => (

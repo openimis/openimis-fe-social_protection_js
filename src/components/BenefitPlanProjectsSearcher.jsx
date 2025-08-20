@@ -121,7 +121,6 @@ function BenefitPlanProjectsSearcher({
     if (projectToUndo && confirmed !== null) {
       setProjectToUndo(null);
     }
-    return () => confirmed && clearConfirm(false);
   }, [confirmed]);
 
   useEffect(() => {

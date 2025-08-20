@@ -223,7 +223,6 @@ function BenefitPlanBeneficiariesSearcher({
       clearBeneficiaryExport();
     }
 
-    return setFailedExport(false);
   }, [beneficiaryExport]);
 
   const beneficiaryFilter = (props) => (

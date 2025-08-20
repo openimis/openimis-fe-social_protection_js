@@ -75,7 +75,6 @@ function BenefitPlanSearcher({
     if (benefitPlanToDelete && confirmed !== null) {
       setBenefitPlanToDelete(null);
     }
-    return () => confirmed && clearConfirm(false);
   }, [confirmed]);
 
   useEffect(() => {
