@@ -5,9 +5,13 @@ export const defaultPageStyles = (theme) => ({
 export const defaultFilterStyles = (theme) => ({
   form: {
     padding: 0,
+    marginLeft: 0,
+    paddingLeft: 0,
   },
   item: {
     padding: theme.spacing(1),
+    paddingLeft: 0,
+    marginLeft: 0,
   },
 });
 

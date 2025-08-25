@@ -11,10 +11,33 @@ import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   ...defaultFilterStyles(theme).form,
+  width: '100%',
+  maxWidth: '100%',
+  overflow: 'hidden',
+  boxSizing: 'border-box',
 }));
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
   ...defaultFilterStyles(theme).item,
+  minWidth: 0,
+  boxSizing: 'border-box',
+  '& > *': {
+    width: '100%',
+  },
+}));
+
+const StyledCheckboxGridItem = styled(Grid)(({ theme }) => ({
+  ...defaultFilterStyles(theme).item,
+  minWidth: 0,
+  boxSizing: 'border-box',
+  display: 'flex',
+  alignItems: 'flex-end',
+  paddingBottom: theme.spacing(1),
+  '& .MuiFormControlLabel-root': {
+    marginLeft: 0,
+    marginRight: 0,
+    alignSelf: 'flex-start',
+  },
 }));
 
 function BenefitPlanFilter({
@@ -58,101 +81,103 @@ function BenefitPlanFilter({
   };
 
   return (
-    <StyledGrid container>
-      <StyledGridItem item xs={2}>
-        <TextInput
-          module="socialProtection"
-          label="benefitPlan.code"
-          value={filterTextFieldValue('code')}
-          onChange={onChangeStringFilter('code', CONTAINS_LOOKUP)}
-        />
-      </StyledGridItem>
-      <StyledGridItem item xs={2}>
-        <TextInput
-          module="socialProtection"
-          label="benefitPlan.name"
-          value={filterTextFieldValue('name')}
-          onChange={onChangeStringFilter('name', CONTAINS_LOOKUP)}
-        />
-      </StyledGridItem>
-      <StyledGridItem item xs={3}>
-        <BenefitPlanTypePicker
-          module="socialProtection"
-          label="beneficiary.benefitPlanTypePicker"
-          value={filterValue('type')}
-          onChange={(v) => onChangeFilters([
-            {
-              id: 'type',
-              value: v,
-              filter: `type: ${v}`,
-            },
-          ])}
-          withNull={false}
-        />
-      </StyledGridItem>
-      <StyledGridItem item xs={2}>
-        <PublishedComponent
-          pubRef="core.DatePicker"
-          module="socialProtection"
-          label="benefitPlan.dateValidFrom"
-          value={filterValue('dateValidFrom')}
-          onChange={(v) => onChangeFilters([
-            {
-              id: 'dateValidFrom',
-              value: v,
-              filter: `dateValidFrom: "${v}T00:00:00.000Z"`,
-            },
-          ])}
-        />
-      </StyledGridItem>
-      <StyledGridItem item xs={2}>
-        <PublishedComponent
-          pubRef="core.DatePicker"
-          module="socialProtection"
-          label="benefitPlan.dateValidTo"
-          value={filterValue('dateValidTo')}
-          onChange={(v) => onChangeFilters([
-            {
-              id: 'dateValidTo',
-              value: v,
-              filter: `dateValidTo: "${v}T00:00:00.000Z"`,
-            },
-          ])}
-        />
-      </StyledGridItem>
-      <StyledGridItem item xs={2}>
-        <FormControlLabel
-          control={(
-            <Checkbox
-              color="primary"
-              checked={filterValue('isDeleted')}
-              onChange={(event) => onChangeCheckbox(
-                'isDeleted',
-                event.target.checked,
-              )}
-            />
-          )}
-          label={formatMessage(intl, 'socialProtection', 'benefitPlan.isDeleted')}
-        />
-      </StyledGridItem>
-      {showStatuses && (
-        <StyledGridItem item xs={2}>
-          <BeneficiaryStatusPicker
-            label="beneficiary.beneficiaryStatusPicker"
-            withNull
-            nullLabel={formatMessage(intl, 'socialProtection', 'any')}
-            value={filterValue('beneficiaryStatus')}
-            onChange={(value) => onChangeFilters([
+    <Grid item xs={12}>
+      <StyledGrid container spacing={2}>
+        <StyledGridItem item xs={12} sm={6} md={2}>
+          <TextInput
+            module="socialProtection"
+            label="benefitPlan.code"
+            value={filterTextFieldValue('code')}
+            onChange={onChangeStringFilter('code', CONTAINS_LOOKUP)}
+          />
+        </StyledGridItem>
+        <StyledGridItem item xs={12} sm={6} md={2}>
+          <TextInput
+            module="socialProtection"
+            label="benefitPlan.name"
+            value={filterTextFieldValue('name')}
+            onChange={onChangeStringFilter('name', CONTAINS_LOOKUP)}
+          />
+        </StyledGridItem>
+        <StyledGridItem item xs={12} sm={6} md={2}>
+          <BenefitPlanTypePicker
+            module="socialProtection"
+            label="beneficiary.benefitPlanTypePicker"
+            value={filterValue('type')}
+            onChange={(v) => onChangeFilters([
               {
-                id: 'beneficiaryStatus',
-                value,
-                filter: `beneficiaryStatus: "${value}"`,
+                id: 'type',
+                value: v,
+                filter: `type: ${v}`,
+              },
+            ])}
+            withNull={false}
+          />
+        </StyledGridItem>
+        <StyledGridItem item xs={12} sm={6} md={2}>
+          <PublishedComponent
+            pubRef="core.DatePicker"
+            module="socialProtection"
+            label="benefitPlan.dateValidFrom"
+            value={filterValue('dateValidFrom')}
+            onChange={(v) => onChangeFilters([
+              {
+                id: 'dateValidFrom',
+                value: v,
+                filter: `dateValidFrom: "${v}T00:00:00.000Z"`,
               },
             ])}
           />
         </StyledGridItem>
-      )}
-    </StyledGrid>
+        <StyledGridItem item xs={12} sm={6} md={2}>
+          <PublishedComponent
+            pubRef="core.DatePicker"
+            module="socialProtection"
+            label="benefitPlan.dateValidTo"
+            value={filterValue('dateValidTo')}
+            onChange={(v) => onChangeFilters([
+              {
+                id: 'dateValidTo',
+                value: v,
+                filter: `dateValidTo: "${v}T00:00:00.000Z"`,
+              },
+            ])}
+          />
+        </StyledGridItem>
+        <StyledCheckboxGridItem item xs={12} sm={6} md={2}>
+          <FormControlLabel
+            control={(
+              <Checkbox
+                color="primary"
+                checked={filterValue('isDeleted')}
+                onChange={(event) => onChangeCheckbox(
+                  'isDeleted',
+                  event.target.checked,
+                )}
+              />
+            )}
+            label={formatMessage(intl, 'socialProtection', 'benefitPlan.isDeleted')}
+          />
+        </StyledCheckboxGridItem>
+        {showStatuses && (
+          <StyledGridItem item xs={12} sm={6} md={2}>
+            <BeneficiaryStatusPicker
+              label="beneficiary.beneficiaryStatusPicker"
+              withNull
+              nullLabel={formatMessage(intl, 'socialProtection', 'any')}
+              value={filterValue('beneficiaryStatus')}
+              onChange={(value) => onChangeFilters([
+                {
+                  id: 'beneficiaryStatus',
+                  value,
+                  filter: `beneficiaryStatus: "${value}"`,
+                },
+              ])}
+            />
+          </StyledGridItem>
+        )}
+      </StyledGrid>
+    </Grid>
   );
 }
 

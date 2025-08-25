@@ -15,6 +15,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { IconButton, Tooltip } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PreviewIcon from '@mui/icons-material/ListAlt';
@@ -31,6 +32,37 @@ import {
   fetchBenefitPlans,
 } from '../actions';
 import BenefitPlanFilter from './BenefitPlanFilter';
+
+const StyledBenefitPlanSearcher = styled('div')(({ theme }) => ({
+  // '& .MuiTable-root': {
+  //   '& .MuiTableHead-root': {
+  //     '& .MuiTableRow-root': {
+  //       '& .MuiTableCell-root': {
+  //         '&:nth-of-type(1)': { width: '15%', minWidth: '120px' }, 
+  //         '&:nth-of-type(2)': { width: '25%', minWidth: '200px' }, 
+  //         '&:nth-of-type(3)': { width: '15%', minWidth: '120px' }, 
+  //         '&:nth-of-type(4)': { width: '15%', minWidth: '120px' }, 
+  //         '&:nth-of-type(5)': { width: '15%', minWidth: '120px' }, 
+  //         '&:nth-of-type(6)': { width: '10%', minWidth: '100px' },
+  //         '&:nth-of-type(7)': { width: '5%', minWidth: '60px' },  
+  //       },
+  //     },
+  //   },
+  //   '& .MuiTableBody-root': {
+  //     '& .MuiTableRow-root': {
+  //       '& .MuiTableCell-root': {
+  //         '&:nth-of-type(1)': { width: '15%', minWidth: '120px' },
+  //         '&:nth-of-type(2)': { width: '25%', minWidth: '200px' },
+  //         '&:nth-of-type(3)': { width: '15%', minWidth: '120px' },
+  //         '&:nth-of-type(4)': { width: '15%', minWidth: '120px' },
+  //         '&:nth-of-type(5)': { width: '15%', minWidth: '120px' },
+  //         '&:nth-of-type(6)': { width: '10%', minWidth: '100px' },
+  //         '&:nth-of-type(7)': { width: '5%', minWidth: '60px' },
+  //       },
+  //     },
+  //   },
+  // },
+}));
 
 function BenefitPlanSearcherForEntities({
   intl,
@@ -234,6 +266,24 @@ function BenefitPlanSearcherForEntities({
     ['maxBeneficiaries', true],
   ];
 
+  const aligns = () => {
+    const alignments = [
+      'left',   // Code
+      'left',   // Name
+      'left',   // Type
+      'center', // Date Valid From
+      'center', // Date Valid To
+      'center', // Max Beneficiaries
+    ];
+    if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE)) {
+      alignments.push('center'); // Edit/Preview action
+    }
+    if (rights.includes(RIGHT_BENEFIT_PLAN_DELETE)) {
+      alignments.push('center'); // Delete action
+    }
+    return alignments;
+  };
+
   const isRowDisabled = (_, benefitPlan) => deletedBenefitPlanUuids.includes(benefitPlan?.id);
 
   const defaultFilters = () => ({
@@ -276,29 +326,32 @@ function BenefitPlanSearcherForEntities({
   }
 
   return (
-    <Searcher
-      module="socialProtection"
-      FilterPane={benefitPlanFilter}
-      fetch={fetch}
-      items={benefitPlans}
-      itemsPageInfo={benefitPlansPageInfo}
-      fetchedItems={fetchingState}
-      errorItems={errorState}
-      tableTitle={formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.searcherResultsTitle', {
-        benefitPlansTotalCount,
-      })}
-      headers={headers}
-      itemFormatters={itemFormatters}
-      sorts={sorts}
-      rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
-      defaultPageSize={DEFAULT_PAGE_SIZE}
-      defaultOrderBy="code"
-      rowIdentifier={rowIdentifier}
-      onDoubleClick={onDoubleClick}
-      defaultFilters={defaultFilters()}
-      rowDisabled={isRowDisabled}
-      rowLocked={isRowDisabled}
-    />
+    <StyledBenefitPlanSearcher>
+      <Searcher
+        module="socialProtection"
+        FilterPane={benefitPlanFilter}
+        fetch={fetch}
+        items={benefitPlans}
+        itemsPageInfo={benefitPlansPageInfo}
+        fetchedItems={fetchingState}
+        errorItems={errorState}
+        tableTitle={formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.searcherResultsTitle', {
+          benefitPlansTotalCount,
+        })}
+        headers={headers}
+        aligns={aligns}
+        itemFormatters={itemFormatters}
+        sorts={sorts}
+        rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+        defaultPageSize={DEFAULT_PAGE_SIZE}
+        defaultOrderBy="code"
+        rowIdentifier={rowIdentifier}
+        onDoubleClick={onDoubleClick}
+        defaultFilters={defaultFilters()}
+        rowDisabled={isRowDisabled}
+        rowLocked={isRowDisabled}
+      />
+    </StyledBenefitPlanSearcher>
   );
 }
 
