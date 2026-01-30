@@ -333,4 +333,5 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchBeneficiaries, downloadBeneficiaries, updateBeneficiary, clearBeneficiaryExport,
 }, dispatch);
 
+export { BenefitPlanBeneficiariesSearcher };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesSearcher));

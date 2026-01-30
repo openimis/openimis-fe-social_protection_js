@@ -61,4 +61,5 @@ function BenefitPackageTabPanel({
   );
 }
 
+export { StyledPaper };
 export default injectIntl(BenefitPackageTabPanel);

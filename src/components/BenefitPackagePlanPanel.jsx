@@ -40,10 +40,10 @@ const StyledFullHeight = styled(Grid)({
 function renderHeadPanelTitle(benefitPlanTitle) {
   return (
     <StyledPaperHeader container alignItems="center" direction="row">
-      <Grid item xs={8}>
+      <Grid size={8}>
         <StyledGrid container alignItems="center">
           {!!benefitPlanTitle && (
-          <Grid item>
+          <Grid>
             <Typography variant="h6">
               <FormattedMessage module="socialProtection" id={benefitPlanTitle} />
             </Typography>
@@ -60,10 +60,10 @@ function renderHeadPanelSubtitle(rights, intl, history, modulesManager, benefitP
   + `/${benefitPlan?.id}`);
 
   return (
-    <Grid item>
+    <Grid>
       <StyledFullHeight container align="center" justify="center" direction="column">
         <Typography>
-          <Grid item>
+          <Grid>
             <FormattedMessage
               module="socialProtection"
               id="socialProtection.benefitPackage.BenefitPlanDetailPanel.title"
@@ -87,17 +87,17 @@ function BenefitPackagePlanPanel({
 }) {
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <StyledPaper>
           {renderHeadPanelTitle(benefitPlanTitle)}
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Divider />
           </Grid>
           <StyledGrid container>
             {renderHeadPanelSubtitle(rights, intl, history, modulesManager, benefitPlan)}
           </StyledGrid>
           <Grid container>
-            <StyledGridItem item xs={3}>
+            <StyledGridItem size={3}>
               <TextInput
                 module="socialProtection"
                 label="benefitPlan.code"
@@ -105,7 +105,7 @@ function BenefitPackagePlanPanel({
                 readOnly={readOnly}
               />
             </StyledGridItem>
-            <StyledGridItem item xs={3}>
+            <StyledGridItem size={3}>
               <TextInput
                 module="socialProtection"
                 label="benefitPlan.name"
@@ -113,7 +113,7 @@ function BenefitPackagePlanPanel({
                 readOnly={readOnly}
               />
             </StyledGridItem>
-            <StyledGridItem item xs={3}>
+            <StyledGridItem size={3}>
               <PublishedComponent
                 pubRef="core.DatePicker"
                 module="socialProtection"
@@ -122,7 +122,7 @@ function BenefitPackagePlanPanel({
                 readOnly={readOnly}
               />
             </StyledGridItem>
-            <StyledGridItem item xs={3}>
+            <StyledGridItem size={3}>
               <PublishedComponent
                 pubRef="core.DatePicker"
                 module="socialProtection"
@@ -131,7 +131,7 @@ function BenefitPackagePlanPanel({
                 readOnly={readOnly}
               />
             </StyledGridItem>
-            <StyledGridItem item xs={3}>
+            <StyledGridItem size={3}>
               <NumberInput
                 min={0}
                 displayZero
@@ -141,7 +141,7 @@ function BenefitPackagePlanPanel({
                 readOnly={readOnly}
               />
             </StyledGridItem>
-            <StyledGridItem item xs={3}>
+            <StyledGridItem size={3}>
               <TextInput
                 module="socialProtection"
                 label="benefitPlan.institution"
@@ -149,7 +149,7 @@ function BenefitPackagePlanPanel({
                 readOnly={readOnly}
               />
             </StyledGridItem>
-            <StyledGridItem item xs={3}>
+            <StyledGridItem size={3}>
               <BenefitPlanTypePicker
                 module="socialProtection"
                 label="beneficiary.benefitPlanTypePicker"
@@ -158,7 +158,7 @@ function BenefitPackagePlanPanel({
               />
             </StyledGridItem>
             {rights.includes(RIGHT_SCHEMA_UPDATE) && (
-              <StyledGridItem item xs={3}>
+              <StyledGridItem size={3}>
                 <BenefitPlanSchemaModal
                   benefitPlan={benefitPlan}
                 />
@@ -171,4 +171,5 @@ function BenefitPackagePlanPanel({
   );
 }
 
+export { StyledGrid };
 export default injectIntl(BenefitPackagePlanPanel);

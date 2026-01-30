@@ -93,8 +93,16 @@ function BenefitPlanProjectsSearcher({
   const onDelete = (project) => setProjectToDelete(project);
   const onUndo = (project) => setProjectToUndo(project);
 
-  useEffect(() => projectToDelete && openDeleteProjectConfirmDialog(), [projectToDelete]);
-  useEffect(() => projectToUndo && openUndoProjectConfirmDialog(), [projectToUndo]);
+  useEffect(() => {
+    if (projectToDelete) {
+      openDeleteProjectConfirmDialog();
+    }
+  }, [projectToDelete]);
+  useEffect(() => {
+    if (projectToUndo) {
+      openUndoProjectConfirmDialog();
+    }
+  }, [projectToUndo]);
 
   useEffect(() => {
     if (projectToDelete && confirmed) {
@@ -325,4 +333,5 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 const ConnectedBenefitPlanProjectsSearcher = withModulesManager(
   injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanProjectsSearcher)),
 );
+export { BenefitPlanProjectsSearcher };
 export default ConnectedBenefitPlanProjectsSearcher;

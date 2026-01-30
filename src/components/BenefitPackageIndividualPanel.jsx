@@ -33,9 +33,9 @@ function renderHeadPanelSubtitle(rights, intl, history, modulesManager, individu
     + `/${individualUuid}`);
 
   return (
-    <Grid item>
+    <Grid>
       <StyledFullHeight container align="center" justify="center" direction="column">
-        <Grid item>
+        <Grid>
           <Typography>
             <FormattedMessage
               module={SOCIAL_PROTECTION_MODULE}
@@ -77,7 +77,7 @@ function BenefitPackageIndividualPanel({
         {renderHeadPanelSubtitle(rights, intl, history, modulesManager, individual?.uuid)}
       </StyledGrid>
       <Grid container>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <TextInput
             module={SOCIAL_PROTECTION_MODULE}
             label="beneficiary.firstName"
@@ -85,7 +85,7 @@ function BenefitPackageIndividualPanel({
             readOnly={readOnly}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <TextInput
             module={SOCIAL_PROTECTION_MODULE}
             label="beneficiary.lastName"
@@ -93,7 +93,7 @@ function BenefitPackageIndividualPanel({
             readOnly={readOnly}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <PublishedComponent
             pubRef="core.DatePicker"
             module={SOCIAL_PROTECTION_MODULE}
@@ -102,7 +102,7 @@ function BenefitPackageIndividualPanel({
             readOnly={readOnly}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <TextInput
             module={SOCIAL_PROTECTION_MODULE}
             label="beneficiary.status"
@@ -110,7 +110,7 @@ function BenefitPackageIndividualPanel({
             readOnly={readOnly}
           />
         </StyledGridItem>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <PublishedComponent
             pubRef="location.DetailedLocation"
             withNull
@@ -120,7 +120,7 @@ function BenefitPackageIndividualPanel({
           />
         </Grid>
         {jsonExtFields?.map((jsonExtField) => (
-          <StyledGridItem item xs={3}>
+          <StyledGridItem size={3}>
             {renderInputComponent(SOCIAL_PROTECTION_MODULE, jsonExtField)}
           </StyledGridItem>
         ))}
@@ -129,4 +129,5 @@ function BenefitPackageIndividualPanel({
   );
 }
 
+export { StyledGrid };
 export default injectIntl(BenefitPackageIndividualPanel);

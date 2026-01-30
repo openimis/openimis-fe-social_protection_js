@@ -138,14 +138,14 @@ function BenefitPlanEligibilityCriteriaPanel({
     show && (
     <StyledPaper>
       <StyledGrid container alignItems="center" direction="row">
-        <Grid item xs={12}>
+        <Grid size={12}>
           <StyledTypography variant="h6">
             {formatMessageWithValues('benefitPlan.BenefitPlanEligibilityCriteriaPanel.title', {
               beneficiaryStatus,
             })}
           </StyledTypography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Divider />
         </Grid>
         <StyledFiltersGrid container>

@@ -82,7 +82,7 @@ function BenefitPlanBeneficiariesTabPanel({
 
   return (
     <Grid container>
-      <Grid item xs={12} style={{ paddingLeft: "10px" }}>
+      <Grid size={12} style={{ paddingLeft: "10px" }}>
         <div style={{ width: "100%" }}>
           <div style={{ float: "left" }}>
             <Contributions
@@ -135,7 +135,7 @@ function BenefitPlanBeneficiariesTabPanel({
           </div>
         </div>
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Contributions
           contributionKey={BENEFIT_PLAN_BENEFICIARY_TABS_PANEL_CONTRIBUTION_KEY}
           rights={rights}

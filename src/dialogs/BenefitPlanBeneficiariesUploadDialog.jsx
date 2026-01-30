@@ -202,9 +202,9 @@ function BenefitPlanBeneficiariesUploadDialog({
             <div
               style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}
             >
-              <Grid item>
+              <Grid>
                 <Grid container spacing={4} direction="column">
-                  <Grid item>
+                  <Grid>
                     <Input
                       onChange={(event) => handleFieldChange('workflows', 'file', event.target.files[0])}
                       required
@@ -218,7 +218,7 @@ function BenefitPlanBeneficiariesUploadDialog({
                       type="file"
                     />
                   </Grid>
-                  <Grid item>
+                  <Grid>
                     <WorkflowsPicker
                       module="socialProtection"
                       label="workflowPicker"
@@ -232,12 +232,12 @@ function BenefitPlanBeneficiariesUploadDialog({
                 {getFieldValue() === PYTHON_DEFAULT_IMPORT_WORKFLOW && isBenefitPlanGroupType() ? (
                   <Grid container direction="row" alignItems="center">
                     <Grid container spacing={4} direction="row" alignItems="center">
-                      <Grid item>
+                      <Grid>
                         <Typography>
                           <FormattedMessage module={MODULE_NAME} id="createGroupFromColumns" />
                         </Typography>
                       </Grid>
-                      <Grid item md={5}>
+                      <Grid md={5}>
                         <Select
                           id="select"
                           value={groupAggregationHeader}
@@ -253,7 +253,7 @@ function BenefitPlanBeneficiariesUploadDialog({
                         </Select>
                       </Grid>
                     </Grid>
-                    <Grid spacing={4} item>
+                    <Grid spacing={4}>
                       <Typography style={{ fontSize: '12px' }}>
                         *
                         {' '}
@@ -330,6 +330,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   coreAlert,
 }, dispatch);
 
+export { StyledButton };
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadDialog),
 );

@@ -143,6 +143,7 @@ const mapStateToProps = (state, props) => ({
   fetchedGroupBeneficiaries: state.socialProtection.fetchedGroup,
 });
 
+export { StyledPage };
 export default injectIntl(connect(mapStateToProps, null)(
   BenefitPackagePage,
 ));

@@ -239,6 +239,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   journalize,
 }, dispatch);
 
+export { StyledPage };
 export default withModulesManager(injectIntl(withHistory(connect(mapStateToProps, mapDispatchToProps)(
   BenefitPlanPage,
 ))));

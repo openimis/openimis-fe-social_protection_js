@@ -68,4 +68,5 @@ function BenefitPlanTabPanel({
   );
 }
 
+export { StyledPaper };
 export default injectIntl(BenefitPlanTabPanel);

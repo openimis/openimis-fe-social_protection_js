@@ -278,6 +278,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
   dispatch,
 );
 
+export { StyledPage };
 export default withModulesManager(
   injectIntl(
     connect(mapStateToProps, mapDispatchToProps)(ProjectPage),

@@ -46,7 +46,7 @@ function ProjectHeadPanel({
 
   return (
     <StyledGrid container>
-      <StyledGridItem item xs={4}>
+      <StyledGridItem size={4}>
         <ValidatedTextInput
           module="socialProtection"
           label="project.name"
@@ -69,7 +69,7 @@ function ProjectHeadPanel({
         />
       </StyledGridItem>
 
-      <StyledGridItem item xs={4}>
+      <StyledGridItem size={4}>
         <ActivityPicker
           label="project.activity"
           required
@@ -80,7 +80,7 @@ function ProjectHeadPanel({
         />
       </StyledGridItem>
 
-      <StyledGridItem item xs={4}>
+      <StyledGridItem size={4}>
         <PublishedComponent
           pubRef="location.LocationCascader"
           module="socialProtection"
@@ -93,7 +93,7 @@ function ProjectHeadPanel({
         />
       </StyledGridItem>
 
-      <StyledGridItem item xs={4}>
+      <StyledGridItem size={4}>
         <NumberInput
           module="socialProtection"
           label="project.targetBeneficiaries"
@@ -105,7 +105,7 @@ function ProjectHeadPanel({
         />
       </StyledGridItem>
 
-      <StyledGridItem item xs={4}>
+      <StyledGridItem size={4}>
         <NumberInput
           module="socialProtection"
           label="project.workingDays"
@@ -117,7 +117,7 @@ function ProjectHeadPanel({
         />
       </StyledGridItem>
 
-      <StyledGridItem item xs={4}>
+      <StyledGridItem size={4}>
         <ProjectStatusPicker
           required
           readOnly={readOnly || isNewProject}
@@ -127,7 +127,7 @@ function ProjectHeadPanel({
         />
       </StyledGridItem>
 
-      <StyledGridItem item xs={4}>
+      <StyledGridItem size={4}>
         <TextInput
           module="socialProtection"
           label="project.benefitPlan"
@@ -146,6 +146,7 @@ const mapStateToProps = (state) => ({
   savedProjectName: state.socialProtection?.project?.name,
 });
 
+export { StyledGrid };
 export default withModulesManager(injectIntl(
   connect(mapStateToProps)(ProjectHeadPanel),
 ));

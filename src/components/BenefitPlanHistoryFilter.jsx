@@ -1,6 +1,6 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import { TextInput, PublishedComponent, formatMessage } from '@openimis/fe-core';
+import { TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_SMALL } from '@openimis/fe-core';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import _debounce from 'lodash/debounce';
@@ -47,7 +47,7 @@ function BenefitPlanHistoryFilter({
 
   return (
     <StyledGrid container>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
         <TextInput
           module="socialProtection"
           label="benefitPlan.code"
@@ -55,7 +55,7 @@ function BenefitPlanHistoryFilter({
           onChange={onChangeStringFilter('code', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
         <TextInput
           module="socialProtection"
           label="benefitPlan.name"
@@ -63,7 +63,7 @@ function BenefitPlanHistoryFilter({
           onChange={onChangeStringFilter('name', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -78,7 +78,7 @@ function BenefitPlanHistoryFilter({
           ])}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -94,7 +94,7 @@ function BenefitPlanHistoryFilter({
         />
       </StyledGridItem>
       {showStatuses && (
-        <StyledGridItem item xs={2}>
+        <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
           <BeneficiaryStatusPicker
             label="beneficiary.beneficiaryStatusPicker"
             withNull
@@ -114,4 +114,5 @@ function BenefitPlanHistoryFilter({
   );
 }
 
+export { StyledGrid };
 export default injectIntl(BenefitPlanHistoryFilter);

@@ -64,7 +64,7 @@ class BenefitPlanHeadPanel extends FormPanel {
 
     return (
       <StyledGrid container>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <ValidatedTextInput
             module="socialProtection"
             label="benefitPlan.code"
@@ -85,7 +85,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             }}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <ValidatedTextInput
             module="socialProtection"
             label="benefitPlan.name"
@@ -103,7 +103,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             validationError={benefitPlanNameValidationError}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <PublishedComponent
             pubRef="core.DatePicker"
             module="socialProtection"
@@ -117,7 +117,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             {...(benefitPlan.dateValidTo ? { maxDate: benefitPlan.dateValidTo } : null)}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <PublishedComponent
             pubRef="core.DatePicker"
             module="socialProtection"
@@ -128,7 +128,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             minDate={benefitPlan?.dateValidFrom ?? new Date()}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <NumberInput
             min={0}
             displayZero
@@ -140,7 +140,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             value={benefitPlan?.maxBeneficiaries ?? ''}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <TextInput
             module="socialProtection"
             label="benefitPlan.institution"
@@ -148,7 +148,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             value={benefitPlan?.institution ?? ''}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <BenefitPlanTypePicker
             label="beneficiary.benefitPlanTypePicker"
             required
@@ -158,7 +158,7 @@ class BenefitPlanHeadPanel extends FormPanel {
             value={!!benefitPlan?.type && benefitPlan.type}
           />
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <TextAreaInput
             module="socialProtection"
             label="benefitPlan.description"
@@ -168,7 +168,7 @@ class BenefitPlanHeadPanel extends FormPanel {
           />
         </StyledGridItem>
         {rights.includes(RIGHT_SCHEMA_UPDATE) && (
-          <StyledGridItem item xs={3}>
+          <StyledGridItem size={3}>
             <ValidatedTextAreaInput
               module="socialProtection"
               label="benefitPlan.schema"
@@ -207,6 +207,8 @@ const mapStateToProps = (store) => ({
     store.socialProtection.validationFields?.benefitPlanSchema?.validationErrorMessage,
 });
 
+export { StyledGrid };
+export { BenefitPlanHeadPanel };
 export default withModulesManager(injectIntl(
   connect(mapStateToProps)(BenefitPlanHeadPanel),
 ));

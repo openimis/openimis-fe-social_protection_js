@@ -92,4 +92,5 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
 
+export { BenefitPackageGrievancesSearcher };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPackageGrievancesSearcher));

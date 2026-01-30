@@ -51,7 +51,7 @@ function BenefitPlanBeneficiariesFilter({
 
   return (
     <StyledGrid container>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <TextInput
           module="socialProtection"
           label="beneficiary.firstName"
@@ -59,7 +59,7 @@ function BenefitPlanBeneficiariesFilter({
           onChange={onChangeStringFilter('individual_FirstName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <TextInput
           module="socialProtection"
           label="beneficiary.lastName"
@@ -67,7 +67,7 @@ function BenefitPlanBeneficiariesFilter({
           onChange={onChangeStringFilter('individual_LastName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -82,7 +82,7 @@ function BenefitPlanBeneficiariesFilter({
           ])}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryStatusPicker"
           withNull
@@ -99,7 +99,7 @@ function BenefitPlanBeneficiariesFilter({
         />
       </StyledGridItem>
       {status && (
-        <StyledGridItem item xs={2}>
+        <StyledGridItem size={2}>
           <ConstantBasedPicker
             module="socialProtection"
             label="beneficiary.isEligible"
@@ -117,7 +117,7 @@ function BenefitPlanBeneficiariesFilter({
           />
         </StyledGridItem>
       )}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <PublishedComponent
           pubRef="location.DetailedLocationFilter"
           withNull
@@ -130,4 +130,5 @@ function BenefitPlanBeneficiariesFilter({
   );
 }
 
+export { StyledGrid };
 export default injectIntl(BenefitPlanBeneficiariesFilter);

@@ -57,6 +57,7 @@ const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
 });
 
+export { StyledPage };
 export default withModulesManager(injectIntl(
   connect(mapStateToProps)(BenefitPlansPage),
 ));

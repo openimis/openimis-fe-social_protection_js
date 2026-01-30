@@ -32,9 +32,9 @@ function renderHeadPanelSubtitle(rights, intl, history, modulesManager, groupUui
   + `/${groupUuid}`);
 
   return (
-    <Grid item>
+    <Grid>
       <StyledFullHeight container align="center" justify="center" direction="column">
-        <Grid item>
+        <Grid>
           <Typography>
             <FormattedMessage
               module={SOCIAL_PROTECTION_MODULE}
@@ -69,7 +69,7 @@ function BenefitPackageGroupPanel({
         {renderHeadPanelSubtitle(rights, intl, history, modulesManager, uuid)}
       </StyledGrid>
       <Grid container>
-        <StyledGridItem item xs={3}>
+        <StyledGridItem size={3}>
           <TextInput
             module={SOCIAL_PROTECTION_MODULE}
             label="beneficiary.status"
@@ -78,7 +78,7 @@ function BenefitPackageGroupPanel({
           />
         </StyledGridItem>
         {jsonExtFields?.map((jsonExtField) => (
-          <StyledGridItem item xs={3}>
+          <StyledGridItem size={3}>
             {renderInputComponent(SOCIAL_PROTECTION_MODULE, jsonExtField)}
           </StyledGridItem>
         ))}
@@ -87,4 +87,5 @@ function BenefitPackageGroupPanel({
   );
 }
 
+export { StyledGrid };
 export default injectIntl(BenefitPackageGroupPanel);

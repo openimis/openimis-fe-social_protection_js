@@ -37,7 +37,7 @@ function BenefitPlanGroupBeneficiariesFilter({
 
   return (
     <StyledGrid container>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <TextInput
           module="socialProtection"
           label="group.code"
@@ -45,7 +45,7 @@ function BenefitPlanGroupBeneficiariesFilter({
           onChange={onChangeStringFilter('group_Code_Icontains')}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryStatusPicker"
           withNull
@@ -62,7 +62,7 @@ function BenefitPlanGroupBeneficiariesFilter({
         />
       </StyledGridItem>
       {status && (
-        <StyledGridItem item xs={2}>
+        <StyledGridItem size={2}>
           <ConstantBasedPicker
             module="socialProtection"
             label="beneficiary.isEligible"
@@ -80,7 +80,7 @@ function BenefitPlanGroupBeneficiariesFilter({
           />
         </StyledGridItem>
       )}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <PublishedComponent
           pubRef="location.DetailedLocationFilter"
           withNull
@@ -93,4 +93,5 @@ function BenefitPlanGroupBeneficiariesFilter({
   );
 }
 
+export { StyledGrid };
 export default injectIntl(BenefitPlanGroupBeneficiariesFilter);

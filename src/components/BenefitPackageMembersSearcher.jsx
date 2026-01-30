@@ -229,4 +229,5 @@ const mapStateToProps = (state) => ({
   errorMembersGroup: state.individual.errorIndividualExport,
 });
 
+export { BenefitPackageMembersSearcher };
 export default injectIntl(connect(mapStateToProps, null)(BenefitPackageMembersSearcher));

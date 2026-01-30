@@ -109,7 +109,11 @@ function BenefitPlanSearcherForEntities({
     formatMessage(intl, 'socialProtection', 'benefitPlan.delete.confirm.message'),
   );
 
-  useEffect(() => benefitPlanToDelete && openDeleteBenefitPlanConfirmDialog(), [benefitPlanToDelete]);
+  useEffect(() => {
+    if (benefitPlanToDelete) {
+      openDeleteBenefitPlanConfirmDialog();
+    }
+  }, [benefitPlanToDelete]);
 
   useEffect(() => {
     if (benefitPlanToDelete && confirmed) {
@@ -387,6 +391,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
   dispatch,
 );
 
+export { StyledBenefitPlanSearcher };
 export default withHistory(
   withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanSearcherForEntities))),
 );

@@ -47,7 +47,7 @@ function BenefitPackageTabFilters({
 
   return (
     <StyledGrid container>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <TextInput
           module="socialProtection"
           label="beneficiary.firstName"
@@ -55,7 +55,7 @@ function BenefitPackageTabFilters({
           onChange={onChangeStringFilter('individual_FirstName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <TextInput
           module="socialProtection"
           label="beneficiary.lastName"
@@ -63,7 +63,7 @@ function BenefitPackageTabFilters({
           onChange={onChangeStringFilter('individual_LastName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -78,7 +78,7 @@ function BenefitPackageTabFilters({
           ])}
         />
       </StyledGridItem>
-      <StyledGridItem item xs={2}>
+      <StyledGridItem size={2}>
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryPicker.label"
           withNull
@@ -97,4 +97,5 @@ function BenefitPackageTabFilters({
   );
 }
 
+export { StyledGrid };
 export default injectIntl(BenefitPackageTabFilters);

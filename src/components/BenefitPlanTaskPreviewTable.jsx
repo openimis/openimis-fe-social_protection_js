@@ -81,4 +81,5 @@ function BenefitPlanTaskPreviewTable({ intl, previewItem }) {
   );
 }
 
+export { StyledTable };
 export default injectIntl(BenefitPlanTaskPreviewTable);

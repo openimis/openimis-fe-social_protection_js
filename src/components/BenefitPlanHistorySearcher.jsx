@@ -183,6 +183,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
   dispatch,
 );
 
+export { BenefitPlanHistorySearcher };
 export default withHistory(
   withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanHistorySearcher))),
 );

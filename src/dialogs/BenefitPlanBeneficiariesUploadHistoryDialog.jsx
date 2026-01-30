@@ -293,6 +293,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchUploadHistory,
 }, dispatch);
 
+export { StyledButton };
 export default injectIntl(
   withModulesManager(
     connect(mapStateToProps, mapDispatchToProps)(BenefitPlanBeneficiariesUploadHistoryDialog),

@@ -100,4 +100,5 @@ function CollapsableErrorList({
   );
 }
 
+export { CollapsableErrorList };
 export default injectIntl(CollapsableErrorList);

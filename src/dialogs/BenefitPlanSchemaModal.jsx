@@ -69,9 +69,9 @@ function BenefitPlanSchemaDialog({
             <div
               style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}
             >
-              <Grid item>
+              <Grid>
                 <Grid container spacing={4} direction="column">
-                  <Grid item>
+                  <Grid>
                     <TextInput
                       module="socialProtection"
                       label="benefitPlan.schema"
@@ -123,6 +123,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchWorkflows,
 }, dispatch);
 
+export { StyledButton };
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(BenefitPlanSchemaDialog),
 );
