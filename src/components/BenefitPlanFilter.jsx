@@ -21,6 +21,7 @@ const StyledGridItem = styled(Grid)(({ theme }) => ({
   ...defaultFilterStyles(theme).item,
   minWidth: 0,
   boxSizing: 'border-box',
+  display: 'flex',
   '& > *': {
     width: '100%',
   },
@@ -31,12 +32,10 @@ const StyledCheckboxGridItem = styled(Grid)(({ theme }) => ({
   minWidth: 0,
   boxSizing: 'border-box',
   display: 'flex',
-  alignItems: 'flex-end',
-  paddingBottom: theme.spacing(1),
+  alignItems: 'center',
   '& .MuiFormControlLabel-root': {
     marginLeft: 0,
     marginRight: 0,
-    alignSelf: 'flex-start',
   },
 }));
 

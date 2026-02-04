@@ -102,7 +102,7 @@ function BenefitPlanSearcher({
       'benefitPlan.dateValidTo',
       'benefitPlan.maxBeneficiaries',
     ];
-    if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE)) {
+    if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) || rights.includes(RIGHT_BENEFIT_PLAN_DELETE)) {
       headers.push('emptyLabel');
     }
     return headers;
@@ -128,29 +128,34 @@ function BenefitPlanSearcher({
       (benefitPlan) => formatDateFromISO(modulesManager, intl, benefitPlan.dateValidTo),
       (benefitPlan) => benefitPlan.maxBeneficiaries,
     ];
-    if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE)) {
+    if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) || rights.includes(RIGHT_BENEFIT_PLAN_DELETE)) {
       formatters.push((benefitPlan) => (
-        <Tooltip title={formatMessage(intl, 'benefitPlan', 'editButtonTooltip')}>
-          <IconButton
-            href={benefitPlanUpdatePageUrl(benefitPlan)}
-            onClick={(e) => e.stopPropagation() && onDoubleClick(benefitPlan)}
-            disabled={deletedBenefitPlanUuids.includes(benefitPlan.id)}
-          >
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-      ));
-    }
-    if (rights.includes(RIGHT_BENEFIT_PLAN_DELETE)) {
-      formatters.push((benefitPlan) => (
-        <Tooltip title={formatMessage(intl, 'benefitPlan', 'deleteButtonTooltip')}>
-          <IconButton
-            onClick={() => onDelete(benefitPlan)}
-            disabled={deletedBenefitPlanUuids.includes(benefitPlan.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+          {rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) && (
+            <Tooltip title={formatMessage(intl, 'benefitPlan', 'editButtonTooltip')}>
+              <IconButton
+                href={benefitPlanUpdatePageUrl(benefitPlan)}
+                onClick={(e) => e.stopPropagation() && onDoubleClick(benefitPlan)}
+                disabled={deletedBenefitPlanUuids.includes(benefitPlan.id)}
+              >
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {rights.includes(RIGHT_BENEFIT_PLAN_DELETE) && (
+            <Tooltip title={formatMessage(intl, 'benefitPlan', 'deleteButtonTooltip')}>
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(benefitPlan);
+                }}
+                disabled={deletedBenefitPlanUuids.includes(benefitPlan.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
       ));
     }
     return formatters;
