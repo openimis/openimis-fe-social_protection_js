@@ -12,11 +12,11 @@ import {
 } from '../constants';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  ...theme.paper.paper,
+  ...theme.paper?.paper ?? {},
 }));
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
-  ...theme.table.title,
+  ...theme.table?.title ?? {},
   display: 'flex',
   alignItems: 'center',
 }));

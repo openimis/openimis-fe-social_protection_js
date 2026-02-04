@@ -29,11 +29,11 @@ import {
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
-  ...theme.paper.item,
+  ...theme.paper?.item ?? {},
 }));
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
-  ...theme.paper.item,
+  ...theme.paper?.item ?? {},
 }));
 
 class BenefitPlanHeadPanel extends FormPanel {

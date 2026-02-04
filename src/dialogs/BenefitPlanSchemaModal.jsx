@@ -16,7 +16,7 @@ import { bindActionCreators } from 'redux';
 import { fetchWorkflows } from '../actions';
 
 const StyledButton = styled(Button)(({ theme }) => ({
-  ...theme.paper.item,
+  ...theme.paper?.item ?? {},
 }));
 
 function BenefitPlanSchemaDialog({

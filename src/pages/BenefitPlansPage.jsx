@@ -14,11 +14,11 @@ import {
 import BenefitPlanSearcher from '../components/BenefitPlanSearcher';
 
 const StyledPage = styled('div')(({ theme }) => ({
-  ...theme.page,
+  ...theme.page ?? {},
 }));
 
 const StyledFab = styled('div')(({ theme }) => ({
-  ...theme.fab,
+  ...theme.fab ?? {},
 }));
 
 function BenefitPlansPage(props) {

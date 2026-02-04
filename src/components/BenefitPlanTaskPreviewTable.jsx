@@ -12,11 +12,11 @@ import {
 import { useSelector } from 'react-redux';
 
 const StyledTable = styled(Table)(({ theme }) => ({
-  ...theme.table,
+  ...theme.table ?? {},
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  ...theme.table.row,
+  ...theme.table?.row ?? {},
 }));
 
 const StyledTableCell = styled(TableCell)({

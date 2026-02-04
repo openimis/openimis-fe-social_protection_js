@@ -30,11 +30,11 @@ import { ACTION_TYPE } from '../reducer';
 import BenefitPlanEligibilityCriteriaPanel from '../components/BenefitPlanEligibilityCriteriaPanel';
 
 const StyledPage = styled('div')(({ theme }) => ({
-  ...theme.page,
+  ...theme.page ?? {},
 }));
 
 const StyledPaper = styled('div')(({ theme }) => ({
-  ...theme.paper.classes,
+  ...theme.paper?.classes ?? {},
 }));
 
 function BenefitPlanPage({

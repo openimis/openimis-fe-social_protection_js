@@ -24,7 +24,7 @@ import {
 import BenefitPackageGroupPanel from '../components/BenefitPackageGroupPanel';
 
 const StyledPage = styled('div')(({ theme }) => ({
-  ...theme.page,
+  ...theme.page ?? {},
 }));
 
 function BenefitPackagePage({

@@ -30,11 +30,11 @@ import ProjectHeadPanel from '../components/ProjectHeadPanel';
 import { RIGHT_BENEFIT_PLAN_UPDATE } from '../constants';
 
 const StyledPage = styled('div')(({ theme }) => ({
-  ...theme.page,
+  ...theme.page ?? {},
 }));
 
 const StyledForm = styled('div')(({ theme }) => ({
-  paper: theme.paper.classes,
+  paper: theme.paper?.classes ?? {},
 }));
 
 function ProjectPage({

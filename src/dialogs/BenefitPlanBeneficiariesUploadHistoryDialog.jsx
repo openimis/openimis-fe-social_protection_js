@@ -30,15 +30,15 @@ import { downloadBeneficiaryUploadFile, downloadInvalidItems } from '../util/exp
 import { UPLOAD_STATUS } from '../constants';
 
 const StyledButton = styled(Button)(({ theme }) => ({
-  ...theme.paper.item,
+  ...theme.paper?.item ?? {},
 }));
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
-  ...theme.paper.item,
+  ...theme.paper?.item ?? {},
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  ...theme.paper.item,
+  ...theme.paper?.item ?? {},
 }));
 
 function BenefitPlanBeneficiariesUploadHistoryDialog({
