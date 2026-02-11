@@ -1,6 +1,8 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import { TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_SMALL } from '@openimis/fe-core';
+import {
+  TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_STANDARD, GRID_RESPONSIVE_SMALL,
+} from '@openimis/fe-core';
 import { FormControlLabel, Grid, Checkbox } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import _debounce from 'lodash/debounce';
@@ -81,8 +83,8 @@ function BenefitPlanFilter({
 
   return (
     <Grid size={12}>
-      <StyledGrid container spacing={2}>
-        <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
+      <StyledGrid container>
+        <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
           <TextInput
             module="socialProtection"
             label="benefitPlan.code"
@@ -90,7 +92,7 @@ function BenefitPlanFilter({
             onChange={onChangeStringFilter('code', CONTAINS_LOOKUP)}
           />
         </StyledGridItem>
-        <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
+        <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
           <TextInput
             module="socialProtection"
             label="benefitPlan.name"
@@ -98,7 +100,7 @@ function BenefitPlanFilter({
             onChange={onChangeStringFilter('name', CONTAINS_LOOKUP)}
           />
         </StyledGridItem>
-        <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
+        <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
           <BenefitPlanTypePicker
             module="socialProtection"
             label="beneficiary.benefitPlanTypePicker"
@@ -113,7 +115,7 @@ function BenefitPlanFilter({
             withNull={false}
           />
         </StyledGridItem>
-        <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
+        <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
           <PublishedComponent
             pubRef="core.DatePicker"
             module="socialProtection"
@@ -128,7 +130,7 @@ function BenefitPlanFilter({
             ])}
           />
         </StyledGridItem>
-        <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
+        <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
           <PublishedComponent
             pubRef="core.DatePicker"
             module="socialProtection"
@@ -143,23 +145,8 @@ function BenefitPlanFilter({
             ])}
           />
         </StyledGridItem>
-        <StyledCheckboxGridItem size={GRID_RESPONSIVE_SMALL}>
-          <FormControlLabel
-            control={(
-              <Checkbox
-                color="primary"
-                checked={filterValue('isDeleted') ?? false}
-                onChange={(event) => onChangeCheckbox(
-                  'isDeleted',
-                  event.target.checked,
-                )}
-              />
-            )}
-            label={formatMessage(intl, 'socialProtection', 'benefitPlan.isDeleted')}
-          />
-        </StyledCheckboxGridItem>
         {showStatuses && (
-          <StyledGridItem size={GRID_RESPONSIVE_SMALL}>
+          <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
             <BeneficiaryStatusPicker
               label="beneficiary.beneficiaryStatusPicker"
               withNull
@@ -175,6 +162,21 @@ function BenefitPlanFilter({
             />
           </StyledGridItem>
         )}
+        <StyledCheckboxGridItem size={GRID_RESPONSIVE_SMALL}>
+          <FormControlLabel
+            control={(
+              <Checkbox
+                color="primary"
+                checked={filterValue('isDeleted') ?? false}
+                onChange={(event) => onChangeCheckbox(
+                  'isDeleted',
+                  event.target.checked,
+                )}
+              />
+            )}
+            label={formatMessage(intl, 'socialProtection', 'benefitPlan.isDeleted')}
+          />
+        </StyledCheckboxGridItem>
       </StyledGrid>
     </Grid>
   );
