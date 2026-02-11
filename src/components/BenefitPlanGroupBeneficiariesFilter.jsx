@@ -2,7 +2,7 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { formatMessage, TextInput, ConstantBasedPicker, PublishedComponent } from '@openimis/fe-core';
+import { formatMessage, TextInput, ConstantBasedPicker, PublishedComponent, GRID_RESPONSIVE_STANDARD } from '@openimis/fe-core';
 import _debounce from 'lodash/debounce';
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
@@ -37,7 +37,7 @@ function BenefitPlanGroupBeneficiariesFilter({
 
   return (
     <StyledGrid container>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <TextInput
           module="socialProtection"
           label="group.code"
@@ -45,7 +45,7 @@ function BenefitPlanGroupBeneficiariesFilter({
           onChange={onChangeStringFilter('group_Code_Icontains')}
         />
       </StyledGridItem>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryStatusPicker"
           withNull
@@ -62,7 +62,7 @@ function BenefitPlanGroupBeneficiariesFilter({
         />
       </StyledGridItem>
       {status && (
-        <StyledGridItem size={2}>
+        <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
           <ConstantBasedPicker
             module="socialProtection"
             label="beneficiary.isEligible"

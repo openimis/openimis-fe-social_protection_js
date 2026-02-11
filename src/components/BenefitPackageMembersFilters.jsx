@@ -3,7 +3,7 @@ import _debounce from 'lodash/debounce';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { TextInput, PublishedComponent } from '@openimis/fe-core';
+import { TextInput, PublishedComponent, GRID_RESPONSIVE_STANDARD } from '@openimis/fe-core';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
 
@@ -46,7 +46,7 @@ function BenefitPackageMembersFilters({
 
   return (
     <StyledGrid container>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <TextInput
           module="socialProtection"
           label="beneficiary.firstName"
@@ -54,7 +54,7 @@ function BenefitPackageMembersFilters({
           onChange={onChangeStringFilter('firstName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <TextInput
           module="socialProtection"
           label="beneficiary.lastName"
@@ -62,7 +62,7 @@ function BenefitPackageMembersFilters({
           onChange={onChangeStringFilter('lastName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"

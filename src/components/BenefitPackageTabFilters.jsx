@@ -3,7 +3,7 @@ import _debounce from 'lodash/debounce';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { TextInput, PublishedComponent, formatMessage } from '@openimis/fe-core';
+import { TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_STANDARD } from '@openimis/fe-core';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
@@ -47,7 +47,7 @@ function BenefitPackageTabFilters({
 
   return (
     <StyledGrid container>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <TextInput
           module="socialProtection"
           label="beneficiary.firstName"
@@ -55,7 +55,7 @@ function BenefitPackageTabFilters({
           onChange={onChangeStringFilter('individual_FirstName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <TextInput
           module="socialProtection"
           label="beneficiary.lastName"
@@ -63,7 +63,7 @@ function BenefitPackageTabFilters({
           onChange={onChangeStringFilter('individual_LastName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -78,7 +78,7 @@ function BenefitPackageTabFilters({
           ])}
         />
       </StyledGridItem>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryPicker.label"
           withNull

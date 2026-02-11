@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import {
-  TextInput, PublishedComponent, formatMessage, ConstantBasedPicker,
+  TextInput, PublishedComponent, formatMessage, ConstantBasedPicker, GRID_RESPONSIVE_STANDARD,
 } from '@openimis/fe-core';
 import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
@@ -51,7 +51,7 @@ function BenefitPlanBeneficiariesFilter({
 
   return (
     <StyledGrid container>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <TextInput
           module="socialProtection"
           label="beneficiary.firstName"
@@ -59,7 +59,7 @@ function BenefitPlanBeneficiariesFilter({
           onChange={onChangeStringFilter('individual_FirstName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <TextInput
           module="socialProtection"
           label="beneficiary.lastName"
@@ -67,7 +67,7 @@ function BenefitPlanBeneficiariesFilter({
           onChange={onChangeStringFilter('individual_LastName', CONTAINS_LOOKUP)}
         />
       </StyledGridItem>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <PublishedComponent
           pubRef="core.DatePicker"
           module="socialProtection"
@@ -82,7 +82,7 @@ function BenefitPlanBeneficiariesFilter({
           ])}
         />
       </StyledGridItem>
-      <StyledGridItem size={2}>
+      <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
         <BeneficiaryStatusPicker
           label="beneficiary.beneficiaryStatusPicker"
           withNull
@@ -99,7 +99,7 @@ function BenefitPlanBeneficiariesFilter({
         />
       </StyledGridItem>
       {status && (
-        <StyledGridItem size={2}>
+        <StyledGridItem size={GRID_RESPONSIVE_STANDARD}>
           <ConstantBasedPicker
             module="socialProtection"
             label="beneficiary.isEligible"
