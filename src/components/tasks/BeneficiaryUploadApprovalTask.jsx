@@ -5,50 +5,39 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
-import { Paper, Fab, Grid, Checkbox, FormControlLabel, Divider } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import {
-  Table, coreConfirm, SelectDialog,
-  withModulesManager,
-  decodeId,
-  PublishedComponent,
-  ControlledField,
-  TextInput,
-  formatMessage,
-  formatMessageWithValues,
-} from '@openimis/fe-core';
-import ClearIcon from '@mui/icons-material/Clear';
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from "@mui/icons-material/Check";
+import ClearIcon from "@mui/icons-material/Clear";
+import { Checkbox, Divider, Fab, Paper } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { decodeId, formatMessage, formatMessageWithValues, SelectDialog, Table } from "@openimis/fe-core";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { useIntl } from 'react-intl';
-import { TASK_STATUS, APPROVED, FAILED } from '../../constants';
-import { fetchPendingBeneficiaryUploads, resolveTask } from '../../actions';
+import { useIntl } from "react-intl";
+import { fetchPendingBeneficiaryUploads, resolveTask } from "../../actions";
+import { APPROVED, FAILED, TASK_STATUS } from "../../constants";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  ...theme.paper?.paper ?? {},
+  ...(theme.paper?.paper ?? {}),
 }));
 
-const StyledFabContainer = styled('div')({
-  display: 'flex',
-  justifyContent: 'center',
+const StyledFabContainer = styled("div")({
+  display: "flex",
+  justifyContent: "center",
 });
 
-const StyledFabHeaderContainer = styled('div')({
-  justifyContent: 'center',
-  textAlign: 'center',
-  fontSize: '16px',
-  fontWeight: 'bold',
+const StyledFabHeaderContainer = styled("div")({
+  justifyContent: "center",
+  textAlign: "center",
+  fontSize: "16px",
+  fontWeight: "bold",
 });
 
-const StyledFab = styled('div')(({ theme }) => ({
+const StyledFab = styled("div")(({ theme }) => ({
   margin: theme.spacing(1),
 }));
 
-function BeneficiaryUploadTaskDisplay({
-  businessData, setAdditionalData, jsonExt,
-}) {
+function BeneficiaryUploadTaskDisplay({ businessData, setAdditionalData, jsonExt }) {
   const {
     errorPendingBeneficiaries,
     pendingBeneficiaries,
@@ -103,32 +92,35 @@ function BeneficiaryUploadTaskDisplay({
   }, [state]);
 
   const organizeData = (data) => {
-    const uniqueKeys = ['last_name', 'first_name', 'dob'];
+    const uniqueKeys = ["last_name", "first_name", "dob"];
 
-    data.forEach((i) => Object.keys(i).forEach((k) => {
-      if (!uniqueKeys.includes(k)) {
-        uniqueKeys.push(k);
-      }
-    }));
+    data.forEach((i) =>
+      Object.keys(i).forEach((k) => {
+        if (!uniqueKeys.includes(k)) {
+          uniqueKeys.push(k);
+        }
+      }),
+    );
 
     // Remove internal identifiers
     // Unnamed 0 is ordinal often found in the uploaded CSVs, it shoun't appear in new
     // version but is added for backward compatibility s
-    return uniqueKeys.filter((k) => !['uuid', 'ID', 'Unnamed: 0'].includes(k));
+    return uniqueKeys.filter((k) => !["uuid", "ID", "Unnamed: 0"].includes(k));
   };
 
   const [storedIndividuals, setStoredIndividuals] = useState({});
 
   useEffect(() => {
     // eslint-disable-next-line max-len
-    setPending(pendingBeneficiaries.map((x) => (x.jsonExt ? { ...JSON.parse(x.jsonExt), uuid: x.uuid } : { uuid: x.uuid })));
+    setPending(
+      pendingBeneficiaries.map((x) => (x.jsonExt ? { ...JSON.parse(x.jsonExt), uuid: x.uuid } : { uuid: x.uuid })),
+    );
     const withIndividuals = {};
-    pendingBeneficiaries.map((x) => withIndividuals[x.id] = x.individual?.id);
+    pendingBeneficiaries.map((x) => (withIndividuals[x.id] = x.individual?.id));
     setStoredIndividuals(withIndividuals);
   }, [pendingBeneficiaries]);
 
   useEffect(() => setKeys(organizeData(pending)), [pending]);
-
 
   const beneficiaryUuids = (businessData?.ids || []).map((id) => id.uuid);
   const beneficiaries = (businessData?.ids || []).map((id) => {
@@ -143,14 +135,20 @@ function BeneficiaryUploadTaskDisplay({
     };
   });
 
-  const headers = () => [
-    task?.status === TASK_STATUS.ACCEPTED
-      ? formatMessage(intl, 'socialProtection', 'selectForEvaluation') : formatMessage(intl, 'socialProtection', 'evaluated'),
-    ...keys] || [];
+  const headers = () =>
+    [
+      task?.status === TASK_STATUS.ACCEPTED
+        ? formatMessage(intl, "socialProtection", "selectForEvaluation")
+        : formatMessage(intl, "socialProtection", "evaluated"),
+      ...keys,
+    ] || [];
 
   const changeCheckboxState = (pending) => {
-    setSelectedRecords(selectedRecords.includes(pending.uuid)
-      ? selectedRecords.filter((x) => x !== pending.uuid) : [...selectedRecords, pending.uuid]);
+    setSelectedRecords(
+      selectedRecords.includes(pending.uuid)
+        ? selectedRecords.filter((x) => x !== pending.uuid)
+        : [...selectedRecords, pending.uuid],
+    );
   };
 
   const itemFormatters = () => {
@@ -172,12 +170,11 @@ function BeneficiaryUploadTaskDisplay({
               disabled
             />
           )}
-
         </>
       ),
     ];
 
-    keys.map((key) => items.push((pending) => (pending.hasOwnProperty(key) ? pending[key] : '-')));
+    keys.map((key) => items.push((pending) => (pending.hasOwnProperty(key) ? pending[key] : "-")));
     return items;
   };
 
@@ -195,14 +192,12 @@ function BeneficiaryUploadTaskDisplay({
   const onChangePage = (page, nbr) => {
     const next = nbr > state.page;
 
-    setState(
-      {
-        page: next ? state.page + 1 : state.page - 1,
-        pageSize: state.pageSize,
-        afterCursor: next ? pendingBeneficiariesPageInfo.endCursor : null,
-        beforeCursor: !next ? pendingBeneficiariesPageInfo.startCursor : null,
-      },
-    );
+    setState({
+      page: next ? state.page + 1 : state.page - 1,
+      pageSize: state.pageSize,
+      afterCursor: next ? pendingBeneficiariesPageInfo.endCursor : null,
+      beforeCursor: !next ? pendingBeneficiariesPageInfo.startCursor : null,
+    });
   };
 
   const isCurrentUserInTaskGroup = () => {
@@ -212,28 +207,30 @@ function BeneficiaryUploadTaskDisplay({
 
   const isRowDisabled = (_) => !isCurrentUserInTaskGroup() || task?.status !== TASK_STATUS.ACCEPTED;
 
-  const [approveOrFail, setApproveOrFail] = useState('');
+  const [approveOrFail, setApproveOrFail] = useState("");
   const [confirmed, setConfirmed] = useState(null);
   const [openModal, setOpenModal] = useState(null);
   const [disabled, setDisable] = useState(false);
 
   const clear = () => {
     setOpenModal(null);
-    setApproveOrFail('');
-    setConfirmed('');
+    setApproveOrFail("");
+    setConfirmed("");
   };
 
   useEffect(() => {
     if (task?.id && currentUser?.id) {
       if (confirmed) {
         setDisable(true);
-        dispatch(resolveTask(
-          task,
-          formatMessage(intl, 'tasksManagement', 'task.resolve.mutationLabel'),
-          currentUser,
-          approveOrFail,
-          selectedRecords,
-        ));
+        dispatch(
+          resolveTask(
+            task,
+            formatMessage(intl, "tasksManagement", "task.resolve.mutationLabel"),
+            currentUser,
+            approveOrFail,
+            selectedRecords,
+          ),
+        );
       }
     }
     return () => confirmed && clear(false);
@@ -264,20 +261,22 @@ function BeneficiaryUploadTaskDisplay({
         onClose={onClose}
         module="socialProtection"
         confirmTitle="taskConfirmation.title"
-        confirmMessage={formatMessageWithValues(intl, 'socialProtection', 'atomicApprove', { count: selectedRecords.length })}
+        confirmMessage={formatMessageWithValues(intl, "socialProtection", "atomicApprove", {
+          count: selectedRecords.length,
+        })}
         confirmationButton="dialogActions.continue"
         rejectionButton="dialogActions.goBack"
       />
       <Table
         module="socialProtection"
         headers={headers()}
-          // headerActions={headerActions}
+        // headerActions={headerActions}
         itemFormatters={itemFormatters()}
         items={(!!pending && pending) || []}
         fetching={fetchingPendingBeneficiaries}
         error={errorPendingBeneficiaries}
-          // onDoubleClick={this.onDoubleClick}
-        withSelection={!isRowDisabled() ? 'multiple' : ''}
+        // onDoubleClick={this.onDoubleClick}
+        withSelection={!isRowDisabled() ? "multiple" : ""}
         onChangeSelection={onChangeSelection}
         withPagination
         rowsPerPageOptions={[10, 20, 10, 100]}
@@ -290,40 +289,43 @@ function BeneficiaryUploadTaskDisplay({
         rowDisabled={isRowDisabled}
       />
 
-      {isCurrentUserInTaskGroup()
-    && (
-    <>
-      {' '}
-      <StyledPaper>
-        <StyledFabHeaderContainer>
-          {formatMessage(intl, 'socialProtection', 'resolveSelectedTasks')}
-          <Divider />
-        </StyledFabHeaderContainer>
-        <StyledFabContainer>
-          <StyledFab>
-            <Fab
-              color="primary"
-              disabled={disabled || task?.status === TASK_STATUS.RECEIVED || isRowDisabled() || selectedRecords.length === 0}
-              onClick={() => handleButtonClick('ACCEPT')}
-            >
-              <CheckIcon />
-            </Fab>
-            {formatMessage(intl, 'socialProtection', 'acceptSelected')}
-          </StyledFab>
-          <StyledFab>
-            <Fab
-              color="primary"
-              disabled={disabled || task?.status === TASK_STATUS.RECEIVED || isRowDisabled() || selectedRecords.length === 0}
-              onClick={() => handleButtonClick('REJECT')}
-            >
-              <ClearIcon />
-            </Fab>
-            {formatMessage(intl, 'socialProtection', 'rejectSelected')}
-          </StyledFab>
-        </StyledFabContainer>
-      </StyledPaper>
-    </>
-    )}
+      {isCurrentUserInTaskGroup() && (
+        <>
+          {" "}
+          <StyledPaper>
+            <StyledFabHeaderContainer>
+              {formatMessage(intl, "socialProtection", "resolveSelectedTasks")}
+              <Divider />
+            </StyledFabHeaderContainer>
+            <StyledFabContainer>
+              <StyledFab>
+                <Fab
+                  color="primary"
+                  disabled={
+                    disabled || task?.status === TASK_STATUS.RECEIVED || isRowDisabled() || selectedRecords.length === 0
+                  }
+                  onClick={() => handleButtonClick("ACCEPT")}
+                >
+                  <CheckIcon />
+                </Fab>
+                {formatMessage(intl, "socialProtection", "acceptSelected")}
+              </StyledFab>
+              <StyledFab>
+                <Fab
+                  color="primary"
+                  disabled={
+                    disabled || task?.status === TASK_STATUS.RECEIVED || isRowDisabled() || selectedRecords.length === 0
+                  }
+                  onClick={() => handleButtonClick("REJECT")}
+                >
+                  <ClearIcon />
+                </Fab>
+                {formatMessage(intl, "socialProtection", "rejectSelected")}
+              </StyledFab>
+            </StyledFabContainer>
+          </StyledPaper>
+        </>
+      )}
     </>
   );
 }
@@ -332,11 +334,7 @@ const UploadResolutionTaskTableHeaders = () => [];
 
 const UploadResolutionItemFormatters = () => [
   (businessData, jsonExt, formatterIndex, setAdditionalData) => (
-    <BeneficiaryUploadTaskDisplay
-      businessData={businessData}
-      setAdditionalData={setAdditionalData}
-      jsonExt={jsonExt}
-    />
+    <BeneficiaryUploadTaskDisplay businessData={businessData} setAdditionalData={setAdditionalData} jsonExt={jsonExt} />
   ),
 ];
 
@@ -348,8 +346,8 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
   const [disabled, setDisable] = useState(defaultDisabled);
 
   const [openModal, setOpenModal] = useState(null);
-  const [approveOrFail, setApproveOrFail] = useState('');
-  const [confirmed, setConfirmed] = useState('');
+  const [approveOrFail, setApproveOrFail] = useState("");
+  const [confirmed, setConfirmed] = useState("");
 
   const onConfirm = () => {
     setOpenModal(false);
@@ -370,8 +368,8 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
 
   const clear = () => {
     setOpenModal(null);
-    setApproveOrFail('');
-    setConfirmed('');
+    setApproveOrFail("");
+    setConfirmed("");
   };
 
   const handleButtonClick = (choiceString) => {
@@ -388,13 +386,14 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
     if (task?.id && currentUser?.id) {
       if (confirmed) {
         setDisable(true);
-        dispatch(resolveTask(
-          task,
-          formatMessage(intl, 'tasksManagement', 'task.resolve.mutationLabel'),
-          currentUser,
-          approveOrFail,
-
-        ));
+        dispatch(
+          resolveTask(
+            task,
+            formatMessage(intl, "tasksManagement", "task.resolve.mutationLabel"),
+            currentUser,
+            approveOrFail,
+          ),
+        );
       }
     }
     return () => confirmed && clear();
@@ -408,26 +407,21 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
         onClose={onClose}
         module="socialProtection"
         confirmTitle="taskConfirmation.title"
-        confirmMessage={formatMessage(intl, 'socialProtection', 'bulkApprove')}
+        confirmMessage={formatMessage(intl, "socialProtection", "bulkApprove")}
         confirmationButton="dialogActions.continue"
         rejectionButton="dialogActions.goBack"
       />
       <StyledPaper>
         <StyledFabHeaderContainer>
-          {formatMessage(intl, 'socialProtection', 'resolveAllRemainingTasks')}
+          {formatMessage(intl, "socialProtection", "resolveAllRemainingTasks")}
           <Divider />
         </StyledFabHeaderContainer>
         <StyledFabContainer>
           <StyledFab>
-            <Fab
-              color="primary"
-              disabled={disabled || isRowDisabled()}
-              onClick={() => handleButtonClick(APPROVED)}
-            >
+            <Fab color="primary" disabled={disabled || isRowDisabled()} onClick={() => handleButtonClick(APPROVED)}>
               <CheckIcon />
             </Fab>
-            {formatMessage(intl, 'socialProtection', 'approveAll')}
-
+            {formatMessage(intl, "socialProtection", "approveAll")}
           </StyledFab>
           <StyledFab>
             <Fab
@@ -437,7 +431,7 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
             >
               <ClearIcon />
             </Fab>
-            {formatMessage(intl, 'socialProtection', 'rejectAll')}
+            {formatMessage(intl, "socialProtection", "rejectAll")}
           </StyledFab>
         </StyledFabContainer>
       </StyledPaper>
@@ -445,4 +439,4 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
   );
 }
 
-export { UploadResolutionTaskTableHeaders, UploadResolutionItemFormatters, UploadConfirmationPanel };
+export { UploadConfirmationPanel, UploadResolutionItemFormatters, UploadResolutionTaskTableHeaders };

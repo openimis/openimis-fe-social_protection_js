@@ -9,8 +9,8 @@ import { connect, useDispatch } from 'react-redux';
 import {
   Button,
   Typography,
-} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import {
   MODULE_NAME,
   RIGHT_PROJECT_UPDATE,

@@ -1,29 +1,27 @@
 import React, { useEffect } from 'react';
 import { formatMessage } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
-import { withTheme, withStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 import {
   Select,
   InputLabel,
   FormControl,
   MenuItem,
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   MODULE_NAME,
 } from '../constants';
 
-const styles = (theme) => ({
-  label: {
-    color: theme.palette.primary.main,
-  },
-  formControl: {
-    position: 'relative',
-  },
-});
+const StyledFormControl = styled(FormControl)(() => ({
+  position: 'relative',
+}));
+
+const StyledInputLabel = styled(InputLabel)(({ theme }) => ({
+  color: theme.palette.primary.main,
+}));
 
 function ProjectAllowsMultiEnrollmentPicker({
   intl,
-  classes,
   value,
   label,
   onChange,
@@ -53,24 +51,23 @@ function ProjectAllowsMultiEnrollmentPicker({
   }, []);
 
   return (
-    <FormControl required={required} fullWidth className={classes.formControl}>
-      <InputLabel shrink className={classes.label}>
+    <StyledFormControl required={required} fullWidth>
+      <StyledInputLabel shrink>
         {formatMessage(intl, MODULE_NAME, label)}
-      </InputLabel>
+      </StyledInputLabel>
       <Select
         readOnly={readOnly}
-        options={options}
         value={value}
         onChange={handleChange}
       >
         {options.map((option) => (
-          <MenuItem value={option.value}>
+          <MenuItem key={`${option.value}`} value={option.value}>
             {option.label}
           </MenuItem>
         ))}
       </Select>
-    </FormControl>
+    </StyledFormControl>
   );
 }
 
-export default injectIntl(withTheme(withStyles(styles)(ProjectAllowsMultiEnrollmentPicker)));
+export default injectIntl(ProjectAllowsMultiEnrollmentPicker);

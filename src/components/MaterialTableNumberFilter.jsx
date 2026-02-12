@@ -6,7 +6,7 @@ import {
   IconButton,
   Popover,
   MenuItem,
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   formatMessage,
 } from '@openimis/fe-core';

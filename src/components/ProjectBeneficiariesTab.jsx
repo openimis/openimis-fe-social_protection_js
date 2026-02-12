@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tab } from '@material-ui/core';
+import { Tab } from '@mui/material';
 import { formatMessage } from '@openimis/fe-core';
 import { PROJECT_BENEFICIARIES_TAB_VALUE, BENEFIT_PLAN_TYPE } from '../constants';
 import { ProjectBeneficiaryTable, ProjectGroupBeneficiaryTable } from './ProjectBeneficiaryTable';

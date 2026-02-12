@@ -1,17 +1,16 @@
 import React, { useMemo, useEffect } from 'react';
 import { injectIntl } from 'react-intl';
-import MaterialTable from 'material-table';
+import MaterialTable from '@material-table/core';
 import _ from 'lodash';
 import {
   Select,
   MenuItem,
-} from '@material-ui/core';
+} from '@mui/material';
 import {
-  withTheme,
-  withStyles,
+  useTheme,
   ThemeProvider,
-  createMuiTheme,
-} from '@material-ui/core/styles';
+  createTheme,
+} from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
 import {
   formatMessage,
@@ -26,11 +25,6 @@ import {
   DEFAULT_PAGE_SIZE,
 } from '../constants';
 import NumberFilter from './MaterialTableNumberFilter';
-
-const styles = (theme) => ({
-  page: theme.page,
-  paper: theme.paper.classes,
-});
 
 const getDynamicColumns = (translateFn, customFilters = []) => {
   if (!customFilters || !customFilters.length) return [];
@@ -138,7 +132,6 @@ const getDynamicColumns = (translateFn, customFilters = []) => {
 
 function BeneficiaryTable({
   intl,
-  theme,
   allRows, // expect either allRows or onQueryChange to be specified, not both at the same time
   onQueryChange,
   fetchingBeneficiaries,
@@ -149,6 +142,7 @@ function BeneficiaryTable({
   appliedFilters,
   appliedPageSize,
 }) {
+  const theme = useTheme();
   const nameDoBFieldPrefix = isGroup ? 'group.head' : 'individual';
   const locationFieldPrefix = isGroup ? 'group' : 'individual';
 
@@ -182,7 +176,7 @@ function BeneficiaryTable({
       });
   }, [fetchCustomFilter]);
 
-  const tableTheme = createMuiTheme({
+  const tableTheme = createTheme({
     palette: {
       primary: theme.palette.primary,
       secondary: theme.palette.primary,
@@ -193,49 +187,63 @@ function BeneficiaryTable({
         fontSize: '1rem',
       },
     },
-    overrides: {
+    components: {
       MuiTableBody: {
-        root: {
-          fontSize: '0.875rem',
+        styleOverrides: {
+          root: {
+            fontSize: '0.875rem',
+          },
         },
       },
       MuiInputBase: {
-        root: {
-          fontSize: '0.875rem',
-          color: theme.palette.text.primary,
-          '&.Mui-focused': {
-            color: theme.palette.primary.main,
+        styleOverrides: {
+          root: {
+            fontSize: '0.875rem',
+            color: theme.palette.text.primary,
+            '&.Mui-focused': {
+              color: theme.palette.primary.main,
+            },
           },
         },
       },
       MuiList: {
-        root: {
-          color: theme.palette.text.primary,
+        styleOverrides: {
+          root: {
+            color: theme.palette.text.primary,
+          },
         },
       },
       MuiIcon: {
-        root: {
-          color: theme.palette.primary.main,
+        styleOverrides: {
+          root: {
+            color: theme.palette.primary.main,
+          },
         },
       },
       MuiIconButton: {
-        root: {
-          color: theme.palette.primary.main,
-          '&:hover': {
-            backgroundColor: 'transparent',
+        styleOverrides: {
+          root: {
+            color: theme.palette.primary.main,
+            '&:hover': {
+              backgroundColor: 'transparent',
+            },
           },
         },
       },
       MuiToolbar: {
-        root: {
-          backgroundColor: theme.paper.body.backgroundColor,
-          margin: '0 -20px -15px',
+        styleOverrides: {
+          root: {
+            backgroundColor: theme.paper?.body?.backgroundColor,
+            margin: '0 -20px -15px',
+          },
         },
       },
       MuiTablePagination: {
-        toolbar: {
-          backgroundColor: 'white',
-          marginBottom: 0,
+        styleOverrides: {
+          toolbar: {
+            backgroundColor: 'white',
+            marginBottom: 0,
+          },
         },
       },
     },
@@ -355,4 +363,4 @@ function BeneficiaryTable({
   );
 }
 
-export default injectIntl(withTheme(withStyles(styles)(BeneficiaryTable)));
+export default injectIntl(BeneficiaryTable);

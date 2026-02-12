@@ -84,19 +84,14 @@ export default defineConfig({
         'react-router',
         'react-router-dom',
         'history',
-        '@emotion/react',
-        '@emotion/styled',
-        '@emotion/cache',
-        '@mui/material',
-        '@mui/icons-material',
-        '@mui/system',
-       
+        /^@emotion\/.*/,
+        /^@mui\/.*/,
+        '@material-table/core',
         '@date-io/core',
         '@date-io/moment',
         'flat',
         /^@babel.*/,
         /^@date-io\/.*/,
-      
         /^@openimis.*/,
       ],
       output: {

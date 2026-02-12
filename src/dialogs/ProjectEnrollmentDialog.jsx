@@ -7,9 +7,9 @@ import {
   DialogActions,
   IconButton,
   Button,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { withStyles, withTheme } from '@material-ui/core/styles';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { styled } from '@mui/material/styles';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -33,29 +33,33 @@ import BeneficiaryTable from '../components/BeneficiaryTable';
 import { REQUEST } from '../util/action-type';
 import { ACTION_TYPE } from '../reducer';
 
-const styles = () => ({
-  dialogPaper: {
+const StyledDialog = styled(Dialog)(() => ({
+  '& .MuiDialog-paper': {
     width: 1200,
     maxWidth: 1500,
     maxHeight: 800,
   },
-  closeButton: {
-    padding: 6,
-  },
-  subtitle: {
-    marginTop: -12,
-    marginBottom: 12,
-    fontSize: '1rem',
-  },
-  actionsContainer: {
-    display: 'inline',
-    paddingLeft: 10,
-  },
-  saveButton: {
-    float: 'right',
-    margin: '-2px 16px 5px',
-  },
-});
+}));
+
+const CloseIconButton = styled(IconButton)(() => ({
+  padding: 6,
+}));
+
+const Subtitle = styled('div')(() => ({
+  marginTop: -12,
+  marginBottom: 12,
+  fontSize: '1rem',
+}));
+
+const StyledDialogActions = styled(DialogActions)(() => ({
+  display: 'inline',
+  paddingLeft: 10,
+}));
+
+const SaveButton = styled(Button)(() => ({
+  float: 'right',
+  margin: '-2px 16px 5px',
+}));
 
 const convertFieldName = (field) => (
   // Handle nested objects (e.g., 'individual.firstName' -> 'individual_FirstName')
@@ -64,7 +68,6 @@ const convertFieldName = (field) => (
 
 function ProjectEnrollmentDialog({
   intl,
-  classes,
   open,
   onClose,
   project,
@@ -334,23 +337,22 @@ function ProjectEnrollmentDialog({
   }, [enrolledBeneficiaries]);
 
   return (
-    <Dialog open={open} onClose={onClose} classes={{ paper: classes.dialogPaper }}>
+    <StyledDialog open={open} onClose={onClose}>
       <DialogTitle style={{ paddingBottom: 0 }}>
         {translate('projectBeneficiaries.dialogTitle')}
         <div style={{ float: 'right' }}>
-          <IconButton
+          <CloseIconButton
             aria-label="close"
             onClick={onClose}
-            className={classes.closeButton}
           >
             <CloseIcon />
-          </IconButton>
+          </CloseIconButton>
         </div>
       </DialogTitle>
       <DialogContent>
-        <div className={classes.subtitle}>
+        <Subtitle>
           {translate('projectBeneficiaries.dialogSubtitle')}
-        </div>
+        </Subtitle>
 
         <BeneficiaryTable
           onQueryChange={handleQueryChange}
@@ -363,18 +365,17 @@ function ProjectEnrollmentDialog({
         />
       </DialogContent>
 
-      <DialogActions className={classes.actionsContainer}>
-        <Button
+      <StyledDialogActions>
+        <SaveButton
           onClick={onSave}
           variant="contained"
           color="primary"
           autoFocus
-          className={classes.saveButton}
         >
           {translate('projectBeneficiaries.save')}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </SaveButton>
+      </StyledDialogActions>
+    </StyledDialog>
   );
 }
 
@@ -403,23 +404,15 @@ const mapDispatchToPropsGroupBeneficiary = (dispatch) => bindActionCreators({
 }, dispatch);
 
 export const ProjectBeneficiariyEnrollmentDialog = injectIntl(
-  withTheme(
-    withStyles(styles)(
-      connect(
-        mapStateToPropsBeneficiary,
-        mapDispatchToPropsBeneficiary,
-      )(ProjectEnrollmentDialog),
-    ),
-  ),
+  connect(
+    mapStateToPropsBeneficiary,
+    mapDispatchToPropsBeneficiary,
+  )(ProjectEnrollmentDialog),
 );
 
 export const ProjectGroupBeneficiaryEnrollmentDialog = injectIntl(
-  withTheme(
-    withStyles(styles)(
-      connect(
-        mapStateToPropsGroupBeneficiary,
-        mapDispatchToPropsGroupBeneficiary,
-      )(ProjectEnrollmentDialog),
-    ),
-  ),
+  connect(
+    mapStateToPropsGroupBeneficiary,
+    mapDispatchToPropsGroupBeneficiary,
+  )(ProjectEnrollmentDialog),
 );
