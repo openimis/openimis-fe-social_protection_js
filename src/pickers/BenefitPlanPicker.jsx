@@ -85,7 +85,7 @@ function BenefitPlanPicker(props) {
             /* eslint-disable-next-line react/jsx-props-no-spreading */
             {...inputProps}
             required={required}
-            label={(withLabel && (label || nullLabel)) || formatMessage('BenefitPlan')}
+            label={(withLabel && (label || nullLabel)) || formatMessage('BenefitPlanPicker.label')}
             placeholder={(withPlaceholder && placeholder) || formatMessage('BenefitPlanPicker.placeholder')}
           />
         </Tooltip>

@@ -47,16 +47,21 @@ const UPLOAD_HISTORY_FULL_PROJECTION = () => [
 const BENEFICIARY_FULL_PROJECTION = (modulesManager) => [
   'id',
   'benefitPlan {id}',
+  'project {id}',
   'individual {firstName, lastName, dob, location' + modulesManager.getProjection('location.Location.FlatProjection') + '}',
   'status',
   'isEligible',
+  'jsonExt',
 ];
 
 const GROUP_BENEFICIARY_FULL_PROJECTION = (modulesManager) => [
   'id',
-  'group {id, code, head {uuid}, location' + modulesManager.getProjection('location.Location.FlatProjection') + '}',
+  'benefitPlan {id}',
+  'project {id}',
+  'group {id, code, head {uuid, firstName, lastName, dob}, location' + modulesManager.getProjection('location.Location.FlatProjection') + '}',
   'status',
   'isEligible',
+  'jsonExt',
 ];
 
 const WORKFLOWS_FULL_PROJECTION = () => [
@@ -66,14 +71,19 @@ const WORKFLOWS_FULL_PROJECTION = () => [
 
 const PROJECT_FULL_PROJECTION = (modulesManager) => [
   'id',
-  'benefitPlan {id, name}',
+  'benefitPlan {id, name, type}',
   'name',
   'status',
   'targetBeneficiaries',
   'workingDays',
   'activity {id, name}',
   'location' + modulesManager.getProjection('location.Location.FlatProjection'),
+  'allowsMultipleEnrollments',
   'isDeleted',
+  'userUpdated {username}',
+  'version',
+  'dateCreated',
+  'dateUpdated',
 ];
 
 export function fetchBenefitPlans(params) {
@@ -86,9 +96,27 @@ export function fetchBeneficiaries(modulesManager, params) {
   return graphql(payload, ACTION_TYPE.SEARCH_BENEFICIARIES);
 }
 
+export function fetchProjectBeneficiaries(modulesManager, params, meta = {}) {
+  const payload = formatPageQueryWithCount('beneficiary', params, BENEFICIARY_FULL_PROJECTION(modulesManager));
+  return graphql(payload, ACTION_TYPE.SEARCH_PROJECT_BENEFICIARIES, meta);
+}
+
 export function fetchGroupBeneficiaries(modulesManager, params) {
-  const payload = formatPageQueryWithCount('groupBeneficiary', params, GROUP_BENEFICIARY_FULL_PROJECTION(modulesManager));
+  const payload = formatPageQueryWithCount(
+    'groupBeneficiary',
+    params,
+    GROUP_BENEFICIARY_FULL_PROJECTION(modulesManager),
+  );
   return graphql(payload, ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES);
+}
+
+export function fetchProjectGroupBeneficiaries(modulesManager, params, meta = {}) {
+  const payload = formatPageQueryWithCount(
+    'groupBeneficiary',
+    params,
+    GROUP_BENEFICIARY_FULL_PROJECTION(modulesManager),
+  );
+  return graphql(payload, ACTION_TYPE.SEARCH_PROJECT_GROUP_BENEFICIARIES, meta);
 }
 
 export function fetchBenefitPlanSchemaFields(params) {
@@ -303,6 +331,8 @@ function formatProjectGQL(project) {
     ${project?.name ? `name: "${formatGQLString(project.name)}"` : ''}
     ${project?.targetBeneficiaries ? `targetBeneficiaries: ${project.targetBeneficiaries}` : ''}
     ${project?.workingDays ? `workingDays: ${project.workingDays}` : ''}
+    ${(project?.allowsMultipleEnrollments !== undefined && project.allowsMultipleEnrollments !== null)
+    ? `allowsMultipleEnrollments: ${project.allowsMultipleEnrollments}` : ''}
     ${project?.status ? `status: "${project.status}"` : ''}
     ${project?.activity?.id ? `activityId: "${project.activity.id}"` : ''}
     ${project?.location?.uuid ? `locationId: "${project.location.uuid}"` : ''}
@@ -377,6 +407,11 @@ export function fetchBenefitPlanProjects(modulesManager, params) {
 export function fetchProject(modulesManager, params) {
   const payload = formatPageQuery('project', params, PROJECT_FULL_PROJECTION(modulesManager));
   return graphql(payload, ACTION_TYPE.GET_PROJECT);
+}
+
+export function fetchProjectHistory(modulesManager, params) {
+  const payload = formatPageQueryWithCount('projectHistory', params, PROJECT_FULL_PROJECTION(modulesManager));
+  return graphql(payload, ACTION_TYPE.SEARCH_PROJECTS_HISTORY);
 }
 
 export function createProject(project, clientMutationLabel) {
@@ -559,6 +594,12 @@ export const clearGroupBeneficiaryExport = () => (dispatch) => {
   });
 };
 
+export const clearProject = () => (dispatch) => {
+  dispatch({
+    type: CLEAR(ACTION_TYPE.GET_PROJECT),
+  });
+};
+
 // formatTaskResolveGQL and  resolveTask are exact copy of one from tasksManagement.
 // However, import from other @openimis/fe-{modue} than fe-core is not possible.
 export const formatTaskResolveGQL = (task, user, approveOrFail, additionalData) => `
@@ -673,3 +714,58 @@ export const projectNameValidationClear = () => (dispatch) => {
     type: CLEAR(ACTION_TYPE.PROJECT_NAME_FIELDS_VALIDATION),
   });
 };
+
+function formatProjectEnrollmentGQL(params) {
+  // double quotes are important!
+  const ids = params.ids?.length ? `"${params.ids.join('","')}"` : '';
+  return `ids: [${ids}]
+          projectId: "${params.projectId}"`;
+}
+
+export function enrollProject(params, clientMutationLabel) {
+  const mutation = formatMutation(
+    'enrollProject',
+    formatProjectEnrollmentGQL(params),
+    clientMutationLabel,
+  );
+
+  const requestedDateTime = new Date();
+
+  return graphql(
+    mutation.payload,
+    [
+      REQUEST(ACTION_TYPE.MUTATION),
+      SUCCESS(ACTION_TYPE.PROJECT_ENROLL),
+      ERROR(ACTION_TYPE.MUTATION),
+    ],
+    {
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}
+
+export function enrollGroupProject(params, clientMutationLabel) {
+  const mutation = formatMutation(
+    'enrollGroupProject',
+    formatProjectEnrollmentGQL(params),
+    clientMutationLabel,
+  );
+
+  const requestedDateTime = new Date();
+
+  return graphql(
+    mutation.payload,
+    [
+      REQUEST(ACTION_TYPE.MUTATION),
+      SUCCESS(ACTION_TYPE.PROJECT_ENROLL_GROUP),
+      ERROR(ACTION_TYPE.MUTATION),
+    ],
+    {
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}

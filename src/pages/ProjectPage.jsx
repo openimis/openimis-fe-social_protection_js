@@ -21,13 +21,18 @@ import {
   fetchBenefitPlan,
   fetchProject,
   createProject,
+  clearProject,
   updateProject,
   deleteProject,
   undoDeleteProject,
 } from '../actions';
 import { ACTION_TYPE } from '../reducer';
 import ProjectHeadPanel from '../components/ProjectHeadPanel';
-import { RIGHT_BENEFIT_PLAN_UPDATE } from '../constants';
+import ProjectTabPanel from '../components/ProjectTabPanel';
+import {
+  RIGHT_BENEFIT_PLAN_UPDATE,
+  PROJECT_BENEFICIARIES_TAB_VALUE,
+} from '../constants';
 
 const StyledPage = styled('div')(({ theme }) => ({
   ...theme.page ?? {},
@@ -45,6 +50,7 @@ function ProjectPage({
   project,
   fetchProject,
   createProject,
+  clearProject,
   updateProject,
   deleteProject,
   undoDeleteProject,
@@ -75,6 +81,8 @@ function ProjectPage({
     status: 'PREPARATION',
   });
   const [reset, setReset] = useState(() => false);
+
+  const [activeTab, setActiveTab] = useState(PROJECT_BENEFICIARIES_TAB_VALUE);
 
   const dispatch = useDispatch();
 
@@ -114,8 +122,7 @@ function ProjectPage({
       setEditedProject(project);
     }
     if (!projectUuid && project?.id) {
-      const projectRouteRef = modulesManager.getRef('socialProtection.route.project');
-      history.replace(`/${projectRouteRef}/${project.id}`);
+      history.replace(`project/${project.id}`);
       setReset(true);
     }
   }, [project]);
@@ -134,17 +141,22 @@ function ProjectPage({
         ACTION_TYPE.DELETE_PROJECT,
         ACTION_TYPE.UNDO_DELETE_PROJECT,
       ].includes(mutation?.actionType)) {
-        back();
+        history.push(
+          `/${modulesManager.getRef('socialProtection.route.benefitPlan')}/${benefitPlanId}`,
+        );
       }
-    }
-    if (mutation?.clientMutationId && !projectUuid) {
-      fetchProject(modulesManager, [`clientMutationId: "${mutation.clientMutationId}"`]);
+
+      if (mutation?.clientMutationId && !projectUuid) {
+        fetchProject(modulesManager, [`clientMutationId: "${mutation.clientMutationId}"`]);
+      }
     }
   }, [submittingMutation]);
 
   useEffect(() => {
     prevSubmittingMutationRef.current = submittingMutation;
   });
+
+  useEffect(() => () => clearProject(), []);
 
   const isMandatoryFieldsEmpty = () => (
     !editedProject?.name
@@ -154,7 +166,7 @@ function ProjectPage({
     || !editedProject?.workingDays
   );
 
-  const isValid = () => (project?.name ? isProjectNameValid : true);
+  const isValid = () => (editedProject?.name ? isProjectNameValid : true);
 
   const doesProjectChange = () => {
     if (_.isEqual(project, editedProject)) return false;
@@ -228,9 +240,12 @@ function ProjectPage({
       }),
   ];
 
+  if (projectUuid && !project) return <div>Loading...</div>;
+
   return rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) && (
     <StyledPage>
       <Form
+        key={project?.id || 'new-project'}
         module="socialProtection"
         title="project.pageTitle"
         openDirty
@@ -242,7 +257,9 @@ function ProjectPage({
         canSave={canSave}
         save={handleSave}
         HeadPanel={ProjectHeadPanel}
-        Panels={[]}
+        Panels={[ProjectTabPanel]}
+        onActiveTabChange={setActiveTab}
+        activeTab={activeTab}
         rights={rights}
         actions={actions}
         readOnly={editedProject?.isDeleted}
@@ -268,6 +285,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
   {
     fetchProject,
     createProject,
+    clearProject,
     updateProject,
     deleteProject,
     undoDeleteProject,

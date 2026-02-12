@@ -30,7 +30,8 @@ const TabButton = styled('button')(({ theme, selected }) => ({
 }));
 
 function BenefitPlanTabPanel({
-  intl, rights, benefitPlan, setConfirmedAction, onActiveTabChange,
+  intl, rights, benefitPlan, setConfirmedAction, onActiveTabChange, confirmed,
+  edited, onEditedChanged,
 }) {
   const [activeTab, setActiveTab] = useState(BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE);
 
@@ -63,6 +64,9 @@ function BenefitPlanTabPanel({
         value={activeTab}
         benefitPlan={benefitPlan}
         setConfirmedAction={setConfirmedAction}
+        confirmed={confirmed}
+        edited={edited}
+        onEditedChanged={onEditedChanged}
       />
     </StyledPaper>
   );

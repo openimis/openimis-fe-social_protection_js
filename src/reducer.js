@@ -31,7 +31,9 @@ export const ACTION_TYPE = {
   BENEFIT_PLAN_NAME_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
   BENEFIT_PLAN_SCHEMA_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
   SEARCH_BENEFICIARIES: 'BENEFICIARY_BENEFICIARIES',
+  SEARCH_PROJECT_BENEFICIARIES: 'PROJECT_BENEFICIARIES',
   SEARCH_GROUP_BENEFICIARIES: 'GROUP_BENEFICIARY_GROUP_BENEFICIARIES',
+  SEARCH_PROJECT_GROUP_BENEFICIARIES: 'PROJECT_GROUP_BENEFICIARIES',
   UPDATE_GROUP_BENEFICIARY: 'GROUP_BENEFICIARY_UPDATE_GROUP_BENEFICIARY',
   GET_BENEFICIARY: 'BENEFICIARY_BENEFICIARY',
   GET_BENEFICIARIES_GROUP: 'GROUP_BENEFICIARY_GET_GROUP',
@@ -45,6 +47,7 @@ export const ACTION_TYPE = {
   RESOLVE_TASK: 'TASK_MANAGEMENT_RESOLVE_TASK',
   SEARCH_BENEFIT_PLANS_HISTORY: 'BENEFIT_PLAN_BENEFIT_PLANS_HISTORY',
   SEARCH_PROJECTS: 'BENEFIT_PLAN_PROJECTS',
+  SEARCH_PROJECTS_HISTORY: 'BENEFIT_PLAN_PROJECTS_HISTORY',
   GET_PROJECT: 'BENEFIT_PLAN_PROJECT',
   CREATE_PROJECT: 'BENEFIT_PLAN_CREATE_PROJECT',
   UPDATE_PROJECT: 'BENEFIT_PLAN_UPDATE_PROJECT',
@@ -52,6 +55,8 @@ export const ACTION_TYPE = {
   UNDO_DELETE_PROJECT: 'BENEFIT_PLAN_UNDO_DELETE_PROJECT',
   PROJECT_NAME_FIELDS_VALIDATION: 'PROJECT_NAME_FIELDS_VALIDATION',
   PROJECT_NAME_SET_VALID: 'PROJECT_NAME_SET_VALID',
+  PROJECT_ENROLL: 'PROJECT_ENROLL',
+  PROJECT_ENROLL_GROUP: 'PROJECT_ENROLL_GROUP',
 };
 
 function reducer(
@@ -131,6 +136,12 @@ function reducer(
     projects: [],
     projectsPageInfo: {},
     projectsTotalCount: 0,
+    fetchingProjectBeneficiaries: false,
+    fetchedProjectBeneficiaries: false,
+    projectBeneficiaries: [],
+    projectBeneficiariesPageInfo: {},
+    projectBeneficiariesTotalCount: 0,
+    errorProjectBeneficiaries: null,
   },
   action,
 ) {
@@ -188,6 +199,16 @@ function reducer(
         groupBeneficiariesTotalCount: 0,
         errorGroupBeneficiaries: null,
       };
+    case REQUEST(ACTION_TYPE.SEARCH_PROJECT_GROUP_BENEFICIARIES):
+      return {
+        ...state,
+        fetchingProjectGroupBeneficiaries: true,
+        fetchedProjectGroupBeneficiaries: false,
+        projectGroupBeneficiaries: action.meta?.isBatch ? state.projectGroupBeneficiaries : [],
+        projectGroupBeneficiariesPageInfo: {},
+        projectGroupBeneficiariesTotalCount: 0,
+        errorProjectGroupBeneficiaries: null,
+      };
     case REQUEST(ACTION_TYPE.GET_WORKFLOWS):
       return {
         ...state,
@@ -213,6 +234,73 @@ function reducer(
         fetchingProject: true,
         fetchedProject: false,
         project: null,
+      };
+    case REQUEST(ACTION_TYPE.SEARCH_PROJECTS_HISTORY):
+      return {
+        ...state,
+        fetchingProjectsHistory: true,
+        fetchedProjectsHistory: false,
+        projectsHistory: [],
+        projectsHistoryPageInfo: {},
+        projectsHistoryTotalCount: 0,
+        errorProjectsHistory: null,
+      };
+    case SUCCESS(ACTION_TYPE.SEARCH_PROJECTS_HISTORY):
+      return {
+        ...state,
+        fetchingProjectsHistory: false,
+        fetchedProjectsHistory: true,
+        projectsHistory: parseData(action.payload.data.projectHistory)?.map((projectHistory) => ({
+          ...projectHistory,
+          id: decodeId(projectHistory.id),
+        })),
+        projectsHistoryPageInfo: pageInfo(action.payload.data.projectHistory),
+        // eslint-disable-next-line max-len
+        projectsHistoryTotalCount: action.payload.data.projectHistory ? action.payload.data.projectHistory.totalCount : null,
+        errorProjectsHistory: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.SEARCH_PROJECTS_HISTORY):
+      return {
+        ...state,
+        fetchingProjectsHistory: false,
+        errorProjectsHistory: formatServerError(action.payload),
+      };
+    case REQUEST(ACTION_TYPE.SEARCH_PROJECT_BENEFICIARIES):
+      return {
+        ...state,
+        fetchingProjectBeneficiaries: true,
+        fetchedProjectBeneficiaries: false,
+        projectBeneficiaries: action.meta?.isBatch ? state.projectBeneficiaries : [],
+        projectBeneficiariesPageInfo: {},
+        projectBeneficiariesTotalCount: 0,
+        errorProjectBeneficiaries: null,
+      };
+    case SUCCESS(ACTION_TYPE.SEARCH_PROJECT_BENEFICIARIES):
+      /* eslint-disable no-case-declarations */
+      const parsedBeneficiaries = parseData(action.payload.data.beneficiary)?.map((beneficiary) => ({
+        ...beneficiary,
+        project: { id: beneficiary?.project?.id ? decodeId(beneficiary.project.id) : null },
+        jsonExt: typeof beneficiary.jsonExt === 'string' ? JSON.parse(beneficiary.jsonExt) : beneficiary.jsonExt,
+        id: decodeId(beneficiary.id),
+      }));
+      return {
+        ...state,
+        fetchingProjectBeneficiaries: false,
+        fetchedProjectBeneficiaries: true,
+        projectBeneficiaries: action.meta?.isBatch
+          ? [...state.projectBeneficiaries, ...parsedBeneficiaries]
+          : parsedBeneficiaries,
+        projectBeneficiariesPageInfo: pageInfo(action.payload.data.beneficiary),
+        projectBeneficiariesTotalCount: action.payload.data.beneficiary
+          ? action.payload.data.beneficiary.totalCount
+          : null,
+        errorProjectBeneficiaries: formatGraphQLError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.SEARCH_PROJECT_BENEFICIARIES):
+      return {
+        ...state,
+        fetchingProjectBeneficiaries: false,
+        errorProjectBeneficiaries: formatServerError(action.payload),
       };
     case SUCCESS(ACTION_TYPE.SEARCH_BENEFIT_PLANS):
       return {
@@ -295,6 +383,37 @@ function reducer(
           ? action.payload.data.groupBeneficiary.totalCount : null,
         errorGroupBeneficiaries: formatGraphQLError(action.payload),
       };
+    case SUCCESS(ACTION_TYPE.SEARCH_PROJECT_GROUP_BENEFICIARIES):
+      /* eslint-disable no-case-declarations */
+      const parsedGroupBeneficiaries = parseData(action.payload.data.groupBeneficiary)?.map((groupBeneficiary) => {
+        const response = ({
+          ...groupBeneficiary,
+          project: { id: groupBeneficiary?.project?.id ? decodeId(groupBeneficiary.project.id) : null },
+          jsonExt: typeof groupBeneficiary.jsonExt === 'string'
+            ? JSON.parse(groupBeneficiary.jsonExt)
+            : groupBeneficiary.jsonExt,
+          id: decodeId(groupBeneficiary.id),
+        });
+        if (response?.group?.id) {
+          response.group = ({
+            ...response.group,
+            id: decodeId(response.group.id),
+          });
+        }
+        return response;
+      });
+      return {
+        ...state,
+        fetchingProjectGroupBeneficiaries: false,
+        fetchedProjectGroupBeneficiaries: true,
+        projectGroupBeneficiaries: action.meta?.isBatch
+          ? [...state.projectGroupBeneficiaries, ...parsedGroupBeneficiaries]
+          : parsedGroupBeneficiaries,
+        projectGroupBeneficiariesPageInfo: pageInfo(action.payload.data.groupBeneficiary),
+        projectGroupBeneficiariesTotalCount: action.payload.data.groupBeneficiary
+          ? action.payload.data.groupBeneficiary.totalCount : null,
+        errorProjectGroupBeneficiaries: formatGraphQLError(action.payload),
+      };
     case SUCCESS(ACTION_TYPE.GET_WORKFLOWS):
       return {
         ...state,
@@ -372,6 +491,12 @@ function reducer(
         ...state,
         fetchingGroupBeneficiaries: false,
         errorGroupBeneficiaries: formatServerError(action.payload),
+      };
+    case ERROR(ACTION_TYPE.SEARCH_PROJECT_GROUP_BENEFICIARIES):
+      return {
+        ...state,
+        fetchingProjectGroupBeneficiaries: false,
+        errorProjectGroupBeneficiaries: formatServerError(action.payload),
       };
     case ERROR(ACTION_TYPE.GET_WORKFLOWS):
       return {
@@ -578,6 +703,15 @@ function reducer(
         errorBenefitPlan: null,
         fetchedBenefitPlan: false,
         benefitPlan: null,
+        mutation: null,
+      };
+    case CLEAR(ACTION_TYPE.GET_PROJECT):
+      return {
+        ...state,
+        fetchingProject: false,
+        errorProject: null,
+        fetchedProject: false,
+        project: null,
         mutation: null,
       };
     case CLEAR(ACTION_TYPE.BENEFICIARY_EXPORT):
@@ -853,6 +987,10 @@ function reducer(
       return dispatchMutationResp(state, 'deleteProject', action);
     case SUCCESS(ACTION_TYPE.UNDO_DELETE_PROJECT):
       return dispatchMutationResp(state, 'undoDeleteProject', action);
+    case SUCCESS(ACTION_TYPE.PROJECT_ENROLL):
+      return dispatchMutationResp(state, 'enrollProject', action);
+    case SUCCESS(ACTION_TYPE.PROJECT_ENROLL_GROUP):
+      return dispatchMutationResp(state, 'enrollGroupProject', action);
     case SUCCESS(ACTION_TYPE.RESOLVE_TASK):
       return dispatchMutationResp(state, 'resolveTask', action);
     case REQUEST(ACTION_TYPE.TASK_MUTATION):

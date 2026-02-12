@@ -137,3 +137,7 @@ export const INDIVIDUAL_LABEL = 'Individual';
 export const INDIVIDUAL_MODULE_NAME = 'individual';
 export const BENEFIT_PLAN_PROJECTS_TAB_VALUE = 'BenefitPlanProjectsTab';
 export const PROJECT_STATUS_LIST = ['PREPARATION', 'IN_PROGRESS', 'COMPLETED'];
+export const PROJECT_TABS_LABEL_CONTRIBUTION_KEY = 'project.TabPanel.label';
+export const PROJECT_TABS_PANEL_CONTRIBUTION_KEY = 'project.TabPanel.panel';
+export const PROJECT_BENEFICIARIES_TAB_VALUE = 'projectBeneficiariesTab';
+export const PROJECT_CHANGELOG_TAB_VALUE = 'projectChangelogTab';
