@@ -27,7 +27,7 @@
     "react-dom": "^18.2.0",
     "react-intl": "^7.1.11",
     "redux": "^5.0.1",
-    "@material-table/core": "^6.4.4"
+    "@material-table/core": "^6.5.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
