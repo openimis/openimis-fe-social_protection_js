@@ -55,6 +55,7 @@ function BenefitPlanBeneficiariesTabPanel({
   setConfirmedAction,
   value, confirmed,
   edited, onEditedChanged,
+  save, isSaving, canSave,
 }) {
   if (value !== BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE) {
     return null;
@@ -131,7 +132,13 @@ function BenefitPlanBeneficiariesTabPanel({
               intl={intl}
               benefitPlan={benefitPlan}
             />
-            <BenefitPlanBeneficiariesUploadDialog benefitPlan={benefitPlan} />
+            <BenefitPlanBeneficiariesUploadDialog
+              benefitPlan={benefitPlan}
+              save={save}
+              isSaving={isSaving}
+              canSave={canSave}
+              edited={edited}
+            />
             <BenefitPlanBeneficiariesUploadHistoryDialog
               benefitPlan={benefitPlan}
             />

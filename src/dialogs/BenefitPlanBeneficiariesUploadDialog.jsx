@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-no-useless-fragment */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useRef, useState,
+} from 'react';
 import {
   Input, Grid, MenuItem, Typography, Select,
 } from '@mui/material';
@@ -38,11 +40,19 @@ function BenefitPlanBeneficiariesUploadDialog({
   fetchWorkflows,
   benefitPlan,
   coreAlert,
+  save,
+  isSaving,
+  canSave,
+  edited,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [forms, setForms] = useState({});
   const [headers, setHeaders] = useState([]);
   const [groupAggregationHeader, setGroupAggregationHeader] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pendingUploadValues, setPendingUploadValues] = useState(null);
+  const autoSaveTimeoutRef = useRef(null);
+  const pendingUploadValuesRef = useRef(null);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -50,6 +60,15 @@ function BenefitPlanBeneficiariesUploadDialog({
 
   const handleClose = () => {
     setForms({});
+    setHeaders([]);
+    setGroupAggregationHeader(null);
+    setPendingUploadValues(null);
+    pendingUploadValuesRef.current = null;
+    setIsSubmitting(false);
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+      autoSaveTimeoutRef.current = null;
+    }
     setIsOpen(false);
   };
 
@@ -57,7 +76,7 @@ function BenefitPlanBeneficiariesUploadDialog({
     fetchWorkflows();
   }, []);
 
-  const isBenefitPlanGroupType = () => benefitPlan.type === BENEFIT_PLAN_TYPE.GROUP;
+  const isBenefitPlanGroupType = () => benefitPlan?.type === BENEFIT_PLAN_TYPE.GROUP;
 
   const getHeadersFromCSV = async (file) => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -110,7 +129,7 @@ function BenefitPlanBeneficiariesUploadDialog({
     downloadTemplate(benefitPlanId);
   };
 
-  const onSubmit = async (values) => {
+  const uploadBeneficiaries = async (values, benefitPlanId) => {
     const { file } = values;
     const fileFormat = file ? file.type : undefined;
 
@@ -136,7 +155,7 @@ function BenefitPlanBeneficiariesUploadDialog({
       || fileFormat.includes('application/vnd.ms-excel')
       || fileFormat.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     ) {
-      formData.append('benefit_plan', benefitPlan.id);
+      formData.append('benefit_plan', benefitPlanId);
       formData.append('workflow_name', values.workflow.name);
       formData.append('workflow_group', values.workflow.group);
       if (groupAggregationHeader) formData.append('group_aggregation_column', groupAggregationHeader);
@@ -144,6 +163,7 @@ function BenefitPlanBeneficiariesUploadDialog({
     }
 
     try {
+      setIsSubmitting(true);
       const response = await fetch(urlImport, {
         headers: apiHeaders,
         body: formData,
@@ -164,8 +184,62 @@ function BenefitPlanBeneficiariesUploadDialog({
       coreAlert(errorHeader, errorMessage);
     } catch (error) {
       handleClose();
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  const onSubmit = async (values) => {
+    if (!values) return;
+
+    if (!benefitPlan?.id) {
+      if (!save || !canSave) {
+        coreAlert(
+          formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.alert.header'),
+          formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.alert.saveBeforeUploadUnavailable'),
+        );
+        return;
+      }
+      if (!canSave?.()) {
+        coreAlert(
+          formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.alert.header'),
+          formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.alert.saveBeforeUploadInvalid'),
+        );
+        return;
+      }
+
+      setIsSubmitting(true);
+      setPendingUploadValues(values);
+      pendingUploadValuesRef.current = values;
+      save?.(edited);
+      autoSaveTimeoutRef.current = setTimeout(() => {
+        if (pendingUploadValuesRef.current) {
+          setPendingUploadValues(null);
+          pendingUploadValuesRef.current = null;
+          setIsSubmitting(false);
+          coreAlert(
+            formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.alert.header'),
+            formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.alert.saveBeforeUploadFailed'),
+          );
+        }
+      }, 20000);
+      return;
+    }
+
+    await uploadBeneficiaries(values, benefitPlan.id);
+  };
+
+  useEffect(() => {
+    if (!pendingUploadValues || !benefitPlan?.id) return;
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+      autoSaveTimeoutRef.current = null;
+    }
+    const valuesToUpload = pendingUploadValues;
+    setPendingUploadValues(null);
+    pendingUploadValuesRef.current = null;
+    uploadBeneficiaries(valuesToUpload, benefitPlan.id);
+  }, [benefitPlan?.id, pendingUploadValues]);
 
   return (
     <>
@@ -291,7 +365,7 @@ function BenefitPlanBeneficiariesUploadDialog({
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => downloadExampleTemplate(benefitPlan.id)}
+                  onClick={() => downloadExampleTemplate(benefitPlan?.id)}
                   style={{ marginRight: '8px' }}
                 >
                   {formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.template')}
@@ -302,7 +376,10 @@ function BenefitPlanBeneficiariesUploadDialog({
                   color="primary"
                   onClick={() => onSubmit(forms.workflows)}
                   disabled={
-                    !(
+                    isSubmitting
+                    || isSaving
+                    || !!pendingUploadValues
+                    || !(
                       forms.workflows?.file
                       && forms.workflows?.workflow
                     )

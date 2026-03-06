@@ -27,6 +27,7 @@ import {
   benefitPlanSchemaValidationClear,
 } from '../actions';
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
+import { formatMessage } from '../../../CoreModule/src/helpers/i18n';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   ...theme.paper?.item ?? {},
@@ -131,13 +132,15 @@ class BenefitPlanHeadPanel extends FormPanel {
         <StyledGridItem size={3}>
           <NumberInput
             min={0}
+            placeholder={formatMessage(this.props.intl, "socialProtection", "benefitPlan.maxBeneficiaries.placeholder")}
             displayZero
             module="socialProtection"
             label="benefitPlan.maxBeneficiaries"
+            allowDecimals={false}
             onChange={(v) => {
               this.updateAttribute('maxBeneficiaries', v === '' ? null : v);
             }}
-            value={benefitPlan?.maxBeneficiaries ?? ''}
+            value={benefitPlan?.maxBeneficiaries ?? null}
           />
         </StyledGridItem>
         <StyledGridItem size={3}>
@@ -170,10 +173,12 @@ class BenefitPlanHeadPanel extends FormPanel {
         {rights.includes(RIGHT_SCHEMA_UPDATE) && (
           <StyledGridItem size={3}>
             <ValidatedTextAreaInput
+              required
+              placeholder={formatMessage(this.props.intl, "socialProtection", "benefitPlan.schema.placeholder")}
               module="socialProtection"
               label="benefitPlan.schema"
               onChange={(v) => this.updateAttribute('beneficiaryDataSchema', v)}
-              value={benefitPlan?.beneficiaryDataSchema}
+              value={benefitPlan?.beneficiaryDataSchema || '{}'}
               codeTakenLabel="socialProtection.validation.benefitPlan.invalidSchema"
               itemQueryIdentifier="bfSchema"
               action={benefitPlanSchemaValidationCheck}

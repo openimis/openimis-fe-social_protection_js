@@ -103,6 +103,8 @@ function BenefitPlanPage({
     }
   }, [benefitPlan]);
 
+  useEffect(() => () => clearBenefitPlan(), []);
+
   const titleParams = (benefitPlan) => ({
     code: benefitPlan?.code,
     name: benefitPlan?.name,
@@ -125,22 +127,26 @@ function BenefitPlanPage({
 
   const handleSave = () => {
     if (benefitPlanUuid) {
-      updateBenefitPlan(modulesManager, editedBenefitPlan);
+      updateBenefitPlan(
+        editedBenefitPlan,
+        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.update.mutationLabel', titleParams(editedBenefitPlan)),
+      );
     } else {
-      createBenefitPlan(modulesManager, editedBenefitPlan);
+      createBenefitPlan(
+        editedBenefitPlan,
+        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.create.mutationLabel', titleParams(editedBenefitPlan)),
+      );
     }
   };
 
   const deleteBenefitPlanCallback = () => deleteBenefitPlan(
-    modulesManager,
     benefitPlan,
-    formatMessage(intl, 'socialProtection', 'benefitPlan.deleteSuccess'),
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', titleParams(benefitPlan)),
   );
 
   const stopBenefitPlanCallback = () => closeBenefitPlan(
-    modulesManager,
     benefitPlan,
-    formatMessage(intl, 'socialProtection', 'benefitPlan.closeSuccess'),
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.close.mutationLabel', titleParams(benefitPlan)),
   );
 
   const openDeleteBenefitPlanConfirmDialog = () => {
@@ -182,7 +188,7 @@ function BenefitPlanPage({
         edited={editedBenefitPlan}
         onEditedChanged={setEditedBenefitPlan}
         canSave={canSave}
-        onSave={handleSave}
+        save={handleSave}
         submittingMutation={submittingMutation}
         confirmedAction={confirmedAction}
         setConfirmedAction={setConfirmedAction}
