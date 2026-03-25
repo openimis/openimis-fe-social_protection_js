@@ -63,6 +63,8 @@
   "socialProtection.benefitPlan.benefitPlanBeneficiariesPotential.label": "Potential",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.upload": "Upload",
   "socialProtection.benefitPlan.benefitPlanBeneficiaries.upload.label": "Upload Beneficiaries",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.upload.success.title": "Upload successful",
+  "socialProtection.benefitPlan.benefitPlanBeneficiaries.upload.success.message": "File uploaded successfully and sent to the task group for approval.",
   "socialProtection.mainMenuSocialProtection": "Social Protection",
   "socialProtection.advancedFilters": "Advanced Filters",
   "socialProtection.createButton.tooltip": "Create",
