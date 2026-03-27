@@ -100,6 +100,7 @@ class ProjectHeadPanel extends FormPanel {
             required
             readOnly={readOnly}
             min={1}
+            numberOfDecimals={0}
             value={project?.targetBeneficiaries}
             onChange={(v) => this.updateAttribute('targetBeneficiaries', v)}
           />
@@ -112,6 +113,7 @@ class ProjectHeadPanel extends FormPanel {
             required
             readOnly={readOnly}
             min={1}
+            numberOfDecimals={0}
             value={project?.workingDays}
             onChange={(v) => this.updateAttribute('workingDays', v)}
           />

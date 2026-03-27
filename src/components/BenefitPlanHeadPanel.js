@@ -132,6 +132,7 @@ class BenefitPlanHeadPanel extends FormPanel {
           <NumberInput
             min={0}
             displayZero
+            numberOfDecimals={0}
             module="socialProtection"
             label="benefitPlan.maxBeneficiaries"
             onChange={(v) => {
