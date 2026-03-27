@@ -6,33 +6,20 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Tune } from '@mui/icons-material';
 import { formatMessage, MainMenuContribution, withModulesManager } from '@openimis/fe-core';
+import Diversity2Icon from '@mui/icons-material/Diversity2';
 import {
   RIGHT_BENEFIT_PLAN_SEARCH,
   SOCIAL_PROTECTION_MAIN_MENU_CONTRIBUTION_KEY,
 } from '../constants';
 
 function BenefitPlanMainMenu(props) {
-  const entries = [
-    {
-      text: formatMessage(props.intl, 'socialProtection', 'menu.socialProtection.benefitPlans'),
-      icon: <Tune />,
-      route: '/benefitPlans',
-      filter: (rights) => rights.includes(RIGHT_BENEFIT_PLAN_SEARCH),
-      id: 'socialProtection.benefitPlans',
-    },
-  ];
-  entries.push(
-    ...props.modulesManager
-      .getContribs(SOCIAL_PROTECTION_MAIN_MENU_CONTRIBUTION_KEY)
-      .filter((c) => !c.filter || c.filter(props.rights)),
-  );
-
   return (
     <MainMenuContribution
       {...props}
       header={formatMessage(props.intl, 'socialProtection', 'mainMenuSocialProtection')}
-      entries={entries}
       menuId="BenefitPlanMainMenu"
+      contributionKey={SOCIAL_PROTECTION_MAIN_MENU_CONTRIBUTION_KEY}
+      icon={<Diversity2Icon />}
     />
   );
 }
