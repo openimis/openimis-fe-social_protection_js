@@ -41,6 +41,7 @@ function BenefitPlanPicker(props) {
             name
             type
             jsonExt
+            maxBeneficiaries
           }
         }
       }
