@@ -9,8 +9,9 @@ import {
   NumberInput,
   FormPanel,
   formatMessage,
+  GetIconComponent,
 } from '@openimis/fe-core';
-import PreviewIcon from '@mui/icons-material/ListAlt';
+const PreviewIcon = GetIconComponent("ListAlt");
 import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';

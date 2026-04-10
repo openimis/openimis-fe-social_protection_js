@@ -9,6 +9,7 @@ import {
   downloadExport,
   useModulesManager,
   useHistory,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -21,9 +22,9 @@ import {
   Tooltip,
   DialogContent,
 } from '@mui/material';
-import PreviewIcon from '@mui/icons-material/ListAlt';
-import ErrorIcon from '@mui/icons-material/Error';
-import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
+const PreviewIcon = GetIconComponent("ListAlt");
+const ErrorIcon = GetIconComponent("Error");
+const CheckCircleIcon = GetIconComponent("CheckCircleOutline");
 import {
   fetchGroupBeneficiaries, downloadGroupBeneficiaries, clearGroupBeneficiaryExport, updateGroupBeneficiary,
 } from '../actions';

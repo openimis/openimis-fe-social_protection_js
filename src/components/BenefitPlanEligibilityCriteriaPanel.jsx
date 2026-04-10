@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  decodeId, fetchCustomFilter, PublishedComponent, useModulesManager, useTranslations,
+  GetIconComponent, decodeId, fetchCustomFilter, PublishedComponent, useModulesManager, useTranslations,
 } from '@openimis/fe-core';
 import { styled } from '@mui/material/styles';
-import AddCircle from '@mui/icons-material/Add';
+const AddCircle = GetIconComponent("Add");
 import { Button, Divider, Grid, Paper, Typography } from '@mui/material';
 import {
   CLEARED_STATE_FILTER,

@@ -3,7 +3,12 @@
 /* eslint-disable import/prefer-default-export */
 import {flatten }from 'flat';
 import React from 'react';
-import { Tune } from '@mui/icons-material';
+
+import { GetIconComponent } from "@openimis/fe-core";
+const Tune = GetIconComponent("Tune");
+const Folder   = GetIconComponent("Folder");
+const Group = GetIconComponent("Group");
+const Edit = GetIconComponent("Edit");
 import { FormattedMessage } from '@openimis/fe-core';
 import messages_en from './translations/en.json';
 import reducer from './reducer';
@@ -74,7 +79,7 @@ import {
 } from './components/BenefitPlanProjectsTab';
 import { BenefitPlanChangelogTabLabel, BenefitPlanChangelogTabPanel } from './components/BenefitPlanChangelogTab';
 import { BenefitPlanTaskTabLabel, BenefitPlanTaskTabPanel } from './components/BenefitPlanTaskTab';
-import { BENEFIT_PLAN_LABEL, RIGHT_BENEFIT_PLAN_SEARCH } from './constants';
+import { BENEFIT_PLAN_LABEL, RIGHT_GROUP_UPDATE,RIGHT_PROJECT_UPDATE, RIGHT_BENEFICIARY_UPDATE, RIGHT_BENEFIT_PLAN_SEARCH, RIGHT_BENEFIT_PLAN_UPDATE } from './constants';
 import BeneficiaryPicker from './pickers/BeneficiaryPicker';
 import BenefitPlanProjectsSearcher from './components/BenefitPlanProjectsSearcher';
 import {
@@ -97,19 +102,25 @@ const DEFAULT_CONFIG = {
   reducers: [{ key: 'socialProtection', reducer }],
   'core.MainMenu': [{ name: 'BenefitPlanMainMenu', component: BenefitPlanMainMenu }],
   'core.Router': [
-    { path: ROUTE_BENEFIT_PLANS, component: BenefitPlansPage },
-    { path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`, component: BenefitPlanPage },
+    { path: ROUTE_BENEFIT_PLANS, component: BenefitPlansPage, rights: [RIGHT_BENEFIT_PLAN_SEARCH], icon: Tune },
+    { path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`, component: BenefitPlanPage, rights: [RIGHT_BENEFIT_PLAN_UPDATE], icon: Edit },
     {
       path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/individual/:beneficiary_uuid?`,
       component: BenefitPackagePage,
+      rights: [RIGHT_BENEFICIARY_UPDATE],
+      icon: Group,
     },
     {
       path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/group/:group_beneficiaries_uuid?`,
       component: BenefitPackagePage,
+      rights: [RIGHT_GROUP_UPDATE],
+      icon: Group,
     },
     {
       path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_PROJECT}/:project_uuid?`,
       component: ProjectPage,
+      rights: [RIGHT_PROJECT_UPDATE],
+      icon: Folder,
     },
   ],
   refs: [
@@ -205,7 +216,6 @@ const DEFAULT_CONFIG = {
       text: <FormattedMessage module="socialProtection" id="menu.socialProtection.benefitPlans" />,
       icon: <Tune />,
       route: '/benefitPlans',
-      filter: (rights) => rights.includes(RIGHT_BENEFIT_PLAN_SEARCH),
       id: 'socialProtection.benefitPlans',
     },
   ],

@@ -4,13 +4,14 @@ import {
   formatMessage,
   formatMessageWithValues,
   useModulesManager,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import { connect, useDispatch } from 'react-redux';
 import {
   Button,
   Typography,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+const AddIcon = GetIconComponent("Add");
 import {
   MODULE_NAME,
   RIGHT_PROJECT_UPDATE,

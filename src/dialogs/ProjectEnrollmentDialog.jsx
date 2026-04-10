@@ -8,7 +8,6 @@ import {
   IconButton,
   Button,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -18,6 +17,7 @@ import {
   useModulesManager,
   decodeId,
   journalize,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import {
   fetchBeneficiaries,
@@ -32,6 +32,7 @@ import {
 import BeneficiaryTable from '../components/BeneficiaryTable';
 import { REQUEST } from '../util/action-type';
 import { ACTION_TYPE } from '../reducer';
+const CloseIcon = GetIconComponent("Close");
 
 const StyledDialog = styled(Dialog)(() => ({
   '& .MuiDialog-paper': {

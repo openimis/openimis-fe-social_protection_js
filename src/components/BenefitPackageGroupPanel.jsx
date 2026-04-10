@@ -9,8 +9,10 @@ import {
   formatMessage,
   createFieldsBasedOnJSON,
   renderInputComponent,
+  GetIconComponent,
 } from '@openimis/fe-core';
-import { People as PeopleIcon } from '@mui/icons-material';
+const PeopleIcon = GetIconComponent("People")
+
 import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import { EMPTY_STRING, RIGHT_GROUP_UPDATE, SOCIAL_PROTECTION_MODULE } from '../constants';

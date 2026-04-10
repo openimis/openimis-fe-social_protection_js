@@ -11,7 +11,8 @@ import {
   createFieldsBasedOnJSON,
   renderInputComponent,
 } from '@openimis/fe-core';
-import { Person } from '@mui/icons-material';
+import { GetIconComponent } from "@openimis/fe-core";
+const Person = GetIconComponent("Person")
 import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import { EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE, SOCIAL_PROTECTION_MODULE } from '../constants';

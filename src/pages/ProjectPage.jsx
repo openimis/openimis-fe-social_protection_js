@@ -8,13 +8,14 @@ import {
   clearConfirm,
   journalize,
   useHistory,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
-import DeleteIcon from '@mui/icons-material/Delete';
-import UndoIcon from '@mui/icons-material/Undo';
+const DeleteIcon = GetIconComponent("Delete");
+const UndoIcon = GetIconComponent("Undo");
 import _ from 'lodash';
 
 import {

@@ -11,12 +11,13 @@ import {
   withHistory,
   withModulesManager,
   formatDateFromISO,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { IconButton, Tooltip } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+const EditIcon = GetIconComponent("Edit");
+const DeleteIcon = GetIconComponent("Delete");
 import {
   DEFAULT_PAGE_SIZE,
   RIGHT_BENEFIT_PLAN_DELETE,

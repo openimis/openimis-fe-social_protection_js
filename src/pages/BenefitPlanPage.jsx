@@ -8,14 +8,15 @@ import {
   clearConfirm,
   journalize,
   withModulesManager,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { styled } from '@mui/material/styles';
-import DeleteIcon from '@mui/icons-material/Delete';
-import PauseIcon from '@mui/icons-material/Pause';
+const DeleteIcon = GetIconComponent("Delete");
+const PauseIcon = GetIconComponent("Pause");
 import {
   BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE,
   RIGHT_BENEFICIARY_SEARCH,

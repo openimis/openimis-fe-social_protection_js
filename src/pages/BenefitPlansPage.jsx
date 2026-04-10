@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  Helmet, withModulesManager, formatMessage, withTooltip, historyPush,
+  GetIconComponent, Helmet, withModulesManager, formatMessage, withTooltip, historyPush,
 } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
 import { Fab } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+const AddIcon = GetIconComponent("Add");
 import {
   RIGHT_BENEFIT_PLAN_CREATE,
   RIGHT_BENEFIT_PLAN_SEARCH, SOCIAL_PROTECTION_ROUTE_BENEFIT_PLAN,

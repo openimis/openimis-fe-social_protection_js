@@ -4,9 +4,10 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Tune } from '@mui/icons-material';
+import { GetIconComponent } from "@openimis/fe-core";
+const Tune = GetIconComponent("Tune")
 import { formatMessage, MainMenuContribution, withModulesManager } from '@openimis/fe-core';
-import Diversity2Icon from '@mui/icons-material/Diversity2';
+const Diversity2Icon = GetIconComponent("Diversity2");
 import {
   RIGHT_BENEFIT_PLAN_SEARCH,
   SOCIAL_PROTECTION_MAIN_MENU_CONTRIBUTION_KEY,

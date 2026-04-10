@@ -10,15 +10,16 @@ import {
   coreConfirm,
   clearConfirm,
   journalize,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import UndoIcon from '@mui/icons-material/Undo';
+const AddIcon = GetIconComponent("Add");
+const EditIcon = GetIconComponent("Edit");
+const DeleteIcon = GetIconComponent("Delete");
+const UndoIcon = GetIconComponent("Undo");
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
