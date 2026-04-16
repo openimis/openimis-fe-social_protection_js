@@ -12,7 +12,6 @@ const Edit = GetIconComponent("Edit");
 import { FormattedMessage } from '@openimis/fe-core';
 import messages_en from './translations/en.json';
 import reducer from './reducer';
-import BenefitPlanMainMenu from './menus/BenefitPlanMainMenu';
 import BenefitPlansPage from './pages/BenefitPlansPage';
 import BenefitPlanPage from './pages/BenefitPlanPage';
 import BenefitPackagePage from './pages/BenefitPackagePage';
@@ -100,27 +99,40 @@ const ROUTE_PROJECT = 'project';
 const DEFAULT_CONFIG = {
   translations: [{ key: 'en', messages: flatten(messages_en) }],
   reducers: [{ key: 'socialProtection', reducer }],
-  'core.MainMenu': [{ name: 'BenefitPlanMainMenu', component: BenefitPlanMainMenu }],
+  'core.MainMenu': [{ name: 'BenefitPlanMainMenu', id:"socialProtection.MainMenu", icon: "Diversity2Icon", text: "socialProtection.mainMenuSocialProtection" }],
   'core.Router': [
-    { path: ROUTE_BENEFIT_PLANS, component: BenefitPlansPage, rights: [RIGHT_BENEFIT_PLAN_SEARCH], icon: Tune },
-    { path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`, component: BenefitPlanPage, rights: [RIGHT_BENEFIT_PLAN_UPDATE], icon: Edit },
+    { 
+      path: ROUTE_BENEFIT_PLANS,
+      id: 'socialProtection.benefitPlans',
+      icon: "Tune",
+      component: BenefitPlansPage,
+      rights: [RIGHT_BENEFIT_PLAN_SEARCH],
+      text: "socialProtection.menu.socialProtection.benefitPlans",
+    },
+    { 
+      path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`,
+      component: BenefitPlanPage,
+      rights: [RIGHT_BENEFIT_PLAN_UPDATE],
+      icon: "Edit",
+      text: "socialProtection.menu.socialProtection.benefitPlan",
+    },
     {
       path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/individual/:beneficiary_uuid?`,
       component: BenefitPackagePage,
       rights: [RIGHT_BENEFICIARY_UPDATE],
-      icon: Group,
+      icon: "Group",
     },
     {
       path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/group/:group_beneficiaries_uuid?`,
       component: BenefitPackagePage,
       rights: [RIGHT_GROUP_UPDATE],
-      icon: Group,
-    },
+      icon: "Group",
+      },
     {
       path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_PROJECT}/:project_uuid?`,
       component: ProjectPage,
       rights: [RIGHT_PROJECT_UPDATE],
-      icon: Folder,
+      icon: "Folder",
     },
   ],
   refs: [
@@ -213,10 +225,7 @@ const DEFAULT_CONFIG = {
   ],
   'socialProtection.MainMenu': [
     {
-      text: <FormattedMessage module="socialProtection" id="menu.socialProtection.benefitPlans" />,
-      icon: <Tune />,
-      route: '/benefitPlans',
-      id: 'socialProtection.benefitPlans',
+      route: ROUTE_BENEFIT_PLANS,
     },
   ],
   middlewares: [projectBeneficiariesMiddleware],
