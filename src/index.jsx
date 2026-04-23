@@ -99,7 +99,7 @@ const ROUTE_PROJECT = 'project';
 const DEFAULT_CONFIG = {
   translations: [{ key: 'en', messages: flatten(messages_en) }],
   reducers: [{ key: 'socialProtection', reducer }],
-  'core.MainMenu': [{ name: 'BenefitPlanMainMenu', id:"socialProtection.MainMenu", icon: "Diversity2Icon", text: "socialProtection.mainMenuSocialProtection" }],
+  'core.MainMenu': [{ name: 'BenefitPlanMainMenu', id:"socialProtection.MainMenu", icon: "diversity_2", text: "socialProtection.mainMenuSocialProtection" }],
   'core.Router': [
     { 
       path: ROUTE_BENEFIT_PLANS,
