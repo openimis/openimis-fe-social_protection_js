@@ -292,6 +292,22 @@ export function deleteBenefitPlan(benefitPlan, clientMutationLabel) {
   );
 }
 
+export function undoDeleteBenefitPlan(benefitPlan, clientMutationLabel) {
+  const benefitPlanUuids = `ids: ["${benefitPlan?.id}"]`;
+  const mutation = formatMutation('undoDeleteBenefitPlan', benefitPlanUuids, clientMutationLabel);
+  const requestedDateTime = new Date();
+  return graphql(
+    mutation.payload,
+    [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.UNDO_DELETE_BENEFIT_PLAN), ERROR(ACTION_TYPE.MUTATION)],
+    {
+      actionType: ACTION_TYPE.UNDO_DELETE_BENEFIT_PLAN,
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}
+
 export function closeBenefitPlan(benefitPlan, clientMutationLabel) {
   const benefitPlanUuids = `ids: ["${benefitPlan?.id}"]`;
   const mutation = formatMutation('closeBenefitPlan', benefitPlanUuids, clientMutationLabel);

@@ -16,6 +16,7 @@ import _ from 'lodash';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PauseIcon from '@material-ui/icons/Pause';
+import UndoIcon from '@material-ui/icons/Undo';
 import {
   BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE,
   RIGHT_BENEFICIARY_SEARCH,
@@ -23,6 +24,7 @@ import {
 } from '../constants';
 import {
   fetchBenefitPlan, deleteBenefitPlan, closeBenefitPlan, updateBenefitPlan, clearBenefitPlan, createBenefitPlan,
+  undoDeleteBenefitPlan,
 } from '../actions';
 import BenefitPlanHeadPanel from '../components/BenefitPlanHeadPanel';
 import BenefitPlanTabPanel from '../components/BenefitPlanTabPanel';
@@ -42,6 +44,7 @@ function BenefitPlanPage({
   benefitPlan,
   fetchBenefitPlan,
   deleteBenefitPlan,
+  undoDeleteBenefitPlan,
   closeBenefitPlan,
   updateBenefitPlan,
   coreConfirm,
@@ -78,7 +81,10 @@ function BenefitPlanPage({
   useEffect(() => {
     if (prevSubmittingMutationRef.current && !submittingMutation) {
       journalize(mutation);
-      if (mutation?.actionType === ACTION_TYPE.DELETE_BENEFIT_PLAN) {
+      if ([
+        ACTION_TYPE.DELETE_BENEFIT_PLAN,
+        ACTION_TYPE.UNDO_DELETE_BENEFIT_PLAN,
+      ].includes(mutation?.actionType)) {
         back();
       }
     }
@@ -132,15 +138,16 @@ function BenefitPlanPage({
   const canSave = () => !isMandatoryFieldsEmpty() && isValid() && doesBenefitPlanChange();
 
   const handleSave = () => {
+    const params = titleParams(editedBenefitPlan);
     if (benefitPlan?.id) {
       updateBenefitPlan(
         editedBenefitPlan,
-        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.update.mutationLabel', titleParams(benefitPlan)),
+        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.update.mutationLabel', params),
       );
     } else {
       createBenefitPlan(
         editedBenefitPlan,
-        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.create.mutationLabel', titleParams(benefitPlan)),
+        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.create.mutationLabel', params),
       );
     }
   };
@@ -148,14 +155,14 @@ function BenefitPlanPage({
   const deleteBenefitPlanCallback = () => deleteBenefitPlan(
     benefitPlan,
     formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-      id: benefitPlan?.id,
+      name: benefitPlan?.name,
     }),
   );
 
   const stopBenefitPlanCallback = () => closeBenefitPlan(
     benefitPlan,
     formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-      id: benefitPlan?.id,
+      name: benefitPlan?.name,
     }),
   );
 
@@ -181,6 +188,24 @@ function BenefitPlanPage({
     );
   };
 
+  const undoDeleteBenefitPlanCallback = () => undoDeleteBenefitPlan(
+    benefitPlan,
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.mutationLabel', {
+      name: benefitPlan?.name,
+    }),
+  );
+
+  const openUndoBenefitPlanConfirmDialog = () => {
+    setConfirmedAction(() => undoDeleteBenefitPlanCallback);
+    coreConfirm(
+      formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.confirm.title', {
+        code: benefitPlan?.code,
+        name: benefitPlan?.name,
+      }),
+      formatMessage(intl, 'socialProtection', 'benefitPlan.undo.confirm.message'),
+    );
+  };
+
   const [childActiveTab, setChildActiveTab] = useState(BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE);
 
   const getBenefitPlanPanels = () => {
@@ -192,11 +217,17 @@ function BenefitPlanPage({
   };
 
   const actions = [
-    !!benefitPlan && {
-      doIt: openDeleteBenefitPlanConfirmDialog,
-      icon: <DeleteIcon />,
-      tooltip: formatMessage(intl, 'socialProtection', 'deleteButtonTooltip'),
-    }, !!benefitPlan && {
+    !!benefitPlan && (
+      benefitPlan.isDeleted ? {
+        doIt: openUndoBenefitPlanConfirmDialog,
+        icon: <UndoIcon />,
+        tooltip: formatMessage(intl, 'socialProtection', 'undoButtonTooltip'),
+      } : {
+        doIt: openDeleteBenefitPlanConfirmDialog,
+        icon: <DeleteIcon />,
+        tooltip: formatMessage(intl, 'socialProtection', 'deleteButtonTooltip'),
+      }),
+    !!benefitPlan && !benefitPlan.isDeleted && {
       doIt: openStopBenefitPlanConfirmDialog,
       icon: <PauseIcon />,
       tooltip: formatMessage(intl, 'socialProtection', 'stopButtonTooltip'),
@@ -227,7 +258,7 @@ function BenefitPlanPage({
         rights={rights}
         actions={actions}
         setConfirmedAction={setConfirmedAction}
-        readOnly={!!benefitPlanUuid}
+        readOnly={!!benefitPlanUuid || editedBenefitPlan?.isDeleted}
         saveTooltip={formatMessage(
           intl,
           'socialProtection',
@@ -259,6 +290,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchBenefitPlan,
   clearBenefitPlan,
   deleteBenefitPlan,
+  undoDeleteBenefitPlan,
   closeBenefitPlan,
   updateBenefitPlan,
   coreConfirm,

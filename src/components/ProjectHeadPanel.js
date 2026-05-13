@@ -19,6 +19,7 @@ import {
 import ProjectStatusPicker from '../pickers/ProjectStatusPicker';
 import ActivityPicker from '../pickers/ActivityPicker';
 import ProjectAllowsMultiEnrollmentPicker from '../pickers/ProjectAllowsMultiEnrollmentPicker';
+import { DEFAULT_MAX_WORKING_DAYS } from '../constants';
 
 const styles = (theme) => ({
   item: theme.paper.item,
@@ -39,10 +40,12 @@ class ProjectHeadPanel extends FormPanel {
       projectNameValidationError,
       savedProjectName,
       readOnly,
+      modulesManager,
     } = this.props;
 
     const project = { ...edited };
     const isNewProject = !project?.id;
+    const maxWorkingDays = modulesManager.getConf('fe-social_protection', 'maxWorkingDays', DEFAULT_MAX_WORKING_DAYS);
 
     return (
       <Grid container className={classes.item}>
@@ -112,6 +115,7 @@ class ProjectHeadPanel extends FormPanel {
             required
             readOnly={readOnly}
             min={1}
+            max={maxWorkingDays}
             value={project?.workingDays}
             onChange={(v) => this.updateAttribute('workingDays', v)}
           />

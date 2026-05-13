@@ -291,8 +291,6 @@ function BenefitPlanProjectsSearcher({
         searcherActions={searcherActions}
         enableActionButtons
         searcherActionsPosition="header-right"
-        exportable
-        exportFieldLabel={formatMessage(intl, MODULE_NAME, 'export.label')}
         onDoubleClick={openProject}
         onFiltersApplied={onFiltersApplied}
       />

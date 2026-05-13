@@ -22,6 +22,7 @@ export const ACTION_TYPE = {
   GET_BENEFIT_PLAN: 'BENEFIT_PLAN_BENEFIT_PLAN',
   CREATE_BENEFIT_PLAN: 'BENEFIT_PLAN_CREATE_BENEFIT_PLAN',
   DELETE_BENEFIT_PLAN: 'BENEFIT_PLAN_DELETE_BENEFIT_PLAN',
+  UNDO_DELETE_BENEFIT_PLAN: 'BENEFIT_PLAN_UNDO_DELETE_BENEFIT_PLAN',
   CLOSE_BENEFIT_PLAN: 'BENEFIT_PLAN_CLOSE_BENEFIT_PLAN',
   UPDATE_BENEFIT_PLAN: 'BENEFIT_PLAN_UPDATE_BENEFIT_PLAN',
   BENEFIT_PLAN_CODE_FIELDS_VALIDATION: 'BENEFIT_PLAN_CODE_FIELDS_VALIDATION',
@@ -383,6 +384,7 @@ function reducer(
         groupBeneficiaries: parseData(action.payload.data.groupBeneficiary)?.map((groupBeneficiary) => {
           const response = ({
             ...groupBeneficiary,
+            benefitPlan: { id: groupBeneficiary?.benefitPlan?.id ? decodeId(groupBeneficiary.benefitPlan.id) : null },
             id: decodeId(groupBeneficiary.id),
           });
           if (response?.group?.id) {
@@ -999,6 +1001,8 @@ function reducer(
       return dispatchMutationResp(state, 'createBenefitPlan', action);
     case SUCCESS(ACTION_TYPE.DELETE_BENEFIT_PLAN):
       return dispatchMutationResp(state, 'deleteBenefitPlan', action);
+    case SUCCESS(ACTION_TYPE.UNDO_DELETE_BENEFIT_PLAN):
+      return dispatchMutationResp(state, 'undoDeleteBenefitPlan', action);
     case SUCCESS(ACTION_TYPE.UPDATE_BENEFIT_PLAN):
       return dispatchMutationResp(state, 'updateBenefitPlan', action);
     case SUCCESS(ACTION_TYPE.UPDATE_BENEFICIARY):

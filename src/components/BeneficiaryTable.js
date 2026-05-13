@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import {
   formatMessage,
   fetchCustomFilter,
+  useModulesManager,
 } from '@openimis/fe-core';
 import {
   LOC_LEVELS,
@@ -29,6 +30,7 @@ import {
 import {
   MODULE_NAME,
   DEFAULT_PAGE_SIZE,
+  DEFAULT_MAX_WORKING_DAYS,
 } from '../constants';
 import NumberFilter from './MaterialTableNumberFilter';
 
@@ -199,9 +201,10 @@ function TableContainer({ children, className }) {
   );
 }
 
-const getWorkDayColumns = (translateFn, onTimeEntryChange, workingDays = 0) => {
+const getWorkDayColumns = (translateFn, onTimeEntryChange, workingDays = 0, maxColumns = DEFAULT_MAX_WORKING_DAYS) => {
   if (!workingDays) return [];
-  return Array.from({ length: workingDays }, (_, i) => {
+  const cappedDays = Math.min(workingDays, maxColumns);
+  return Array.from({ length: cappedDays }, (_, i) => {
     const dayNumber = i + 1;
     const dayKey = `day${dayNumber}`;
     return {
@@ -258,6 +261,8 @@ function BeneficiaryTable({
   const [jsonExtFilters, setJsonExtFilters] = React.useState({});
 
   const dispatch = useDispatch();
+  const modulesManager = useModulesManager();
+  const maxWorkingDays = modulesManager.getConf('fe-social_protection', 'maxWorkingDays', DEFAULT_MAX_WORKING_DAYS);
 
   const dynamicColumns = React.useMemo(() => (
     getDynamicColumns(translate, jsonExtFilters)
@@ -350,7 +355,7 @@ function BeneficiaryTable({
         defaultSort: 'asc',
       },
     ] : [];
-    const workDayColumns = getWorkDayColumns(translate, onTimeEntryChange, workingDays);
+    const workDayColumns = getWorkDayColumns(translate, onTimeEntryChange, workingDays, maxWorkingDays);
     const allColumns = [
       ...additionalColumns,
       {
@@ -405,7 +410,10 @@ function BeneficiaryTable({
       width: typeof c.field === 'string' && c.field.includes('email') ? '200px' : '140px',
       tableData: { filterValue: initialFiltersRef.current[c.title] || '' },
     }));
-  }, [isGroup, nameDoBFieldPrefix, locationFieldPrefix, translate, dynamicColumns, workingDays, onTimeEntryChange]);
+  }, [
+    isGroup, nameDoBFieldPrefix, locationFieldPrefix, translate,
+    dynamicColumns, workingDays, onTimeEntryChange, maxWorkingDays,
+  ]);
 
   const isSelectable = !!onSelectionChange;
 

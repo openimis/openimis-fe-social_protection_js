@@ -2,6 +2,7 @@ export const SOCIAL_PROTECTION_MAIN_MENU_CONTRIBUTION_KEY = 'socialProtection.Ma
 export const CONTAINS_LOOKUP = 'Icontains';
 export const DEFAULT_DEBOUNCE_TIME = 500;
 export const DEFAULT_PAGE_SIZE = 10;
+export const DEFAULT_MAX_WORKING_DAYS = 1000;
 export const EMPTY_STRING = '';
 export const ROWS_PER_PAGE_OPTIONS = [10, 20, 50, 100];
 
