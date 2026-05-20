@@ -29,7 +29,7 @@ export const ACTION_TYPE = {
   BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION: 'BENEFIT_PLAN_SCHEMA_FIELDS_VALIDATION',
   BENEFIT_PLAN_CODE_SET_VALID: 'BENEFIT_PLAN_CODE_SET_VALID',
   BENEFIT_PLAN_NAME_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
-  BENEFIT_PLAN_SCHEMA_SET_VALID: 'BENEFIT_PLAN_NAME_SET_VALID',
+   BENEFIT_PLAN_SCHEMA_SET_VALID: 'BENEFIT_PLAN_SCHEMA_SET_VALID',
   SEARCH_BENEFICIARIES: 'BENEFICIARY_BENEFICIARIES',
   SEARCH_PROJECT_BENEFICIARIES: 'PROJECT_BENEFICIARIES',
   SEARCH_GROUP_BENEFICIARIES: 'GROUP_BENEFICIARY_GROUP_BENEFICIARIES',
@@ -142,6 +142,11 @@ function reducer(
     projectBeneficiariesPageInfo: {},
     projectBeneficiariesTotalCount: 0,
     errorProjectBeneficiaries: null,
+    validationFields: {
+      benefitPlanName: { isValid: true },
+      benefitPlanCode: { isValid: true },
+      benefitPlanSchema: { isValid: true },
+    },
   },
   action,
 ) {

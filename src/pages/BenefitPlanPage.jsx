@@ -115,7 +115,7 @@ function BenefitPlanPage({
   };
 
   const isValid = () => (
-    isBenefitPlanNameValid && isBenefitPlanCodeValid && isBenefitPlanSchemaValid
+    isBenefitPlanNameValid && isBenefitPlanCodeValid && (isBenefitPlanSchemaValid ?? true)
   );
 
   const doesBenefitPlanChange = () => {
@@ -201,14 +201,14 @@ function BenefitPlanPage({
             icon: <DeleteIcon />,
             handler: openDeleteBenefitPlanConfirmDialog,
             disabled: !benefitPlan?.id || submittingMutation,
-            tooltip: formatMessage(intl, 'socialProtection', 'benefitPlan.deleteButton.tooltip'),
+            tooltip: (!benefitPlan?.id || submittingMutation) ? undefined : formatMessage(intl, 'socialProtection', 'benefitPlan.deleteButton.tooltip'),
           },
           {
             name: 'stop',
             icon: <PauseIcon />,
             handler: openStopBenefitPlanConfirmDialog,
             disabled: !benefitPlan?.id || submittingMutation,
-            tooltip: formatMessage(intl, 'socialProtection', 'benefitPlan.closeButton.tooltip'),
+            tooltip: (!benefitPlan?.id || submittingMutation) ? undefined : formatMessage(intl, 'socialProtection', 'benefitPlan.closeButton.tooltip'),
           },
         ]}
       />

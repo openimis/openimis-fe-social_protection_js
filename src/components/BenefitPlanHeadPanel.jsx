@@ -131,7 +131,6 @@ class BenefitPlanHeadPanel extends FormPanel {
         <StyledGridItem size={3}>
           <NumberInput
             min={0}
-            displayZero
             module="socialProtection"
             label="benefitPlan.maxBeneficiaries"
             onChange={(v) => {
