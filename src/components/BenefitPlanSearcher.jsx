@@ -135,8 +135,10 @@ function BenefitPlanSearcher({
           {rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) && (
             <Tooltip title={formatMessage(intl, 'benefitPlan', 'editButtonTooltip')}>
               <IconButton
-                href={benefitPlanUpdatePageUrl(benefitPlan)}
-                onClick={(e) => e.stopPropagation() && onDoubleClick(benefitPlan)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDoubleClick(benefitPlan);
+                }}
                 disabled={deletedBenefitPlanUuids.includes(benefitPlan.id)}
               >
                 <EditIcon />
