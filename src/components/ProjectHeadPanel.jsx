@@ -18,6 +18,7 @@ import {
 } from '../actions';
 import ProjectStatusPicker from '../pickers/ProjectStatusPicker';
 import ActivityPicker from '../pickers/ActivityPicker';
+import { DEFAULT_MAX_WORKING_DAYS } from '../constants';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   ...theme.paper?.item ?? {},
@@ -35,9 +36,11 @@ function ProjectHeadPanel({
   savedProjectName,
   readOnly,
   updateAttribute,
+  modulesManager,
 }) {
   const project = { ...edited };
   const isNewProject = !project?.id;
+  const maxWorkingDays = modulesManager.getConf('fe-social_protection', 'maxWorkingDays', DEFAULT_MAX_WORKING_DAYS);
 
   const shouldValidate = (inputValue, savedValue) => {
     if (!savedValue) return false;
@@ -112,6 +115,7 @@ function ProjectHeadPanel({
           required
           readOnly={readOnly}
           min={1}
+          max={maxWorkingDays}
           value={project?.workingDays}
           onChange={(v) => updateAttribute('workingDays', v)}
         />

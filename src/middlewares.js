@@ -37,7 +37,7 @@ const projectBeneficiariesMiddleware = (store) => (next) => (action) => {
     const payloadField = isGroup ? 'groupBeneficiary' : 'beneficiary';
 
     const params = [
-      `project_Id: "${fetchAllForProjectId}"`,
+      `enrolledInProject: "${fetchAllForProjectId}"`,
       'isDeleted: false',
       orderBy,
       `first: ${batchSize}`,

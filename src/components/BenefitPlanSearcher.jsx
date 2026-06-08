@@ -18,13 +18,14 @@ import { connect } from 'react-redux';
 import { IconButton, Tooltip } from '@mui/material';
 const EditIcon = GetIconComponent("Edit");
 const DeleteIcon = GetIconComponent("Delete");
+const UndoIcon = GetIconComponent("Undo");
 import {
   DEFAULT_PAGE_SIZE,
   RIGHT_BENEFIT_PLAN_DELETE,
   RIGHT_BENEFIT_PLAN_UPDATE,
   ROWS_PER_PAGE_OPTIONS,
 } from '../constants';
-import { deleteBenefitPlan, fetchBenefitPlans } from '../actions';
+import { deleteBenefitPlan, undoDeleteBenefitPlan, fetchBenefitPlans } from '../actions';
 import BenefitPlanFilter from './BenefitPlanFilter';
 
 function BenefitPlanSearcher({
@@ -40,6 +41,7 @@ function BenefitPlanSearcher({
   mutation,
   fetchBenefitPlans,
   deleteBenefitPlan,
+  undoDeleteBenefitPlan,
   fetchingBenefitPlans,
   errorBenefitPlans,
   benefitPlans,
@@ -50,7 +52,10 @@ function BenefitPlanSearcher({
   beneficiaryStatus,
 }) {
   const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
+  const [benefitPlanToUndo, setBenefitPlanToUndo] = useState(null);
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
+  const [undoBenefitPlanUuids, setUndoBenefitPlanUuids] = useState([]);
+  const [activeFilters, setActiveFilters] = useState([]);
   const prevSubmittingMutationRef = useRef();
 
   const openDeleteBenefitPlanConfirmDialog = (benefitPlan) => coreConfirm(
@@ -61,6 +66,14 @@ function BenefitPlanSearcher({
     formatMessage(intl, 'socialProtection', 'benefitPlan.delete.confirm.message'),
   );
 
+  const openUndoBenefitPlanConfirmDialog = () => coreConfirm(
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.confirm.title', {
+      code: benefitPlanToUndo?.code,
+      name: benefitPlanToUndo?.name,
+    }),
+    formatMessage(intl, 'socialProtection', 'benefitPlan.undo.confirm.message'),
+  );
+
   useEffect(() => {
     if (benefitPlanToDelete) {
       openDeleteBenefitPlanConfirmDialog(benefitPlanToDelete);
@@ -68,18 +81,37 @@ function BenefitPlanSearcher({
   }, [benefitPlanToDelete]);
 
   useEffect(() => {
+    if (benefitPlanToUndo) {
+      openUndoBenefitPlanConfirmDialog();
+    }
+  }, [benefitPlanToUndo]);
+
+  useEffect(() => {
     if (benefitPlanToDelete && confirmed) {
       deleteBenefitPlan(
         benefitPlanToDelete,
         formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-          id: benefitPlanToDelete?.id,
+          name: benefitPlanToDelete?.name,
         }),
       );
       setDeletedBenefitPlanUuids([...deletedBenefitPlanUuids, benefitPlanToDelete.id]);
     }
+    if (benefitPlanToUndo && confirmed) {
+      undoDeleteBenefitPlan(
+        benefitPlanToUndo,
+        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.mutationLabel', {
+          name: benefitPlanToUndo?.name,
+        }),
+      );
+      setUndoBenefitPlanUuids([...undoBenefitPlanUuids, benefitPlanToUndo.id]);
+    }
     if (benefitPlanToDelete && confirmed !== null) {
       setBenefitPlanToDelete(null);
     }
+    if (benefitPlanToUndo && confirmed !== null) {
+      setBenefitPlanToUndo(null);
+    }
+    return () => confirmed && clearConfirm(false);
   }, [confirmed]);
 
   useEffect(() => {
@@ -106,6 +138,9 @@ function BenefitPlanSearcher({
     if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) || rights.includes(RIGHT_BENEFIT_PLAN_DELETE)) {
       headers.push('emptyLabel');
     }
+    if (rights.includes(RIGHT_BENEFIT_PLAN_DELETE)) {
+      headers.push('emptyLabel');
+    }
     return headers;
   };
 
@@ -119,6 +154,7 @@ function BenefitPlanSearcher({
       && historyPush(modulesManager, history, 'socialProtection.route.benefitPlan', [benefitPlan?.id], newTab);
 
   const onDelete = (benefitPlan) => setBenefitPlanToDelete(benefitPlan);
+  const onUndo = (benefitPlan) => setBenefitPlanToUndo(benefitPlan);
 
   const itemFormatters = () => {
     const formatters = [
@@ -131,35 +167,40 @@ function BenefitPlanSearcher({
     ];
     if (rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) || rights.includes(RIGHT_BENEFIT_PLAN_DELETE)) {
       formatters.push((benefitPlan) => (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-          {rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) && (
-            <Tooltip title={formatMessage(intl, 'benefitPlan', 'editButtonTooltip')}>
-              <IconButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDoubleClick(benefitPlan);
-                }}
-                disabled={deletedBenefitPlanUuids.includes(benefitPlan.id)}
-              >
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-          {rights.includes(RIGHT_BENEFIT_PLAN_DELETE) && (
-            <Tooltip title={formatMessage(intl, 'benefitPlan', 'deleteButtonTooltip')}>
-              <IconButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete(benefitPlan);
-                }}
-                disabled={deletedBenefitPlanUuids.includes(benefitPlan.id)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
+        <Tooltip title={formatMessage(intl, 'benefitPlan', 'editButtonTooltip')}>
+          <IconButton
+            href={benefitPlanUpdatePageUrl(benefitPlan)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDoubleClick(benefitPlan);
+            }}
+            disabled={deletedBenefitPlanUuids.includes(benefitPlan.id)}
+          >
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
       ));
+    }
+    if (rights.includes(RIGHT_BENEFIT_PLAN_DELETE)) {
+      formatters.push((benefitPlan) => (!benefitPlan?.isDeleted ? (
+        <Tooltip title={formatMessage(intl, 'socialProtection', 'deleteButtonTooltip')}>
+          <IconButton
+            onClick={() => onDelete(benefitPlan)}
+            disabled={deletedBenefitPlanUuids.includes(benefitPlan.id)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title={formatMessage(intl, 'socialProtection', 'undoButtonTooltip')}>
+          <IconButton
+            onClick={() => onUndo(benefitPlan)}
+            disabled={undoBenefitPlanUuids.includes(benefitPlan.id)}
+          >
+            <UndoIcon />
+          </IconButton>
+        </Tooltip>
+      )));
     }
     return formatters;
   };
@@ -175,7 +216,8 @@ function BenefitPlanSearcher({
     ['maxBeneficiaries', true],
   ];
 
-  const isRowDisabled = (_, benefitPlan) => deletedBenefitPlanUuids.includes(benefitPlan.id);
+  const isRowDisabled = (_, benefitPlan) => deletedBenefitPlanUuids.includes(benefitPlan.id)
+    || undoBenefitPlanUuids.includes(benefitPlan.id);
 
   const defaultFilters = () => ({
     isDeleted: {
@@ -212,12 +254,23 @@ function BenefitPlanSearcher({
     />
   );
 
+  const onFiltersApplied = (appliedFilters) => {
+    setActiveFilters(appliedFilters);
+    setDeletedBenefitPlanUuids([]);
+    setUndoBenefitPlanUuids([]);
+  };
+
+  const isDeletedFilterActive = !!activeFilters?.isDeleted?.value;
+  const items = benefitPlans.filter((bp) => (
+    isDeletedFilterActive ? !undoBenefitPlanUuids.includes(bp.id) : !deletedBenefitPlanUuids.includes(bp.id)
+  ));
+
   return (
     <Searcher
       module="socialProtection"
       FilterPane={benefitPlanFilter}
       fetch={fetch}
-      items={benefitPlans}
+      items={items}
       itemsPageInfo={benefitPlansPageInfo}
       fetchedItems={fetchingBenefitPlans}
       errorItems={errorBenefitPlans}
@@ -235,6 +288,7 @@ function BenefitPlanSearcher({
       defaultFilters={defaultFilters()}
       rowDisabled={isRowDisabled}
       rowLocked={isRowDisabled}
+      onFiltersApplied={onFiltersApplied}
     />
   );
 }
@@ -254,6 +308,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
   {
     fetchBenefitPlans,
     deleteBenefitPlan,
+    undoDeleteBenefitPlan,
     coreConfirm,
     clearConfirm,
     journalize,

@@ -17,6 +17,7 @@ import _ from 'lodash';
 import { styled } from '@mui/material/styles';
 const DeleteIcon = GetIconComponent("Delete");
 const PauseIcon = GetIconComponent("Pause");
+const UndoIcon = GetIconComponent("Undo");
 import {
   BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE,
   RIGHT_BENEFICIARY_SEARCH,
@@ -24,6 +25,7 @@ import {
 } from '../constants';
 import {
   fetchBenefitPlan, deleteBenefitPlan, closeBenefitPlan, updateBenefitPlan, clearBenefitPlan, createBenefitPlan,
+  undoDeleteBenefitPlan,
 } from '../actions';
 import BenefitPlanHeadPanel from '../components/BenefitPlanHeadPanel';
 import BenefitPlanTabPanel from '../components/BenefitPlanTabPanel';
@@ -46,6 +48,7 @@ function BenefitPlanPage({
   benefitPlan,
   fetchBenefitPlan,
   deleteBenefitPlan,
+  undoDeleteBenefitPlan,
   closeBenefitPlan,
   updateBenefitPlan,
   coreConfirm,
@@ -82,7 +85,10 @@ function BenefitPlanPage({
   useEffect(() => {
     if (prevSubmittingMutationRef.current && !submittingMutation) {
       journalize(mutation);
-      if (mutation?.actionType === ACTION_TYPE.DELETE_BENEFIT_PLAN) {
+      if ([
+        ACTION_TYPE.DELETE_BENEFIT_PLAN,
+        ACTION_TYPE.UNDO_DELETE_BENEFIT_PLAN,
+      ].includes(mutation?.actionType)) {
         back();
       }
     }
@@ -125,23 +131,32 @@ function BenefitPlanPage({
   const canSave = () => !isMandatoryFieldsEmpty() && isValid() && doesBenefitPlanChange();
 
   const handleSave = () => {
-    if (benefitPlanUuid) {
-      updateBenefitPlan(modulesManager, editedBenefitPlan);
+    const params = titleParams(editedBenefitPlan);
+    if (benefitPlan?.id) {
+      updateBenefitPlan(
+        editedBenefitPlan,
+        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.update.mutationLabel', params),
+      );
     } else {
-      createBenefitPlan(modulesManager, editedBenefitPlan);
+      createBenefitPlan(
+        editedBenefitPlan,
+        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.create.mutationLabel', params),
+      );
     }
   };
 
   const deleteBenefitPlanCallback = () => deleteBenefitPlan(
-    modulesManager,
     benefitPlan,
-    formatMessage(intl, 'socialProtection', 'benefitPlan.deleteSuccess'),
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
+      name: benefitPlan?.name,
+    }),
   );
 
   const stopBenefitPlanCallback = () => closeBenefitPlan(
-    modulesManager,
     benefitPlan,
-    formatMessage(intl, 'socialProtection', 'benefitPlan.closeSuccess'),
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
+      name: benefitPlan?.name,
+    }),
   );
 
   const openDeleteBenefitPlanConfirmDialog = () => {
@@ -160,6 +175,24 @@ function BenefitPlanPage({
     );
   };
 
+  const undoDeleteBenefitPlanCallback = () => undoDeleteBenefitPlan(
+    benefitPlan,
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.mutationLabel', {
+      name: benefitPlan?.name,
+    }),
+  );
+
+  const openUndoBenefitPlanConfirmDialog = () => {
+    setConfirmedAction(() => undoDeleteBenefitPlanCallback);
+    coreConfirm(
+      formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.confirm.title', {
+        code: benefitPlan?.code,
+        name: benefitPlan?.name,
+      }),
+      formatMessage(intl, 'socialProtection', 'benefitPlan.undo.confirm.message'),
+    );
+  };
+
   const getBenefitPlanPanels = () => {
     const panels = [];
     if (rights.includes(RIGHT_BENEFICIARY_SEARCH)) {
@@ -170,6 +203,24 @@ function BenefitPlanPage({
     }
     return panels;
   };
+
+  const actions = [
+    !!benefitPlan && (
+      benefitPlan.isDeleted ? {
+        doIt: openUndoBenefitPlanConfirmDialog,
+        icon: <UndoIcon />,
+        tooltip: formatMessage(intl, 'socialProtection', 'undoButtonTooltip'),
+      } : {
+        doIt: openDeleteBenefitPlanConfirmDialog,
+        icon: <DeleteIcon />,
+        tooltip: formatMessage(intl, 'socialProtection', 'deleteButtonTooltip'),
+      }),
+    !!benefitPlan && !benefitPlan.isDeleted && {
+      doIt: openStopBenefitPlanConfirmDialog,
+      icon: <PauseIcon />,
+      tooltip: formatMessage(intl, 'socialProtection', 'stopButtonTooltip'),
+    },
+  ];
 
   return (
     <StyledPage>
@@ -195,22 +246,13 @@ function BenefitPlanPage({
         modulesManager={modulesManager}
         benefitPlan={benefitPlan}
         activeTab={BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE}
-        actions={[
-          {
-            name: 'delete',
-            icon: <DeleteIcon />,
-            handler: openDeleteBenefitPlanConfirmDialog,
-            disabled: !benefitPlan?.id || submittingMutation,
-            tooltip: (!benefitPlan?.id || submittingMutation) ? undefined : formatMessage(intl, 'socialProtection', 'benefitPlan.deleteButton.tooltip'),
-          },
-          {
-            name: 'stop',
-            icon: <PauseIcon />,
-            handler: openStopBenefitPlanConfirmDialog,
-            disabled: !benefitPlan?.id || submittingMutation,
-            tooltip: (!benefitPlan?.id || submittingMutation) ? undefined : formatMessage(intl, 'socialProtection', 'benefitPlan.closeButton.tooltip'),
-          },
-        ]}
+        actions={actions}
+        readOnly={!!benefitPlanUuid || editedBenefitPlan?.isDeleted}
+        saveTooltip={formatMessage(
+          intl,
+          'socialProtection',
+          `benefitPlan.saveButton.tooltip.${canSave() ? 'enabled' : 'disabled'}`,
+        )}
       />
     </StyledPage>
   );
@@ -231,6 +273,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchBenefitPlan,
   deleteBenefitPlan,
+  undoDeleteBenefitPlan,
   closeBenefitPlan,
   updateBenefitPlan,
   clearBenefitPlan,

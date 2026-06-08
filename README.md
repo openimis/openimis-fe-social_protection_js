@@ -53,5 +53,5 @@ None
 ## Other Modules Redux State Bindings
 * `state.core.user`, to access user info (rights,...)
 
-## Configurations Options
-None
+## Configuration Options
+* `maxWorkingDays`: Maximum number of working days allowed for a project. This limits both the input validation on the project form and the number of day columns rendered in the beneficiaries table. Default: `1000`

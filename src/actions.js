@@ -44,24 +44,35 @@ const UPLOAD_HISTORY_FULL_PROJECTION = () => [
   'dataUpload {uuid, dateCreated, dateUpdated, sourceName, sourceType, status, error, userCreated {username} }',
 ];
 
-const BENEFICIARY_FULL_PROJECTION = (modulesManager) => [
+const BENEFICIARY_PROJECTION = (modulesManager) => [
   'id',
   'benefitPlan {id}',
-  'project {id}',
-  'individual {firstName, lastName, dob, location' + modulesManager.getProjection('location.Location.FlatProjection') + '}',
+  `individual {firstName, lastName, dob, location${modulesManager.getProjection('location.Location.FlatProjection')}}`,
   'status',
   'isEligible',
   'jsonExt',
 ];
 
-const GROUP_BENEFICIARY_FULL_PROJECTION = (modulesManager) => [
-  'id',
-  'benefitPlan {id}',
-  'project {id}',
-  'group {id, code, head {uuid, firstName, lastName, dob}, location' + modulesManager.getProjection('location.Location.FlatProjection') + '}',
-  'status',
-  'isEligible',
-  'jsonExt',
+const PROJECT_BENEFICIARY_PROJECTION = (modulesManager) => [
+  ...BENEFICIARY_PROJECTION(modulesManager),
+  'projectEnrollments { id, project {id}, timeEntries { id, dayNumber, percentComplete } }',
+];
+
+const GROUP_BENEFICIARY_PROJECTION = (modulesManager) => {
+  const locationProjection = modulesManager.getProjection('location.Location.FlatProjection');
+  return [
+    'id',
+    'benefitPlan {id}',
+    `group {id, code, head {uuid, firstName, lastName, dob}, location${locationProjection}}`,
+    'status',
+    'isEligible',
+    'jsonExt',
+  ];
+};
+
+const PROJECT_GROUP_BENEFICIARY_PROJECTION = (modulesManager) => [
+  ...GROUP_BENEFICIARY_PROJECTION(modulesManager),
+  'projectEnrollments { id, project {id}, timeEntries { id, dayNumber, percentComplete } }',
 ];
 
 const WORKFLOWS_FULL_PROJECTION = () => [
@@ -77,7 +88,7 @@ const PROJECT_FULL_PROJECTION = (modulesManager) => [
   'targetBeneficiaries',
   'workingDays',
   'activity {id, name}',
-  'location' + modulesManager.getProjection('location.Location.FlatProjection'),
+  `location${modulesManager.getProjection('location.Location.FlatProjection')}`,
   'allowsMultipleEnrollments',
   'isDeleted',
   'userUpdated {username}',
@@ -92,12 +103,12 @@ export function fetchBenefitPlans(params) {
 }
 
 export function fetchBeneficiaries(modulesManager, params) {
-  const payload = formatPageQueryWithCount('beneficiary', params, BENEFICIARY_FULL_PROJECTION(modulesManager));
+  const payload = formatPageQueryWithCount('beneficiary', params, BENEFICIARY_PROJECTION(modulesManager));
   return graphql(payload, ACTION_TYPE.SEARCH_BENEFICIARIES);
 }
 
 export function fetchProjectBeneficiaries(modulesManager, params, meta = {}) {
-  const payload = formatPageQueryWithCount('beneficiary', params, BENEFICIARY_FULL_PROJECTION(modulesManager));
+  const payload = formatPageQueryWithCount('beneficiary', params, PROJECT_BENEFICIARY_PROJECTION(modulesManager));
   return graphql(payload, ACTION_TYPE.SEARCH_PROJECT_BENEFICIARIES, meta);
 }
 
@@ -105,7 +116,7 @@ export function fetchGroupBeneficiaries(modulesManager, params) {
   const payload = formatPageQueryWithCount(
     'groupBeneficiary',
     params,
-    GROUP_BENEFICIARY_FULL_PROJECTION(modulesManager),
+    GROUP_BENEFICIARY_PROJECTION(modulesManager),
   );
   return graphql(payload, ACTION_TYPE.SEARCH_GROUP_BENEFICIARIES);
 }
@@ -114,7 +125,7 @@ export function fetchProjectGroupBeneficiaries(modulesManager, params, meta = {}
   const payload = formatPageQueryWithCount(
     'groupBeneficiary',
     params,
-    GROUP_BENEFICIARY_FULL_PROJECTION(modulesManager),
+    PROJECT_GROUP_BENEFICIARY_PROJECTION(modulesManager),
   );
   return graphql(payload, ACTION_TYPE.SEARCH_PROJECT_GROUP_BENEFICIARIES, meta);
 }
@@ -274,6 +285,22 @@ export function deleteBenefitPlan(benefitPlan, clientMutationLabel) {
     [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.DELETE_BENEFIT_PLAN), ERROR(ACTION_TYPE.MUTATION)],
     {
       actionType: ACTION_TYPE.DELETE_BENEFIT_PLAN,
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}
+
+export function undoDeleteBenefitPlan(benefitPlan, clientMutationLabel) {
+  const benefitPlanUuids = `ids: ["${benefitPlan?.id}"]`;
+  const mutation = formatMutation('undoDeleteBenefitPlan', benefitPlanUuids, clientMutationLabel);
+  const requestedDateTime = new Date();
+  return graphql(
+    mutation.payload,
+    [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.UNDO_DELETE_BENEFIT_PLAN), ERROR(ACTION_TYPE.MUTATION)],
+    {
+      actionType: ACTION_TYPE.UNDO_DELETE_BENEFIT_PLAN,
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
       requestedDateTime,
@@ -760,6 +787,80 @@ export function enrollGroupProject(params, clientMutationLabel) {
     [
       REQUEST(ACTION_TYPE.MUTATION),
       SUCCESS(ACTION_TYPE.PROJECT_ENROLL_GROUP),
+      ERROR(ACTION_TYPE.MUTATION),
+    ],
+    {
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}
+
+function formatTimeEntriesGQL(timeEntries) {
+  if (!timeEntries || timeEntries.length === 0) {
+    return '[]';
+  }
+
+  const formatted = timeEntries.map((entry) => {
+    const fields = [];
+    if (entry.id) {
+      fields.push(`id: "${entry.id}"`);
+    }
+    fields.push(`enrollmentId: "${entry.enrollmentId}"`);
+    fields.push(`dayNumber: ${entry.dayNumber}`);
+    fields.push(`percentComplete: ${entry.percentComplete}`);
+
+    return `{ ${fields.join(', ')} }`;
+  });
+
+  return `[${formatted.join(', ')}]`;
+}
+
+export function bulkUpdateBeneficiaryTimeEntries(params, clientMutationLabel) {
+  const timeEntriesGQL = formatTimeEntriesGQL(params.timeEntries || []);
+  const gqlParams = `timeEntries: ${timeEntriesGQL}`;
+
+  const mutation = formatMutation(
+    'bulkUpdateBeneficiaryTimeEntries',
+    gqlParams,
+    clientMutationLabel,
+  );
+
+  const requestedDateTime = new Date();
+
+  return graphql(
+    mutation.payload,
+    [
+      REQUEST(ACTION_TYPE.MUTATION),
+      SUCCESS(ACTION_TYPE.BULK_UPDATE_BENEFICIARY_TIME_ENTRIES),
+      ERROR(ACTION_TYPE.MUTATION),
+    ],
+    {
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}
+
+export function bulkUpdateGroupBeneficiaryTimeEntries(params, clientMutationLabel) {
+  const timeEntriesGQL = formatTimeEntriesGQL(params.timeEntries || []);
+  const gqlParams = `timeEntries: ${timeEntriesGQL}`;
+
+  const mutation = formatMutation(
+    'bulkUpdateGroupBeneficiaryTimeEntries',
+    gqlParams,
+    clientMutationLabel,
+  );
+
+  const requestedDateTime = new Date();
+
+  return graphql(
+    mutation.payload,
+    [
+      REQUEST(ACTION_TYPE.MUTATION),
+      SUCCESS(ACTION_TYPE.BULK_UPDATE_GROUP_BENEFICIARY_TIME_ENTRIES),
       ERROR(ACTION_TYPE.MUTATION),
     ],
     {

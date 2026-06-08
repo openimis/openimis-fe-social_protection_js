@@ -9,7 +9,10 @@ import {
 } from '@mui/material';
 import {
   formatMessage,
+  GetIconComponent,
 } from '@openimis/fe-core';
+
+const ClearIcon = GetIconComponent('Clear');
 import {
   MODULE_NAME,
 } from '../constants';
@@ -26,15 +29,25 @@ function NumberFilter({ intl, columnDef, onFilterChanged }) {
   const handleOperatorClose = (selectedOperator) => {
     setAnchorEl(null);
     if (selectedOperator) {
-      const newOperator = selectedOperator;
-      setOperator(newOperator);
-      const newFilter = {
-        ...columnDef.tableData.filterValue,
-        operator: newOperator,
-      };
-      onFilterChanged(columnDef.tableData.id, newFilter);
+      setOperator(selectedOperator);
+      const currentValue = columnDef.tableData.filterValue?.value;
+      if (currentValue !== undefined && currentValue !== '') {
+        onFilterChanged(columnDef.tableData.id, {
+          value: currentValue,
+          operator: selectedOperator,
+        });
+      }
     }
   };
+
+  const handleClear = () => {
+    setOperator('exact');
+    onFilterChanged(columnDef.tableData.id, undefined);
+  };
+
+  const hasValue = (columnDef.tableData.filterValue?.value !== undefined
+    && columnDef.tableData.filterValue?.value !== '')
+    || operator !== 'exact';
 
   const operatorIcon = () => {
     switch (operator) {
@@ -54,11 +67,10 @@ function NumberFilter({ intl, columnDef, onFilterChanged }) {
         value={columnDef.tableData.filterValue?.value || ''}
         placeholder={translate('projectBeneficiaries.filterPlaceholder')}
         onChange={(e) => {
-          const newFilter = {
-            ...columnDef.tableData.filterValue,
+          onFilterChanged(columnDef.tableData.id, {
             value: e.target.value,
-          };
-          onFilterChanged(columnDef.tableData.id, newFilter);
+            operator,
+          });
         }}
         InputProps={{
           startAdornment: (
@@ -106,6 +118,17 @@ function NumberFilter({ intl, columnDef, onFilterChanged }) {
               </Popover>
             </InputAdornment>
           ),
+          endAdornment: hasValue ? (
+            <InputAdornment position="end">
+              <IconButton
+                size="small"
+                onClick={handleClear}
+                style={{ padding: '4px' }}
+              >
+                <ClearIcon style={{ fontSize: '16px' }} />
+              </IconButton>
+            </InputAdornment>
+          ) : null,
         }}
       />
     </div>
