@@ -15,6 +15,7 @@ import {
   useTheme,
   ThemeProvider,
   createTheme,
+  styled,
 } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
 import {
@@ -183,6 +184,18 @@ function TableContainer({ children, className }) {
   );
 }
 
+const StyledTableContainer = styled(TableContainer)({
+  padding: '0 20px',
+  // Patch style of a nested material-table element
+  // so frozen columns work correctly
+  '& > div:nth-child(2) > div:nth-child(2)': {
+    position: 'relative',
+  },
+  '& td': {
+    padding: DEFAULT_CELL_PADDING,
+  },
+});
+
 const getWorkDayColumns = (translateFn, onTimeEntryChange, workingDays = 0, maxColumns = DEFAULT_MAX_WORKING_DAYS) => {
   if (!workingDays) return [];
   const cappedDays = Math.min(workingDays, maxColumns);
@@ -230,7 +243,6 @@ function BeneficiaryTable({
   appliedPageSize,
   workingDays,
   tableRef,
-  classes,
   onTimeEntryChange,
 }) {
   const theme = useTheme();
@@ -416,8 +428,8 @@ function BeneficiaryTable({
   const cellPadding = isSelectable ? '0' : DEFAULT_CELL_PADDING;
 
   const ContainerComponent = useCallback(
-    (props) => <TableContainer className={classes.containerWrapper}>{props.children}</TableContainer>,
-    [classes.containerWrapper],
+    (props) => <StyledTableContainer>{props.children}</StyledTableContainer>,
+    [],
   );
 
   const tableComponents = useMemo(
