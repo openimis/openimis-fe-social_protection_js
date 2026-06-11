@@ -3,10 +3,9 @@ import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { formatMessage, TextInput, ConstantBasedPicker, PublishedComponent, GRID_RESPONSIVE_STANDARD } from '@openimis/fe-core';
-import _debounce from 'lodash/debounce';
 import { defaultFilterStyles } from '../util/styles';
+import { createFilterHelpers } from '../util/filter-helpers';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
-import { DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   ...defaultFilterStyles(theme).form,
@@ -19,21 +18,7 @@ const StyledGridItem = styled(Grid)(({ theme }) => ({
 function BenefitPlanGroupBeneficiariesFilter({
   filters, onChangeFilters, readOnly, status,
 }) {
-  const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
-
-  const filterTextFieldValue = (filterName) => filters?.[filterName]?.value ?? EMPTY_STRING;
-
-  const filterValue = (filterName) => filters?.[filterName]?.value;
-
-  const onChangeStringFilter = (filterName) => (value) => {
-    debouncedOnChangeFilters([
-      {
-        id: filterName,
-        value,
-        filter: `${filterName}: "${value}"`,
-      },
-    ]);
-  };
+  const { filterValue, filterTextFieldValue, onChangeStringFilter } = createFilterHelpers(filters, onChangeFilters);
 
   return (
     <StyledGrid container>
