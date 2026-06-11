@@ -234,7 +234,7 @@ function BenefitPlanPage({
         edited={editedBenefitPlan}
         onEditedChanged={setEditedBenefitPlan}
         canSave={canSave}
-        onSave={handleSave}
+        save={handleSave}
         submittingMutation={submittingMutation}
         confirmedAction={confirmedAction}
         setConfirmedAction={setConfirmedAction}
