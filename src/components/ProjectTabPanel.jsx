@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Paper, Grid } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { injectIntl } from 'react-intl';
+import { TabBarGrid, TabBarPaper } from '../util/styles';
 import {
   Contributions,
 } from '@openimis/fe-core';
@@ -10,22 +9,6 @@ import {
   PROJECT_TABS_LABEL_CONTRIBUTION_KEY,
   PROJECT_TABS_PANEL_CONTRIBUTION_KEY,
 } from '../constants';
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  ...theme.paper?.paper ?? {},
-}));
-
-const StyledGrid = styled(Grid)(({ theme }) => ({
-  ...theme.table?.title ?? {},
-  display: 'flex',
-  alignItems: 'center',
-  '& .selected': {
-    borderBottom: '4px solid white',
-  },
-  '& .unselected': {
-    borderBottom: '4px solid transparent',
-  },
-}));
 
 function ProjectTabPanel({
   intl,
@@ -47,8 +30,8 @@ function ProjectTabPanel({
 
   return (
     !!edited?.id && (
-      <StyledPaper>
-        <StyledGrid container>
+      <TabBarPaper>
+        <TabBarGrid container>
           <Contributions
             contributionKey={PROJECT_TABS_LABEL_CONTRIBUTION_KEY}
             intl={intl}
@@ -58,7 +41,7 @@ function ProjectTabPanel({
             isSelected={isSelected}
             tabStyle={tabStyle}
           />
-        </StyledGrid>
+        </TabBarGrid>
         <Contributions
           contributionKey={PROJECT_TABS_PANEL_CONTRIBUTION_KEY}
           intl={intl}
@@ -67,7 +50,7 @@ function ProjectTabPanel({
           project={edited}
           setConfirmedAction={setConfirmedAction}
         />
-      </StyledPaper>
+      </TabBarPaper>
     )
   );
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Paper, Grid } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { TabBarGrid, TabBarPaper } from '../util/styles';
 import { Contributions } from '@openimis/fe-core';
 import { injectIntl } from 'react-intl';
 import {
@@ -9,22 +8,6 @@ import {
   BENEFIT_PACKAGE_BENEFITS_TAB_VALUE,
   BENEFIT_PACKAGE_MEMBERS_TAB_VALUE,
 } from '../constants';
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  ...theme.paper?.paper ?? {},
-}));
-
-const StyledGrid = styled(Grid)(({ theme }) => ({
-  ...theme.table?.title ?? {},
-  display: 'flex',
-  alignItems: 'center',
-  '& .selected': {
-    borderBottom: '4px solid white',
-  },
-  '& .unselected': {
-    borderBottom: '4px solid transparent',
-  },
-}));
 
 function BenefitPackageTabPanel({
   intl, rights, groupBeneficiaries, modulesManager, history, benefitPlan, beneficiary,
@@ -39,8 +22,8 @@ function BenefitPackageTabPanel({
   const handleChange = (_, tab) => setActiveTab(tab);
 
   return (
-    <StyledPaper>
-      <StyledGrid container>
+    <TabBarPaper>
+      <TabBarGrid container>
         <Contributions
           contributionKey={BENEFIT_PACKAGE_TABS_LABEL_CONTRIBUTION_KEY}
           intl={intl}
@@ -52,7 +35,7 @@ function BenefitPackageTabPanel({
           groupBeneficiaries={groupBeneficiaries}
           modulesManager={modulesManager}
         />
-      </StyledGrid>
+      </TabBarGrid>
       <Contributions
         contributionKey={BENEFIT_PACKAGE_TABS_PANEL_CONTRIBUTION_KEY}
         rights={rights}
@@ -63,9 +46,8 @@ function BenefitPackageTabPanel({
         benefitPlan={benefitPlan}
         beneficiary={beneficiary}
       />
-    </StyledPaper>
+    </TabBarPaper>
   );
 }
 
-export { StyledPaper };
 export default injectIntl(BenefitPackageTabPanel);

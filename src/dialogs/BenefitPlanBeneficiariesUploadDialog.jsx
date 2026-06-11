@@ -175,10 +175,8 @@ function BenefitPlanBeneficiariesUploadDialog({
     <>
       <StyledButton
         onClick={handleOpen}
-        variant="outlined"
-        color="#DFEDEF"
+        variant="text"
         style={{
-          border: '0px',
           marginTop: '6px',
         }}
       >
