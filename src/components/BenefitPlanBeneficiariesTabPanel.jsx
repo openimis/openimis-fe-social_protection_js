@@ -5,6 +5,16 @@ import {
   Button,
   Tooltip,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledGrid = styled(Grid)({
+  '& .selected-tab': {
+    borderBottom: '4px solid white',
+  },
+  '& .unselected-tab': {
+    borderBottom: '4px solid transparent',
+  },
+});
 import {
   Contributions,
   formatMessage,
@@ -84,7 +94,7 @@ function BenefitPlanBeneficiariesTabPanel({
   };
 
   return (
-    <Grid container>
+    <StyledGrid container>
       <Grid size={12} style={{ paddingLeft: "10px" }}>
         <div style={{ width: "100%" }}>
           <div style={{ float: "left" }}>
@@ -156,7 +166,7 @@ function BenefitPlanBeneficiariesTabPanel({
           setConfirmedAction={setConfirmedAction}
         />
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 }
 

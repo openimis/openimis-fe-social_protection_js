@@ -19,14 +19,12 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   ...theme.table?.title ?? {},
   display: 'flex',
   alignItems: 'center',
-}));
-
-const TabButton = styled('button')(({ theme, selected }) => ({
-  marginLeft: 'auto',
-  padding: theme.spacing(1),
-  fontSize: '0.875rem',
-  textTransform: 'none',
-  borderBottom: selected ? '4px solid white' : '4px solid transparent',
+  '& .selected': {
+    borderBottom: '4px solid white',
+  },
+  '& .unselected': {
+    borderBottom: '4px solid transparent',
+  },
 }));
 
 function BenefitPlanTabPanel({

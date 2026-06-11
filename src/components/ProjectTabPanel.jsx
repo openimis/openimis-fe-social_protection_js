@@ -19,6 +19,12 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   ...theme.table?.title ?? {},
   display: 'flex',
   alignItems: 'center',
+  '& .selected': {
+    borderBottom: '4px solid white',
+  },
+  '& .unselected': {
+    borderBottom: '4px solid transparent',
+  },
 }));
 
 function ProjectTabPanel({
