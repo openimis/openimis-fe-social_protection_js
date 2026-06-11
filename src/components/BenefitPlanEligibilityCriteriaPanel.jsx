@@ -148,7 +148,7 @@ function BenefitPlanEligibilityCriteriaPanel({
         <Grid size={12}>
           <Divider />
         </Grid>
-        <StyledFiltersGrid container>
+        <StyledFiltersGrid container size={12}>
           {filters.map((filter, index) => (
             // eslint-disable-next-line react/react-in-jsx-scope
             <PublishedComponent
@@ -161,42 +161,33 @@ function BenefitPlanEligibilityCriteriaPanel({
               setFilters={setFilters}
             />
           ))}
-          <div style={{ backgroundColor: '#DFEDEF', paddingLeft: '10px', paddingBottom: '10px' }}>
-            <AddCircle
-              style={{
-                border: 'thin solid',
-                borderRadius: '40px',
-                width: '16px',
-                height: '16px',
-              }}
-              onClick={handleAddFilter}
-              disabled={confirmed}
-            />
+          <Grid size={12} sx={{ display: 'flex', gap: 1, p: 1 }}>
             <Button
               onClick={handleAddFilter}
-              variant="outlined"
-              style={{
-                border: '0px',
-                marginBottom: '6px',
-                fontSize: '0.8rem',
-              }}
+              variant="contained"
+              color="primary"
+              startIcon={(
+                <AddCircle
+                  style={{
+                    border: 'thin solid',
+                    borderRadius: '40px',
+                    width: '16px',
+                    height: '16px',
+                  }}
+                />
+              )}
               disabled={confirmed}
             >
               {formatMessage('individual.enrollment.addFilters')}
             </Button>
-          </div>
-          <div style={{ float: 'left' }}>
             <Button
               onClick={handleRemoveFilter}
-              variant="outlined"
-              style={{
-                border: '0px',
-              }}
+              variant="text"
               disabled={confirmed}
             >
               {formatMessage('individual.enrollment.clearAllFilters')}
             </Button>
-          </div>
+          </Grid>
         </StyledFiltersGrid>
       </StyledGrid>
     </StyledPaper>
