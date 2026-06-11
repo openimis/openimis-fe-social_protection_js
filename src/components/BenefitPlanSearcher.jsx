@@ -171,6 +171,7 @@ function BenefitPlanSearcher({
           <IconButton
             href={benefitPlanUpdatePageUrl(benefitPlan)}
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               onDoubleClick(benefitPlan);
             }}
