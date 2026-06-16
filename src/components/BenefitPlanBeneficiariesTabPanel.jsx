@@ -69,16 +69,16 @@ function BenefitPlanBeneficiariesTabPanel({
   value, confirmed,
   edited, onEditedChanged,
 }) {
-  if (value !== BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE) {
-    return null;
-  }
-
   const history = useHistory();
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
   const [activeTab, setActiveTab] = useState(
     BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE
   );
+
+  if (value !== BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE) {
+    return null;
+  }
 
   const isSelected = (tab) => tab === activeTab;
   const tabStyle = (tab) => (isSelected(tab) ? "selected" : "unselected");

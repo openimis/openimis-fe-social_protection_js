@@ -138,13 +138,12 @@ function BeneficiaryUploadTaskDisplay({ businessData, setAdditionalData, jsonExt
     };
   });
 
-  const headers = () =>
-    [
-      task?.status === TASK_STATUS.ACCEPTED
-        ? formatMessage(intl, "socialProtection", "selectForEvaluation")
-        : formatMessage(intl, "socialProtection", "evaluated"),
-      ...keys,
-    ] || [];
+  const headers = () => [
+    task?.status === TASK_STATUS.ACCEPTED
+      ? formatMessage(intl, "socialProtection", "selectForEvaluation")
+      : formatMessage(intl, "socialProtection", "evaluated"),
+    ...keys,
+  ];
 
   const changeCheckboxState = (pending) => {
     setSelectedRecords(
@@ -236,7 +235,7 @@ function BeneficiaryUploadTaskDisplay({ businessData, setAdditionalData, jsonExt
         );
       }
     }
-    return () => confirmed && clear(false);
+    return () => confirmed && clear();
   }, [confirmed]);
 
   const onConfirm = () => {
