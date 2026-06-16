@@ -20,20 +20,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
-        
+        node-version: ["20"]
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run : yarn install 
-      - name: build
-        run : yarn build 
+        run: npm install --legacy-peer-deps
+      - name: Build
+        run: npm run build
       - name: Check build status
         run: |
           if [ -d "dist" ]; then
