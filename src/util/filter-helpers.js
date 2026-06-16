@@ -1,6 +1,7 @@
 import _debounce from 'lodash/debounce';
 import { DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
 
+// eslint-disable-next-line import/prefer-default-export
 export function createFilterHelpers(filters, onChangeFilters) {
   const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
 
