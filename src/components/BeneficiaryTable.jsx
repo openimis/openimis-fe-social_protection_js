@@ -284,7 +284,7 @@ function BeneficiaryTable({
   const tableTheme = createTheme({
     palette: {
       primary: theme.palette.primary,
-      secondary: theme.palette.primary,
+      secondary: theme.palette.secondary,
     },
     typography: {
       h6: {
@@ -321,7 +321,7 @@ function BeneficiaryTable({
       MuiIcon: {
         styleOverrides: {
           root: {
-            color: theme.palette.primary.main,
+            color: theme.palette.text.primary,
           },
         },
       },
