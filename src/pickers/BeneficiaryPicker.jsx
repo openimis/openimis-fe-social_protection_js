@@ -31,78 +31,19 @@ function BeneficiaryPicker(props) {
   const [currentString, setCurrentString] = useState('');
   const { formatMessage, formatMessageWithValues } = useTranslations('individual', modulesManager);
 
-  if (benefitPlan) {
-    const decodedBenefitPlanId = decodeId(benefitPlan.id);
-    const { isLoading, data, error } = useGraphqlQuery(
-      `
-    query BeneficiaryPicker(
-      $decodedBenefitPlanId: ID!, $search: String, $first: Int, $isDeleted: Boolean
-    ) {
-        beneficiary(
-          individual_LastName_Icontains: $search, 
-          first: $first, 
-          isDeleted: $isDeleted,
-          ${decodedBenefitPlanId ? 'benefitPlan_Id: $decodedBenefitPlanId' : ''},
-        ) {
-        edges {
-          node {
-            id,isDeleted,dateCreated,dateUpdated,
-            jsonExt,version,userUpdated {username},
-            individual{firstName,lastName,dob,jsonExt}
-          }
-        }
-      }}
-    `,
-      { decodedBenefitPlanId },
-      filters,
-      { skip: true },
-    );
-    const beneficiaries = data?.beneficiary?.edges.map((edge) => edge.node) ?? [];
-    const shouldShowTooltip = beneficiaries?.length >= BENEFICIARIES_QUANTITY_LIMIT && !value && !currentString;
+  const decodedBenefitPlanId = benefitPlan ? decodeId(benefitPlan.id) : null;
+  const benefitPlanVarDecl = decodedBenefitPlanId ? '$decodedBenefitPlanId: ID!, ' : '';
+  const benefitPlanFilterArg = decodedBenefitPlanId ? ', benefitPlan_Id: $decodedBenefitPlanId' : '';
 
-    return (
-      <Autocomplete
-        multiple={multiple}
-        error={error}
-        readOnly={readOnly}
-        options={beneficiaries ?? []}
-        isLoading={isLoading}
-        value={value}
-        getOptionLabel={(option) => `${option.individual.firstName} ${option.individual.lastName} ${option.individual.dob}`}
-        onChange={(value) => onChange(value, value ? `${value.firstName} ${value.lastName} ${value.dob}` : null)}
-        setCurrentString={setCurrentString}
-        filterOptions={filter}
-        filterSelectedOptions={filterSelectedOptions}
-        onInputChange={(search) => setFilters({ search, isDeleted: false })}
-        renderInput={(inputProps) => (
-          <Tooltip
-            title={
-            shouldShowTooltip
-              ? formatMessageWithValues('BeneficiaryPicker.aboveLimit', { limit: BENEFICIARIES_QUANTITY_LIMIT })
-              : ''
-          }
-          >
-            <TextField
-            /* eslint-disable-next-line react/jsx-props-no-spreading */
-              {...inputProps}
-              required={required}
-              label={(withLabel && (label || nullLabel)) || formatMessage('BeneficiaryPicker')}
-              placeholder={(withPlaceholder && placeholder) || formatMessage('BeneficiaryPicker.placeholder')}
-            />
-          </Tooltip>
-        )}
-      />
-    );
-  }
   const { isLoading, data, error } = useGraphqlQuery(
     `
-        query BeneficiaryPicker(
-          $search: String, $first: Int, $isDeleted: Boolean
-        ) {
-          beneficiary(
-            individual_LastName_Icontains: $search, 
-            first: $first, 
-            isDeleted: $isDeleted
+      query BeneficiaryPicker(
+        ${benefitPlanVarDecl}$search: String, $first: Int, $isDeleted: Boolean
+      ) {
+        beneficiary(
+          individual_LastName_Icontains: $search,
+          first: $first,
+          isDeleted: $isDeleted${benefitPlanFilterArg}
         ) {
           edges {
             node {
@@ -111,9 +52,10 @@ function BeneficiaryPicker(props) {
               individual{firstName,lastName,dob,jsonExt}
             }
           }
-        }}
-      `,
-    filters,
+        }
+      }
+    `,
+    decodedBenefitPlanId ? { ...filters, decodedBenefitPlanId } : filters,
     { skip: true },
   );
   const beneficiaries = data?.beneficiary?.edges.map((edge) => edge.node) ?? [];
@@ -128,7 +70,7 @@ function BeneficiaryPicker(props) {
       isLoading={isLoading}
       value={value}
       getOptionLabel={(option) => `${option.individual.firstName} ${option.individual.lastName} ${option.individual.dob}`}
-      onChange={(value) => onChange(value, value ? `${value.firstName} ${value.lastName} ${value.dob}` : null)}
+      onChange={(v) => onChange(v, v ? `${v.firstName} ${v.lastName} ${v.dob}` : null)}
       setCurrentString={setCurrentString}
       filterOptions={filter}
       filterSelectedOptions={filterSelectedOptions}

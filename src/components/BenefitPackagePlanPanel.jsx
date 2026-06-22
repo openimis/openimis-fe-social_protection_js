@@ -7,16 +7,16 @@ import {
   PublishedComponent,
   TextInput,
   NumberInput,
-  FormPanel,
   formatMessage,
   GetIconComponent,
 } from '@openimis/fe-core';
-const PreviewIcon = GetIconComponent("ListAlt");
 import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 import { RIGHT_BENEFIT_PLAN_UPDATE, RIGHT_SCHEMA_UPDATE } from '../constants';
 import BenefitPlanSchemaModal from '../dialogs/BenefitPlanSchemaModal';
+
+const PreviewIcon = GetIconComponent('ListAlt');
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   ...theme.table?.title ?? {},

@@ -3,7 +3,6 @@ import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
 import {
-  FormPanel,
   ValidatedTextInput,
   NumberInput,
   PublishedComponent,
