@@ -3,11 +3,15 @@
 /* eslint-disable import/prefer-default-export */
 import {flatten }from 'flat';
 import React from 'react';
-import { Tune } from '@mui/icons-material';
+
+import { GetIconComponent } from "@openimis/fe-core";
+const Tune = GetIconComponent("Tune");
+const Folder   = GetIconComponent("Folder");
+const Group = GetIconComponent("Group");
+const Edit = GetIconComponent("Edit");
 import { FormattedMessage } from '@openimis/fe-core';
 import messages_en from './translations/en.json';
 import reducer from './reducer';
-import BenefitPlanMainMenu from './menus/BenefitPlanMainMenu';
 import BenefitPlansPage from './pages/BenefitPlansPage';
 import BenefitPlanPage from './pages/BenefitPlanPage';
 import BenefitPackagePage from './pages/BenefitPackagePage';
@@ -50,6 +54,7 @@ import BenefitPlanSearcherForEntities from './components/BenefitPlanSearcherForE
 import { BenefitPackageMembersTabLabel, BenefitPackageMembersTabPanel } from './components/BenefitPackageMembersTab';
 import BenefitPlanTaskPreviewTable from './components/BenefitPlanTaskPreviewTable';
 import BenefitPlanPicker from './pickers/BenefitPlanPicker';
+import ProjectPicker from './pickers/ProjectPicker';
 import { BenefitPlansListTabLabel, BenefitPlansListTabPanel } from './components/BenefitPlansListTab';
 import {
   BenefitPlanTaskItemFormatters,
@@ -74,7 +79,7 @@ import {
 } from './components/BenefitPlanProjectsTab';
 import { BenefitPlanChangelogTabLabel, BenefitPlanChangelogTabPanel } from './components/BenefitPlanChangelogTab';
 import { BenefitPlanTaskTabLabel, BenefitPlanTaskTabPanel } from './components/BenefitPlanTaskTab';
-import { BENEFIT_PLAN_LABEL, RIGHT_BENEFIT_PLAN_SEARCH } from './constants';
+import { BENEFIT_PLAN_LABEL, RIGHT_GROUP_UPDATE,RIGHT_PROJECT_UPDATE, RIGHT_BENEFICIARY_UPDATE, RIGHT_BENEFIT_PLAN_SEARCH, RIGHT_BENEFIT_PLAN_UPDATE } from './constants';
 import BeneficiaryPicker from './pickers/BeneficiaryPicker';
 import BenefitPlanProjectsSearcher from './components/BenefitPlanProjectsSearcher';
 import {
@@ -95,21 +100,40 @@ const ROUTE_PROJECT = 'project';
 const DEFAULT_CONFIG = {
   translations: [{ key: 'en', messages: flatten(messages_en) }],
   reducers: [{ key: 'socialProtection', reducer }],
-  'core.MainMenu': [{ name: 'BenefitPlanMainMenu', component: BenefitPlanMainMenu }],
+  'core.MainMenu': [{ name: 'BenefitPlanMainMenu', id:"socialProtection.MainMenu", icon: "diversity_2", text: "socialProtection.mainMenuSocialProtection" }],
   'core.Router': [
-    { path: ROUTE_BENEFIT_PLANS, component: BenefitPlansPage },
-    { path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`, component: BenefitPlanPage },
+    { 
+      path: ROUTE_BENEFIT_PLANS,
+      id: 'socialProtection.benefitPlans',
+      icon: "Tune",
+      component: BenefitPlansPage,
+      rights: [RIGHT_BENEFIT_PLAN_SEARCH],
+      text: "socialProtection.menu.socialProtection.benefitPlans",
+    },
+    { 
+      path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?`,
+      component: BenefitPlanPage,
+      rights: [RIGHT_BENEFIT_PLAN_UPDATE],
+      icon: "Edit",
+      text: "socialProtection.menu.socialProtection.benefitPlan",
+    },
     {
       path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/individual/:beneficiary_uuid?`,
       component: BenefitPackagePage,
+      rights: [RIGHT_BENEFICIARY_UPDATE],
+      icon: "Group",
     },
     {
       path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_BENEFIT_PACKAGE}/group/:group_beneficiaries_uuid?`,
       component: BenefitPackagePage,
-    },
+      rights: [RIGHT_GROUP_UPDATE],
+      icon: "Group",
+      },
     {
       path: `${ROUTE_BENEFIT_PLAN}/:benefit_plan_uuid?/${ROUTE_PROJECT}/:project_uuid?`,
       component: ProjectPage,
+      rights: [RIGHT_PROJECT_UPDATE],
+      icon: "Folder",
     },
   ],
   refs: [
@@ -121,6 +145,7 @@ const DEFAULT_CONFIG = {
     { key: 'socialProtection.BenefitPlanSearcherForEntities', ref: BenefitPlanSearcherForEntities },
     { key: 'socialProtection.BenefitPlanTaskPreviewTable', ref: BenefitPlanTaskPreviewTable },
     { key: 'socialProtection.BenefitPlanPicker', ref: BenefitPlanPicker },
+    { key: 'socialProtection.ProjectPicker', ref: ProjectPicker },
     { key: 'socialProtection.BenefitPlansListTabLabel', ref: BenefitPlansListTabLabel },
     { key: 'socialProtection.BenefitPlansListTabPanel', ref: BenefitPlansListTabPanel },
     { key: 'socialProtection.fetchBenefitPlanSchemaFields', ref: fetchBenefitPlanSchemaFields },
@@ -202,11 +227,7 @@ const DEFAULT_CONFIG = {
   ],
   'socialProtection.MainMenu': [
     {
-      text: <FormattedMessage module="socialProtection" id="menu.socialProtection.benefitPlans" />,
-      icon: <Tune />,
-      route: '/benefitPlans',
-      filter: (rights) => rights.includes(RIGHT_BENEFIT_PLAN_SEARCH),
-      id: 'socialProtection.benefitPlans',
+      route: ROUTE_BENEFIT_PLANS,
     },
   ],
   middlewares: [projectBeneficiariesMiddleware],

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { injectIntl } from 'react-intl';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+
 import {
   formatMessage,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import {
   ListItem,
@@ -11,8 +11,9 @@ import {
   Collapse,
 } from '@mui/material';
 
-import ErrorIcon from '@mui/icons-material/ErrorOutline';
-
+const ErrorIcon = GetIconComponent("ErrorOutline");
+const ExpandLess = GetIconComponent("ExpandLess");
+const ExpandMore = GetIconComponent("ExpandMore");
 function CollapsableErrorList({
   intl,
   errors,

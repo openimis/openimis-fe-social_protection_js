@@ -7,6 +7,7 @@ import {
   Searcher,
   downloadExport,
   CLEARED_STATE_FILTER,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import {
   IconButton,
@@ -17,7 +18,7 @@ import {
   DialogTitle,
   DialogContent,
 } from '@mui/material';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+const VisibilityIcon = GetIconComponent("Visibility");
 import { connect, useDispatch } from 'react-redux';
 import {
   DEFAULT_PAGE_SIZE, EMPTY_STRING, INDIVIDUAL_LABEL,

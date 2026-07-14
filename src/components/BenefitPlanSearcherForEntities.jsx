@@ -11,14 +11,15 @@ import {
   withHistory,
   withModulesManager,
   formatDateFromISO,
+  GetIconComponent,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { IconButton, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import PreviewIcon from '@mui/icons-material/ListAlt';
+const EditIcon = GetIconComponent("Edit");
+const DeleteIcon = GetIconComponent("Delete");
+const PreviewIcon = GetIconComponent("ListAlt");
 import {
   DEFAULT_PAGE_SIZE,
   RIGHT_BENEFIT_PLAN_DELETE,
@@ -120,7 +121,7 @@ function BenefitPlanSearcherForEntities({
       deleteBenefitPlan(
         benefitPlanToDelete,
         formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-          id: benefitPlanToDelete?.id,
+          name: benefitPlanToDelete?.name,
         }),
       );
       setDeletedBenefitPlanUuids([...deletedBenefitPlanUuids, benefitPlanToDelete.id]);

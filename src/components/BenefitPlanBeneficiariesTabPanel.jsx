@@ -5,6 +5,19 @@ import {
   Button,
   Tooltip,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { tabStyles } from "../util/styles";
+
+const StyledGrid = styled(Grid)(({ theme }) => tabStyles(theme));
+
+const HeaderActions = styled('div')({
+  float: 'right',
+  paddingRight: '16px',
+  display: 'flex',
+  flexWrap: 'nowrap',
+  alignItems: 'center',
+  gap: 8,
+});
 import {
   Contributions,
   formatMessage,
@@ -57,10 +70,6 @@ function BenefitPlanBeneficiariesTabPanel({
   edited, onEditedChanged,
   save, isSaving, canSave,
 }) {
-  if (value !== BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE) {
-    return null;
-  }
-
   const history = useHistory();
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
@@ -68,9 +77,12 @@ function BenefitPlanBeneficiariesTabPanel({
     BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE
   );
 
+  if (value !== BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE) {
+    return null;
+  }
+
   const isSelected = (tab) => tab === activeTab;
-  const tabStyle = (tab) =>
-    isSelected(tab) ? "selected-tab" : "unselected-tab";
+  const tabStyle = (tab) => (isSelected(tab) ? "selected" : "unselected");
 
   const handleChange = (_, tab) => {
     setActiveTab(tab);
@@ -85,7 +97,7 @@ function BenefitPlanBeneficiariesTabPanel({
   };
 
   return (
-    <Grid container>
+    <StyledGrid container>
       <Grid size={12} style={{ paddingLeft: "10px" }}>
         <div style={{ width: "100%" }}>
           <div style={{ float: "left" }}>
@@ -99,7 +111,7 @@ function BenefitPlanBeneficiariesTabPanel({
               tabStyle={tabStyle}
             />
           </div>
-          <div style={{ float: "right", paddingRight: "16px" }}>
+          <HeaderActions>
             {rights.includes(payrollCreateRights) && (
               <Tooltip
                 title={formatMessage(
@@ -110,12 +122,10 @@ function BenefitPlanBeneficiariesTabPanel({
                 <span>
                   <Button
                     onClick={handleCreatePayrollButton}
-                    variant="outlined"
+                    variant="text"
                     disabled={!benefitPlan?.hasPaymentPlans}
                     sx={{
-                      border: 0,
                       marginTop: "6px",
-                      backgroundColor: "#DFEDEF", // keep your old color
                       textTransform: "none",
                     }}
                   >
@@ -142,7 +152,7 @@ function BenefitPlanBeneficiariesTabPanel({
             <BenefitPlanBeneficiariesUploadHistoryDialog
               benefitPlan={benefitPlan}
             />
-          </div>
+          </HeaderActions>
         </div>
       </Grid>
       <Grid size={12}>
@@ -163,7 +173,7 @@ function BenefitPlanBeneficiariesTabPanel({
           setConfirmedAction={setConfirmedAction}
         />
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 }
 

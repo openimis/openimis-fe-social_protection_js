@@ -1,20 +1,27 @@
-import React, { useMemo, useEffect } from 'react';
+import React, {
+  useMemo, useEffect, useRef, useCallback,
+} from 'react';
 import { injectIntl } from 'react-intl';
 import MaterialTable from '@material-table/core';
 import _ from 'lodash';
 import {
   Select,
   MenuItem,
+  Paper,
+  TextField,
+  InputAdornment,
 } from '@mui/material';
 import {
   useTheme,
   ThemeProvider,
   createTheme,
+  styled,
 } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
 import {
   formatMessage,
   fetchCustomFilter,
+  useModulesManager,
 } from '@openimis/fe-core';
 import {
   LOC_LEVELS,
@@ -23,8 +30,39 @@ import {
 import {
   MODULE_NAME,
   DEFAULT_PAGE_SIZE,
+  DEFAULT_MAX_WORKING_DAYS,
 } from '../constants';
 import NumberFilter from './MaterialTableNumberFilter';
+
+const DEFAULT_CELL_PADDING = '0 0 0 10px';
+
+const createNumericFilterFn = (getValue) => (filter, rowData) => {
+  const value = getValue(rowData);
+  const numValue = (value === null || value === undefined) ? 0 : Number(value);
+
+  // Handle case when filter is a string (global search)
+  if (typeof filter === 'string') {
+    if (filter === '') return true;
+    const searchNum = Number(filter);
+    if (Number.isNaN(searchNum)) return false;
+    return numValue === searchNum;
+  }
+
+  // Handle case when filter is an object (column filter)
+  const filterValue = Number(filter?.value);
+  if (Number.isNaN(numValue)) return false;
+  if (filter?.value === undefined || filter?.value === '') return true;
+  if (Number.isNaN(filterValue)) return false;
+
+  switch (filter?.operator) {
+    case 'exact': return numValue === filterValue;
+    case 'lt': return numValue < filterValue;
+    case 'lte': return numValue <= filterValue;
+    case 'gt': return numValue > filterValue;
+    case 'gte': return numValue >= filterValue;
+    default: return numValue === filterValue;
+  }
+};
 
 const getDynamicColumns = (translateFn, customFilters = []) => {
   if (!customFilters || !customFilters.length) return [];
@@ -69,35 +107,7 @@ const getDynamicColumns = (translateFn, customFilters = []) => {
         case 'integer':
         case 'numeric':
           filterComponent = NumberFilter;
-
-          filterFn = (filter, rowData) => {
-            const value = rowData.jsonExt?.[field];
-            if (value === null || value === undefined) return false;
-            const numValue = Number(value);
-
-            // Handle case when filter is a string (global search)
-            if (typeof filter === 'string') {
-              if (filter === '') return true; // Empty search matches all
-              const searchNum = Number(filter);
-              if (Number.isNaN(searchNum)) return false;
-              return numValue === searchNum; // Exact match for global search
-            }
-
-            // Handle case when filter is an object (column filter)
-            const filterValue = Number(filter?.value);
-            if (Number.isNaN(numValue)) return false;
-            if (filter?.value === undefined || filter?.value === '') return true;
-            if (Number.isNaN(filterValue)) return false;
-
-            switch (filter?.operator) {
-              case 'exact': return numValue === filterValue;
-              case 'lt': return numValue < filterValue;
-              case 'lte': return numValue <= filterValue;
-              case 'gt': return numValue > filterValue;
-              case 'gte': return numValue >= filterValue;
-              default: return numValue === filterValue;
-            }
-          };
+          filterFn = createNumericFilterFn((rowData) => rowData.jsonExt?.[field]);
           break;
 
         case 'date':
@@ -126,8 +136,98 @@ const getDynamicColumns = (translateFn, customFilters = []) => {
         filterComponent,
         customFilterAndSearch: filterFn,
         align: 'left',
+        editable: 'never',
       };
     });
+};
+
+function PercentageEditField({
+  value, onChange, columnDef, rowData, onTimeEntryChange, dayKey,
+}) {
+  const numValue = value === undefined || value === null || value === '' ? '' : Number(value);
+  const isInvalid = numValue !== '' && (numValue < 0 || numValue > 100);
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    onChange(newValue);
+
+    const effectiveDayKey = dayKey || columnDef?.dayKey;
+    if (onTimeEntryChange && rowData?.enrollmentId && effectiveDayKey) {
+      const originalEntry = rowData.projectTimeEntriesDict?.[effectiveDayKey];
+      onTimeEntryChange(rowData.enrollmentId, effectiveDayKey, newValue, originalEntry, rowData);
+    }
+  };
+
+  return (
+    <TextField
+      type="number"
+      value={numValue}
+      onChange={handleChange}
+      error={isInvalid}
+      helperText={isInvalid ? '0-100' : ''}
+      placeholder={columnDef?.title}
+      InputProps={{
+        min: 0,
+        max: 100,
+        endAdornment: <InputAdornment position="end">%</InputAdornment>,
+      }}
+      size="small"
+    />
+  );
+}
+
+function TableContainer({ children, className }) {
+  return (
+    <Paper elevation={2} className={className}>
+      {children}
+    </Paper>
+  );
+}
+
+const StyledTableContainer = styled(TableContainer)({
+  padding: '0 20px',
+  // Patch style of a nested material-table element
+  // so frozen columns work correctly
+  '& > div:nth-child(2) > div:nth-child(2)': {
+    position: 'relative',
+  },
+  '& td': {
+    padding: DEFAULT_CELL_PADDING,
+  },
+});
+
+const getWorkDayColumns = (translateFn, onTimeEntryChange, workingDays = 0, maxColumns = DEFAULT_MAX_WORKING_DAYS) => {
+  if (!workingDays) return [];
+  const cappedDays = Math.min(workingDays, maxColumns);
+  return Array.from({ length: cappedDays }, (_, i) => {
+    const dayNumber = i + 1;
+    const dayKey = `day${dayNumber}`;
+    return {
+      title: `${translateFn('project.day')} ${dayNumber}`,
+      field: `projectTimeEntriesDict.${dayKey}.percentComplete`,
+      dayKey,
+      type: 'numeric',
+      render: (rowData) => {
+        const value = rowData.projectTimeEntriesDict?.[dayKey]?.percentComplete;
+        return value !== undefined && value !== null ? `${value}%` : '';
+      },
+      filterComponent: NumberFilter,
+      editComponent: (props) => (
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        <PercentageEditField {...props} onTimeEntryChange={onTimeEntryChange} dayKey={dayKey} />
+      ),
+      customFilterAndSearch: createNumericFilterFn(
+        (rowData) => rowData.projectTimeEntriesDict?.[dayKey]?.percentComplete,
+      ),
+      customSort: (a, b) => {
+        const aVal = a.projectTimeEntriesDict?.[dayKey]?.percentComplete ?? 0;
+        const bVal = b.projectTimeEntriesDict?.[dayKey]?.percentComplete ?? 0;
+        return aVal - bVal;
+      },
+      align: 'center',
+      width: '100px',
+    };
+  });
 };
 
 function BeneficiaryTable({
@@ -141,17 +241,22 @@ function BeneficiaryTable({
   isGroup,
   appliedFilters,
   appliedPageSize,
+  workingDays,
+  tableRef,
+  onTimeEntryChange,
 }) {
   const theme = useTheme();
   const nameDoBFieldPrefix = isGroup ? 'group.head' : 'individual';
   const locationFieldPrefix = isGroup ? 'group' : 'individual';
 
-  const translate = (key) => formatMessage(intl, MODULE_NAME, key);
+  const translate = useCallback((key) => formatMessage(intl, MODULE_NAME, key), [intl]);
 
-  const [filters, setFilters] = React.useState({});
+  const initialFiltersRef = useRef(appliedFilters || {});
   const [jsonExtFilters, setJsonExtFilters] = React.useState({});
 
   const dispatch = useDispatch();
+  const modulesManager = useModulesManager();
+  const maxWorkingDays = modulesManager.getConf('fe-social_protection', 'maxWorkingDays', DEFAULT_MAX_WORKING_DAYS);
 
   const dynamicColumns = React.useMemo(() => (
     getDynamicColumns(translate, jsonExtFilters)
@@ -159,7 +264,7 @@ function BeneficiaryTable({
 
   useEffect(() => {
     if (appliedFilters) {
-      setFilters(appliedFilters);
+      initialFiltersRef.current = appliedFilters;
     }
   }, [appliedFilters]);
 
@@ -179,7 +284,7 @@ function BeneficiaryTable({
   const tableTheme = createTheme({
     palette: {
       primary: theme.palette.primary,
-      secondary: theme.palette.primary,
+      secondary: theme.palette.secondary,
     },
     typography: {
       h6: {
@@ -216,7 +321,7 @@ function BeneficiaryTable({
       MuiIcon: {
         styleOverrides: {
           root: {
-            color: theme.palette.primary.main,
+            color: theme.palette.text.primary,
           },
         },
       },
@@ -249,55 +354,93 @@ function BeneficiaryTable({
     },
   });
 
-  const additionalColumns = isGroup ? [
-    {
-      title: translate('socialProtection.groupBeneficiary.code'),
-      field: 'group.code',
-    },
-  ] : [];
-
   const columns = useMemo(() => {
+    const additionalColumns = isGroup ? [
+      {
+        title: translate('socialProtection.groupBeneficiary.code'),
+        field: 'group.code',
+        editable: 'never',
+        defaultSort: 'asc',
+      },
+    ] : [];
+    const workDayColumns = getWorkDayColumns(translate, onTimeEntryChange, workingDays, maxWorkingDays);
     const allColumns = [
-      ...additionalColumns || [],
+      ...additionalColumns,
       {
         title: translate('socialProtection.beneficiary.firstName'),
         field: `${nameDoBFieldPrefix}.firstName`,
+        editable: 'never',
+        ...(isGroup && { orderField: 'head_first_name' }),
       },
       {
         title: translate('socialProtection.beneficiary.lastName'),
         field: `${nameDoBFieldPrefix}.lastName`,
+        editable: 'never',
+        ...(!isGroup && { defaultSort: 'asc' }),
+        ...(isGroup && { orderField: 'head_last_name' }),
       },
       {
         title: translate('socialProtection.beneficiary.dob'),
         field: `${nameDoBFieldPrefix}.dob`,
+        editable: 'never',
+        ...(isGroup && { orderField: 'head_dob' }),
       },
-      ...Array.from({ length: LOC_LEVELS }, (_, i) => ({
-        title: translate(`location.locationType.${i}`),
-        type: 'location',
-        level: i,
-        render: (rowData) => locationFormatter(rowData?.[locationFieldPrefix]?.location)[i] || '',
-        customFilterAndSearch: (term, rowData) => {
-          const locName = locationFormatter(rowData?.[locationFieldPrefix]?.location)[i].toLowerCase() || '';
-          return locName.includes(term.toLowerCase());
-        },
-      })),
+      ...Array.from({ length: LOC_LEVELS }, (_, i) => {
+        // Build the orderField path for remote sorting: level 3 (village) = location__name,
+        // level 2 (ward) = location__parent__name, etc.
+        const parentChain = Array(LOC_LEVELS - 1 - i).fill('parent').join('__');
+        const locationPath = parentChain ? `location__${parentChain}__name` : 'location__name';
+        const orderField = `${locationFieldPrefix}__${locationPath}`;
+
+        return {
+          title: translate(`location.locationType.${i}`),
+          type: 'location',
+          level: i,
+          orderField,
+          render: (rowData) => locationFormatter(rowData?.[locationFieldPrefix]?.location)[i] || '',
+          customSort: (a, b) => {
+            const aLoc = locationFormatter(a?.[locationFieldPrefix]?.location)[i] || '';
+            const bLoc = locationFormatter(b?.[locationFieldPrefix]?.location)[i] || '';
+            return aLoc.localeCompare(bLoc);
+          },
+          customFilterAndSearch: (term, rowData) => {
+            const locName = locationFormatter(rowData?.[locationFieldPrefix]?.location)[i].toLowerCase() || '';
+            return locName.includes(term.toLowerCase());
+          },
+        };
+      }),
       ...dynamicColumns,
+      ...workDayColumns,
     ];
 
     return allColumns.map((c) => ({
       ...c,
-      width: c.field && c.field.includes('email') ? '200px' : '140px',
-      tableData: { filterValue: filters[c.title] || '' },
+      width: typeof c.field === 'string' && c.field.includes('email') ? '200px' : '140px',
+      tableData: { filterValue: initialFiltersRef.current[c.title] || '' },
     }));
-  }, [additionalColumns, filters, nameDoBFieldPrefix, translate, dynamicColumns]);
+  }, [
+    isGroup, nameDoBFieldPrefix, locationFieldPrefix, translate,
+    dynamicColumns, workingDays, onTimeEntryChange, maxWorkingDays,
+  ]);
 
   const isSelectable = !!onSelectionChange;
 
-  const cellPadding = isSelectable ? '0' : '0 0 0 10px';
+  const cellPadding = isSelectable ? '0' : DEFAULT_CELL_PADDING;
+
+  const ContainerComponent = useCallback(
+    (props) => <StyledTableContainer>{props.children}</StyledTableContainer>,
+    [],
+  );
+
+  const tableComponents = useMemo(
+    () => ({ Container: ContainerComponent }),
+    [ContainerComponent],
+  );
 
   return (
     <ThemeProvider theme={tableTheme}>
       <MaterialTable
+        components={tableComponents}
         title={tableTitle}
         columns={columns}
         data={onQueryChange || allRows}
@@ -333,6 +476,8 @@ function BeneficiaryTable({
           doubleHorizontalScroll: true,
           tableLayout: 'fixed',
           emptyRowsWhenPaging: false,
+          fixedColumns: { left: isGroup ? 3 : 2, right: 0 },
+          actionsColumnIndex: -1,
         }}
         localization={{
           toolbar: {
@@ -344,20 +489,9 @@ function BeneficiaryTable({
             },
           },
         }}
-        onFilterChange={(appliedFilters) => {
-          // This is only triggered for local data
-          const updatedFilters = {};
-          appliedFilters.forEach((filter) => {
-            if (filter?.value !== undefined) {
-              // keyed by column title because not all columns have field
-              updatedFilters[filter.column.title] = filter.value;
-            }
-          });
-          setFilters(updatedFilters);
-        }}
         onSelectionChange={(rows) => (isSelectable && onSelectionChange(rows))}
         actions={actions}
-        style={{ padding: '0 20px' }}
+        tableRef={tableRef}
       />
     </ThemeProvider>
   );

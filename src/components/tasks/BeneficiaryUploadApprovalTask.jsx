@@ -5,8 +5,11 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-unused-vars */
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
+import { GetIconComponent } from "@openimis/fe-core";
+
+const CheckIcon = GetIconComponent("Check")
+
+const ClearIcon = GetIconComponent("Clear")
 import { Checkbox, Divider, Fab, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { decodeId, formatMessage, formatMessageWithValues, SelectDialog, Table } from "@openimis/fe-core";
@@ -135,13 +138,12 @@ function BeneficiaryUploadTaskDisplay({ businessData, setAdditionalData, jsonExt
     };
   });
 
-  const headers = () =>
-    [
-      task?.status === TASK_STATUS.ACCEPTED
-        ? formatMessage(intl, "socialProtection", "selectForEvaluation")
-        : formatMessage(intl, "socialProtection", "evaluated"),
-      ...keys,
-    ] || [];
+  const headers = () => [
+    task?.status === TASK_STATUS.ACCEPTED
+      ? formatMessage(intl, "socialProtection", "selectForEvaluation")
+      : formatMessage(intl, "socialProtection", "evaluated"),
+    ...keys,
+  ];
 
   const changeCheckboxState = (pending) => {
     setSelectedRecords(
@@ -233,7 +235,7 @@ function BeneficiaryUploadTaskDisplay({ businessData, setAdditionalData, jsonExt
         );
       }
     }
-    return () => confirmed && clear(false);
+    return () => confirmed && clear();
   }, [confirmed]);
 
   const onConfirm = () => {

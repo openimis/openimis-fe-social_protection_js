@@ -6,15 +6,16 @@ import {
   FormattedMessage,
   PublishedComponent,
   TextInput,
-  FormPanel,
   formatMessage,
   createFieldsBasedOnJSON,
   renderInputComponent,
+  GetIconComponent,
 } from '@openimis/fe-core';
-import { Person } from '@mui/icons-material';
 import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import { EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE, SOCIAL_PROTECTION_MODULE } from '../constants';
+
+const Person = GetIconComponent('Person');
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   ...theme.table?.title ?? {},

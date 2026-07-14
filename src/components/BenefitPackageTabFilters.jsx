@@ -1,11 +1,11 @@
 import React from 'react';
-import _debounce from 'lodash/debounce';
 import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_STANDARD } from '@openimis/fe-core';
-import { CONTAINS_LOOKUP, DEFAULT_DEBOUNCE_TIME, EMPTY_STRING } from '../constants';
+import { CONTAINS_LOOKUP } from '../constants';
 import { defaultFilterStyles } from '../util/styles';
+import { createFilterHelpers } from '../util/filter-helpers';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
@@ -19,31 +19,7 @@ const StyledGridItem = styled(Grid)(({ theme }) => ({
 function BenefitPackageTabFilters({
   intl, filters, onChangeFilters,
 }) {
-  const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
-
-  const filterValue = (filterName) => filters?.[filterName]?.value;
-
-  const filterTextFieldValue = (filterName) => filters?.[filterName]?.value ?? EMPTY_STRING;
-
-  const onChangeStringFilter = (filterName, lookup = null) => (value) => {
-    if (lookup) {
-      debouncedOnChangeFilters([
-        {
-          id: filterName,
-          value,
-          filter: `${filterName}_${lookup}: "${value}"`,
-        },
-      ]);
-    } else {
-      onChangeFilters([
-        {
-          id: filterName,
-          value,
-          filter: `${filterName}: "${value}"`,
-        },
-      ]);
-    }
-  };
+  const { filterValue, filterTextFieldValue, onChangeStringFilter } = createFilterHelpers(filters, onChangeFilters);
 
   return (
     <StyledGrid container>

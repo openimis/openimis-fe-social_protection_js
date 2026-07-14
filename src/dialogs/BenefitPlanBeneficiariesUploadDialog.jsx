@@ -172,6 +172,10 @@ function BenefitPlanBeneficiariesUploadDialog({
       });
 
       if (response.ok) {
+        coreAlert(
+          formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload.success.title'),
+          formatMessage(intl, 'socialProtection', 'benefitPlan.benefitPlanBeneficiaries.upload.success.message'),
+        );
         handleClose();
         return;
       }
@@ -245,10 +249,8 @@ function BenefitPlanBeneficiariesUploadDialog({
     <>
       <StyledButton
         onClick={handleOpen}
-        variant="outlined"
-        color="#DFEDEF"
+        variant="text"
         style={{
-          border: '0px',
           marginTop: '6px',
         }}
       >
