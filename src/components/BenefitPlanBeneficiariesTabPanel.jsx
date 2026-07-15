@@ -68,6 +68,7 @@ function BenefitPlanBeneficiariesTabPanel({
   setConfirmedAction,
   value, confirmed,
   edited, onEditedChanged,
+  save, isSaving, canSave,
 }) {
   const history = useHistory();
   const modulesManager = useModulesManager();
@@ -141,7 +142,13 @@ function BenefitPlanBeneficiariesTabPanel({
               intl={intl}
               benefitPlan={benefitPlan}
             />
-            <BenefitPlanBeneficiariesUploadDialog benefitPlan={benefitPlan} />
+            <BenefitPlanBeneficiariesUploadDialog
+              benefitPlan={benefitPlan}
+              save={save}
+              isSaving={isSaving}
+              canSave={canSave}
+              edited={edited}
+            />
             <BenefitPlanBeneficiariesUploadHistoryDialog
               benefitPlan={benefitPlan}
             />

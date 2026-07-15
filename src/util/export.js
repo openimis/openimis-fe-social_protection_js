@@ -35,7 +35,9 @@ export default function downloadTemplate(benefitPlan) {
   const url = new URL(
     `${window.location.origin}${baseApiUrl}/social_protection/download_template_benefit_plan_file/`,
   );
-  url.searchParams.append('benefit_plan_uuid', benefitPlan);
+  if (benefitPlan) {
+    url.searchParams.append('benefit_plan_uuid', benefitPlan);
+  }
 
   fetch(url)
     .then((response) => response.blob())

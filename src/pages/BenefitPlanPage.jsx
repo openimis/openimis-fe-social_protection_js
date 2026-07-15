@@ -110,6 +110,8 @@ function BenefitPlanPage({
     }
   }, [benefitPlan]);
 
+  useEffect(() => () => clearBenefitPlan(), []);
+
   const titleParams = (benefitPlan) => ({
     code: benefitPlan?.code,
     name: benefitPlan?.name,
@@ -131,32 +133,27 @@ function BenefitPlanPage({
   const canSave = () => !isMandatoryFieldsEmpty() && isValid() && doesBenefitPlanChange();
 
   const handleSave = () => {
-    const params = titleParams(editedBenefitPlan);
-    if (benefitPlan?.id) {
+    if (benefitPlanUuid) {
       updateBenefitPlan(
         editedBenefitPlan,
-        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.update.mutationLabel', params),
+        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.update.mutationLabel', titleParams(editedBenefitPlan)),
       );
     } else {
       createBenefitPlan(
         editedBenefitPlan,
-        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.create.mutationLabel', params),
+        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.create.mutationLabel', titleParams(editedBenefitPlan)),
       );
     }
   };
 
   const deleteBenefitPlanCallback = () => deleteBenefitPlan(
     benefitPlan,
-    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-      name: benefitPlan?.name,
-    }),
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', titleParams(benefitPlan)),
   );
 
   const stopBenefitPlanCallback = () => closeBenefitPlan(
     benefitPlan,
-    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-      name: benefitPlan?.name,
-    }),
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.close.mutationLabel', titleParams(benefitPlan)),
   );
 
   const openDeleteBenefitPlanConfirmDialog = () => {

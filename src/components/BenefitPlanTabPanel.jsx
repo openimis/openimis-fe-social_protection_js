@@ -12,7 +12,7 @@ import {
 
 function BenefitPlanTabPanel({
   intl, rights, benefitPlan, setConfirmedAction, onActiveTabChange, confirmed,
-  edited, onEditedChanged,
+  edited, onEditedChanged, save, isSaving, canSave,
 }) {
   const [activeTab, setActiveTab] = useState(BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE);
 
@@ -48,6 +48,9 @@ function BenefitPlanTabPanel({
         confirmed={confirmed}
         edited={edited}
         onEditedChanged={onEditedChanged}
+        save={save}
+        isSaving={isSaving}
+        canSave={canSave}
       />
     </TabBarPaper>
   );
