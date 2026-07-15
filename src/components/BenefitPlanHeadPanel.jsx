@@ -27,7 +27,7 @@ import {
   benefitPlanSchemaValidationClear,
 } from '../actions';
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
-import { formatMessage } from '../../../CoreModule/src/helpers/i18n';
+import { formatMessage } from '@openimis/fe-core';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   ...theme.paper?.item ?? {},
