@@ -7,7 +7,6 @@ import {
   FormPanel,
   NumberInput,
   ValidatedTextInput,
-  ValidatedTextAreaInput,
   TextAreaInput,
   PublishedComponent,
   TextInput,
@@ -22,9 +21,7 @@ import {
   benefitPlanCodeValidationClear,
   benefitPlanNameSetValid,
   benefitPlanNameValidationCheck,
-  benefitPlanNameValidationClear, benefitPlanSchemaSetValid,
-  benefitPlanSchemaValidationCheck,
-  benefitPlanSchemaValidationClear,
+  benefitPlanNameValidationClear,
 } from '../actions';
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 import { formatMessage } from '@openimis/fe-core';
@@ -49,9 +46,6 @@ class BenefitPlanHeadPanel extends FormPanel {
       benefitPlanNameValidationError,
       savedBenefitPlanCode,
       savedBenefitPlanName,
-      isBenefitPlanSchemaValid,
-      isBenefitPlanSchemaValidating,
-      benefitPlanSchemaValidationError,
       readOnly,
       rights,
     } = this.props;
@@ -171,23 +165,14 @@ class BenefitPlanHeadPanel extends FormPanel {
           />
         </StyledGridItem>
         {rights.includes(RIGHT_SCHEMA_UPDATE) && (
-          <StyledGridItem size={3}>
-            <ValidatedTextAreaInput
-              required
-              placeholder={formatMessage(this.props.intl, "socialProtection", "benefitPlan.schema.placeholder")}
-              module="socialProtection"
-              label="benefitPlan.schema"
-              onChange={(v) => this.updateAttribute('beneficiaryDataSchema', v)}
-              value={benefitPlan?.beneficiaryDataSchema || '{}'}
-              codeTakenLabel="socialProtection.validation.benefitPlan.invalidSchema"
-              itemQueryIdentifier="bfSchema"
-              action={benefitPlanSchemaValidationCheck}
-              clearAction={benefitPlanSchemaValidationClear}
-              setValidAction={benefitPlanSchemaSetValid}
-              shouldValidate={() => true}
-              isValid={isBenefitPlanSchemaValid}
-              isValidating={isBenefitPlanSchemaValidating}
-              validationError={benefitPlanSchemaValidationError}
+          <StyledGridItem size={12}>
+            {/* The benefit plan mutation sends the schema as a JSON string. */}
+            <PublishedComponent
+              pubRef="individual.SchemaFieldPicker"
+              withOptions
+              label={formatMessage(this.props.intl, 'socialProtection', 'benefitPlan.schema')}
+              value={benefitPlan?.beneficiaryDataSchema}
+              onChange={(schema) => this.updateAttribute('beneficiaryDataSchema', JSON.stringify(schema))}
             />
           </StyledGridItem>
         )}
@@ -205,11 +190,6 @@ const mapStateToProps = (store) => ({
   isBenefitPlanNameValidating: store.socialProtection.validationFields?.benefitPlanName?.isValidating,
   benefitPlanNameValidationError: store.socialProtection.validationFields?.benefitPlanName?.validationError,
   savedBenefitPlanName: store.socialProtection?.benefitPlan?.name,
-  isBenefitPlanSchemaValid: store.socialProtection.validationFields?.benefitPlanSchema?.isValid,
-  isBenefitPlanSchemaValidating: store.socialProtection.validationFields?.benefitPlanSchema?.isValidating,
-  benefitPlanSchemaValidationError: store.socialProtection.validationFields?.benefitPlanSchema?.validationError,
-  benefitPlanSchemaValidationErrorMessage:
-    store.socialProtection.validationFields?.benefitPlanSchema?.validationErrorMessage,
 });
 
 export { StyledGrid };
