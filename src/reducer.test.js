@@ -9,7 +9,9 @@ const { default: reducer, ACTION_TYPE } = await import('./reducer');
 const {
   CLEAR, ERROR, REQUEST, SUCCESS,
 } = await import('./util/action-type');
-const { globalId, graphqlErrors, relayPage, serverError } = await import('@openimis/fe-core/testing');
+const {
+  globalId, graphqlErrors, relayPage, serverError,
+} = await import('@openimis/fe-core/testing');
 
 const initial = () => reducer(undefined, { type: '@@INIT' });
 const dispatch = (state, type, { payload, meta } = {}) => reducer(state, { type, payload, meta });
@@ -142,7 +144,9 @@ describe('social_protection reducer', () => {
     });
 
     it('discards the loaded plan and any pending mutation on clear', () => {
-      const loaded = { ...initial(), benefitPlan: { id: 'plan-1' }, fetchedBenefitPlan: true, mutation: { id: 'm1' } };
+      const loaded = {
+        ...initial(), benefitPlan: { id: 'plan-1' }, fetchedBenefitPlan: true, mutation: { id: 'm1' },
+      };
 
       const state = dispatch(loaded, CLEAR(ACTION_TYPE.GET_BENEFIT_PLAN));
 
@@ -541,7 +545,9 @@ describe('social_protection reducer', () => {
     });
 
     it('discards the loaded project and any pending mutation on clear', () => {
-      const loaded = { ...initial(), project: { id: 'proj-1' }, fetchedProject: true, mutation: { id: 'm1' } };
+      const loaded = {
+        ...initial(), project: { id: 'proj-1' }, fetchedProject: true, mutation: { id: 'm1' },
+      };
 
       expect(dispatch(loaded, CLEAR(ACTION_TYPE.GET_PROJECT))).toMatchObject({
         project: null,

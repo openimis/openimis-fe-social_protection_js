@@ -436,7 +436,9 @@ describe('social_protection actions', () => {
     ])('sends %s as a list of objects', (creator, actionType) => {
       const result = actions[creator]({
         timeEntries: [
-          { id: 'entry-1', enrollmentId: 'enrol-1', dayNumber: 1, percentComplete: 50 },
+          {
+            id: 'entry-1', enrollmentId: 'enrol-1', dayNumber: 1, percentComplete: 50,
+          },
           { enrollmentId: 'enrol-1', dayNumber: 2, percentComplete: 0 },
         ],
       }, 'Update time entries');
