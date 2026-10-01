@@ -24,7 +24,7 @@ import {
   useModulesManager,
 } from '@openimis/fe-core';
 import {
-  LOC_LEVELS,
+  getLocLevels,
   locationFormatter,
 } from '../util/searcher-utils';
 import {
@@ -262,6 +262,7 @@ function BeneficiaryTable({
 
   const dispatch = useDispatch();
   const modulesManager = useModulesManager();
+  const locLevels = getLocLevels(modulesManager);
   const maxWorkingDays = modulesManager.getConf('fe-social_protection', 'maxWorkingDays', DEFAULT_MAX_WORKING_DAYS);
 
   const dynamicColumns = React.useMemo(() => (
@@ -377,10 +378,10 @@ function BeneficiaryTable({
         editable: 'never',
         ...(isGroup && { orderField: 'head_dob' }),
       },
-      ...Array.from({ length: LOC_LEVELS }, (_, i) => {
-        // Build the orderField path for remote sorting: level 3 (village) = location__name,
-        // level 2 (ward) = location__parent__name, etc.
-        const parentChain = Array(LOC_LEVELS - 1 - i).fill('parent').join('__');
+      ...Array.from({ length: locLevels }, (_, i) => {
+        // Build the orderField path for remote sorting: the last level = location__name,
+        // the level above = location__parent__name, etc.
+        const parentChain = Array(locLevels - 1 - i).fill('parent').join('__');
         const locationPath = parentChain ? `location__${parentChain}__name` : 'location__name';
         const orderField = `${locationFieldPrefix}__${locationPath}`;
 
@@ -389,14 +390,15 @@ function BeneficiaryTable({
           type: 'location',
           level: i,
           orderField,
-          render: (rowData) => locationFormatter(rowData?.[locationFieldPrefix]?.location)[i] || '',
+          render: (rowData) => locationFormatter(rowData?.[locationFieldPrefix]?.location, locLevels)[i] || '',
           customSort: (a, b) => {
-            const aLoc = locationFormatter(a?.[locationFieldPrefix]?.location)[i] || '';
-            const bLoc = locationFormatter(b?.[locationFieldPrefix]?.location)[i] || '';
+            const aLoc = locationFormatter(a?.[locationFieldPrefix]?.location, locLevels)[i] || '';
+            const bLoc = locationFormatter(b?.[locationFieldPrefix]?.location, locLevels)[i] || '';
             return aLoc.localeCompare(bLoc);
           },
           customFilterAndSearch: (term, rowData) => {
-            const locName = locationFormatter(rowData?.[locationFieldPrefix]?.location)[i].toLowerCase() || '';
+            const locName = locationFormatter(rowData?.[locationFieldPrefix]?.location, locLevels)[i]
+              .toLowerCase() || '';
             return locName.includes(term.toLowerCase());
           },
         };
@@ -412,7 +414,7 @@ function BeneficiaryTable({
     }));
   }, [
     isGroup, nameDoBFieldPrefix, locationFieldPrefix, translate,
-    dynamicColumns, workingDays, onTimeEntryChange, maxWorkingDays,
+    dynamicColumns, workingDays, onTimeEntryChange, maxWorkingDays, locLevels,
   ]);
 
   const isSelectable = !!onSelectionChange;
