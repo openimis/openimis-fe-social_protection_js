@@ -38,7 +38,7 @@ import BenefitPlanBeneficiariesFilter from './BenefitPlanBeneficiariesFilter';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';
 import {
   applyNumberCircle,
-  LOC_LEVELS,
+  getLocLevels,
   locationFormatter,
 } from '../util/searcher-utils';
 
@@ -62,6 +62,7 @@ function BenefitPlanBeneficiariesSearcher({
   updateBeneficiary,
 }) {
   const modulesManager = useModulesManager();
+  const locLevels = getLocLevels(modulesManager);
   const history = useHistory();
   const [updatedBeneficiaries, setUpdatedBeneficiaries] = useState([]);
   const fetch = (params) => fetchBeneficiaries(modulesManager, params);
@@ -73,7 +74,7 @@ function BenefitPlanBeneficiariesSearcher({
       'socialProtection.beneficiary.dob',
     ];
 
-    baseHeaders.push(...Array.from({ length: LOC_LEVELS }, (_, i) => `location.locationType.${i}`));
+    baseHeaders.push(...Array.from({ length: locLevels }, (_, i) => `location.locationType.${i}`));
     baseHeaders.push('socialProtection.beneficiary.status');
 
     if (status) {
@@ -128,8 +129,8 @@ function BenefitPlanBeneficiariesSearcher({
     const result = [
       ...baseFormatters,
       ...Array.from(
-        { length: LOC_LEVELS },
-        (_, i) => (beneficiary) => locationFormatter(beneficiary?.individual?.location)[i],
+        { length: locLevels },
+        (_, i) => (beneficiary) => locationFormatter(beneficiary?.individual?.location, locLevels)[i],
       ),
     ];
 

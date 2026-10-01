@@ -19,7 +19,7 @@ import {
 import { fetchProjectHistory } from '../actions';
 import ProjectFilter from './BenefitPlanProjectsFilter';
 import {
-  LOC_LEVELS,
+  getLocLevels,
   locationFormatter,
 } from '../util/searcher-utils';
 
@@ -35,6 +35,7 @@ function ProjectHistorySearcher({
   projectsHistoryTotalCount,
   projectId,
 }) {
+  const locLevels = getLocLevels(modulesManager);
   const fetch = (params) => fetchProjectHistory(modulesManager, params);
 
   const headers = () => {
@@ -45,7 +46,7 @@ function ProjectHistorySearcher({
       'project.targetBeneficiaries',
       'project.workingDays',
     ];
-    baseHeaders.push(...Array.from({ length: LOC_LEVELS }, (_, i) => `location.locationType.${i}`));
+    baseHeaders.push(...Array.from({ length: locLevels }, (_, i) => `location.locationType.${i}`));
 
     baseHeaders.push(...[
       'project.version',
@@ -66,7 +67,7 @@ function ProjectHistorySearcher({
     ];
     const formatters = [
       ...baseFormatters,
-      ...Array.from({ length: LOC_LEVELS }, (_, i) => (project) => locationFormatter(project?.location)[i]),
+      ...Array.from({ length: locLevels }, (_, i) => (project) => locationFormatter(project?.location, locLevels)[i]),
       ...[
         (project) => project.version,
         (project) => (project.dateUpdated
