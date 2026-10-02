@@ -22,6 +22,8 @@ In development mode, you can use `npm link` and `npm start` to continuously scan
 * `benefitPlan.TabPanel.panel` panels under Benefit Plan detail view
 * `benefitPackage.TabPanel.label` labels for panels under Benefit Package detail view
 * `benefitPackage.TabPanel.panel` panels under Benefit Package detail view
+* `socialProtection.BenefitPlanBeneficiariesSearcher.columns` columns (`{ header, formatter }`) added to the individual beneficiaries searcher of a Benefit Plan, through the fe-core Searcher `columnsContributionKey`
+* `socialProtection.BenefitPlanGroupBeneficiariesSearcher.columns` columns added to the group beneficiaries searcher of a Benefit Plan, likewise
 
 ## Dispatched Redux Actions
 * `BENEFIT_PLAN_BENEFIT_PLANS_{REQ|RESP|ERR}` fetching BenefitPlans (as triggered by the searcher)
