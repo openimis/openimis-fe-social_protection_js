@@ -50,6 +50,9 @@ In development mode, you can use `npm link` and `npm start` to continuously scan
 ## Other Modules Listened Redux Actions
 None
 
+## Overridable Components
+* `socialProtection.BenefitPlanSearcher`, the Benefit Plans searcher: another module replaces it with a fe-core `core.ComponentOverrides` entry `{ key: 'socialProtection.BenefitPlanSearcher', component }`
+
 ## Other Modules Redux State Bindings
 * `state.core.user`, to access user info (rights,...)
 
