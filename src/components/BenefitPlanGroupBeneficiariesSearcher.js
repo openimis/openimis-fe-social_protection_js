@@ -9,6 +9,7 @@ import {
   downloadExport,
   useModulesManager,
   useHistory,
+  EXPORT_FILE_FORMATS,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -64,6 +65,9 @@ function BenefitPlanGroupBeneficiariesSearcher({
   const modulesManager = useModulesManager();
   const history = useHistory();
   const [updatedGroupBeneficiaries, setUpdatedGroupBeneficiaries] = useState([]);
+  const exportFileFormat = modulesManager.getConf(
+    'fe-social_protection', 'groupBeneficiaryExportFileFormat', EXPORT_FILE_FORMATS.csv,
+  );
 
   const fetch = (params) => fetchGroupBeneficiaries(modulesManager, params);
 
@@ -209,7 +213,8 @@ function BenefitPlanGroupBeneficiariesSearcher({
     if (groupBeneficiaryExport) {
       downloadExport(
         groupBeneficiaryExport,
-        `${formatMessage(intl, 'socialProtection', 'export.filename.groupBeneficiaries')}.csv`,
+        `${formatMessage(intl, 'socialProtection', 'export.filename.groupBeneficiaries')}.${exportFileFormat}`,
+        exportFileFormat,
       )();
       clearGroupBeneficiaryExport();
     }
@@ -251,6 +256,7 @@ function BenefitPlanGroupBeneficiariesSearcher({
         })}
         exportable
         exportFetch={downloadGroupBeneficiaries}
+        exportFileFormat={exportFileFormat}
         exportFields={[
           'id',
           'group.id',
