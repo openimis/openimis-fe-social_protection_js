@@ -11,6 +11,7 @@ import {
   withHistory,
   withModulesManager,
   formatDateFromISO,
+  overridable,
 } from '@openimis/fe-core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -303,6 +304,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
   dispatch,
 );
 
-export default withHistory(
-  withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanSearcher))),
+export default overridable('socialProtection.BenefitPlanSearcher')(
+  withHistory(withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(BenefitPlanSearcher)))),
 );
