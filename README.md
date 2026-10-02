@@ -55,3 +55,4 @@ None
 
 ## Configuration Options
 * `maxWorkingDays`: Maximum number of working days allowed for a project. This limits both the input validation on the project form and the number of day columns rendered in the beneficiaries table. Default: `1000`
+* `groupBeneficiaryExportFileFormat`: file format (`csv` or `xlsx`) of the group beneficiaries export of a Benefit Plan, used for the export request and the downloaded file name. Default: `csv`
