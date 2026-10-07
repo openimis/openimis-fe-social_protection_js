@@ -22,7 +22,7 @@ function BenefitPlanTabPanel({
 
   const handleChange = (_, tab) => {
     setActiveTab(tab);
-    onActiveTabChange(tab);
+    onActiveTabChange?.(tab);
   };
 
   return (
