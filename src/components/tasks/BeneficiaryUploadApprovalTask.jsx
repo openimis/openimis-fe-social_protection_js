@@ -263,9 +263,12 @@ function BeneficiaryUploadTaskDisplay({ businessData, setAdditionalData, jsonExt
         onClose={onClose}
         module="socialProtection"
         confirmTitle="taskConfirmation.title"
-        confirmMessage={formatMessageWithValues(intl, "socialProtection", "atomicApprove", {
-          count: selectedRecords.length,
-        })}
+        confirmMessage={formatMessageWithValues(
+          intl,
+          "socialProtection",
+          approveOrFail === "REJECT" ? "atomicReject" : "atomicApprove",
+          { count: selectedRecords.length },
+        )}
         confirmationButton="dialogActions.continue"
         rejectionButton="dialogActions.goBack"
       />
@@ -409,7 +412,7 @@ function UploadConfirmationPanel({ defaultAction, defaultDisabled }) {
         onClose={onClose}
         module="socialProtection"
         confirmTitle="taskConfirmation.title"
-        confirmMessage={formatMessage(intl, "socialProtection", "bulkApprove")}
+        confirmMessage={formatMessage(intl, "socialProtection", approveOrFail === FAILED ? "bulkReject" : "bulkApprove")}
         confirmationButton="dialogActions.continue"
         rejectionButton="dialogActions.goBack"
       />

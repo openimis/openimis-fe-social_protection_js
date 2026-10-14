@@ -128,6 +128,8 @@
   "socialProtection.rejectAll": "Reject All",
   "socialProtection.atomicApprove": "Do you want to approve this task for {count} records?",
   "socialProtection.bulkApprove": "Do you want to approve this task for all records?",
+  "socialProtection.atomicReject": "Do you want to reject this task for {count} records?",
+  "socialProtection.bulkReject": "Do you want to reject this task for all records?",
   "socialProtection.taskConfirmation.title": "Beneficiary Upload Confirmation",
   "socialProtection.dialogActions.continue": "Continue",
   "socialProtection.dialogActions.goBack": "Go back",
