@@ -65,7 +65,6 @@ function BenefitPlanPage({
   isBenefitPlanSchemaValid,
 }) {
   const [editedBenefitPlan, setEditedBenefitPlan] = useState({});
-  const [confirmedAction, setConfirmedAction] = useState(() => null);
   const [reset, setReset] = useState(() => false);
   const prevSubmittingMutationRef = useRef();
 
@@ -74,11 +73,6 @@ function BenefitPlanPage({
       fetchBenefitPlan(modulesManager, [`id: "${benefitPlanUuid}"`]);
     }
   }, [benefitPlanUuid]);
-
-  useEffect(() => {
-    if (confirmed && confirmedAction) confirmedAction();
-    return () => confirmed && clearConfirm(null);
-  }, [confirmed]);
 
   const back = () => history.goBack();
 
@@ -180,13 +174,13 @@ function BenefitPlanPage({
   );
 
   const openUndoBenefitPlanConfirmDialog = () => {
-    setConfirmedAction(() => undoDeleteBenefitPlanCallback);
     coreConfirm(
       formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.confirm.title', {
         code: benefitPlan?.code,
         name: benefitPlan?.name,
       }),
       formatMessage(intl, 'socialProtection', 'benefitPlan.undo.confirm.message'),
+      { onConfirm: undoDeleteBenefitPlanCallback },
     );
   };
 
@@ -233,8 +227,6 @@ function BenefitPlanPage({
         canSave={canSave}
         save={handleSave}
         submittingMutation={submittingMutation}
-        confirmedAction={confirmedAction}
-        setConfirmedAction={setConfirmedAction}
         reset={reset}
         setReset={setReset}
         rights={rights}

@@ -75,7 +75,6 @@ function ProjectPage({
   const benefitPlanId = benefitPlanIdFromState || benefitPlanIdFromPath;
 
   const [benefitPlanName, setBenefitPlanName] = useState(benefitPlanNameFromState);
-  const [confirmedAction, setConfirmedAction] = useState(() => null);
 
   const [editedProject, setEditedProject] = useState({
     benefitPlan: { id: benefitPlanId, name: benefitPlanName },
@@ -127,11 +126,6 @@ function ProjectPage({
       setReset(true);
     }
   }, [project]);
-
-  useEffect(() => {
-    if (confirmed && confirmedAction) confirmedAction();
-    return () => confirmed && clearConfirm(null);
-  }, [confirmed]);
 
   const back = () => history.goBack();
 
@@ -202,12 +196,12 @@ function ProjectPage({
   );
 
   const openDeleteConfirmDialog = () => {
-    setConfirmedAction(() => deleteProjectCallback);
     coreConfirm(
       formatMessageWithValues(intl, 'socialProtection', 'project.delete.confirm.title', {
         name: project?.name,
       }),
       formatMessage(intl, 'socialProtection', 'project.delete.confirm.message'),
+      { onConfirm: deleteProjectCallback },
     );
   };
 
@@ -219,12 +213,12 @@ function ProjectPage({
   );
 
   const openUndoConfirmDialog = () => {
-    setConfirmedAction(() => undoProjectCallback);
     coreConfirm(
       formatMessageWithValues(intl, 'socialProtection', 'project.undo.confirm.title', {
         name: project?.name,
       }),
       formatMessage(intl, 'socialProtection', 'project.undo.confirm.message'),
+      { onConfirm: undoProjectCallback },
     );
   };
 
