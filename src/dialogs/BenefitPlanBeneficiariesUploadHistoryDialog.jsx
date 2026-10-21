@@ -281,7 +281,6 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
-  confirmed: state.core.confirmed,
   history: state.socialProtection.beneficiaryDataUploadHistory,
   fetchedHistory: state.socialProtection.fetchedBeneficiaryDataUploadHistory,
   fetchingHistory: state.socialProtection.fetchingBeneficiaryDataUploadHistory,

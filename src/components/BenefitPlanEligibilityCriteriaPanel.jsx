@@ -30,7 +30,6 @@ const StyledFiltersGrid = styled(Grid)(({ theme }) => ({
 }));
 
 function BenefitPlanEligibilityCriteriaPanel({
-  confirmed,
   edited,
   benefitPlan,
   onEditedChanged,
@@ -176,14 +175,12 @@ function BenefitPlanEligibilityCriteriaPanel({
                   }}
                 />
               )}
-              disabled={confirmed}
             >
               {formatMessage('individual.enrollment.addFilters')}
             </Button>
             <Button
               onClick={handleRemoveFilter}
               variant="text"
-              disabled={confirmed}
             >
               {formatMessage('individual.enrollment.clearAllFilters')}
             </Button>

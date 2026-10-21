@@ -66,7 +66,7 @@ function BenefitPlanBeneficiariesTabPanel({
   rights,
   benefitPlan,
   setConfirmedAction,
-  value, confirmed,
+  value,
   edited, onEditedChanged,
   save, isSaving, canSave,
 }) {
@@ -158,7 +158,6 @@ function BenefitPlanBeneficiariesTabPanel({
       <Grid size={12}>
         {rights.includes(RIGHT_BENEFIT_PLAN_UPDATE) && benefitPlan?.id && (
           <BenefitPlanEligibilityCriteriaPanel
-            confirmed={confirmed}
             edited={edited}
             benefitPlan={benefitPlan}
             onEditedChanged={onEditedChanged}

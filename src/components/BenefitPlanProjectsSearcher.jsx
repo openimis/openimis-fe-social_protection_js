@@ -8,7 +8,6 @@ import {
   useModulesManager,
   useHistory,
   coreConfirm,
-  clearConfirm,
   journalize,
   GetIconComponent,
 } from '@openimis/fe-core';
@@ -55,9 +54,7 @@ function BenefitPlanProjectsSearcher({
   benefitPlanId,
   benefitPlanName,
   rights,
-  confirmed,
   coreConfirm,
-  clearConfirm,
   journalize,
   submittingMutation,
   mutation,
@@ -65,72 +62,52 @@ function BenefitPlanProjectsSearcher({
   const history = useHistory();
   const modulesManager = useModulesManager();
   const fetch = (params) => fetchBenefitPlanProjects(modulesManager, params);
-  const [projectToDelete, setProjectToDelete] = useState(null);
-  const [projectToUndo, setProjectToUndo] = useState(null);
   const [deletedProjectUuids, setDeletedProjectUuids] = useState([]);
   const [undoProjectUuids, setUndoProjectUuids] = useState([]);
   const prevSubmittingMutationRef = useRef();
   const [activeFilters, setActiveFilters] = useState([]);
-
-  const openDeleteProjectConfirmDialog = () => coreConfirm(
-    formatMessageWithValues(intl, MODULE_NAME, 'project.delete.confirm.title', {
-      name: projectToDelete.name,
-    }),
-    formatMessage(intl, MODULE_NAME, 'project.delete.confirm.message'),
-  );
-
-  const openUndoProjectConfirmDialog = () => coreConfirm(
-    formatMessageWithValues(intl, MODULE_NAME, 'project.undo.confirm.title', {
-      name: projectToUndo.name,
-    }),
-    formatMessage(intl, MODULE_NAME, 'project.undo.confirm.message'),
-  );
 
   const openProject = (project) => rights.includes(RIGHT_PROJECT_UPDATE)
     && history.push(`${benefitPlanId}/`
     + `${modulesManager.getRef('socialProtection.route.project')}`
     + `/${project?.id}`);
 
-  const onDelete = (project) => setProjectToDelete(project);
-  const onUndo = (project) => setProjectToUndo(project);
+  // state.core.confirmed deleted or restored the project on any other dialog's "Yes" (OP-3212).
+  const onDelete = (project) => coreConfirm(
+    formatMessageWithValues(intl, MODULE_NAME, 'project.delete.confirm.title', {
+      name: project.name,
+    }),
+    formatMessage(intl, MODULE_NAME, 'project.delete.confirm.message'),
+    {
+      onConfirm: () => {
+        deleteProject(
+          project,
+          formatMessageWithValues(intl, MODULE_NAME, 'project.delete.mutationLabel', {
+            name: project?.name,
+          }),
+        );
+        setDeletedProjectUuids((uuids) => [...uuids, project.id]);
+      },
+    },
+  );
 
-  useEffect(() => {
-    if (projectToDelete) {
-      openDeleteProjectConfirmDialog();
-    }
-  }, [projectToDelete]);
-  useEffect(() => {
-    if (projectToUndo) {
-      openUndoProjectConfirmDialog();
-    }
-  }, [projectToUndo]);
-
-  useEffect(() => {
-    if (projectToDelete && confirmed) {
-      deleteProject(
-        projectToDelete,
-        formatMessageWithValues(intl, MODULE_NAME, 'project.delete.mutationLabel', {
-          name: projectToDelete?.name,
-        }),
-      );
-      setDeletedProjectUuids([...deletedProjectUuids, projectToDelete.id]);
-    }
-    if (projectToUndo && confirmed) {
-      undoDeleteProject(
-        projectToUndo,
-        formatMessageWithValues(intl, MODULE_NAME, 'project.undo.mutationLabel', {
-          name: projectToUndo?.name,
-        }),
-      );
-      setUndoProjectUuids([...undoProjectUuids, projectToUndo.id]);
-    }
-    if (projectToDelete && confirmed !== null) {
-      setProjectToDelete(null);
-    }
-    if (projectToUndo && confirmed !== null) {
-      setProjectToUndo(null);
-    }
-  }, [confirmed]);
+  const onUndo = (project) => coreConfirm(
+    formatMessageWithValues(intl, MODULE_NAME, 'project.undo.confirm.title', {
+      name: project.name,
+    }),
+    formatMessage(intl, MODULE_NAME, 'project.undo.confirm.message'),
+    {
+      onConfirm: () => {
+        undoDeleteProject(
+          project,
+          formatMessageWithValues(intl, MODULE_NAME, 'project.undo.mutationLabel', {
+            name: project?.name,
+          }),
+        );
+        setUndoProjectUuids((uuids) => [...uuids, project.id]);
+      },
+    },
+  );
 
   useEffect(() => {
     if (prevSubmittingMutationRef.current && !submittingMutation) {
@@ -313,7 +290,6 @@ const mapStateToProps = (state) => ({
   projects: state.socialProtection.projects,
   projectsPageInfo: state.socialProtection.projectsPageInfo,
   projectsTotalCount: state.socialProtection.projectsTotalCount,
-  confirmed: state.core.confirmed,
   submittingMutation: state.socialProtection.submittingMutation,
   mutation: state.socialProtection.mutation,
 });
@@ -323,7 +299,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   deleteProject,
   undoDeleteProject,
   coreConfirm,
-  clearConfirm,
   journalize,
 }, dispatch);
 
