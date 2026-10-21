@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import {
-  clearConfirm,
   coreConfirm,
   formatMessage,
   formatMessageWithValues,
@@ -34,8 +33,6 @@ function BenefitPlanSearcher({
   history,
   rights,
   coreConfirm,
-  clearConfirm,
-  confirmed,
   journalize,
   submittingMutation,
   mutation,
@@ -51,68 +48,10 @@ function BenefitPlanSearcher({
   groupId,
   beneficiaryStatus,
 }) {
-  const [benefitPlanToDelete, setBenefitPlanToDelete] = useState(null);
-  const [benefitPlanToUndo, setBenefitPlanToUndo] = useState(null);
   const [deletedBenefitPlanUuids, setDeletedBenefitPlanUuids] = useState([]);
   const [undoBenefitPlanUuids, setUndoBenefitPlanUuids] = useState([]);
   const [activeFilters, setActiveFilters] = useState([]);
   const prevSubmittingMutationRef = useRef();
-
-  const openDeleteBenefitPlanConfirmDialog = (benefitPlan) => coreConfirm(
-    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.confirm.title', {
-      code: benefitPlan?.code,
-      name: benefitPlan?.name,
-    }),
-    formatMessage(intl, 'socialProtection', 'benefitPlan.delete.confirm.message'),
-  );
-
-  const openUndoBenefitPlanConfirmDialog = () => coreConfirm(
-    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.confirm.title', {
-      code: benefitPlanToUndo?.code,
-      name: benefitPlanToUndo?.name,
-    }),
-    formatMessage(intl, 'socialProtection', 'benefitPlan.undo.confirm.message'),
-  );
-
-  useEffect(() => {
-    if (benefitPlanToDelete) {
-      openDeleteBenefitPlanConfirmDialog(benefitPlanToDelete);
-    }
-  }, [benefitPlanToDelete]);
-
-  useEffect(() => {
-    if (benefitPlanToUndo) {
-      openUndoBenefitPlanConfirmDialog();
-    }
-  }, [benefitPlanToUndo]);
-
-  useEffect(() => {
-    if (benefitPlanToDelete && confirmed) {
-      deleteBenefitPlan(
-        benefitPlanToDelete,
-        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
-          name: benefitPlanToDelete?.name,
-        }),
-      );
-      setDeletedBenefitPlanUuids([...deletedBenefitPlanUuids, benefitPlanToDelete.id]);
-    }
-    if (benefitPlanToUndo && confirmed) {
-      undoDeleteBenefitPlan(
-        benefitPlanToUndo,
-        formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.mutationLabel', {
-          name: benefitPlanToUndo?.name,
-        }),
-      );
-      setUndoBenefitPlanUuids([...undoBenefitPlanUuids, benefitPlanToUndo.id]);
-    }
-    if (benefitPlanToDelete && confirmed !== null) {
-      setBenefitPlanToDelete(null);
-    }
-    if (benefitPlanToUndo && confirmed !== null) {
-      setBenefitPlanToUndo(null);
-    }
-    return () => confirmed && clearConfirm(false);
-  }, [confirmed]);
 
   useEffect(() => {
     if (prevSubmittingMutationRef.current && !submittingMutation) {
@@ -153,8 +92,44 @@ function BenefitPlanSearcher({
       && !deletedBenefitPlanUuids.includes(benefitPlan.id)
       && historyPush(modulesManager, history, 'socialProtection.route.benefitPlan', [benefitPlan?.id], newTab);
 
-  const onDelete = (benefitPlan) => setBenefitPlanToDelete(benefitPlan);
-  const onUndo = (benefitPlan) => setBenefitPlanToUndo(benefitPlan);
+  // state.core.confirmed deleted or restored the plan on any other dialog's "Yes" (OP-3212).
+  const onDelete = (benefitPlan) => coreConfirm(
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.confirm.title', {
+      code: benefitPlan?.code,
+      name: benefitPlan?.name,
+    }),
+    formatMessage(intl, 'socialProtection', 'benefitPlan.delete.confirm.message'),
+    {
+      onConfirm: () => {
+        deleteBenefitPlan(
+          benefitPlan,
+          formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.delete.mutationLabel', {
+            name: benefitPlan?.name,
+          }),
+        );
+        setDeletedBenefitPlanUuids((uuids) => [...uuids, benefitPlan.id]);
+      },
+    },
+  );
+
+  const onUndo = (benefitPlan) => coreConfirm(
+    formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.confirm.title', {
+      code: benefitPlan?.code,
+      name: benefitPlan?.name,
+    }),
+    formatMessage(intl, 'socialProtection', 'benefitPlan.undo.confirm.message'),
+    {
+      onConfirm: () => {
+        undoDeleteBenefitPlan(
+          benefitPlan,
+          formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.mutationLabel', {
+            name: benefitPlan?.name,
+          }),
+        );
+        setUndoBenefitPlanUuids((uuids) => [...uuids, benefitPlan.id]);
+      },
+    },
+  );
 
   const itemFormatters = () => {
     const formatters = [
@@ -300,7 +275,6 @@ const mapStateToProps = (state) => ({
   benefitPlans: state.socialProtection.benefitPlans,
   benefitPlansPageInfo: state.socialProtection.benefitPlansPageInfo,
   benefitPlansTotalCount: state.socialProtection.benefitPlansTotalCount,
-  confirmed: state.core.confirmed,
   submittingMutation: state.socialProtection.submittingMutation,
   mutation: state.socialProtection.mutation,
 });
@@ -311,7 +285,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
     deleteBenefitPlan,
     undoDeleteBenefitPlan,
     coreConfirm,
-    clearConfirm,
     journalize,
   },
   dispatch,

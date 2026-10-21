@@ -11,7 +11,7 @@ import {
 } from '../constants';
 
 function BenefitPlanTabPanel({
-  intl, rights, benefitPlan, setConfirmedAction, onActiveTabChange, confirmed,
+  intl, rights, benefitPlan, setConfirmedAction, onActiveTabChange,
   edited, onEditedChanged, save, isSaving, canSave,
 }) {
   const [activeTab, setActiveTab] = useState(BENEFIT_PLAN_BENEFICIARIES_TAB_WRAPPER_VALUE);
@@ -45,7 +45,6 @@ function BenefitPlanTabPanel({
         value={activeTab}
         benefitPlan={benefitPlan}
         setConfirmedAction={setConfirmedAction}
-        confirmed={confirmed}
         edited={edited}
         onEditedChanged={onEditedChanged}
         save={save}
