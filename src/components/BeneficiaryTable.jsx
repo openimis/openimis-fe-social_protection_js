@@ -35,6 +35,9 @@ import {
 import NumberFilter from './MaterialTableNumberFilter';
 
 const DEFAULT_CELL_PADDING = '0 0 0 10px';
+// material-table merges its defaults with a spread, so an undefined `actions` prop
+// replaces its [] and a selectable table then crashes on actions.filter.
+const NO_ACTIONS = [];
 
 const createNumericFilterFn = (getValue) => (filter, rowData) => {
   const value = getValue(rowData);
@@ -237,7 +240,7 @@ function BeneficiaryTable({
   fetchingBeneficiaries,
   onSelectionChange,
   tableTitle,
-  actions,
+  actions = NO_ACTIONS,
   isGroup,
   appliedFilters,
   appliedPageSize,
