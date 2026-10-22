@@ -6,6 +6,9 @@ import {
 } from '@openimis/fe-core/testing';
 import ProjectHeadPanel from './ProjectHeadPanel';
 
+// Props handed to the published location cascader, recorded by the stub below.
+const { publishedProps } = vi.hoisted(() => ({ publishedProps: vi.fn() }));
+
 // The fe-core barrel cannot be loaded from a test, so stub the inputs this panel
 // renders with plain elements that report their value through onChange.
 vi.mock('@openimis/fe-core', async () => {
@@ -22,7 +25,10 @@ vi.mock('@openimis/fe-core', async () => {
     ValidatedTextInput: input,
     TextInput: input,
     NumberInput: input,
-    PublishedComponent: () => null,
+    PublishedComponent: (props) => {
+      publishedProps(props);
+      return null;
+    },
     withModulesManager: (Component) => function WithModulesManager(props) {
       return ReactActual.createElement(Component, { ...props, modulesManager: mockModulesManager() });
     },
@@ -53,5 +59,19 @@ describe('ProjectHeadPanel', () => {
     fireEvent.change(screen.getByLabelText('project.name'), { target: { value: 'W' } });
 
     expect(onEditedChanged).toHaveBeenCalledWith({ ...edited, name: 'W' });
+  });
+
+  // A project may cover a region or a district (e.g. a payroll over villages of two
+  // districts): the location is required, at no particular level.
+  it('requires a project location at any level', () => {
+    renderWithProviders(
+      <ProjectHeadPanel edited={{ status: 'PREPARATION' }} onEditedChanged={vi.fn()} />,
+      { store: store() },
+    );
+
+    const cascader = publishedProps.mock.calls.map(([props]) => props)
+      .find((props) => props.pubRef === 'location.LocationCascader');
+    expect(cascader).toEqual(expect.objectContaining({ required: true }));
+    expect(cascader.requiredLevel).toBeUndefined();
   });
 });
