@@ -299,7 +299,8 @@ function BenefitPlanBeneficiariesUploadDialog({
                       module="socialProtection"
                       label="workflowPicker"
                       onChange={(value) => handleFieldChange('workflows', 'workflow', value)}
-                      value={() => getFieldValue()}
+                      // The stored option value ({ name, group }), which the picker matches against.
+                      value={forms?.workflows?.workflow ?? null}
                       workflows={workflows}
                       required
                     />
