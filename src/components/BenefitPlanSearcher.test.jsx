@@ -19,10 +19,14 @@ vi.mock('@openimis/fe-core', () => ({
   historyPush: vi.fn(),
   coreConfirm: vi.fn(() => ({ type: 'CORE_CONFIRM' })),
   journalize: vi.fn(() => ({ type: 'JOURNALIZE' })),
-  // One row per item, each cell from the searcher's formatters.
-  Searcher: function Searcher({ items, itemFormatters, rowDisabled }) {
+  // One row per item, each cell from the searcher's formatters. The title follows
+  // fe-core's Searcher: its "Loading..." text while fetchingItems, else tableTitle.
+  Searcher: function Searcher({
+    items, itemFormatters, rowDisabled, fetchingItems, tableTitle,
+  }) {
     return (
       <table>
+        <caption>{fetchingItems ? 'Loading...' : tableTitle}</caption>
         <tbody>
           {items.map((item) => (
             <tr key={item.id} data-testid={`row-${item.id}`} data-disabled={String(!!rowDisabled?.(null, item))}>
@@ -49,7 +53,7 @@ const { RIGHT_BENEFIT_PLAN_DELETE } = await import('../constants');
 const ACTIVE = { id: 'plan-1', code: 'P1', name: 'Plan 1', isDeleted: false };
 const DELETED = { id: 'plan-2', code: 'P2', name: 'Plan 2', isDeleted: true };
 
-const renderSearcher = () => {
+const renderSearcher = (extraProps = {}) => {
   const props = {
     intl: {},
     modulesManager: { getRef: () => null },
@@ -63,6 +67,7 @@ const renderSearcher = () => {
     journalize: vi.fn(),
     clearConfirm: vi.fn(),
     confirmed: null,
+    ...extraProps,
   };
   const view = render(<BenefitPlanSearcher {...props} />);
   // Stands in for any other dialog in the app being answered.
@@ -113,5 +118,22 @@ describe('BenefitPlanSearcher delete and undo', () => {
     act(() => setConfirmed(true));
 
     expect(props.undoDeleteBenefitPlan).not.toHaveBeenCalled();
+  });
+});
+
+describe('BenefitPlanSearcher results title', () => {
+  // The reducer clears the count when a search starts: the title read "0 Programs"
+  // until the answer came, which reads as "no result" (UAT deleteProgram, OP-3260).
+  it('reads "Loading..." while a search is in flight, not the cleared count', () => {
+    renderSearcher({ benefitPlans: [], benefitPlansTotalCount: 0, fetchingBenefitPlans: true });
+
+    expect(screen.getByRole('table')).toHaveTextContent('Loading...');
+    expect(screen.queryByText('benefitPlan.searcherResultsTitle')).not.toBeInTheDocument();
+  });
+
+  it('shows the results title once the search has answered', () => {
+    renderSearcher({ fetchingBenefitPlans: false, fetchedBenefitPlans: true });
+
+    expect(screen.getByText('benefitPlan.searcherResultsTitle')).toBeInTheDocument();
   });
 });

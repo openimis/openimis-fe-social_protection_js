@@ -40,6 +40,7 @@ function BenefitPlanSearcher({
   deleteBenefitPlan,
   undoDeleteBenefitPlan,
   fetchingBenefitPlans,
+  fetchedBenefitPlans,
   errorBenefitPlans,
   benefitPlans,
   benefitPlansPageInfo,
@@ -248,7 +249,9 @@ function BenefitPlanSearcher({
       fetch={fetch}
       items={items}
       itemsPageInfo={benefitPlansPageInfo}
-      fetchedItems={fetchingBenefitPlans}
+      // fetchingItems drives the "Loading" title: without it a search in flight read "0 Programs".
+      fetchingItems={fetchingBenefitPlans}
+      fetchedItems={fetchedBenefitPlans}
       errorItems={errorBenefitPlans}
       tableTitle={formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.searcherResultsTitle', {
         benefitPlansTotalCount,
@@ -271,6 +274,7 @@ function BenefitPlanSearcher({
 
 const mapStateToProps = (state) => ({
   fetchingBenefitPlans: state.socialProtection.fetchingBenefitPlans,
+  fetchedBenefitPlans: state.socialProtection.fetchedBenefitPlans,
   errorBenefitPlans: state.socialProtection.errorBenefitPlans,
   benefitPlans: state.socialProtection.benefitPlans,
   benefitPlansPageInfo: state.socialProtection.benefitPlansPageInfo,
