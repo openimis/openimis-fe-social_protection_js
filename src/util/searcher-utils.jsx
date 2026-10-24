@@ -22,15 +22,29 @@ export const applyNumberCircle = (number) => (
   </div>
 );
 
-export const LOC_LEVELS = 4;
-export const locationFormatter = (location) => (
-  Array.from({ length: LOC_LEVELS }, (_, i) => {
-    let loc = location;
-    const levels = [];
-    while (loc) {
-      levels.unshift(loc.name); // top level first
-      loc = loc.parent;
-    }
-    return levels[i] || '';
-  })
+export const DEFAULT_LOC_LEVELS = 4;
+const LOCATION_MAX_LEVELS_KEY = 'location.Location.MaxLevels';
+
+const parseLocLevels = (value) => {
+  if (typeof value !== 'number' && typeof value !== 'string') return null;
+  if (typeof value === 'string' && !value.trim()) return null;
+  const levels = Number(value);
+  return Number.isInteger(levels) && levels > 0 ? levels : null;
+};
+
+// Number of location columns: the fe-location module configuration key
+// location.Location.MaxLevels, then the ref of the same name, then 4.
+export const getLocLevels = (modulesManager) => (
+  parseLocLevels(modulesManager.getConf('fe-location', LOCATION_MAX_LEVELS_KEY))
+  ?? parseLocLevels(modulesManager.getRef(LOCATION_MAX_LEVELS_KEY))
+  ?? DEFAULT_LOC_LEVELS
 );
+
+// Location names from the top level down, one entry per level ('' when missing).
+export const locationFormatter = (location, levels = DEFAULT_LOC_LEVELS) => {
+  const names = [];
+  for (let loc = location; loc; loc = loc.parent) {
+    names.unshift(loc.name);
+  }
+  return Array.from({ length: levels }, (_, i) => names[i] || '');
+};
