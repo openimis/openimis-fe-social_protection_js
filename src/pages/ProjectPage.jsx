@@ -34,6 +34,11 @@ import {
   PROJECT_BENEFICIARIES_TAB_VALUE,
 } from '../constants';
 
+// Journal status of a mutation, mirroring fe-core helpers/mutations.js (not exported by fe-core).
+const MUTATION_SUCCESS = 2;
+const journalStatus = (mutations, clientMutationId) => (
+  (mutations ?? []).find((m) => m.clientMutationId === clientMutationId)?.status);
+
 const StyledPage = styled('div')(({ theme }) => ({
   ...theme.page ?? {},
 }));
@@ -56,6 +61,7 @@ function ProjectPage({
   undoDeleteProject,
   submittingMutation,
   mutation,
+  mutations,
   coreConfirm,
   journalize,
   isProjectNameValid,
@@ -84,6 +90,7 @@ function ProjectPage({
   const dispatch = useDispatch();
 
   const prevSubmittingMutationRef = useRef();
+  const [createMutationId, setCreateMutationId] = useState(null);
 
   useEffect(() => {
     // Only fetch benefit plan name if project creation URL is visited directly
@@ -138,11 +145,20 @@ function ProjectPage({
         );
       }
 
-      if (mutation?.clientMutationId && !projectUuid) {
-        fetchProject(modulesManager, [`clientMutationId: "${mutation.clientMutationId}"`]);
+      if (mutation?.actionType === ACTION_TYPE.CREATE_PROJECT && mutation?.clientMutationId && !projectUuid) {
+        setCreateMutationId(mutation.clientMutationId);
       }
     }
   }, [submittingMutation]);
+
+  // The create response only means the mutation is queued: the project can be
+  // looked up by its clientMutationId once the journal reports it as SUCCESS.
+  useEffect(() => {
+    if (createMutationId && journalStatus(mutations, createMutationId) === MUTATION_SUCCESS) {
+      setCreateMutationId(null);
+      fetchProject(modulesManager, [`clientMutationId: "${createMutationId}"`]);
+    }
+  }, [createMutationId, mutations, fetchProject, modulesManager]);
 
   useEffect(() => {
     prevSubmittingMutationRef.current = submittingMutation;
@@ -269,6 +285,7 @@ const mapStateToProps = (state, props) => ({
   project: state.socialProtection.project,
   submittingMutation: state.socialProtection.submittingMutation,
   mutation: state.socialProtection.mutation,
+  mutations: state.core?.mutations ?? [],
   isProjectNameValid: state.socialProtection.validationFields?.projectName?.isValid,
 });
 
