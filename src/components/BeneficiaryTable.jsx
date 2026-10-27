@@ -67,7 +67,11 @@ const createNumericFilterFn = (getValue) => (filter, rowData) => {
   }
 };
 
-const getDynamicColumns = (translateFn, customFilters = []) => {
+// material-table calls a column's filter function for any filter value that is not
+// undefined, including the '' left by a cleared filter: an empty term filters nothing.
+const isEmptyTerm = (term) => term === undefined || term === null || term === '';
+
+export const getDynamicColumns = (translateFn, customFilters = []) => {
   if (!customFilters || !customFilters.length) return [];
 
   return customFilters
@@ -78,6 +82,7 @@ const getDynamicColumns = (translateFn, customFilters = []) => {
         return value === null || value === undefined ? '' : String(value);
       };
       let filterFn = (term, rowData) => {
+        if (isEmptyTerm(term)) return true;
         const value = rowData.jsonExt?.[field];
         if (value === null || value === undefined) return false;
         return String(value).toLowerCase().includes(term.toLowerCase());
@@ -88,7 +93,7 @@ const getDynamicColumns = (translateFn, customFilters = []) => {
         case 'boolean':
           renderFn = (rowData) => (rowData.jsonExt?.[field] ? translateFn('common.true') : translateFn('common.false'));
           filterFn = (term, rowData) => {
-            if (term === 'all') return true;
+            if (isEmptyTerm(term) || term === 'all') return true;
             return term === String(rowData.jsonExt?.[field]);
           };
           filterComponent = ({ columnDef, onFilterChanged }) => (
@@ -119,6 +124,7 @@ const getDynamicColumns = (translateFn, customFilters = []) => {
             return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString();
           };
           filterFn = (term, rowData) => {
+            if (isEmptyTerm(term)) return true;
             const value = rowData.jsonExt?.[field];
             if (value === null || value === undefined) return false;
             const date = new Date(value);
@@ -419,7 +425,9 @@ function BeneficiaryTable({
     return allColumns.map((c) => ({
       ...c,
       width: typeof c.field === 'string' && c.field.includes('email') ? '200px' : '140px',
-      tableData: { filterValue: initialFiltersRef.current[c.title] || '' },
+      // Only preset a saved filter: material-table applies every column whose filterValue
+      // is not undefined, so an '' preset would run every column filter on every row.
+      tableData: { filterValue: initialFiltersRef.current[c.title] },
     }));
   }, [
     isGroup, nameDoBFieldPrefix, locationFieldPrefix, translate,
