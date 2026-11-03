@@ -5,7 +5,6 @@ import {
   formatMessageWithValues,
   withModulesManager,
   coreConfirm,
-  clearConfirm,
   journalize,
   useHistory,
   GetIconComponent,
@@ -35,6 +34,11 @@ import {
   PROJECT_BENEFICIARIES_TAB_VALUE,
 } from '../constants';
 
+// Journal status of a mutation, mirroring fe-core helpers/mutations.js (not exported by fe-core).
+const MUTATION_SUCCESS = 2;
+const journalStatus = (mutations, clientMutationId) => (
+  (mutations ?? []).find((m) => m.clientMutationId === clientMutationId)?.status);
+
 const StyledPage = styled('div')(({ theme }) => ({
   ...theme.page ?? {},
 }));
@@ -57,9 +61,8 @@ function ProjectPage({
   undoDeleteProject,
   submittingMutation,
   mutation,
+  mutations,
   coreConfirm,
-  clearConfirm,
-  confirmed,
   journalize,
   isProjectNameValid,
 }) {
@@ -75,7 +78,6 @@ function ProjectPage({
   const benefitPlanId = benefitPlanIdFromState || benefitPlanIdFromPath;
 
   const [benefitPlanName, setBenefitPlanName] = useState(benefitPlanNameFromState);
-  const [confirmedAction, setConfirmedAction] = useState(() => null);
 
   const [editedProject, setEditedProject] = useState({
     benefitPlan: { id: benefitPlanId, name: benefitPlanName },
@@ -88,6 +90,7 @@ function ProjectPage({
   const dispatch = useDispatch();
 
   const prevSubmittingMutationRef = useRef();
+  const [createMutationId, setCreateMutationId] = useState(null);
 
   useEffect(() => {
     // Only fetch benefit plan name if project creation URL is visited directly
@@ -128,11 +131,6 @@ function ProjectPage({
     }
   }, [project]);
 
-  useEffect(() => {
-    if (confirmed && confirmedAction) confirmedAction();
-    return () => confirmed && clearConfirm(null);
-  }, [confirmed]);
-
   const back = () => history.goBack();
 
   useEffect(() => {
@@ -147,11 +145,20 @@ function ProjectPage({
         );
       }
 
-      if (mutation?.clientMutationId && !projectUuid) {
-        fetchProject(modulesManager, [`clientMutationId: "${mutation.clientMutationId}"`]);
+      if (mutation?.actionType === ACTION_TYPE.CREATE_PROJECT && mutation?.clientMutationId && !projectUuid) {
+        setCreateMutationId(mutation.clientMutationId);
       }
     }
   }, [submittingMutation]);
+
+  // The create response only means the mutation is queued: the project can be
+  // looked up by its clientMutationId once the journal reports it as SUCCESS.
+  useEffect(() => {
+    if (createMutationId && journalStatus(mutations, createMutationId) === MUTATION_SUCCESS) {
+      setCreateMutationId(null);
+      fetchProject(modulesManager, [`clientMutationId: "${createMutationId}"`]);
+    }
+  }, [createMutationId, mutations, fetchProject, modulesManager]);
 
   useEffect(() => {
     prevSubmittingMutationRef.current = submittingMutation;
@@ -202,12 +209,12 @@ function ProjectPage({
   );
 
   const openDeleteConfirmDialog = () => {
-    setConfirmedAction(() => deleteProjectCallback);
     coreConfirm(
       formatMessageWithValues(intl, 'socialProtection', 'project.delete.confirm.title', {
         name: project?.name,
       }),
       formatMessage(intl, 'socialProtection', 'project.delete.confirm.message'),
+      { onConfirm: deleteProjectCallback },
     );
   };
 
@@ -219,12 +226,12 @@ function ProjectPage({
   );
 
   const openUndoConfirmDialog = () => {
-    setConfirmedAction(() => undoProjectCallback);
     coreConfirm(
       formatMessageWithValues(intl, 'socialProtection', 'project.undo.confirm.title', {
         name: project?.name,
       }),
       formatMessage(intl, 'socialProtection', 'project.undo.confirm.message'),
+      { onConfirm: undoProjectCallback },
     );
   };
 
@@ -276,9 +283,9 @@ const mapStateToProps = (state, props) => ({
   rights: state.core?.user?.i_user?.rights ?? [],
   projectUuid: props.match.params.project_uuid,
   project: state.socialProtection.project,
-  confirmed: state.core.confirmed,
   submittingMutation: state.socialProtection.submittingMutation,
   mutation: state.socialProtection.mutation,
+  mutations: state.core?.mutations ?? [],
   isProjectNameValid: state.socialProtection.validationFields?.projectName?.isValid,
 });
 
@@ -291,7 +298,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
     deleteProject,
     undoDeleteProject,
     coreConfirm,
-    clearConfirm,
     journalize,
   },
   dispatch,

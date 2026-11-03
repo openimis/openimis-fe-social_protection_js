@@ -11,7 +11,7 @@ import {
   BENEFICIARY_STATUS,
   DEFAULT_BENEFICIARY_STATUS,
 } from '../constants';
-import { isBase64Encoded } from '../util/advanced-criteria-utils';
+import { completeCriteria, isBase64Encoded } from '../util/advanced-criteria-utils';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   ...theme.paper?.paper ?? {},
@@ -30,7 +30,6 @@ const StyledFiltersGrid = styled(Grid)(({ theme }) => ({
 }));
 
 function BenefitPlanEligibilityCriteriaPanel({
-  confirmed,
   edited,
   benefitPlan,
   onEditedChanged,
@@ -117,12 +116,12 @@ function BenefitPlanEligibilityCriteriaPanel({
       if (Array.isArray(advancedCriteria)) {
         advancedCriteria = { [DEFAULT_BENEFICIARY_STATUS]: jsonData?.advanced_criteria };
       }
-      const editedAdvancedCriteria = { ...advancedCriteria, [status]: filters };
+      // Rows still being filled in stay on screen but are not stored.
+      const complete = completeCriteria(filters);
+      const editedAdvancedCriteria = { ...advancedCriteria, [status]: complete };
       const json = { ...jsonData, advanced_criteria: editedAdvancedCriteria };
 
-      if (!filters.length) {
-        delete json.advanced_criteria[status];
-      } else if (!!filters.length && !filters[0].field) {
+      if (!complete.length) {
         delete json.advanced_criteria[status];
       }
 
@@ -176,14 +175,12 @@ function BenefitPlanEligibilityCriteriaPanel({
                   }}
                 />
               )}
-              disabled={confirmed}
             >
               {formatMessage('individual.enrollment.addFilters')}
             </Button>
             <Button
               onClick={handleRemoveFilter}
               variant="text"
-              disabled={confirmed}
             >
               {formatMessage('individual.enrollment.clearAllFilters')}
             </Button>

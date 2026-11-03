@@ -299,7 +299,8 @@ function BenefitPlanBeneficiariesUploadDialog({
                       module="socialProtection"
                       label="workflowPicker"
                       onChange={(value) => handleFieldChange('workflows', 'workflow', value)}
-                      value={() => getFieldValue()}
+                      // The stored option value ({ name, group }), which the picker matches against.
+                      value={forms?.workflows?.workflow ?? null}
                       workflows={workflows}
                       required
                     />
@@ -400,7 +401,6 @@ function BenefitPlanBeneficiariesUploadDialog({
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
-  confirmed: state.core.confirmed,
   workflows: state.socialProtection.workflows,
 });
 

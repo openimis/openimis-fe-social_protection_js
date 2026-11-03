@@ -4,6 +4,7 @@
 import {
   decodeId,
   dispatchMutationErr,
+  dispatchMutationDefault,
   dispatchMutationReq,
   dispatchMutationResp,
   formatGraphQLError,
@@ -1037,7 +1038,7 @@ function reducer(
     case ERROR(ACTION_TYPE.TASK_MUTATION):
       return dispatchMutationErr(state, action);
     default:
-      return state;
+      return dispatchMutationDefault(state, action);
   }
 }
 

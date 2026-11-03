@@ -5,7 +5,6 @@ import {
   formatMessage,
   formatMessageWithValues,
   coreConfirm,
-  clearConfirm,
   journalize,
   withModulesManager,
   GetIconComponent,
@@ -52,8 +51,6 @@ function BenefitPlanPage({
   closeBenefitPlan,
   updateBenefitPlan,
   coreConfirm,
-  clearConfirm,
-  confirmed,
   submittingMutation,
   mutation,
   journalize,
@@ -65,7 +62,6 @@ function BenefitPlanPage({
   isBenefitPlanSchemaValid,
 }) {
   const [editedBenefitPlan, setEditedBenefitPlan] = useState({});
-  const [confirmedAction, setConfirmedAction] = useState(() => null);
   const [reset, setReset] = useState(() => false);
   const prevSubmittingMutationRef = useRef();
 
@@ -74,11 +70,6 @@ function BenefitPlanPage({
       fetchBenefitPlan(modulesManager, [`id: "${benefitPlanUuid}"`]);
     }
   }, [benefitPlanUuid]);
-
-  useEffect(() => {
-    if (confirmed && confirmedAction) confirmedAction();
-    return () => confirmed && clearConfirm(null);
-  }, [confirmed]);
 
   const back = () => history.goBack();
 
@@ -156,11 +147,13 @@ function BenefitPlanPage({
     formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.close.mutationLabel', titleParams(benefitPlan)),
   );
 
+  // A bare callback as third argument is read as the dialog intent, so "Yes"
+  // never deleted or closed the plan (OP-3212).
   const openDeleteBenefitPlanConfirmDialog = () => {
     coreConfirm(
       formatMessage(intl, 'socialProtection', 'benefitPlan.deleteConfirm.title'),
       formatMessage(intl, 'socialProtection', 'benefitPlan.deleteConfirm.message'),
-      deleteBenefitPlanCallback,
+      { onConfirm: deleteBenefitPlanCallback },
     );
   };
 
@@ -168,7 +161,7 @@ function BenefitPlanPage({
     coreConfirm(
       formatMessage(intl, 'socialProtection', 'benefitPlan.closeConfirm.title'),
       formatMessage(intl, 'socialProtection', 'benefitPlan.closeConfirm.message'),
-      stopBenefitPlanCallback,
+      { onConfirm: stopBenefitPlanCallback },
     );
   };
 
@@ -180,13 +173,13 @@ function BenefitPlanPage({
   );
 
   const openUndoBenefitPlanConfirmDialog = () => {
-    setConfirmedAction(() => undoDeleteBenefitPlanCallback);
     coreConfirm(
       formatMessageWithValues(intl, 'socialProtection', 'benefitPlan.undo.confirm.title', {
         code: benefitPlan?.code,
         name: benefitPlan?.name,
       }),
       formatMessage(intl, 'socialProtection', 'benefitPlan.undo.confirm.message'),
+      { onConfirm: undoDeleteBenefitPlanCallback },
     );
   };
 
@@ -233,8 +226,6 @@ function BenefitPlanPage({
         canSave={canSave}
         save={handleSave}
         submittingMutation={submittingMutation}
-        confirmedAction={confirmedAction}
-        setConfirmedAction={setConfirmedAction}
         reset={reset}
         setReset={setReset}
         rights={rights}
@@ -259,7 +250,6 @@ const mapStateToProps = (state, props) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   benefitPlanUuid: props.match.params.benefit_plan_uuid,
   benefitPlan: state.socialProtection.benefitPlan,
-  confirmed: state.core.confirmed,
   submittingMutation: state.socialProtection.submittingMutation,
   mutation: state.socialProtection.mutation,
   isBenefitPlanNameValid: state.socialProtection.validationFields?.benefitPlanName?.isValid,
@@ -276,7 +266,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   clearBenefitPlan,
   createBenefitPlan,
   coreConfirm,
-  clearConfirm,
   journalize,
 }, dispatch);
 

@@ -34,10 +34,12 @@ function ProjectHeadPanel({
   projectNameValidationError,
   savedProjectName,
   readOnly,
-  updateAttribute,
+  onEditedChanged,
   modulesManager,
 }) {
   const project = { ...edited };
+  // fe-core Form passes a HeadPanel `onEditedChanged`, not FormPanel's updateAttribute.
+  const updateAttribute = (attr, v) => onEditedChanged({ ...edited, [attr]: v });
   const isNewProject = !project?.id;
   const maxWorkingDays = modulesManager.getConf('fe-social_protection', 'maxWorkingDays', DEFAULT_MAX_WORKING_DAYS);
 

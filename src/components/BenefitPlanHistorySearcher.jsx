@@ -1,7 +1,6 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import {
-  clearConfirm,
   coreConfirm,
   formatMessageWithValues,
   journalize,
@@ -168,7 +167,6 @@ const mapStateToProps = (state) => ({
   benefitPlansHistory: state.socialProtection.benefitPlansHistory,
   benefitPlansHistoryPageInfo: state.socialProtection.benefitPlansHistoryPageInfo,
   benefitPlansHistoryTotalCount: state.socialProtection.benefitPlansHistoryTotalCount,
-  confirmed: state.core.confirmed,
   submittingMutation: state.socialProtection.submittingMutation,
   mutation: state.socialProtection.mutation,
 });
@@ -177,7 +175,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
   {
     fetchBenefitPlanHistory,
     coreConfirm,
-    clearConfirm,
     journalize,
   },
   dispatch,

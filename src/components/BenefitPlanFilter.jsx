@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { injectIntl } from 'react-intl';
 import {
   TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_STANDARD, GRID_RESPONSIVE_SMALL,
@@ -44,7 +44,15 @@ const StyledCheckboxGridItem = styled(Grid)(({ theme }) => ({
 function BenefitPlanFilter({
   intl, filters, onChangeFilters, showStatuses,
 }) {
-  const debouncedOnChangeFilters = _debounce(onChangeFilters, DEFAULT_DEBOUNCE_TIME);
+  // One debounced callback for the component's life: recreated on every render, each
+  // keystroke got a fresh timer and fired its own search with a partial value.
+  const onChangeFiltersRef = useRef(onChangeFilters);
+  onChangeFiltersRef.current = onChangeFilters;
+  const debouncedOnChangeFilters = useMemo(
+    () => _debounce((changes) => onChangeFiltersRef.current(changes), DEFAULT_DEBOUNCE_TIME),
+    [],
+  );
+  useEffect(() => () => debouncedOnChangeFilters.cancel(), [debouncedOnChangeFilters]);
 
   const filterValue = (filterName) => filters?.[filterName]?.value;
 

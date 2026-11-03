@@ -1,7 +1,6 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import {
-  clearConfirm,
   coreConfirm,
   formatMessageWithValues,
   journalize,
@@ -138,7 +137,6 @@ const mapStateToProps = (state) => ({
   projectsHistory: state.socialProtection.projectsHistory,
   projectsHistoryPageInfo: state.socialProtection.projectsHistoryPageInfo,
   projectsHistoryTotalCount: state.socialProtection.projectsHistoryTotalCount,
-  confirmed: state.core.confirmed,
   submittingMutation: state.socialProtection.submittingMutation,
   mutation: state.socialProtection.mutation,
 });
@@ -147,7 +145,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
   {
     fetchProjectHistory,
     coreConfirm,
-    clearConfirm,
     journalize,
   },
   dispatch,

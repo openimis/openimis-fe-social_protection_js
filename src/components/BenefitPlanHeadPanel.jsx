@@ -65,6 +65,14 @@ class BenefitPlanHeadPanel extends FormPanel {
 
     return (
       <StyledGrid container>
+        {/* Nothing is shown without a pending task, nor without the tasks module. */}
+        <Grid size={12}>
+          <PublishedComponent
+            pubRef="tasksManagement.PendingTaskCount"
+            entityType="social_protection.benefitplan"
+            entityId={edited?.id}
+          />
+        </Grid>
         <StyledGridItem size={3}>
           <ValidatedTextInput
             module="socialProtection"
