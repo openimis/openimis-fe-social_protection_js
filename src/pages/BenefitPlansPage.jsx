@@ -1,8 +1,7 @@
 import React from 'react';
 import {
-  GetIconComponent, Helmet, withModulesManager, formatMessage, withTooltip, historyPush,
+  GetIconComponent, Helmet, withModulesManager, formatMessage, withTooltip, historyPush, injectIntl,
 } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
 import { Fab } from '@mui/material';
@@ -14,11 +13,11 @@ import {
 import BenefitPlanSearcher from '../components/BenefitPlanSearcher';
 
 const StyledPage = styled('div')(({ theme }) => ({
-  ...theme.page ?? {},
+  ...(theme.page ?? {}),
 }));
 
 const StyledFab = styled('div')(({ theme }) => ({
-  ...theme.fab ?? {},
+  ...(theme.fab ?? {}),
 }));
 
 function BenefitPlansPage(props) {

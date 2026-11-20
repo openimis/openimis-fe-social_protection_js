@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { injectIntl } from 'react-intl';
 import {
   Dialog,
   DialogTitle,
@@ -18,6 +17,7 @@ import {
   decodeId,
   journalize,
   GetIconComponent,
+  injectIntl,
 } from '@openimis/fe-core';
 import {
   fetchBeneficiaries,

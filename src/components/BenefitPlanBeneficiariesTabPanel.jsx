@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Grid,
-  Tab,
   Button,
   Tooltip,
 } from "@mui/material";
@@ -24,6 +23,7 @@ import {
   useHistory,
   useModulesManager,
   useTranslations,
+  Tab,
 } from "@openimis/fe-core";
 import {
   MODULE_NAME,

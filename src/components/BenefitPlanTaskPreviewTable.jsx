@@ -1,22 +1,21 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 
-import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@mui/material';
 import {
-  formatMessage, PublishedComponent, ProgressOrError,
+  formatMessage, PublishedComponent, ProgressOrError, injectIntl,
 } from '@openimis/fe-core';
 import { useSelector } from 'react-redux';
 
 const StyledTable = styled(Table)(({ theme }) => ({
-  ...theme.table ?? {},
+  ...(theme.table ?? {}),
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  ...theme.table?.row ?? {},
+  ...(theme.table?.row ?? {}),
 }));
 
 const StyledTableCell = styled(TableCell)({

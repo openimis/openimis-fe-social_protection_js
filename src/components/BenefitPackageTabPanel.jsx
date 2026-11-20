@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TabBarGrid, TabBarPaper } from '../util/styles';
-import { Contributions } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
+import { Contributions, injectIntl } from '@openimis/fe-core';
+
 import {
   BENEFIT_PACKAGE_TABS_LABEL_CONTRIBUTION_KEY,
   BENEFIT_PACKAGE_TABS_PANEL_CONTRIBUTION_KEY,
