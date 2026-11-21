@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { injectIntl } from 'react-intl';
 import {
   formatMessageWithValues,
   formatDateFromISO,
@@ -8,6 +7,7 @@ import {
   downloadExport,
   CLEARED_STATE_FILTER,
   GetIconComponent,
+  injectIntl,
 } from '@openimis/fe-core';
 import {
   IconButton,

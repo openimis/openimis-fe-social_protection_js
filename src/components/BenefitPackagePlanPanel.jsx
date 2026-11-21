@@ -9,8 +9,8 @@ import {
   NumberInput,
   formatMessage,
   GetIconComponent,
+  injectIntl,
 } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 import { RIGHT_BENEFIT_PLAN_UPDATE, RIGHT_SCHEMA_UPDATE } from '../constants';
@@ -19,19 +19,19 @@ import BenefitPlanSchemaModal from '../dialogs/BenefitPlanSchemaModal';
 const PreviewIcon = GetIconComponent('ListAlt');
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
-  ...theme.table?.title ?? {},
+  ...(theme.table?.title ?? {}),
 }));
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...(theme.paper?.item ?? {}),
 }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  ...theme.paper?.paper ?? {},
+  ...(theme.paper?.paper ?? {}),
 }));
 
 const StyledPaperHeader = styled(Grid)(({ theme }) => ({
-  ...theme.paper?.header ?? {},
+  ...(theme.paper?.header ?? {}),
 }));
 
 const StyledFullHeight = styled(Grid)({

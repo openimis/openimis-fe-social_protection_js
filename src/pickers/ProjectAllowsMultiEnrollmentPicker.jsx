@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { formatMessage } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
+import { formatMessage, injectIntl } from '@openimis/fe-core';
+
 import { styled } from '@mui/material/styles';
 import {
   Select,

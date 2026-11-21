@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { injectIntl } from 'react-intl';
 import {
   formatMessage,
   formatMessageWithValues,
@@ -10,6 +9,7 @@ import {
   coreConfirm,
   journalize,
   GetIconComponent,
+  injectIntl,
 } from '@openimis/fe-core';
 import {
   IconButton,

@@ -1,9 +1,8 @@
 import React from 'react';
-import { injectIntl } from 'react-intl';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import {
-  TextInput, PublishedComponent, formatMessage, ConstantBasedPicker, GRID_RESPONSIVE_STANDARD,
+  TextInput, PublishedComponent, formatMessage, ConstantBasedPicker, GRID_RESPONSIVE_STANDARD, injectIntl,
 } from '@openimis/fe-core';
 import { CONTAINS_LOOKUP } from '../constants';
 import { defaultFilterStyles } from '../util/styles';

@@ -7,7 +7,6 @@ import React, {
 import {
   Input, Grid, MenuItem, Typography, Select,
 } from '@mui/material';
-import { injectIntl } from 'react-intl';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -19,6 +18,7 @@ import {
   formatMessage,
   coreAlert,
   FormattedMessage,
+  injectIntl,
 } from '@openimis/fe-core';
 import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
@@ -31,7 +31,7 @@ import {
 import downloadTemplate from '../util/export';
 
 const StyledButton = styled(Button)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...(theme.paper?.item ?? {}),
 }));
 
 function BenefitPlanBeneficiariesUploadDialog({
@@ -259,11 +259,13 @@ function BenefitPlanBeneficiariesUploadDialog({
       <Dialog
         open={isOpen}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            width: 600,
-            maxWidth: 1000,
-          },
+        slotProps={{
+          paper: {
+            style: {
+              width: 600,
+              maxWidth: 1000,
+            },
+          }
         }}
       >
         <form noValidate>
@@ -307,8 +309,12 @@ function BenefitPlanBeneficiariesUploadDialog({
                   </Grid>
                 </Grid>
                 {getFieldValue() === PYTHON_DEFAULT_IMPORT_WORKFLOW && isBenefitPlanGroupType() ? (
-                  <Grid container direction="row" alignItems="center">
-                    <Grid container spacing={4} direction="row" alignItems="center">
+                  <Grid container direction="row" sx={{
+                    alignItems: "center"
+                  }}>
+                    <Grid container spacing={4} direction="row" sx={{
+                      alignItems: "center"
+                    }}>
                       <Grid>
                         <Typography>
                           <FormattedMessage module={MODULE_NAME} id="createGroupFromColumns" />
