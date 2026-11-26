@@ -34,7 +34,7 @@ function BenefitPlanTaskTabPanel({
   }
   return (
     <PublishedComponent
-      pubRef="policyHolder.TabPanel"
+      pubRef="core.TabPanel"
       module="individual"
       index={BENEFIT_PLAN_TASK_TAB_VALUE}
       value={value}

@@ -22,7 +22,7 @@ function ProjectChangelogTabPanel({
 }) {
   return (
     <PublishedComponent
-      pubRef="policyHolder.TabPanel"
+      pubRef="core.TabPanel"
       module="socialProtection"
       index={PROJECT_CHANGELOG_TAB_VALUE}
       value={value}

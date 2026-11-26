@@ -22,7 +22,7 @@ function BenefitPlanChangelogTabPanel({
 }) {
   return (
     <PublishedComponent
-      pubRef="policyHolder.TabPanel"
+      pubRef="core.TabPanel"
       module="socialProtection"
       index={BENEFIT_PLAN_CHANGELOG_TAB_VALUE}
       value={value}

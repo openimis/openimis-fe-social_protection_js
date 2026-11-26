@@ -21,7 +21,7 @@ function BenefitPackageGrievancesTabLabel({
 function BenefitPackageGrievancesTabPanel({ value }) {
   return (
     <PublishedComponent
-      pubRef="policyHolder.TabPanel"
+      pubRef="core.TabPanel"
       module="socialProtection"
       index={BENEFIT_PACKAGE_GRIEVANCES_TAB_VALUE}
       value={value}

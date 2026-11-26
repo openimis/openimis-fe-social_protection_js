@@ -28,7 +28,7 @@ function BenefitPackageMembersTabPanel({
   if (groupBeneficiaries) {
     return (
       <PublishedComponent
-        pubRef="policyHolder.TabPanel"
+        pubRef="core.TabPanel"
         module="socialProtection"
         index={BENEFIT_PACKAGE_MEMBERS_TAB_VALUE}
         value={value}
