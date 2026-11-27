@@ -40,7 +40,7 @@ const journalStatus = (mutations, clientMutationId) => (
   (mutations ?? []).find((m) => m.clientMutationId === clientMutationId)?.status);
 
 const StyledPage = styled('div')(({ theme }) => ({
-  ...(theme.page ?? {}),
+  ...theme.page,
 }));
 
 const StyledForm = styled('div')(({ theme }) => ({

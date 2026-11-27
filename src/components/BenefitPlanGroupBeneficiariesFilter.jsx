@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { formatMessage, TextInput, ConstantBasedPicker, PublishedComponent, GRID_RESPONSIVE_STANDARD, injectIntl } from '@openimis/fe-core';
+import { TextInput, ConstantBasedPicker, PublishedComponent, GRID_RESPONSIVE_STANDARD, injectIntl } from '@openimis/fe-core';
 import { defaultFilterStyles } from '../util/styles';
 import { createFilterHelpers } from '../util/filter-helpers';
 import BeneficiaryStatusPicker from '../pickers/BeneficiaryStatusPicker';

@@ -20,11 +20,11 @@ import ActivityPicker from '../pickers/ActivityPicker';
 import { DEFAULT_MAX_WORKING_DAYS } from '../constants';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
-  ...(theme.paper?.item ?? {}),
+  ...theme.paper?.item,
 }));
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
-  ...(theme.paper?.item ?? {}),
+  ...theme.paper?.item,
 }));
 
 function ProjectHeadPanel({
