@@ -8,8 +8,8 @@ import {
   PublishedComponent,
   TextInput,
   withModulesManager,
+  injectIntl,
 } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
 import {
   projectNameSetValid,
   projectNameValidationCheck,
@@ -20,11 +20,11 @@ import ActivityPicker from '../pickers/ActivityPicker';
 import { DEFAULT_MAX_WORKING_DAYS } from '../constants';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...theme.paper?.item,
 }));
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...theme.paper?.item,
 }));
 
 function ProjectHeadPanel({

@@ -1,6 +1,6 @@
 import React from 'react';
-import { injectIntl } from 'react-intl';
-import { TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_SMALL } from '@openimis/fe-core';
+
+import { TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_SMALL, injectIntl } from '@openimis/fe-core';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { CONTAINS_LOOKUP } from '../constants';

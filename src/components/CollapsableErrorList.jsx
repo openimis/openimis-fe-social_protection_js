@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { injectIntl } from 'react-intl';
 
 import {
   formatMessage,
   GetIconComponent,
+  injectIntl,
 } from '@openimis/fe-core';
 import {
   ListItem,
@@ -63,7 +63,9 @@ function CollapsableErrorList({
               <ListItemText
                 primary={key}
                 style={{ marginLeft: '20px' }}
-                primaryTypographyProps={{ style: { fontWeight: 'bold' } }}
+                slotProps={{
+                  primary: { style: { fontWeight: 'bold' } }
+                }}
               />
             </ListItem>
             <ListItem>

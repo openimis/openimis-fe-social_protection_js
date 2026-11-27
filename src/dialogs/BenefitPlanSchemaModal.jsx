@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Grid } from '@mui/material';
-import { injectIntl } from 'react-intl';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -9,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {
   formatMessage,
   TextInput,
+  injectIntl,
 } from '@openimis/fe-core';
 import { styled } from '@mui/material/styles';
 import { connect } from 'react-redux';
@@ -16,7 +16,7 @@ import { bindActionCreators } from 'redux';
 import { fetchWorkflows } from '../actions';
 
 const StyledButton = styled(Button)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...theme.paper?.item,
 }));
 
 function BenefitPlanSchemaDialog({
@@ -49,12 +49,14 @@ function BenefitPlanSchemaDialog({
       <Dialog
         open={isOpen}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            width: 600,
-            maxWidth: 600,
-            maxHeight: 1000,
-          },
+        slotProps={{
+          paper: {
+            style: {
+              width: 600,
+              maxWidth: 600,
+              maxHeight: 1000,
+            },
+          }
         }}
       >
         <form noValidate>

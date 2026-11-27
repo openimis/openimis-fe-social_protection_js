@@ -1,13 +1,13 @@
 import React, {
   useState, useEffect, useRef, useMemo, useCallback,
 } from 'react';
-import { injectIntl } from 'react-intl';
 import {
   formatMessage,
   formatMessageWithValues,
   useModulesManager,
   GetIconComponent,
   coreAlert,
+  injectIntl,
 } from '@openimis/fe-core';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';

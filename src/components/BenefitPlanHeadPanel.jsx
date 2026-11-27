@@ -11,8 +11,8 @@ import {
   TextAreaInput,
   PublishedComponent,
   TextInput,
+  injectIntl,
 } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
 import {
   DESCRIPTION_MAX_LENGTH, MAX_CODE_LENGTH, RIGHT_SCHEMA_UPDATE,
 } from '../constants';
@@ -30,11 +30,11 @@ import BenefitPlanTypePicker from '../pickers/BenefitPlanTypePicker';
 import { formatMessage } from '@openimis/fe-core';
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...theme.paper?.item,
 }));
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...theme.paper?.item,
 }));
 
 class BenefitPlanHeadPanel extends FormPanel {

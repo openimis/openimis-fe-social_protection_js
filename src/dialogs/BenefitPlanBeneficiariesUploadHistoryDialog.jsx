@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { injectIntl } from 'react-intl';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,6 +9,7 @@ import {
   formatDateTimeFromISO,
   ProgressOrError,
   withModulesManager,
+  injectIntl,
 } from '@openimis/fe-core';
 import {
   TableHead,
@@ -30,15 +30,15 @@ import { downloadBeneficiaryUploadFile, downloadInvalidItems } from '../util/exp
 import { UPLOAD_STATUS } from '../constants';
 
 const StyledButton = styled(Button)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...theme.paper?.item,
 }));
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...theme.paper?.item,
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...theme.paper?.item,
 }));
 
 function BenefitPlanBeneficiariesUploadHistoryDialog({
@@ -94,16 +94,18 @@ function BenefitPlanBeneficiariesUploadHistoryDialog({
       <Dialog
         open={isOpen}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%,-50%)',
-            width: '85%',
-            maxWidth: '85%',
-            maxHeight: '75%',
-          },
+        slotProps={{
+          paper: {
+            style: {
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%,-50%)',
+              width: '85%',
+              maxWidth: '85%',
+              maxHeight: '75%',
+            },
+          }
         }}
       >
         <DialogTitle

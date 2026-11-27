@@ -6,8 +6,8 @@ import {
   formatMessageWithValues,
   useHistory,
   useModulesManager,
+  injectIntl,
 } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import BenefitPackageTabPanel from '../components/BenefitPackageTabPanel';
 import BenefitPackagePlanPanel from '../components/BenefitPackagePlanPanel';
@@ -24,7 +24,7 @@ import {
 import BenefitPackageGroupPanel from '../components/BenefitPackageGroupPanel';
 
 const StyledPage = styled('div')(({ theme }) => ({
-  ...theme.page ?? {},
+  ...theme.page,
 }));
 
 function BenefitPackagePage({

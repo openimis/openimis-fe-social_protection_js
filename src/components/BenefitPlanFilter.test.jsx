@@ -6,6 +6,8 @@ import {
 } from 'vitest';
 
 vi.mock('@openimis/fe-core', () => ({
+  // The test passes intl itself, as with the react-intl mock below.
+  injectIntl: (component) => component,
   // A plain input per text filter, labelled by its key.
   TextInput: function TextInput({ label, value, onChange }) {
     return <input aria-label={label} value={value} onChange={(e) => onChange(e.target.value)} />;

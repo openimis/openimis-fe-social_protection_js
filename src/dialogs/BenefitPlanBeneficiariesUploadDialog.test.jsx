@@ -11,6 +11,7 @@ import {
 vi.mock('@openimis/fe-core', async () => {
   const ReactActual = (await import('react')).default;
   return {
+    injectIntl: (await import("@openimis/fe-core/testing")).injectIntl,
     apiHeaders: {},
     baseApiUrl: '/api',
     formatMessage: (intl, module, id) => id,

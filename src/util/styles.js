@@ -44,11 +44,11 @@ export const tabStyles = (theme) => ({
 });
 
 export const TabBarPaper = styled(Paper)(({ theme }) => ({
-  ...theme.paper?.paper ?? {},
+  ...theme.paper?.paper,
 }));
 
 export const TabBarGrid = styled(Grid)(({ theme }) => ({
-  ...theme.table?.title ?? {},
+  ...theme.table?.title,
   display: 'flex',
   alignItems: 'center',
   ...tabStyles(theme),
