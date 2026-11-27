@@ -1,6 +1,5 @@
 import React from 'react';
-import { Tab } from '@mui/material';
-import { formatMessage, PublishedComponent } from '@openimis/fe-core';
+import { formatMessage, PublishedComponent, Tab } from '@openimis/fe-core';
 import { BENEFIT_PLAN_PROJECTS_TAB_VALUE } from '../constants';
 
 function BenefitPlanProjectsTabLabel({

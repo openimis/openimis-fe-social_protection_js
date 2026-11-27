@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { injectIntl } from 'react-intl';
 import {
-  TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_STANDARD, GRID_RESPONSIVE_SMALL,
+  TextInput, PublishedComponent, formatMessage, GRID_RESPONSIVE_STANDARD, GRID_RESPONSIVE_SMALL, injectIntl,
 } from '@openimis/fe-core';
 import { FormControlLabel, Grid, Checkbox } from '@mui/material';
 import { styled } from '@mui/material/styles';

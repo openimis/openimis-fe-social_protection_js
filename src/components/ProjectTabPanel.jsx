@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { injectIntl } from 'react-intl';
 import { TabBarGrid, TabBarPaper } from '../util/styles';
 import {
-  Contributions,
+  Contributions, injectIntl,
 } from '@openimis/fe-core';
 import {
   PROJECT_BENEFICIARIES_TAB_VALUE,

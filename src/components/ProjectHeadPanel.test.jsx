@@ -22,6 +22,7 @@ vi.mock('@openimis/fe-core', async () => {
   });
 
   return {
+    injectIntl: (await import("@openimis/fe-core/testing")).injectIntl,
     ValidatedTextInput: input,
     TextInput: input,
     NumberInput: input,

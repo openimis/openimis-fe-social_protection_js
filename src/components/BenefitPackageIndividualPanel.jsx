@@ -10,19 +10,19 @@ import {
   createFieldsBasedOnJSON,
   renderInputComponent,
   GetIconComponent,
+  injectIntl,
 } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
 import { styled } from '@mui/material/styles';
 import { EMPTY_STRING, RIGHT_INDIVIDUAL_UPDATE, SOCIAL_PROTECTION_MODULE } from '../constants';
 
 const Person = GetIconComponent('Person');
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
-  ...theme.table?.title ?? {},
+  ...theme.table?.title,
 }));
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
-  ...theme.paper?.item ?? {},
+  ...theme.paper?.item,
 }));
 
 const StyledFullHeight = styled(Grid)({

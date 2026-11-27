@@ -14,6 +14,7 @@ vi.mock('@openimis/fe-core', async () => {
   const input = () => null;
 
   return {
+    injectIntl: (await import("@openimis/fe-core/testing")).injectIntl,
     FormPanel,
     formatMessage: (intl, module, id) => `${module}.${id}`,
     NumberInput: input,

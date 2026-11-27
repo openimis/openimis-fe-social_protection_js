@@ -1,6 +1,5 @@
 import React from 'react';
-import { Tab } from '@mui/material';
-import { formatMessage, PublishedComponent } from '@openimis/fe-core';
+import { formatMessage, PublishedComponent, Tab } from '@openimis/fe-core';
 import { BENEFIT_PLAN_BENEFICIARIES_LIST_TAB_VALUE, BENEFIT_PLAN_TYPE } from '../constants';
 import BenefitPlanBeneficiariesSearcher from './BenefitPlanBeneficiariesSearcher';
 import BenefitPlanGroupBeneficiariesSearcher from './BenefitPlanGroupBeneficiariesSearcher';

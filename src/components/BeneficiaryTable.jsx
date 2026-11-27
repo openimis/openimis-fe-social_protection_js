@@ -1,7 +1,6 @@
 import React, {
   useMemo, useEffect, useRef, useCallback,
 } from 'react';
-import { injectIntl } from 'react-intl';
 import MaterialTable from '@material-table/core';
 import _ from 'lodash';
 import {
@@ -22,6 +21,7 @@ import {
   formatMessage,
   fetchCustomFilter,
   useModulesManager,
+  injectIntl,
 } from '@openimis/fe-core';
 import {
   LOC_LEVELS,
@@ -175,12 +175,14 @@ function PercentageEditField({
       error={isInvalid}
       helperText={isInvalid ? '0-100' : ''}
       placeholder={columnDef?.title}
-      InputProps={{
-        min: 0,
-        max: 100,
-        endAdornment: <InputAdornment position="end">%</InputAdornment>,
-      }}
       size="small"
+      slotProps={{
+        input: {
+          min: 0,
+          max: 100,
+          endAdornment: <InputAdornment position="end">%</InputAdornment>,
+        }
+      }}
     />
   );
 }

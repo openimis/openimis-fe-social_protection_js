@@ -8,8 +8,8 @@ import {
   journalize,
   useHistory,
   GetIconComponent,
+  injectIntl,
 } from '@openimis/fe-core';
-import { injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
@@ -40,7 +40,7 @@ const journalStatus = (mutations, clientMutationId) => (
   (mutations ?? []).find((m) => m.clientMutationId === clientMutationId)?.status);
 
 const StyledPage = styled('div')(({ theme }) => ({
-  ...theme.page ?? {},
+  ...theme.page,
 }));
 
 const StyledForm = styled('div')(({ theme }) => ({

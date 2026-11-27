@@ -16,6 +16,10 @@ vi.mock('@openimis/fe-core', () => ({
   formatMessage: (intl, module, key) => key,
   fetchCustomFilter: vi.fn(() => ({ type: 'FETCH_CUSTOM_FILTER' })),
   useModulesManager: () => ({ getConf: (module, key, defaultValue) => defaultValue }),
+  // injectIntl now comes from fe-core (react-intl 10 dropped it); same stub as below.
+  injectIntl: (Component) => function WithIntl(props) {
+    return <Component {...props} intl={{}} />;
+  },
 }));
 
 vi.mock('react-intl', () => ({
