@@ -489,7 +489,6 @@ function BeneficiaryTable({
           doubleHorizontalScroll: true,
           tableLayout: 'fixed',
           emptyRowsWhenPaging: false,
-          fixedColumns: { left: isGroup ? 3 : 2, right: 0 },
           actionsColumnIndex: -1,
         }}
         localization={{

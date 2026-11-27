@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -18,6 +17,7 @@ import {
   journalize,
   GetIconComponent,
   injectIntl,
+  ResponsiveDialog,
 } from '@openimis/fe-core';
 import {
   fetchBeneficiaries,
@@ -33,14 +33,6 @@ import BeneficiaryTable from '../components/BeneficiaryTable';
 import { REQUEST } from '../util/action-type';
 import { ACTION_TYPE } from '../reducer';
 const CloseIcon = GetIconComponent("Close");
-
-const StyledDialog = styled(Dialog)(() => ({
-  '& .MuiDialog-paper': {
-    width: 1200,
-    maxWidth: 1500,
-    maxHeight: 800,
-  },
-}));
 
 const CloseIconButton = styled(IconButton)(() => ({
   padding: 6,
@@ -339,7 +331,7 @@ function ProjectEnrollmentDialog({
   }, [enrolledBeneficiaries]);
 
   return (
-    <StyledDialog open={open} onClose={onClose}>
+    <ResponsiveDialog open={open} onClose={onClose} maxWidth="lg" fullWidth maxPaperHeight={800}>
       <DialogTitle style={{ paddingBottom: 0 }}>
         {translate('projectBeneficiaries.dialogTitle')}
         <div style={{ float: 'right' }}>
@@ -377,7 +369,7 @@ function ProjectEnrollmentDialog({
           {translate('projectBeneficiaries.save')}
         </SaveButton>
       </StyledDialogActions>
-    </StyledDialog>
+    </ResponsiveDialog>
   );
 }
 
