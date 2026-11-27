@@ -21,7 +21,7 @@ function BenefitPlanProjectsTabPanel({
 }) {
   return (
     <PublishedComponent
-      pubRef="policyHolder.TabPanel"
+      pubRef="core.TabPanel"
       module="socialProtection"
       index={BENEFIT_PLAN_PROJECTS_TAB_VALUE}
       value={value}

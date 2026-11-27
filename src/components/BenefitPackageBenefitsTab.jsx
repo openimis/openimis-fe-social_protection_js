@@ -21,7 +21,7 @@ function BenefitPackageBenefitsTabPanel({
 }) {
   return (
     <PublishedComponent
-      pubRef="policyHolder.TabPanel"
+      pubRef="core.TabPanel"
       module="socialProtection"
       index={BENEFIT_PACKAGE_BENEFITS_TAB_VALUE}
       value={value}

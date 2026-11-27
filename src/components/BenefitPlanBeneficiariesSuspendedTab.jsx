@@ -21,7 +21,7 @@ function BenefitPlanBeneficiariesSuspendedTabLabel({
 function BenefitPlanBeneficiariesSuspendedTabPanel({ value, benefitPlan }) {
   return (
     <PublishedComponent
-      pubRef="policyHolder.TabPanel"
+      pubRef="core.TabPanel"
       module="socialProtection"
       index={BENEFIT_PLAN_BENEFICIARIES_SUSPENDED_TAB_VALUE}
       value={value}
